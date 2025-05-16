@@ -1,0 +1,37 @@
+<UserControl x:Class="unreal_GUI.Rename"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:unreal_GUI"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Thickness x:Key="Common">10,10,10,10</Thickness>
+    </UserControl.Resources>
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <TextBlock x:Name="Title" TextWrapping="Wrap" Text="重命名" Margin="{DynamicResource Common}" FontWeight="Bold"/>
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <RadioButton x:Name="rbProject" Content="项目" IsChecked="True" Margin="0,0,10,0"/>
+                <RadioButton x:Name="rbPlugin" Content="插件"/>
+            </StackPanel>
+            <TextBlock x:Name="tip0" TextWrapping="Wrap" Margin="{DynamicResource Common}"><Run Language="zh-cn" Text="设置输入路径"/></TextBlock>
+            <TextBox x:Name="Input" Margin="10,10,10,10"/>
+            <Button Content="设定输入路径" Margin="10,10,10,10" Click="Button_Click"/>
+            <TextBlock x:Name="tip1" TextWrapping="Wrap" Text="输入重命名名称" Margin="{DynamicResource Common}"/>
+            <TextBox x:Name="Output" Margin="10,10,10,10"/>
+            
+            <Button Content="重命名(UAC)" Margin="10,10,10,10" Click="RenameButton_Click"/>
+            <TextBlock x:Name="msg" TextWrapping="Wrap" Text="TextBlock" Margin="10,0,10,0" Visibility="Hidden"/>
+        </StackPanel>
+
+    </Grid>
+</UserControl>

@@ -1,0 +1,26 @@
+﻿<Window x:Class="unreal_GUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Unreal-GUI" Height="550" Width="700"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    ui:WindowHelper.UseModernWindowStyle="True">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0">
+            <MenuItem Header="插件编译" Click="CompilePlugin_Click"/>
+            <MenuItem Header="项目重命名" Click="RenameProject_Click"/>
+            <MenuItem Header="快速访问" Click="QuickAccess_Click"/>
+            <MenuItem Header="设置" Click="Settings_Click"/>
+            <MenuItem Header="关于" Click="About_Click"/>
+            
+        </Menu>
+        <ContentControl x:Name="ContentContainer" Grid.Row="1" Margin="0,0,0,60" />
+    </Grid>
+
+</Window>

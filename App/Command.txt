@@ -1,0 +1,8 @@
+重命名项目：
+
+renom rename-project --project <PROJECT> --new-name <NEW_NAME>
+
+重命名项目插件：
+
+renom rename-plugin --project <PROJECT> --plugin <PLUGIN> --new-name <NEW_NAME>
+
