@@ -1,6 +1,6 @@
 # Unreal-GUI
 
-![GitHub license](https://img.shields.io/github/license/G-POPLO/unreal-GUI.svg) !
+![GitHub license](https://img.shields.io/github/license/G-POPLO/unreal-GUI.svg) 
 
 Unreal-GUI是一款旨在简化虚幻引擎（Unreal Engine）相关操作流程的图形用户界面应用程序。它允许用户通过直观的图形界面执行复杂的终端命令，而无需直接与命令行交互。
 
