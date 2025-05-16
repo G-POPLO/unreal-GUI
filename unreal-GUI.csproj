@@ -19,7 +19,7 @@
     <AssemblyName>Unreal-GUI</AssemblyName>
     <DelaySign>False</DelaySign>
     <PackageIcon>icon.png</PackageIcon>
-    <PackageProjectUrl>https://github.com/G-POPLO/</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/G-POPLO/unreal-GUI</PackageProjectUrl>
     <Copyright>C-Poplo</Copyright>
     <Description>一款简单的小工具，辅助用户将复杂的UE5命令转成简单的GUI操作。</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
