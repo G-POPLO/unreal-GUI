@@ -1,3 +1,4 @@
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Microsoft.Win32;
+using static unreal_GUI.Settings;
 
 namespace unreal_GUI
 {
@@ -23,21 +24,30 @@ namespace unreal_GUI
     public partial class Settings : System.Windows.Controls.UserControl
     {
         private List<EngineInfo> engineInfos = new List<EngineInfo>();
+        private CheckBox AutoOpenPath = new CheckBox();
 
     public class EngineInfo
     {
         public string Path { get; set; }
         public string Version { get; set; }
+        
     }
+        public class SettingsInfo
+        { 
+        
+        }
 
         public Settings()
         {
             InitializeComponent();
+            Button0.IsChecked = Properties.Settings.Default.AutoOpen;
+            
             if (File.Exists("settings.json"))
             {
                 engineInfos = Newtonsoft.Json.JsonConvert.DeserializeObject<List<EngineInfo>>(File.ReadAllText("settings.json"));
                 EnginePathsList.ItemsSource = null;
                 EnginePathsList.ItemsSource = engineInfos.Select(p => $"{p.Path} ({p.Version})").ToList();
+                
             }
         }
 
@@ -87,6 +97,7 @@ namespace unreal_GUI
                         }
                         EnginePathsList.ItemsSource = null;
                         EnginePathsList.ItemsSource = engineInfos.Select(p => $"{p.Path} ({p.Version})").ToList();
+            
                     }
                 }
             }
@@ -105,6 +116,7 @@ namespace unreal_GUI
                     engineInfos.Add(new EngineInfo { Path = folderDialog.SelectedPath, Version = GetEngineVersion(folderDialog.SelectedPath) });
                     EnginePathsList.ItemsSource = null;
                     EnginePathsList.ItemsSource = engineInfos.Select(p => $"{p.Path} ({p.Version})").ToList();
+            
                 }
             }
         }
@@ -117,19 +129,30 @@ namespace unreal_GUI
                 engineInfos.RemoveAll(x => x.Path == selectedPath);
                 EnginePathsList.ItemsSource = null;
                 EnginePathsList.ItemsSource = engineInfos.Select(p => $"{p.Path} ({p.Version})").ToList();
+            
             }
         }
 
         private void SavePaths_Click(object sender, RoutedEventArgs e)
         {
+            // 保存应用程序设置
+            Properties.Settings.Default.AutoOpen = Button0.IsChecked.Value;
+            Properties.Settings.Default.Save();
+            // 保存JSON文件
             File.WriteAllText("settings.json", Newtonsoft.Json.JsonConvert.SerializeObject(engineInfos));
+            
             if (this.FindName("Msg") is System.Windows.Controls.TextBlock msg)
             {
-                msg.Text = "路径保存成功";
+                msg.Text = "设置已保存";
                 msg.Visibility = System.Windows.Visibility.Visible;
             }
         }
 
-        
+
+
+        private void Button0_Checked(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.AutoOpen  = (bool)Button0.IsChecked;
+        }
     }
 }

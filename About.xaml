@@ -6,14 +6,17 @@
              xmlns:local="clr-namespace:unreal_GUI"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
     <Grid Margin="20,20,20,20">
         <StackPanel>
             <TextBlock x:Name="Title" TextWrapping="Wrap" Margin="10,10,10,10" Text="Unreal-GUI" FontSize="18"/>
-            <TextBlock x:Name="Version" TextWrapping="Wrap" Margin="10,10,10,10" Text="版本：0.0.1"/>
+            <Separator/>
+            <TextBlock x:Name="Version" TextWrapping="Wrap" Margin="10,10,10,10" Text="{Binding VersionText}"/>
             <TextBlock x:Name="Author" TextWrapping="Wrap" Margin="10,10,10,10" Text="作者：C-Poplo"/>
-            <TextBlock TextWrapping="Wrap" Margin="10,10,10,10" Text="一款简单的小工具，辅助用户将复杂的UE5命令转成简单的GUI操作"/>
+            <TextBlock TextWrapping="Wrap" Margin="10,10,10,10" Text="一款简单的小工具，目的是辅助用户将繁杂的命令操作转成简单的GUI操作。"/>
             <Button Content="获取更新" Margin="10,0,0,0" Click="Button_Click"/>
         </StackPanel>
 
     </Grid>
+</ScrollViewer>
 </UserControl>

@@ -1,9 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <UseWindowsForms>true</UseWindowsForms>
-    <TargetFramework>net9.0-windows</TargetFramework>
+    <TargetFramework>net9.0-windows10.0.17763.0</TargetFramework>
     <RootNamespace>unreal_GUI</RootNamespace>
     <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
@@ -14,7 +14,7 @@
     <SignAssembly>False</SignAssembly>
     <Authors>C-Poplo</Authors>
     <Company />
-    <Version>0.0.1</Version>
+    <Version>0.0.1.1</Version>
     <Title>Unreal-GUI</Title>
     <AssemblyName>Unreal-GUI</AssemblyName>
     <DelaySign>False</DelaySign>
@@ -30,12 +30,16 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Link>App\renom.exe</Link>
     </Content>
+    <Content Include="$(ProjectDir)Sound\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebugType>none</DebugType>
     <WarningLevel>3</WarningLevel>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <Optimize>True</Optimize>
   </PropertyGroup>
 
 
@@ -44,6 +48,7 @@
     <DebugType>none</DebugType>
     <WarningLevel>3</WarningLevel>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <Optimize>True</Optimize>
   </PropertyGroup>
 
 
@@ -66,6 +71,7 @@
 
   <ItemGroup>
     <Content Include="Icon\icon.ico" />
+    <Content Include="Sound\ui-sound-on.wav" />
   </ItemGroup>
 
 

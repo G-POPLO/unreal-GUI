@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,9 +21,13 @@ namespace unreal_GUI
     /// </summary>
     public partial class About : System.Windows.Controls.UserControl
     {
+        public string VersionText { get; set; }
+
         public About()
         {
-            InitializeComponent();
+            InitializeComponent();                                       
+            VersionText = "版本：" + Application.ResourceAssembly.GetName().Version.ToString();
+            DataContext = this;                            
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

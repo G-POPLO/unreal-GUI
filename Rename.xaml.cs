@@ -1,19 +1,22 @@
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Windows.Forms;
-using Microsoft.Win32;
 
 namespace unreal_GUI
 {
@@ -62,13 +65,30 @@ namespace unreal_GUI
             {
                 string exePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App", "renom.exe");
                 System.Diagnostics.Process.Start("cmd.exe", $" /c \"{exePath}\" {command.Replace("renom ", "")}");
+
+
+                
                 msg.Text = "重命名成功！";
                 msg.Visibility = Visibility.Visible;
+
+
+                // 检查AutoOpen设置来决定是否打开文件夹
+                if (Properties.Settings.Default.AutoOpen)
+                {
+                    // 更新输入框为新的路径
+                    string newPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(projectPath), newName);
+                    Input.Text = newPath;
+                    msg.Text = "重命名成功！";
+                    msg.Visibility = Visibility.Visible;
+                    Process.Start("explorer.exe", newPath);
+                }
             }
             catch (Exception ex)
             {
                 msg.Text = $"重命名失败：{ex.Message}";
-                msg.Visibility = Visibility.Visible;
+                msg.Visibility = Visibility.Visible;               
+                var player = new System.Media.SoundPlayer(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav"));
+                player.Play();
             }
         }
     }

@@ -6,17 +6,19 @@
              xmlns:local="clr-namespace:unreal_GUI"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Margin="20,20,20,20">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <Grid Margin="10,10,10,10">
         <StackPanel>
             <TextBlock x:Name="Title" TextWrapping="Wrap" Margin="10,10,10,10" Text="将插件编译成指定版本"/>
             <ComboBox x:Name="EngineVersions" Margin="10,10,10,10" DisplayMemberPath="Version" SelectedValuePath="Path"/>
             <TextBox x:Name="Input" Margin="10,10,10,10"/>
             <Button Content="设定插件路径" Margin="10,10,10,10" Click="InputButton_Click"/>
+            <TextBlock x:Name="text" TextWrapping="Wrap" Margin="10,10,10,10" Text="请选择空白文件夹作为输出路径"/>
             <TextBox x:Name="Output" Margin="10,10,10,10"/>
             <Button Content="设置输出文件夹" Margin="10,10,10,10" Click="OutputButton_Click"/>
             <TextBlock x:Name="Tips" TextWrapping="Wrap" Text="TextBlock" Margin="10,0,10,0" Visibility="Hidden"/>
             <Button x:Name="Compile1" Content="开始编译" Margin="10,10,10,10" Click="CompileButton_Click"/>
         </StackPanel>
-
     </Grid>
+</ScrollViewer>
 </UserControl>

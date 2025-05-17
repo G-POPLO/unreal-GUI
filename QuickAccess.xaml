@@ -7,10 +7,12 @@
              xmlns:ui="http://schemas.modernwpf.com/2019"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
     <Grid Margin="20">
         <StackPanel>
             <TextBlock TextWrapping="Wrap" FontSize="18" Text="快速访问" Height="23" Width="760" Margin="10,10,10,10" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold"/>
-            <TextBlock TextWrapping="Wrap" FontSize="14" Height="23" Width="760" Margin="10,10,10,10"><Run Language="zh-cn" Text="打开"/><Run Text="插件目录"/></TextBlock>
+                <Separator/>
+                <TextBlock TextWrapping="Wrap" FontSize="14" Height="23" Width="760" Margin="10,10,10,10"><Run Language="zh-cn" Text="打开"/><Run Text="插件目录"/></TextBlock>
             <ItemsControl x:Name="EnginesList" Margin="10 20">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
@@ -20,4 +22,5 @@
             </ItemsControl>
         </StackPanel>
     </Grid>
+</ScrollViewer>
 </UserControl>

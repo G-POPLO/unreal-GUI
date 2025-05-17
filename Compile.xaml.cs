@@ -81,14 +81,27 @@ namespace unreal_GUI
                 using (var process = Process.Start(startInfo))
                 {
                     process.WaitForExit();
-                    Tips.Text = process.ExitCode == 0 
-                        ? "编译成功！" 
-                        : $"编译失败，错误代码：{process.ExitCode}";
+                    if (process.ExitCode == 0) 
+                    {
+                        Tips.Text = "编译成功！";
+                        if (Properties.Settings.Default.AutoOpen)
+                        {
+                            Process.Start("explorer.exe", Output.Text);
+                        }
+                    }
+                    else
+                    {
+                        Tips.Text = $"编译失败，错误代码：{process.ExitCode}";
+                    }
                 }
+                var player = new System.Media.SoundPlayer(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-on.wav"));
+                player.Play();
             }
             catch (Exception ex)
             {
                 Tips.Text = $"编译错误：{ex.Message}";
+                var player = new System.Media.SoundPlayer(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav"));
+                player.Play();
             }
         }
 
