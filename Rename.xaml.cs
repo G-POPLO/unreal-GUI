@@ -64,7 +64,14 @@ namespace unreal_GUI
             try
             {
                 string exePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App", "renom.exe");
-                System.Diagnostics.Process.Start("cmd.exe", $" /c \"{exePath}\" {command.Replace("renom ", "")}");
+                var processInfo = new ProcessStartInfo
+                {
+                    FileName = exePath,
+                    Arguments = command.Replace("renom ", ""),
+                    UseShellExecute = true,
+                    CreateNoWindow = true
+                };
+                System.Diagnostics.Process.Start(processInfo);
 
 
                 
@@ -80,7 +87,12 @@ namespace unreal_GUI
                     Input.Text = newPath;
                     msg.Text = "重命名成功！";
                     msg.Visibility = Visibility.Visible;
-                    Process.Start("explorer.exe", newPath);
+                    Process.Start(new ProcessStartInfo
+                {
+                    FileName = "explorer.exe",
+                    Arguments = newPath,
+                    UseShellExecute = true
+                });
                 }
             }
             catch (Exception ex)
