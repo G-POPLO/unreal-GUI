@@ -32,7 +32,7 @@ namespace unreal_GUI
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo { FileName = "https://github.com/G-POPLO/unreal-GUI", UseShellExecute = true });
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo { FileName = "https://github.com/G-POPLO/unreal-GUI/releases/", UseShellExecute = true });
         }
     }
 }
