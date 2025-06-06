@@ -11,7 +11,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Diagnostics;
 using System.IO;
 
@@ -45,7 +44,7 @@ namespace unreal_GUI
             }
 
             var selectedEngine = (Settings.EngineInfo)EngineVersions.SelectedItem;
-            var uatPath = System.IO.Path.Combine(selectedEngine.Path, "Engine", "Build", "BatchFiles", "RunUAT.bat");
+            var uatPath = Path.Combine(selectedEngine.Path, "Engine", "Build", "BatchFiles", "RunUAT.bat");
 
             if (!File.Exists(uatPath))
             {
