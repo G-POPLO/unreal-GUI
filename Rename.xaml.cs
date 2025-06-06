@@ -16,7 +16,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace unreal_GUI
 {
@@ -83,9 +83,11 @@ namespace unreal_GUI
                 if (Properties.Settings.Default.AutoOpen)
                 {
                     // 更新输入框为新的路径
-                    string newPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(projectPath), newName);
+                    string newPath = Path.Combine(System.IO.Path.GetDirectoryName(projectPath), newName);
                     Input.Text = newPath;
                     msg.Text = "重命名成功！";
+                    var player = new System.Media.SoundPlayer(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-on.wav"));
+                    player.Play();
                     msg.Visibility = Visibility.Visible;
                     Process.Start(new ProcessStartInfo
                 {
@@ -99,7 +101,7 @@ namespace unreal_GUI
             {
                 msg.Text = $"重命名失败：{ex.Message}";
                 msg.Visibility = Visibility.Visible;               
-                var player = new System.Media.SoundPlayer(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav"));
+                var player = new System.Media.SoundPlayer(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav"));
                 player.Play();
             }
         }

@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
+
 
 namespace unreal_GUI
 {
@@ -19,8 +19,39 @@ namespace unreal_GUI
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             await InitializeAsync();
+            await CheckForUpdatesAsync();
         }
+        private async Task CheckForUpdatesAsync()
+        {
+            if (!Properties.Settings.Default.AutoUpdate)
+                return;
 
+            try
+            {
+                var currentVersion = Application.ResourceAssembly.GetName().Version;
+                using (var client = new System.Net.Http.HttpClient())
+                {
+                    client.DefaultRequestHeaders.Add("User-Agent", "unreal-GUI");
+                    var response = await client.GetStringAsync("https://api.github.com/repos/G-POPLO/unreal-GUI/releases/latest");
+                    dynamic release = Newtonsoft.Json.JsonConvert.DeserializeObject(response);
+                    var latestVersion = new Version(release.tag_name.ToString().TrimStart('v'));
+
+                    if (latestVersion > currentVersion)
+                    {
+                        bool? result = await ModernDialog.ShowConfirmAsync("发现新版本 " + latestVersion + "，是否前往下载？", "版本更新");
+                        if (result == true)
+                        {
+                            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                            {
+                                FileName = "https://github.com/G-POPLO/unreal-GUI/releases/latest",
+                                UseShellExecute = true
+                            });
+                        }
+                    }
+                }
+            }
+            catch { }
+        }
         public async Task InitializeAsync()
         {
             if (!File.Exists("settings.json"))
@@ -67,6 +98,11 @@ namespace unreal_GUI
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
             PageTransitionAnimation.ApplyTransition(ContentContainer, new Settings());
+        }
+
+        private void Clear_Click(object sender, RoutedEventArgs e)
+        {
+            PageTransitionAnimation.ApplyTransition(ContentContainer, new Clear());
         }
     }
 }

@@ -1,0 +1,41 @@
+<UserControl x:Class="unreal_GUI.Clear"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:unreal_GUI"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="20,20,20,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="0*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock x:Name="Title" TextWrapping="Wrap" FontSize="18" Margin="0,10,0,10" FontWeight="Bold"><Run Language="zh-cn" Text="清除缓存"/></TextBlock>
+                <Separator/>
+                <TextBlock TextWrapping="Wrap" Margin="0,10,0,10"><Run Language="zh-cn" Text="清除项目文件夹中的目录，部分数据可以选择性保留"/></TextBlock>
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox x:Name="DerivedDataCache" Content="保留着色器文件" Margin="0,0,10,0"/>
+                    <CheckBox x:Name="SaveGame" Content="保留项目游戏存档(SaveGames)"/>
+                </StackPanel>
+                <TextBlock TextWrapping="Wrap" Margin="0,10,0,10"><Run Language="zh-cn" Text="设定要进行清理的工程路径"/></TextBlock>
+                <TextBox x:Name="Input" Margin="0,0,0,10"/>
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
+                    <Button Content="设定工程路径" Margin="0,0,10,0" Click="InputButton_Click"/>
+                    <Button Content="清理缓存" Click="CleanButton_Click"/>
+                </StackPanel>
+                <TextBlock x:Name="Tip" TextWrapping="Wrap" Visibility="Hidden"><Run Language="zh-cn" Text="清理任务完毕！"/></TextBlock>
+
+
+
+
+
+            </StackPanel>
+
+
+
+        </Grid>
+    </ScrollViewer>
+</UserControl>

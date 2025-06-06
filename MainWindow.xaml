@@ -15,7 +15,9 @@
         <Menu Grid.Row="0">
             <MenuItem Header="插件编译" Click="CompilePlugin_Click"/>
             <MenuItem Header="项目重命名" Click="RenameProject_Click"/>
+           
             <MenuItem Header="快速访问" Click="QuickAccess_Click"/>
+            <MenuItem Header="清除缓存" Click="Clear_Click"/>
             <MenuItem Header="设置" Click="Settings_Click"/>
             <MenuItem Header="关于" Click="About_Click"/>      
         </Menu>

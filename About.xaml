@@ -7,16 +7,24 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-    <Grid Margin="20,20,20,20">
-        <StackPanel>
-            <TextBlock x:Name="Title" TextWrapping="Wrap" Margin="10,10,10,10" Text="Unreal-GUI" FontSize="18"/>
-            <Separator/>
-            <TextBlock x:Name="Version" TextWrapping="Wrap" Margin="10,10,10,10" Text="{Binding VersionText}"/>
-            <TextBlock x:Name="Author" TextWrapping="Wrap" Margin="10,10,10,10" Text="作者：C-Poplo"/>
-            <TextBlock TextWrapping="Wrap" Margin="10,10,10,10" Text="一款简单的小工具，目的是辅助用户将繁杂的命令操作转成简单的GUI操作。"/>
-            <Button Content="获取更新" Margin="10,0,0,0" Click="Button_Click"/>
-        </StackPanel>
+        <Grid Margin="20,20,20,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="0*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock x:Name="Title" TextWrapping="Wrap" Margin="10,10,10,10" Text="Unreal-GUI" FontSize="18"/>
+                <Separator/>
+                <TextBlock x:Name="Version" TextWrapping="Wrap" Margin="10,10,10,10" Text="{Binding VersionText}"/>
+                <TextBlock x:Name="Author" TextWrapping="Wrap" Margin="10,10,10,10" Text="作者：C-Poplo"/>
+                <TextBlock TextWrapping="Wrap" Margin="10,10,10,10"><Run Text="一款简单的小工具，"/><Run Text="原开发"/><Run Text="目的是辅助用户将繁杂的命令操作转成简单的GUI操作"/><Run Text="，现在正"/><Run Language="zh-cn" Text="在"/><Run Text="准备考虑"/><Run Language="zh-cn" Text="将其"/><Run Text="打造成集合"/><Run Language="zh-cn" Text="各种"/><Run Text="开发小工具的统一平台。"/></TextBlock>
+                <Button x:Name="Update" Content="获取更新" Margin="10,0,0,0" Click="Button_Click"/>
+                
 
-    </Grid>
-</ScrollViewer>
+            </StackPanel>
+
+
+
+        </Grid>
+    </ScrollViewer>
 </UserControl>
