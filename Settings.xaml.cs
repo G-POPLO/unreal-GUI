@@ -32,16 +32,14 @@ namespace unreal_GUI
         public string Version { get; set; }
         
     }
-        public class SettingsInfo
-        { 
         
-        }
 
         public Settings()
         {
             InitializeComponent();
             Button0.IsChecked = Properties.Settings.Default.AutoOpen;
-            
+            Button1.IsChecked = Properties.Settings.Default.AutoUpdate;
+
             if (File.Exists("settings.json"))
             {
                 engineInfos = Newtonsoft.Json.JsonConvert.DeserializeObject<List<EngineInfo>>(File.ReadAllText("settings.json"));
@@ -137,7 +135,7 @@ namespace unreal_GUI
         {
             // 保存应用程序设置
             Properties.Settings.Default.AutoOpen = Button0.IsChecked.Value;
-            Properties.Settings.Default.AutoOpen = Button1.IsChecked.Value;
+            Properties.Settings.Default.AutoUpdate = Button1.IsChecked.Value;
             Properties.Settings.Default.Save();
             // 保存JSON文件
             File.WriteAllText("settings.json", Newtonsoft.Json.JsonConvert.SerializeObject(engineInfos));
