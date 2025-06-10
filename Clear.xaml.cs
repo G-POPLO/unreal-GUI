@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -30,6 +30,9 @@ namespace unreal_GUI
         public Clear()
         {
             InitializeComponent();
+            DDC.Text = $"DDC全局缓存路径：{Properties.Settings.Default.DDC}";
+            DDCshare.Text = $"DDC共享缓存路径：{Properties.Settings.Default.DDCShare}";
+            Total.Text = $"总计大小：{Properties.Settings.Default.DDCTotal:0.00} GB";
         }
 
         private void InputButton_Click(object sender, RoutedEventArgs e)
@@ -85,6 +88,95 @@ namespace unreal_GUI
             }
         }
 
-        
+        private void DDCButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                using (var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\\Epic Games\\GlobalDataCachePath"))
+                {
+                    var localPath = key?.GetValue("UE-LocalDataCachePath")?.ToString();
+                    var sharedPath = key?.GetValue("UE-SharedDataCachePath")?.ToString();
+
+                    if (!string.IsNullOrEmpty(localPath))
+                    {
+                        DDC.Text = $"DDC全局缓存路径：{Properties.Settings.Default.DDC}";
+                        Properties.Settings.Default.DDC = localPath;
+                    }
+
+                    if (!string.IsNullOrEmpty(sharedPath))
+                    {
+                        DDCshare.Text = $"DDC共享缓存路径：{Properties.Settings.Default.DDCShare}";
+                        Properties.Settings.Default.DDCShare = sharedPath;
+                    }
+
+                    Properties.Settings.Default.Save();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                _ = ModernDialog.ShowConfirmAsync($"找不到DDC缓存路径：" + ex.Message, "提示");
+            }
+        }
+
+        private float CalculateDirectorySize(string path)
+        {
+            if (!Directory.Exists(path)) return 0;
+            
+            float size = 0;
+            try
+            {
+                foreach (var file in Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories))
+                {
+                    var info = new FileInfo(file);
+                    size += info.Length;
+                }
+            }
+            catch { }
+            return size / (1024 * 1024 * 1024); // 转换为GB
+        }
+
+        private async void TotalButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            try
+            {
+                button.IsEnabled = false;
+                Total.Text = "正在计算...";
+
+                await Task.Run(() =>
+                {
+                    var ddcPath = Properties.Settings.Default.DDC;
+                    var sharePath = Properties.Settings.Default.DDCShare;
+
+                    if (string.IsNullOrEmpty(ddcPath) || string.IsNullOrEmpty(sharePath))
+                    {
+                        throw new Exception("请先获取DDC缓存路径");
+                    }
+
+                    float totalSize = CalculateDirectorySize(ddcPath) + CalculateDirectorySize(sharePath);
+                    Properties.Settings.Default.DDCTotal = totalSize;
+                    Dispatcher.Invoke(() =>
+                    {
+                        Total.Text = $"总计大小：{totalSize:0.00} GB";
+                    });
+                    Properties.Settings.Default.Save();
+                });
+            }
+            catch (Exception ex)
+            {
+                await Dispatcher.Invoke(async () =>
+                {
+                    await ModernDialog.ShowInfoAsync("计算失败: " + ex.Message, "错误提示");
+                    Total.Text = $"总计大小：{Properties.Settings.Default.DDCTotal:0.00} GB";
+                });
+            }
+            finally
+            {
+                button.IsEnabled = true;
+            }
+        }
     }
 }
+
+
