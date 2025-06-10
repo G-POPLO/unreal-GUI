@@ -22,17 +22,27 @@ namespace unreal_GUI
     public partial class About : System.Windows.Controls.UserControl
     {
         public string VersionText { get; set; }
+        public string LatestVersion { get; set; }
 
         public About()
         {
-            InitializeComponent();                                       
+            InitializeComponent();
+           
             VersionText = "版本：" + Application.ResourceAssembly.GetName().Version.ToString();
-            DataContext = this;                            
+            DataContext = this;
+            //Tip.Text = $"最新可用版本：{LatestVersion}";
         }
+        
+
+               
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo { FileName = "https://github.com/G-POPLO/unreal-GUI/releases/", UseShellExecute = true });
         }
+
+        
     }
 }
+
+

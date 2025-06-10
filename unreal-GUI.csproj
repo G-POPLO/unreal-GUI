@@ -14,7 +14,7 @@
     <SignAssembly>False</SignAssembly>
     <Authors>C-Poplo</Authors>
     <Company />
-    <Version>0.1.0.0</Version>
+    <Version>0.1.1.0</Version>
     <Title>Unreal-GUI</Title>
     <AssemblyName>Unreal-GUI</AssemblyName>
     <DelaySign>True</DelaySign>
@@ -25,13 +25,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
   </PropertyGroup>
-  <PropertyGroup Label="MultilingualAppToolkit">
-    <MultilingualAppToolkitVersion>4.0</MultilingualAppToolkitVersion>
-    <MultilingualFallbackLanguage>zh-CN</MultilingualFallbackLanguage>
-    <TranslationReport Condition="'$(Configuration)' == 'Release'">true</TranslationReport>
-    <SuppressPseudoWarning Condition="'$(Configuration)' == 'Debug'">true</SuppressPseudoWarning>
-    <MATProjectType>AnonResx</MATProjectType>
-  </PropertyGroup>
+
   <ItemGroup>
     <Content Include="$(ProjectDir)App\renom.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -39,6 +33,7 @@
     </Content>
     <Content Include="$(ProjectDir)Sound\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <DestinationFolder>$(OutputPath)Sound</DestinationFolder>
     </Content>
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -65,10 +60,7 @@
   </PropertyGroup>
   
 
-  <ItemGroup>
-    <Content Include="Icon\icon.ico" />
-    <Content Include="Sound\ui-sound-on.wav" />
-  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="ModernWpfUI" Version="0.9.6" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />

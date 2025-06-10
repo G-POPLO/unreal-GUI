@@ -46,13 +46,13 @@
                              Glyph="&#xE8B7;" />
                         </ui:AppBarToggleButton.Icon>
                     </ui:AppBarToggleButton>
-                    <ui:AppBarToggleButton x:Name="Button1" Label="应用程序打开后自动检查更新" Checked="Button1_Checked" >
+                    <!--<ui:AppBarToggleButton x:Name="Button1" Label="应用程序打开后自动检查更新" Checked="Button1_Checked" >
                         <ui:AppBarToggleButton.Icon>
                             <ui:FontIcon
                              FontFamily="Segoe MDL2 Assets"
                              Glyph="&#xE895;" />
                         </ui:AppBarToggleButton.Icon>
-                    </ui:AppBarToggleButton>
+                    </ui:AppBarToggleButton>-->
                 </UniformGrid>
             </StackPanel>
         </ScrollViewer>
