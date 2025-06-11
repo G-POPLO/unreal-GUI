@@ -13,7 +13,7 @@ Unreal-GUI是一款旨在简化虚幻引擎（Unreal Engine）相关操作流程
 4. **缓存清理**：清理项目文件的缓存，包括编译生成的中间文件和临时文件。同时可以查看DDC的缓存情况。
 
 ## 常见问题
-部分操作可能会导致程序报错，可以参考目录下的[error](https://markdown.com.cn)文件来查看报错原因。
+部分操作可能会导致程序报错，可以参考目录下的[error](https://github.com/G-POPLO/unreal-GUI/blob/master/error.md)文件来查看报错原因。
 
 
 
