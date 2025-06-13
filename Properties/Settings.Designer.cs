@@ -85,13 +85,36 @@ namespace unreal_GUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public float DDCTotal {
             get {
                 return ((float)(this["DDCTotal"]));
             }
             set {
                 this["DDCTotal"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LatestVersion {
+            get {
+                return ((string)(this["LatestVersion"]));
+            }
+            set {
+                this["LatestVersion"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public short SelectedUpdateSource {
+            get {
+                return ((short)(this["SelectedUpdateSource"]));
+            }
+            set {
+                this["SelectedUpdateSource"] = value;
             }
         }
     }

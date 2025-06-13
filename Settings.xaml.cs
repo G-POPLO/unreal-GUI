@@ -13,7 +13,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using static unreal_GUI.Settings;
 
 namespace unreal_GUI
@@ -37,8 +36,10 @@ namespace unreal_GUI
         public Settings()
         {
             InitializeComponent();
+            // 初始化UI页面
             Button0.IsChecked = Properties.Settings.Default.AutoOpen;
-            //Button1.IsChecked = Properties.Settings.Default.AutoUpdate;
+            Button1.IsChecked = Properties.Settings.Default.AutoUpdate;
+            SelectedUpdate.SelectedIndex = Properties.Settings.Default.SelectedUpdateSource;
 
             if (File.Exists("settings.json"))
             {
@@ -56,7 +57,7 @@ namespace unreal_GUI
             try
             {
                 // 尝试从路径中提取版本号
-                var dirName = System.IO.Path.GetFileName(enginePath.TrimEnd(System.IO.Path.DirectorySeparatorChar));
+                var dirName = Path.GetFileName(enginePath.TrimEnd(System.IO.Path.DirectorySeparatorChar));
                 if (dirName.StartsWith("UE_"))
                 {
                     return dirName.Substring(3);
@@ -135,16 +136,20 @@ namespace unreal_GUI
         {
             // 保存应用程序设置
             Properties.Settings.Default.AutoOpen = Button0.IsChecked.Value;
-            //Properties.Settings.Default.AutoUpdate = Button1.IsChecked.Value;
+            Properties.Settings.Default.AutoUpdate = Button1.IsChecked.Value;
+
+            //Properties.Settings.Default.SelectedUpdateSource = SelectedUpdate.SelectedItem != null 
+            //    ? SelectedUpdate.SelectedItem.ToString() 
+            //    : "Gitcode"; // 默认选中Gitcode作为下载源
+            
             Properties.Settings.Default.Save();
             // 保存JSON文件
             File.WriteAllText("settings.json", Newtonsoft.Json.JsonConvert.SerializeObject(engineInfos));
+
+
+            Tip.Text = "设置已保存";
+            Tip.Visibility = System.Windows.Visibility.Visible;
             
-            if (this.FindName("Msg") is System.Windows.Controls.TextBlock msg)
-            {
-                msg.Text = "设置已保存";
-                msg.Visibility = System.Windows.Visibility.Visible;
-            }
         }
 
 
@@ -154,11 +159,13 @@ namespace unreal_GUI
             Properties.Settings.Default.AutoOpen  = (bool)Button0.IsChecked;
         }
 
-        /*private void Button1_Checked(object sender, RoutedEventArgs e)
+
+
+        private void Button1_Checked(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.AutoUpdate = (bool)Button1.IsChecked;
-        }*/
-        
+        }
+
 
     }
 }
