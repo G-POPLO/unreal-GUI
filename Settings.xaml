@@ -10,8 +10,8 @@
 
     <Grid Margin="20,20,20,20">
         <Grid.RowDefinitions>
-           
-            
+
+
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <ScrollViewer HorizontalScrollBarVisibility="Auto" CanContentScroll="True" VerticalScrollBarVisibility="Auto">
@@ -25,35 +25,44 @@
                     <Button Content="删除" Margin="10,0,10,0" Click="RemoveEnginePath_Click"/>
                     <Button Content="自动设置引擎路径" Margin="10,0,10,0" Click="AutoPath_Click"/>
                     <Button Click="SavePaths_Click" Margin="10,10,10,10" HorizontalAlignment="Right" VerticalAlignment="Center">
-    <StackPanel Orientation="Horizontal">
-        <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE74E;"/>
-        <TextBlock Text="保存设置" Margin="5,0,0,0"/>
-    </StackPanel>
-</Button>
-                    
+                        <StackPanel Orientation="Horizontal">
+                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE74E;"/>
+                            <TextBlock Text="保存设置" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+
                 </StackPanel>
-                
-                <TextBlock x:Name="Msg" TextWrapping="Wrap" Margin="10,0,20,0" Visibility="Hidden"><Run Text="输入"/><Run Text="提示信息"/></TextBlock>
-                <TextBlock x:Name="Settings_title" TextWrapping="Wrap" Margin="10,10,10,10" FontWeight="Bold" FontSize="15"><Run Language="zh-cn" Text="应用设置"/></TextBlock>
+
+                <TextBlock x:Name="Tip" TextWrapping="Wrap" Margin="10,0,20,0" Visibility="Hidden"><Run Text="输入"/><Run Text="提示信息"/></TextBlock>
                 <Separator/>
-                <UniformGrid Margin="10,10,10,10" HorizontalAlignment="Left">
-                    <!--https://learn.microsoft.com/zh-cn/windows/apps/design/style/segoe-ui-symbol-font-->
-                    <!-- App bar button with font icon. -->
-                    <ui:AppBarToggleButton x:Name="Button0" Label="任务完成后打开输出文件夹" Checked="Button0_Checked" Margin="0,0,10,0" >
-                        <ui:AppBarToggleButton.Icon>
-                            <ui:FontIcon
+                <StackPanel Margin="10,10,10,10">
+                    <TextBlock x:Name="Settings_title" TextWrapping="Wrap" FontWeight="Bold" FontSize="15"><Run Language="zh-cn" Text="应用设置"/></TextBlock>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13"><Run Language="zh-cn" Text="更新下载源设置"/></TextBlock>
+                        <ComboBox x:Name="SelectedUpdate" SelectedIndex="0" Width="120" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10,0,0,0" Cursor="Arrow">
+                            <ComboBoxItem Content="Gitcode"/>
+                            <ComboBoxItem Content="Github"/>
+                        </ComboBox>
+                    </StackPanel>
+                    <UniformGrid Margin="10,10,10,10" HorizontalAlignment="Left">
+                        <!--https://learn.microsoft.com/zh-cn/windows/apps/design/style/segoe-ui-symbol-font-->
+                        <!-- App bar button with font icon. -->
+                        <ui:AppBarToggleButton x:Name="Button0" Label="任务完成后打开输出文件夹" Checked="Button0_Checked" Margin="0,0,10,0" >
+                            <ui:AppBarToggleButton.Icon>
+                                <ui:FontIcon
                              FontFamily="Segoe MDL2 Assets"
                              Glyph="&#xE8B7;" />
-                        </ui:AppBarToggleButton.Icon>
-                    </ui:AppBarToggleButton>
-                    <!--<ui:AppBarToggleButton x:Name="Button1" Label="应用程序打开后自动检查更新" Checked="Button1_Checked" >
-                        <ui:AppBarToggleButton.Icon>
-                            <ui:FontIcon
+                            </ui:AppBarToggleButton.Icon>
+                        </ui:AppBarToggleButton>
+                        <ui:AppBarToggleButton x:Name="Button1" Label="应用程序打开后自动检查更新" Checked="Button1_Checked" >
+                            <ui:AppBarToggleButton.Icon>
+                                <ui:FontIcon
                              FontFamily="Segoe MDL2 Assets"
                              Glyph="&#xE895;" />
-                        </ui:AppBarToggleButton.Icon>
-                    </ui:AppBarToggleButton>-->
-                </UniformGrid>
+                            </ui:AppBarToggleButton.Icon>
+                        </ui:AppBarToggleButton>
+                    </UniformGrid>
+                </StackPanel>
             </StackPanel>
         </ScrollViewer>
 

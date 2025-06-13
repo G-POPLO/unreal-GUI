@@ -94,5 +94,29 @@ namespace unreal_GUI.Properties {
                 this["DDCTotal"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LatestVersion {
+            get {
+                return ((string)(this["LatestVersion"]));
+            }
+            set {
+                this["LatestVersion"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("GitHub")]
+        public string SelectedUpdateSource {
+            get {
+                return ((string)(this["SelectedUpdateSource"]));
+            }
+            set {
+                this["SelectedUpdateSource"] = value;
+            }
+        }
     }
 }
