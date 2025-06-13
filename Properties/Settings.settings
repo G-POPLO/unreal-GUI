@@ -18,6 +18,12 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="DDCTotal" Type="System.Single" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="LatestVersion" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="SelectedUpdateSource" Type="System.Int16" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>

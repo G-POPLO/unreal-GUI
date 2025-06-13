@@ -19,47 +19,59 @@ namespace unreal_GUI
             InitializeComponent();
             Loaded += MainWindow_Loaded;
         }
+        // 问题就出现在这里，信息没有显示
+       
+        
 
-        public string latestVersion;
-
-        //private async Task CheckForUpdatesAsync()
-        //{
-        //    try
-        //    {
-        //        using var client = new System.Net.Http.HttpClient();
-        //        client.DefaultRequestHeaders.UserAgent.ParseAdd("unreal-GUI");
-        //        var response = await client.GetAsync("https://api.github.com/repos/G-POPLO/unreal-GUI/releases/latest");
-        //        // 获取最新版本号latestVersion
-        //        latestVersion = JObject.Parse(await response.Content.ReadAsStringAsync())["tag_name"]?.ToString();
-
-        //        // 通过事件通知更新UI
+        private async Task CheckForUpdatesAsync()
+        {
+            
+            try
+            {
+                if  (!Properties.Settings.Default.AutoUpdate)
+                    return;
+                // 开始获取最新版本号
+                using var client = new System.Net.Http.HttpClient();
+                client.DefaultRequestHeaders.UserAgent.ParseAdd("unreal-GUI");
+                var response = Properties.Settings.Default.SelectedUpdateSource == "GitHub" 
+                    ? await client.GetAsync("https://api.github.com/repos/G-POPLO/unreal-GUI/releases/latest")
+                    : await client.GetAsync("https://api.gitcode.com/api/v5/repos/C-Poplo/unreal-GUI/releases/latest/?access_token=4RszX_1zdryXuvgwHbV-Edr7");
                 
+                // 获取最新版本号latestVersion
+                var latestVersion = "";
+                latestVersion = JObject.Parse(await response.Content.ReadAsStringAsync())["tag_name"]?.ToString();
+                Properties.Settings.Default.LatestVersion = latestVersion;
+                Properties.Settings.Default.Save();
 
+
+
+                var currentVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
+
+                if (Version.Parse(latestVersion) >= Version.Parse(currentVersion))
+                {
+                    var result = await ModernDialog.ShowCustomAsync("发现新版本 " + latestVersion, "更新可用", "立即下载");
+                    if (result == ContentDialogResult.Primary)
+                    {
+                        var url = Properties.Settings.Default.SelectedUpdateSource == "GitHub"
+                            ? "https://github.com/G-POPLO/unreal-GUI/releases/latest"
+                            : "https://gitcode.com/C-Poplo/unreal-GUI/releases";
+                        Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+                    }
+                }
                 
-        //        var currentVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
-
-        //        if (Version.Parse(latestVersion) <= Version.Parse(currentVersion))
-        //        {
-
-        //            var result = await ModernDialog.ShowCustomAsync("发现新版本 " + latestVersion, "更新可用", "立即下载");
-        //            if (result == ContentDialogResult.Primary)
-        //            {
-        //                Process.Start(new ProcessStartInfo("https://github.com/G-POPLO/unreal-GUI/releases/latest") { UseShellExecute = true });
-        //            }
-        //        }
-
-        //        Properties.Settings.Default.LastUpdateTime = DateTime.Now;
-        //        Properties.Settings.Default.Save();
-        //    }
-        //    catch {
-        //        // 错误逻辑
-        //    }
-        //}
+                Properties.Settings.Default.LastUpdateTime = DateTime.Now;               
+                Properties.Settings.Default.Save();
+            }
+            catch
+            {
+                // 错误逻辑
+            }
+        }
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             await InitializeAsync();
-            //await CheckForUpdatesAsync(); // 添加更新检查
+            await CheckForUpdatesAsync(); // 添加更新检查
         }
 
         // 若没有发现设置JSON文件，则弹窗提示
@@ -106,12 +118,6 @@ namespace unreal_GUI
         private void About_Click(object sender, RoutedEventArgs e)
         {
             PageTransitionAnimation.ApplyTransition(ContentContainer, new About());
-            //var aboutPage = ContentContainer.Content as About;
-            //    if(aboutPage != null)
-            //    {
-            //    aboutPage.LatestVersion = latestVersion;
-            //    aboutPage.Tip.Text = $"最新可用版本：{latestVersion}";
-            //    }
         }
 
 

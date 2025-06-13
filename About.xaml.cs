@@ -21,16 +21,22 @@ namespace unreal_GUI
     /// </summary>
     public partial class About : System.Windows.Controls.UserControl
     {
-        public string VersionText { get; set; }
-        public string LatestVersion { get; set; }
+
+        private string LatestVersion;
+        private string LastUpdateTime;
+        
+
 
         public About()
         {
             InitializeComponent();
-           
-            VersionText = "版本：" + Application.ResourceAssembly.GetName().Version.ToString();
+            // 控件信息更新
+            LastUpdateTime = Properties.Settings.Default.LastUpdateTime.ToString();
+            LatestVersion = Properties.Settings.Default.LatestVersion.ToString();
+            Version.Text = "当前版本：" + Application.ResourceAssembly.GetName().Version.ToString();
             DataContext = this;
-            //Tip.Text = $"最新可用版本：{LatestVersion}";
+            Tip.Text = $"最新可用版本：{LatestVersion}";
+            Update_Time.Text = $"上次更新时间：{LastUpdateTime}";
         }
         
 
