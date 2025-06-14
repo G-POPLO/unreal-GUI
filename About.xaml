@@ -4,8 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:unreal_GUI"
+             xmlns:viewmodel="clr-namespace:unreal_GUI.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <viewmodel:AboutViewModel/>
+    </UserControl.DataContext>
+    
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Margin="20,20,20,20">
             <Grid.ColumnDefinitions>
@@ -18,15 +23,10 @@
                 <TextBlock x:Name="Version" TextWrapping="Wrap" Margin="10,10,10,10" Text="{Binding VersionText}"/>
                 <TextBlock x:Name="Author" TextWrapping="Wrap" Margin="10,10,10,10" Text="作者：C-Poplo"/>
                 <TextBlock TextWrapping="Wrap" Margin="10,10,10,10"><Run Text="一款简单的小工具，"/><Run Text="原开发"/><Run Text="目的是辅助用户将繁杂的命令操作转成简单的GUI操作"/><Run Text="，现在正"/><Run Language="zh-cn" Text="在"/><Run Text="准备考虑"/><Run Language="zh-cn" Text="将其"/><Run Text="打造成集合"/><Run Language="zh-cn" Text="各种"/><Run Text="开发小工具的统一平台。"/></TextBlock>
-                <Button x:Name="Update" Content="获取更新" Margin="10,0,0,0" Click="Button_Click"/>
-                <TextBlock x:Name="Update_Time" TextWrapping="Wrap" Text="上次检查更新时间：" Margin="10,10,10,10"/>
-                <TextBlock x:Name="Tip" TextWrapping="Wrap" Text="暂时无法从Github获取最新的版本信息" Margin="10,0,10,0"/>
-
-
+                <Button x:Name="Update" Content="获取更新" Margin="10,0,0,0" Command="{Binding CheckUpdateCommand}"/>
+                <TextBlock x:Name="Update_Time" TextWrapping="Wrap" Text="{Binding LastUpdateTime}" Margin="10,10,10,10"/>
+                <TextBlock x:Name="Tip" TextWrapping="Wrap" Text="{Binding Tip}" Margin="10,0,10,0"/>
             </StackPanel>
-
-
-
         </Grid>
     </ScrollViewer>
 </UserControl>
