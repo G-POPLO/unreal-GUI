@@ -38,11 +38,11 @@
                 <StackPanel Margin="10,10,10,10">
                     <TextBlock x:Name="Settings_title" TextWrapping="Wrap" FontWeight="Bold" FontSize="15"><Run Language="zh-cn" Text="应用设置"/></TextBlock>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13"><Run Language="zh-cn" Text="更新下载源设置"/></TextBlock>
-                        <ComboBox x:Name="SelectedUpdate" SelectedIndex="0" Width="120" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10,0,0,0" Cursor="Arrow">
+                        <!--<TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13"><Run Language="zh-cn" Text="更新下载源设置"/></TextBlock>-->
+                        <!--<ComboBox x:Name="SelectedUpdate" SelectedIndex="0" Width="120" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10,0,0,0" Cursor="Arrow">
                             <ComboBoxItem Content="Gitcode"/>
                             <ComboBoxItem Content="Github"/>
-                        </ComboBox>
+                        </ComboBox>-->
                     </StackPanel>
                     <UniformGrid Margin="10,10,10,10" HorizontalAlignment="Left">
                         <!--https://learn.microsoft.com/zh-cn/windows/apps/design/style/segoe-ui-symbol-font-->
@@ -61,13 +61,13 @@
                              Glyph="&#xE83B;" />
                         </ui:AppBarToggleButton.Icon>
                     </ui:AppBarToggleButton>
-                    <ui:AppBarToggleButton x:Name="Button1" Label="应用程序打开后自动检查更新" Checked="Button1_Checked" >
+                    <!--<ui:AppBarToggleButton x:Name="Button1" Label="应用程序打开后自动检查更新" Checked="Button1_Checked" >
                         <ui:AppBarToggleButton.Icon>
                             <ui:FontIcon
                              FontFamily="Segoe MDL2 Assets"
                              Glyph="&#xE895;" />
                             </ui:AppBarToggleButton.Icon>
-                        </ui:AppBarToggleButton>
+                        </ui:AppBarToggleButton>-->
                     </UniformGrid>
                 </StackPanel>
             </StackPanel>
