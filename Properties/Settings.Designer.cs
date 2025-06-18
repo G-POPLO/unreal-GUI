@@ -94,5 +94,17 @@ namespace unreal_GUI.Properties {
                 this["DDCTotal"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ZenDashborad {
+            get {
+                return ((bool)(this["ZenDashborad"]));
+            }
+            set {
+                this["ZenDashborad"] = value;
+            }
+        }
     }
 }
