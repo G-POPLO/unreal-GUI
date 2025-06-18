@@ -38,8 +38,8 @@ namespace unreal_GUI
             InitializeComponent();
             // 初始化UI页面
             Button0.IsChecked = Properties.Settings.Default.AutoOpen;
-            Button1.IsChecked = Properties.Settings.Default.AutoUpdate;
-            SelectedUpdate.SelectedIndex = Properties.Settings.Default.SelectedUpdateSource;
+            Button2.IsChecked = Properties.Settings.Default.ZenDashborad;
+            //Button1.IsChecked = Properties.Settings.Default.AutoUpdate;
 
             if (File.Exists("settings.json"))
             {
@@ -136,12 +136,8 @@ namespace unreal_GUI
         {
             // 保存应用程序设置
             Properties.Settings.Default.AutoOpen = Button0.IsChecked.Value;
-            Properties.Settings.Default.AutoUpdate = Button1.IsChecked.Value;
-
-            //Properties.Settings.Default.SelectedUpdateSource = SelectedUpdate.SelectedItem != null 
-            //    ? SelectedUpdate.SelectedItem.ToString() 
-            //    : "Gitcode"; // 默认选中Gitcode作为下载源
-            
+            Properties.Settings.Default.ZenDashborad = Button2.IsChecked.Value;
+            //Properties.Settings.Default.AutoUpdate = Button1.IsChecked.Value;
             Properties.Settings.Default.Save();
             // 保存JSON文件
             File.WriteAllText("settings.json", Newtonsoft.Json.JsonConvert.SerializeObject(engineInfos));
@@ -159,12 +155,15 @@ namespace unreal_GUI
             Properties.Settings.Default.AutoOpen  = (bool)Button0.IsChecked;
         }
 
+        private void Button2_Checked(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.ZenDashborad = (bool)Button2.IsChecked;
+        }
 
-
-        private void Button1_Checked(object sender, RoutedEventArgs e)
+        /*private void Button1_Checked(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.AutoUpdate = (bool)Button1.IsChecked;
-        }
+        }*/
 
 
     }
