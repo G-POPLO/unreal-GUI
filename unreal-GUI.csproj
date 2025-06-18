@@ -14,7 +14,7 @@
     <SignAssembly>False</SignAssembly>
     <Authors>C-Poplo</Authors>
     <Company />
-    <Version>0.2.0.0</Version>
+    <Version>0.1.2.0</Version>
     <Title>Unreal-GUI</Title>
     <AssemblyName>Unreal-GUI</AssemblyName>
     <DelaySign>True</DelaySign>
