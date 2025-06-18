@@ -96,25 +96,13 @@ namespace unreal_GUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string LatestVersion {
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ZenDashborad {
             get {
-                return ((string)(this["LatestVersion"]));
+                return ((bool)(this["ZenDashborad"]));
             }
             set {
-                this["LatestVersion"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public short SelectedUpdateSource {
-            get {
-                return ((short)(this["SelectedUpdateSource"]));
-            }
-            set {
-                this["SelectedUpdateSource"] = value;
+                this["ZenDashborad"] = value;
             }
         }
     }
