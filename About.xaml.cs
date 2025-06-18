@@ -31,12 +31,12 @@ namespace unreal_GUI
         {
             InitializeComponent();
             // 控件信息更新
-            LastUpdateTime = Properties.Settings.Default.LastUpdateTime.ToString();
-            LatestVersion = Properties.Settings.Default.LatestVersion.ToString();
+            //LastUpdateTime = Properties.Settings.Default.LastUpdateTime.ToString();
+            //LatestVersion = Properties.Settings.Default.LatestVersion.ToString();
             Version.Text = "当前版本：" + Application.ResourceAssembly.GetName().Version.ToString();
             DataContext = this;
-            Tip.Text = $"最新可用版本：{LatestVersion}";
-            Update_Time.Text = $"上次更新时间：{LastUpdateTime}";
+            //Tip.Text = $"最新可用版本：{LatestVersion}";
+            //Update_Time.Text = $"上次更新时间：{LastUpdateTime}";
         }
         
 
