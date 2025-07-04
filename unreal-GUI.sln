@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "unreal-GUI-download", "..\unreal-GUI-download\unreal-GUI-download.csproj", "{412DC6D2-8C9A-4AC3-889B-61F68ECB9123}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,14 @@ Global
 		{152FF494-525F-417B-849B-9B7FC54DCA17}.Release|Any CPU.Build.0 = Release|Any CPU
 		{152FF494-525F-417B-849B-9B7FC54DCA17}.Release|x64.ActiveCfg = Release|x64
 		{152FF494-525F-417B-849B-9B7FC54DCA17}.Release|x64.Build.0 = Release|x64
+		{412DC6D2-8C9A-4AC3-889B-61F68ECB9123}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{412DC6D2-8C9A-4AC3-889B-61F68ECB9123}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{412DC6D2-8C9A-4AC3-889B-61F68ECB9123}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{412DC6D2-8C9A-4AC3-889B-61F68ECB9123}.Debug|x64.Build.0 = Debug|Any CPU
+		{412DC6D2-8C9A-4AC3-889B-61F68ECB9123}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{412DC6D2-8C9A-4AC3-889B-61F68ECB9123}.Release|Any CPU.Build.0 = Release|Any CPU
+		{412DC6D2-8C9A-4AC3-889B-61F68ECB9123}.Release|x64.ActiveCfg = Release|Any CPU
+		{412DC6D2-8C9A-4AC3-889B-61F68ECB9123}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

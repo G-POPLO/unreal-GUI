@@ -61,18 +61,6 @@ namespace unreal_GUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2025-06-06")]
-        public global::System.DateTime LastUpdateTime {
-            get {
-                return ((global::System.DateTime)(this["LastUpdateTime"]));
-            }
-            set {
-                this["LastUpdateTime"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string DDCShare {
             get {
@@ -92,30 +80,6 @@ namespace unreal_GUI.Properties {
             }
             set {
                 this["DDCTotal"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string LatestVersion {
-            get {
-                return ((string)(this["LatestVersion"]));
-            }
-            set {
-                this["LatestVersion"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public short SelectedUpdateSource {
-            get {
-                return ((short)(this["SelectedUpdateSource"]));
-            }
-            set {
-                this["SelectedUpdateSource"] = value;
             }
         }
         

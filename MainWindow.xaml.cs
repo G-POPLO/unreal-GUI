@@ -70,6 +70,7 @@ namespace unreal_GUI
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            Config.CreateConfig(); // 新增配置检查
             await InitializeAsync();
             //await CheckForUpdatesAsync(); // 添加更新检查
         }
