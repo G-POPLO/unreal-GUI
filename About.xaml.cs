@@ -22,8 +22,8 @@ namespace unreal_GUI
     public partial class About : System.Windows.Controls.UserControl
     {
 
-        private string LatestVersion;
-        private string LastUpdateTime;
+        //private string LatestVersion;
+        //private string LastUpdateTime;
         
 
 
