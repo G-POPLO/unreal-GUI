@@ -36,6 +36,14 @@
       <DestinationFolder>$(OutputPath)Sound</DestinationFolder>
     </Content>
   </ItemGroup>
+  <PropertyGroup>
+    <!-- 暂时禁用MordenWP的多语言资源生成 -->
+    <!-- <SatelliteResourceLanguages>en</SatelliteResourceLanguages> -->
+    <IncludeSatelliteResourceLanguages>false</IncludeSatelliteResourceLanguages>
+    <NeutralLanguage>zh-CN</NeutralLanguage>
+  </PropertyGroup>
+  
+    
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebugType>full</DebugType>
     <WarningLevel>3</WarningLevel>
