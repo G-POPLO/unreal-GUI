@@ -26,10 +26,16 @@ namespace unreal_GUI
         {
             InitializeComponent();
             LoadEngineList();
+            //LoadWebsiteList();
         }
+        //构造常用网站按钮
+        //private void LoadWebsiteList()
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         private List<Settings.EngineInfo> engines = new List<Settings.EngineInfo>();
-
+        //构造插件按钮
         private void LoadEngineList()
         {
             if (File.Exists("settings.json"))
@@ -54,6 +60,16 @@ namespace unreal_GUI
             }
         }
 
-       
+        private void Button_Click_0(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo { FileName = "https://www.fab.com/", UseShellExecute = true });
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo { FileName = "https://dev.epicgames.com/community/unreal-engine/learning", UseShellExecute = true });
+        }
+
+  
     }
 }
