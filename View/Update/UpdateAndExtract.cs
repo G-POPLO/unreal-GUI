@@ -2,6 +2,7 @@ using ModernWpf.Controls;
 using Newtonsoft.Json.Linq;
 using SevenZip;
 using System;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -11,10 +12,10 @@ namespace unreal_GUI.View.Update
 {
     class UpdateAndExtract
     {
-        private static JObject _releaseInfo;
-        private static string? latestVersion;
+        public static JObject release_info;
+        public static string? latestVersion;
 
-        public static async Task<bool> CheckForUpdatesAsync()
+        public static async Task CheckForUpdatesAsync()
         {
             var currentVersion = Application.ResourceAssembly.GetName().Version.ToString();
             try
@@ -26,27 +27,44 @@ namespace unreal_GUI.View.Update
                     ? await client.GetAsync("https://api.gitcode.com/api/v5/repos/C-Poplo/unreal-GUI/releases/latest/?access_token=4RszX_1zdryXuvgwHbV-Edr7")
                     : await client.GetAsync("https://api.github.com/repos/G-POPLO/unreal-GUI/releases/latest");
 
-                _releaseInfo = JObject.Parse(await response.Content.ReadAsStringAsync());
-                latestVersion = _releaseInfo["tag_name"]?.ToString();
+                release_info = JObject.Parse(await response.Content.ReadAsStringAsync());
+                latestVersion = release_info["tag_name"]?.ToString();
 
-                return !string.IsNullOrEmpty(latestVersion) && 
-                       Version.Parse(latestVersion) > Version.Parse(currentVersion);
+                if (Version.Parse(latestVersion) > Version.Parse(currentVersion))
+                {
+                    bool? result = await ModernDialog.ShowConfirmAsync($"发现新版本{latestVersion},是否下载？", "提示");
+                    if (result == true)
+                    {
+                        await DownloadAndUpdateAsync();                       
+                    }
+                    else
+                    {
+                        return;
+                    }
+
+
+                }
             }
-            catch { return false; }
+            catch (Exception ex) 
+            {
+                await ModernDialog.ShowInfoAsync($"下载失败：{ex.Message}", "提示");
+            }            
         }
 
         public static async Task DownloadAndUpdateAsync()
         {
-            if (_releaseInfo == null) return;
+            //if (release_info == null) return;
 
             try
             {
-                string? downloadUrl = _releaseInfo["assets"]
+                string? downloadUrl = release_info["assets"]
                     ?.FirstOrDefault(a => a["name"]?.ToString().EndsWith(".7z") == true)?["browser_download_url"]?.ToString();
 
                 if (!string.IsNullOrEmpty(downloadUrl))
                 {
-                    string downloadPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "download", $"{latestVersion}.7z");
+                    var downloadDir = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "download");
+                    System.IO.Directory.CreateDirectory(downloadDir);
+                    var downloadPath = System.IO.Path.Combine(downloadDir, $"{latestVersion}.7z");
                     using (var fileStream = System.IO.File.Create(downloadPath))
                     {
 
@@ -58,16 +76,19 @@ namespace unreal_GUI.View.Update
 
                     await ModernDialog.ShowInfoAsync($"已下载到：{downloadPath}", "下载完成");
 
-                    // 解压7Z文件到download文件夹
+                
+
                     try
                     {
 
                         // 设置7zxa.dll
                         _7z.ConfigureSevenZip();
                         // 解压到download文件夹
-                        var extractor = new SevenZipExtractor(downloadPath);
-                        var extractPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "download");
+                        SevenZipExtractor extractor = new SevenZipExtractor(downloadPath);
+                        string extractPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "download");
                         extractor.ExtractArchive(extractPath);
+                        File.Delete(downloadPath);
+
 
                         // 启动Update.bat并退出程序
                         var updateBatPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Update.bat");
