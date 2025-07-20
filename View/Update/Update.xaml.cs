@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +22,19 @@ namespace unreal_GUI.View.Update
         public Update()
         {
             InitializeComponent();
+            Loaded += UpdateWindow_Loaded;
+        }
+
+        private async void UpdateWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            
+                await UpdateAndExtract.DownloadAndUpdateAsync();
+            
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo { FileName = "https://github.com/G-POPLO/unreal-GUI/", UseShellExecute = true });
         }
     }
 }

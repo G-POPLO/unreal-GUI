@@ -27,8 +27,9 @@ namespace unreal_GUI
 
     public class EngineInfo
     {
-        public string Path { get; set; }       
-    }
+        public string Path { get; set; }
+        public string Version { get; set; }
+        }
         
 
         public Settings()
