@@ -44,31 +44,29 @@
                             <ComboBoxItem Content="Github"/>
                         </ComboBox>-->
                     </StackPanel>
-                    <UniformGrid Margin="10,10,10,10" HorizontalAlignment="Left">
-                        <!--https://learn.microsoft.com/zh-cn/windows/apps/design/style/segoe-ui-symbol-font-->
-                        <!-- App bar button with font icon. -->
+                    <StackPanel x:Name="Setting_Panel" Orientation="Horizontal">
                         <ui:AppBarToggleButton x:Name="Button0" Label="任务完成后打开输出文件夹" Checked="Button0_Checked" Margin="0,0,10,0" >
                             <ui:AppBarToggleButton.Icon>
                                 <ui:FontIcon
-                             FontFamily="Segoe MDL2 Assets"
-                             Glyph="&#xE8B7;" />
-                        </ui:AppBarToggleButton.Icon>
-                    </ui:AppBarToggleButton>
-                    <ui:AppBarToggleButton x:Name="Button2" Label="使用ZenDash来查看缓存信息" Checked="Button2_Checked" Margin="0,0,10,0" >
-                        <ui:AppBarToggleButton.Icon>
-                            <ui:FontIcon
-                             FontFamily="Segoe MDL2 Assets"
-                             Glyph="&#xE83B;" />
-                        </ui:AppBarToggleButton.Icon>
-                    </ui:AppBarToggleButton>
-                    <!--<ui:AppBarToggleButton x:Name="Button1" Label="应用程序打开后自动检查更新" Checked="Button1_Checked" >
-                        <ui:AppBarToggleButton.Icon>
-                            <ui:FontIcon
-                             FontFamily="Segoe MDL2 Assets"
-                             Glyph="&#xE895;" />
+                                        FontFamily="Segoe MDL2 Assets"
+                                        Glyph="&#xE8B7;" />
                             </ui:AppBarToggleButton.Icon>
-                        </ui:AppBarToggleButton>-->
-                    </UniformGrid>
+                        </ui:AppBarToggleButton>
+                        <ui:AppBarToggleButton x:Name="Button1" Label="使用Gitcode作为更新下载源" Checked="Button1_Checked" Margin="0,0,10,0" >
+                            <ui:AppBarToggleButton.Icon>
+                                <ui:FontIcon
+                                        FontFamily="Segoe MDL2 Assets"
+                                        Glyph="&#xE895;" />
+                            </ui:AppBarToggleButton.Icon>
+                        </ui:AppBarToggleButton>
+                        <ui:AppBarToggleButton x:Name="Button2" Label="使用ZenDash来查看缓存信息" Checked="Button2_Checked" Margin="0,0,10,0" >
+                            <ui:AppBarToggleButton.Icon>
+                                <ui:FontIcon
+                                        FontFamily="Segoe MDL2 Assets"
+                                        Glyph="&#xE83B;" />
+                            </ui:AppBarToggleButton.Icon>
+                        </ui:AppBarToggleButton>
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
