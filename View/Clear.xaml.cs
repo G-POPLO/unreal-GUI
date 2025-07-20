@@ -22,6 +22,7 @@ namespace unreal_GUI
     public partial class Clear : UserControl
     {
         private List<Settings.EngineInfo> engineList = new List<Settings.EngineInfo>();
+
         private void DeleteDirectoryIfExists(string path)
         {
             if (Directory.Exists(path))
@@ -45,12 +46,15 @@ namespace unreal_GUI
         public Clear()
         {
             InitializeComponent();
-            UpdatePanelVisibility();  // 添加初始化调用
+            
+
             if (File.Exists("settings.json"))
             {
                 engineList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Settings.EngineInfo>>(File.ReadAllText("settings.json"));
                 EngineVersions.ItemsSource = engineList;
             }
+            // 控件UI初始化
+            UpdatePanelVisibility();  
             DDC.Text = $"DDC全局缓存路径：{Properties.Settings.Default.DDC}";
             DDCshare.Text = $"DDC共享缓存路径：{Properties.Settings.Default.DDCShare}";
             Total.Text = $"总计大小：{Properties.Settings.Default.DDCTotal:0.00} GB";
@@ -80,18 +84,27 @@ namespace unreal_GUI
                     return;
                 }
 
-                if (!DerivedDataCache.IsChecked ?? false && Directory.Exists(Path.Combine(projectPath, "DerivedDataCache")))
-                    Directory.Delete(Path.Combine(projectPath, "DerivedDataCache"), true);
-                
-                if (!SaveGame.IsChecked ?? false && Directory.Exists(Path.Combine(projectPath, "Saved", "SaveGames")))
-                    Directory.Delete(Path.Combine(projectPath, "Saved", "SaveGames"), true);
-                
+                try
+                {
+                    if (!DerivedDataCache.IsChecked ?? false)
+                        Directory.Delete(Path.Combine(projectPath, "DerivedDataCache"), true);
+                }
+                catch { }
+
+                try
+                {
+                    if (!SaveGame.IsChecked ?? false)
+                        Directory.Delete(Path.Combine(projectPath, "Saved", "SaveGames"), true);
+                }
+                catch { }
+
                 DeleteDirectoryIfExists(Path.Combine(projectPath, "Binaries"));
                 DeleteDirectoryIfExists(Path.Combine(projectPath, "Build"));
                 DeleteDirectoryIfExists(Path.Combine(projectPath, "Intermediate"));
                 
                 foreach (var file in Directory.GetFiles(projectPath, "*.sln", SearchOption.TopDirectoryOnly))
-                    File.Delete(file);
+                File.Delete(file);
+
                 Tip.Text = "清理完毕";
                 Tip.Visibility = Visibility.Visible;
                 var player = new System.Media.SoundPlayer(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-on.wav"));

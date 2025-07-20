@@ -25,19 +25,27 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
   </PropertyGroup>
-
+ <!--编译时要求额外生成的文件-->
   <ItemGroup>
     <Content Include="$(ProjectDir)App\renom.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Link>App\renom.exe</Link>
+    </Content>
+    <Content Include="$(ProjectDir)App\7zxa.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>App\7zxa.dll</Link>
+    </Content>
+    <Content Include="Update.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="$(ProjectDir)Sound\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <DestinationFolder>$(OutputPath)Sound</DestinationFolder>
     </Content>
   </ItemGroup>
+  
   <PropertyGroup>
-    <!-- 暂时禁用MordenWP的多语言资源生成 -->
+    <!-- 暂时禁用MordenWPF的多语言资源生成 -->
     <!-- <SatelliteResourceLanguages>en</SatelliteResourceLanguages> -->
     <IncludeSatelliteResourceLanguages>false</IncludeSatelliteResourceLanguages>
   </PropertyGroup>
@@ -71,6 +79,7 @@
   <ItemGroup>
     <PackageReference Include="ModernWpfUI" Version="0.9.6" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Squid-Box.SevenZipSharp.Lite" Version="1.6.2.24" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
