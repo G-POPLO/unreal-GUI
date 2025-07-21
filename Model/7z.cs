@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace unreal_GUI.View.Update
+namespace unreal_GUI.Model
 {
     class _7z
     {

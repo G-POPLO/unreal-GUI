@@ -3,7 +3,7 @@ using ModernWpf.Controls;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace unreal_GUI
+namespace unreal_GUI.Model
 {
     public static class ModernDialog
     {

@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Shapes;
 using ModernWpf.Controls;
 using Newtonsoft.Json.Linq;
+using unreal_GUI.Model;
 
 
 namespace unreal_GUI
@@ -24,7 +25,7 @@ namespace unreal_GUI
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {          
             await InitializeJson_Async();
-            await View.Update.UpdateAndExtract.CheckForUpdatesAsync(); // 检查更新
+            await UpdateAndExtract.CheckForUpdatesAsync(); // 检查更新
         }
 
 
