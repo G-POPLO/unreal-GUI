@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using unreal_GUI.Model;
 using static unreal_GUI.Settings;
 
 namespace unreal_GUI

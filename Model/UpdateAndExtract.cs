@@ -8,7 +8,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace unreal_GUI.View.Update
+namespace unreal_GUI.Model
 {
     class UpdateAndExtract
     {
@@ -22,7 +22,7 @@ namespace unreal_GUI.View.Update
             {
                 using var client = new HttpClient();
                 client.DefaultRequestHeaders.UserAgent.ParseAdd("unreal-GUI");
-
+                // 从API获取最新版本信息
                 var response = Properties.Settings.Default.Gitcode
                     ? await client.GetAsync("https://api.gitcode.com/api/v5/repos/C-Poplo/unreal-GUI/releases/latest/?access_token=4RszX_1zdryXuvgwHbV-Edr7")
                     : await client.GetAsync("https://api.github.com/repos/G-POPLO/unreal-GUI/releases/latest");
@@ -62,10 +62,10 @@ namespace unreal_GUI.View.Update
 
                 if (!string.IsNullOrEmpty(downloadUrl))
                 {
-                    var downloadDir = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "download");
-                    System.IO.Directory.CreateDirectory(downloadDir);
-                    var downloadPath = System.IO.Path.Combine(downloadDir, $"{latestVersion}.7z");
-                    using (var fileStream = System.IO.File.Create(downloadPath))
+                    var downloadDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "download");
+                    Directory.CreateDirectory(downloadDir);
+                    var downloadPath = Path.Combine(downloadDir, $"{latestVersion}.7z");
+                    using (var fileStream = File.Create(downloadPath))
                     {
 
                         using var client = new HttpClient();
@@ -85,13 +85,13 @@ namespace unreal_GUI.View.Update
                         _7z.ConfigureSevenZip();
                         // 解压到download文件夹
                         SevenZipExtractor extractor = new SevenZipExtractor(downloadPath);
-                        string extractPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "download");
+                        string extractPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "download");
                         extractor.ExtractArchive(extractPath);
                         File.Delete(downloadPath);
 
 
                         // 启动Update.bat并退出程序
-                        var updateBatPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Update.bat");
+                        var updateBatPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Update.bat");
                         System.Diagnostics.Process.Start(updateBatPath);
                         Environment.Exit(0);
 
