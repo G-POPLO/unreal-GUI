@@ -19,6 +19,7 @@
         </Grid.RowDefinitions>
         <StackPanel>
             <TextBlock x:Name="Title" TextWrapping="Wrap" Text="重命名" Margin="{DynamicResource Common}" FontWeight="Bold"/>
+                
             <StackPanel Orientation="Horizontal" Margin="10">
                 <RadioButton x:Name="rbProject" Content="项目" IsChecked="{Binding IsProjectSelected}" Margin="0,0,10,0"/>
                 <RadioButton x:Name="rbPlugin" Content="插件" IsChecked="{Binding IsProjectSelected, Converter={StaticResource InverseBooleanConverter}}"/>
@@ -27,10 +28,11 @@
             <TextBox x:Name="Input" Margin="10,10,10,10" Text="{Binding InputPath}"/>
             <Button Content="设定输入路径" Margin="10,10,10,10" Command="{Binding SelectFolderCommand}"/>
             <TextBlock x:Name="tip1" TextWrapping="Wrap" Text="输入重命名名称" Margin="{DynamicResource Common}"/>
-            <TextBox x:Name="Output" Margin="10,10,10,10" Text="{Binding OutputName}"/>
-            
-            <Button Content="重命名" Margin="10,10,10,10" Command="{Binding RenameCommand}"/>
-            <TextBlock x:Name="msg" TextWrapping="Wrap" Text="{Binding Message}" Margin="10,0,10,0"/>
+                <TextBlock TextWrapping="Wrap" Text="为避免潜在的崩溃，请勿使用中文来命名你的C++项目！" Margin="10,0,10,0" FontWeight="Bold"/>
+                <TextBox x:Name="Output" Margin="10,10,10,10"/>
+
+                <Button x:Name="RenameButton" Content="重命名" Margin="10,10,10,10" Click="RenameButton_Click"/>
+            <TextBlock x:Name="msg" TextWrapping="Wrap" Text="TextBlock" Margin="10,0,10,0" Visibility="Hidden"/>
         </StackPanel>
 
     </Grid>

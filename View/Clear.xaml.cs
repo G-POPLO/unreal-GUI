@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using unreal_GUI.Model;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace unreal_GUI
@@ -21,18 +22,53 @@ namespace unreal_GUI
     /// </summary>
     public partial class Clear : UserControl
     {
+        private List<Settings.EngineInfo> engineList = new List<Settings.EngineInfo>();
+
         private void DeleteDirectoryIfExists(string path)
         {
             if (Directory.Exists(path))
                 Directory.Delete(path, true);
         }
 
+        private void UpdatePanelVisibility()
+        {
+            if (Properties.Settings.Default.ZenDashborad)
+            {
+                OldDDC_Panel.Visibility = Visibility.Collapsed;
+                Zen_Panel.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                OldDDC_Panel.Visibility = Visibility.Visible;
+                Zen_Panel.Visibility = Visibility.Collapsed;
+            }
+        }
+
         public Clear()
         {
             InitializeComponent();
+            
+            if (File.Exists("settings.json"))
+            {
+                engineList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Settings.EngineInfo>>(File.ReadAllText("settings.json"));
+                EngineVersions.ItemsSource = engineList;
+            }
+            // 控件UI初始化
+            UpdatePanelVisibility();  
             DDC.Text = $"DDC全局缓存路径：{Properties.Settings.Default.DDC}";
             DDCshare.Text = $"DDC共享缓存路径：{Properties.Settings.Default.DDCShare}";
             Total.Text = $"总计大小：{Properties.Settings.Default.DDCTotal:0.00} GB";
+            
+            // 初始禁用清理按钮
+            CleanButton.IsEnabled = false;
+            
+            // 添加输入变化事件
+            Input.TextChanged += ValidateInputs;
+        }
+        
+        private void ValidateInputs(object sender, RoutedEventArgs e)
+        {
+            CleanButton.IsEnabled = !string.IsNullOrWhiteSpace(Input.Text);
         }
 
         private void InputButton_Click(object sender, RoutedEventArgs e)
@@ -41,6 +77,7 @@ namespace unreal_GUI
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 Input.Text = dialog.SelectedPath;
+                ValidateInputs(null, null);
                 Tip.Text = "工程路径已设置: " + dialog.SelectedPath;
                 Tip.Visibility = Visibility.Visible;
             }
@@ -58,18 +95,27 @@ namespace unreal_GUI
                     return;
                 }
 
-                if (!DerivedDataCache.IsChecked ?? false && Directory.Exists(Path.Combine(projectPath, "DerivedDataCache")))
-                    Directory.Delete(Path.Combine(projectPath, "DerivedDataCache"), true);
-                
-                if (!SaveGame.IsChecked ?? false && Directory.Exists(Path.Combine(projectPath, "Saved", "SaveGames")))
-                    Directory.Delete(Path.Combine(projectPath, "Saved", "SaveGames"), true);
-                
+                try
+                {
+                    if (!DerivedDataCache.IsChecked ?? false)
+                        Directory.Delete(Path.Combine(projectPath, "DerivedDataCache"), true);
+                }
+                catch { }
+
+                try
+                {
+                    if (!SaveGame.IsChecked ?? false)
+                        Directory.Delete(Path.Combine(projectPath, "Saved", "SaveGames"), true);
+                }
+                catch { }
+
                 DeleteDirectoryIfExists(Path.Combine(projectPath, "Binaries"));
                 DeleteDirectoryIfExists(Path.Combine(projectPath, "Build"));
                 DeleteDirectoryIfExists(Path.Combine(projectPath, "Intermediate"));
                 
                 foreach (var file in Directory.GetFiles(projectPath, "*.sln", SearchOption.TopDirectoryOnly))
-                    File.Delete(file);
+                File.Delete(file);
+
                 Tip.Text = "清理完毕";
                 Tip.Visibility = Visibility.Visible;
                 var player = new System.Media.SoundPlayer(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-on.wav"));
@@ -175,6 +221,41 @@ namespace unreal_GUI
             {
                 button.IsEnabled = true;
             }
+        }
+
+        private void ZenButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (EngineVersions.SelectedItem == null)
+                {
+                    DDC_error.Text = "请先从下拉框中选择引擎版本"; 
+                    DDC_error.Visibility = Visibility.Visible;
+                    return;
+                }
+                var selectedEngine = EngineVersions.SelectedItem as Settings.EngineInfo;
+                if (selectedEngine != null)
+                {
+                    var zenPath = Path.Combine(selectedEngine.Path, "Engine\\Binaries\\Win64\\ZenDashboard.exe");
+                    if (File.Exists(zenPath))
+                    {
+                        System.Diagnostics.Process.Start(zenPath);
+                    }
+                    else
+                    {
+                        _ = ModernDialog.ShowInfoAsync("ZenDashboard.exe未找到，请确认引擎安装", "路径错误");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _ = ModernDialog.ShowInfoAsync($"打开失败：{ex.Message}", "错误提示");
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo { FileName = "https://dev.epicgames.com/documentation/unreal-engine/zen-storage-server-for-unreal-engine", UseShellExecute = true });
         }
     }
 }

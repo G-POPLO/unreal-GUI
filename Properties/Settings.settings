@@ -8,23 +8,20 @@
     <Setting Name="AutoOpen" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="AutoUpdate" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="LastUpdateTime" Type="System.DateTime" Scope="User">
-      <Value Profile="(Default)">2025-06-06</Value>
-    </Setting>
     <Setting Name="DDCShare" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="DDCTotal" Type="System.Single" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="LatestVersion" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="ZenDashborad" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="SelectedUpdateSource" Type="System.String" Scope="User">
-      <Value Profile="(Default)">GitHub</Value>
+    <Setting Name="Gitcode" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="AutoUpdate" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>
