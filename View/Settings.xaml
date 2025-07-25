@@ -38,11 +38,6 @@
                 <StackPanel Margin="10,10,10,10">
                     <TextBlock x:Name="Settings_title" TextWrapping="Wrap" FontWeight="Bold" FontSize="15"><Run Language="zh-cn" Text="应用设置"/></TextBlock>
                     <StackPanel Orientation="Horizontal">
-                        <!--<TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="13"><Run Language="zh-cn" Text="更新下载源设置"/></TextBlock>-->
-                        <!--<ComboBox x:Name="SelectedUpdate" SelectedIndex="0" Width="120" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10,0,0,0" Cursor="Arrow">
-                            <ComboBoxItem Content="Gitcode"/>
-                            <ComboBoxItem Content="Github"/>
-                        </ComboBox>-->
                     </StackPanel>
                     <StackPanel x:Name="Setting_Panel" Orientation="Horizontal">
                         <ui:AppBarToggleButton x:Name="Button0" Label="任务完成后打开输出文件夹" Checked="Button0_Checked" Margin="0,0,10,0" >
@@ -62,8 +57,15 @@
                         <ui:AppBarToggleButton x:Name="Button2" Label="使用ZenDash来查看缓存信息" Checked="Button2_Checked" Margin="0,0,10,0" >
                             <ui:AppBarToggleButton.Icon>
                                 <ui:FontIcon
-                                        FontFamily="Segoe MDL2 Assets"
-                                        Glyph="&#xE83B;" />
+                FontFamily="Segoe MDL2 Assets"
+                Glyph="&#xE83B;" />
+                            </ui:AppBarToggleButton.Icon>
+                        </ui:AppBarToggleButton>
+                        <ui:AppBarToggleButton x:Name="Button3" Label="应用程序启动时自动检查更新" Checked="Button3_Checked" >
+                            <ui:AppBarToggleButton.Icon>
+                                <ui:FontIcon
+                                    FontFamily="Segoe MDL2 Assets"
+                                    Glyph="&#xECC5;"/>
                             </ui:AppBarToggleButton.Icon>
                         </ui:AppBarToggleButton>
                     </StackPanel>
