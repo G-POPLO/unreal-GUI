@@ -1,0 +1,59 @@
+<UserControl x:Class="unreal_GUI.Clear"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:unreal_GUI"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="20,20,20,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="0*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock x:Name="Title" TextWrapping="Wrap" FontSize="18" Margin="0,10,0,10" FontWeight="Bold"><Run Language="zh-cn" Text="清除缓存"/></TextBlock>
+                <Separator/>
+                <TextBlock TextWrapping="Wrap" Margin="0,10,0,10"><Run Language="zh-cn" Text="清除项目文件夹中的目录，部分数据可以选择性保留"/></TextBlock>
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox x:Name="DerivedDataCache" Content="保留着色器文件(DerivedDataCache)" Margin="0,0,10,0"/>
+                    <CheckBox x:Name="SaveGame" Content="保留项目游戏存档(SaveGames)"/>
+                </StackPanel>
+                <TextBlock TextWrapping="Wrap" Margin="0,10,0,10"><Run Language="zh-cn" Text="设定要进行清理的工程路径"/></TextBlock>
+                <TextBox x:Name="Input" Margin="0,0,0,10"/>
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
+                    <Button Content="设定工程路径" Margin="0,0,10,0" Click="InputButton_Click"/>
+                    <Button Content="清理缓存" x:Name="CleanButton" Click="CleanButton_Click"/>
+                </StackPanel>
+                <TextBlock x:Name="Tip" TextWrapping="Wrap" Visibility="Hidden"><Run Language="zh-cn" Text="清理任务完毕！"/></TextBlock>
+                <Separator/>
+                <StackPanel x:Name="OldDDC_Panel" Orientation="Vertical" Visibility="Collapsed">
+                    <TextBlock x:Name="Title_DDC" TextWrapping="Wrap" FontSize="14" FontWeight="Bold" Text="DDC缓存信息（旧）"/>
+                    <TextBlock x:Name="Tip_DDC" TextWrapping="Wrap" Text="在项目工作过程中会生成缓存文件，该软件可以帮你检测缓存空间的占用大小。若觉得空间占用过大，可以将缓存保存在其他位置或者使用UE5自带的DDC清理来清除缓存"/>
+                    <StackPanel>
+                        <TextBlock x:Name="DDC" TextWrapping="Wrap"><Run Text="DDC全局缓存路径："/></TextBlock>
+                        <TextBlock x:Name="DDCshare" TextWrapping="Wrap"><Run Text="DDC共享缓存路径："/></TextBlock>
+                        <TextBlock x:Name="Total" TextWrapping="Wrap"><Run Text="总计大小："/></TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="寻找DDC缓存路径" Margin="0,0,10,0" Click="DDCButton_Click"/>
+                        <Button Content="更新占用空间" Click="TotalButton_Click" />
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel x:Name="Zen_Panel" Margin="0,10,0,0">
+                    <TextBlock TextWrapping="Wrap" Text="DDC缓存信息" FontSize="14" FontWeight="Bold"/>
+                    <TextBlock x:Name="Tip2_DDC" TextWrapping="Wrap" Text="在项目工作过程中会生成缓存文件，可以打开UE5自带的ZenDashboard查看详情。"/>
+                    <StackPanel Orientation="Horizontal">
+                        <ComboBox x:Name="EngineVersions" Margin="10,10,10,10" DisplayMemberPath="Version" SelectedValuePath="Path"/>
+                        <Button x:Name="ZenButton" Content="打开ZenDashboard" Click="ZenButton_Click" />
+                        <Button Content="查看相关文档" Click="Button_Click"  Margin="10,0,10,0" />
+                        <TextBlock x:Name="DDC_error" TextWrapping="Wrap" Text="textblock" Margin="10,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</UserControl>
+
+
