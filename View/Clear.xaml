@@ -24,7 +24,7 @@
                 <TextBox x:Name="Input" Margin="0,0,0,10"/>
                 <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
                     <Button Content="设定工程路径" Margin="0,0,10,0" Click="InputButton_Click"/>
-                    <Button Content="清理缓存" Click="CleanButton_Click"/>
+                    <Button Content="清理缓存" x:Name="CleanButton" Click="CleanButton_Click"/>
                 </StackPanel>
                 <TextBlock x:Name="Tip" TextWrapping="Wrap" Visibility="Hidden"><Run Language="zh-cn" Text="清理任务完毕！"/></TextBlock>
                 <Separator/>
