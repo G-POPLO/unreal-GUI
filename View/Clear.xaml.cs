@@ -47,7 +47,6 @@ namespace unreal_GUI
         {
             InitializeComponent();
             
-
             if (File.Exists("settings.json"))
             {
                 engineList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Settings.EngineInfo>>(File.ReadAllText("settings.json"));
@@ -59,6 +58,16 @@ namespace unreal_GUI
             DDCshare.Text = $"DDC共享缓存路径：{Properties.Settings.Default.DDCShare}";
             Total.Text = $"总计大小：{Properties.Settings.Default.DDCTotal:0.00} GB";
             
+            // 初始禁用清理按钮
+            CleanButton.IsEnabled = false;
+            
+            // 添加输入变化事件
+            Input.TextChanged += ValidateInputs;
+        }
+        
+        private void ValidateInputs(object sender, RoutedEventArgs e)
+        {
+            CleanButton.IsEnabled = !string.IsNullOrWhiteSpace(Input.Text);
         }
 
         private void InputButton_Click(object sender, RoutedEventArgs e)
@@ -67,6 +76,7 @@ namespace unreal_GUI
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 Input.Text = dialog.SelectedPath;
+                ValidateInputs(null, null);
                 Tip.Text = "工程路径已设置: " + dialog.SelectedPath;
                 Tip.Visibility = Visibility.Visible;
             }

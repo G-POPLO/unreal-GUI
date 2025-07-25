@@ -17,7 +17,7 @@
             <TextBox x:Name="Output" Margin="10,10,10,10"/>
             <Button Content="设置输出文件夹" Margin="10,10,10,10" Click="OutputButton_Click"/>
             <TextBlock x:Name="Tips" TextWrapping="Wrap" Text="TextBlock" Margin="10,0,10,0" Visibility="Hidden"/>
-            <Button x:Name="Compile1" Content="开始编译" Margin="10,10,10,10" Click="CompileButton_Click"/>
+                <Button x:Name="CompileButton" Content="开始编译" Margin="10,10,10,10" Click="CompileButton_Click"/>
         </StackPanel>
     </Grid>
 </ScrollViewer>
