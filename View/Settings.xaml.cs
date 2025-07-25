@@ -40,7 +40,7 @@ namespace unreal_GUI
             Button0.IsChecked = Properties.Settings.Default.AutoOpen;
             Button1.IsChecked = Properties.Settings.Default.Gitcode;
             Button2.IsChecked = Properties.Settings.Default.ZenDashborad;
-            
+            Button3.IsChecked = Properties.Settings.Default.AutoUpdate;
 
             if (File.Exists("settings.json"))
             {
@@ -139,6 +139,7 @@ namespace unreal_GUI
             Properties.Settings.Default.AutoOpen = Button0.IsChecked.Value;
             Properties.Settings.Default.Gitcode = Button1.IsChecked.Value;
             Properties.Settings.Default.ZenDashborad = Button2.IsChecked.Value;
+            Properties.Settings.Default.AutoUpdate = Button3.IsChecked.Value;
             Properties.Settings.Default.Save();
             // 保存JSON文件
             File.WriteAllText("settings.json", Newtonsoft.Json.JsonConvert.SerializeObject(engineInfos));
@@ -166,8 +167,9 @@ namespace unreal_GUI
             Properties.Settings.Default.ZenDashborad = (bool)Button2.IsChecked;
         }
 
-        
-
-
+        private void Button3_Checked(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.AutoUpdate = (bool)Button3.IsChecked;
+        }
     }
 }

@@ -25,7 +25,14 @@ namespace unreal_GUI
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {          
             await InitializeJson_Async();
-            await UpdateAndExtract.CheckForUpdatesAsync(); // 检查更新
+            await AutoUpdate();
+        }
+        private static async Task AutoUpdate()
+        { 
+            if (Properties.Settings.Default.AutoUpdate)
+            {
+                await UpdateAndExtract.CheckForUpdatesAsync(); // 检查更新                
+            }
         }
 
 
