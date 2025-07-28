@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace unreal_GUI
+namespace unreal_GUI.Converters
 {
     public class StringToVisibilityConverter : IValueConverter
     {

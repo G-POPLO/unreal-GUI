@@ -132,7 +132,7 @@ namespace unreal_GUI.ViewModel
                     File.Delete(file);
 
                 TipText = "清理完毕";
-                var player = new System.Media.SoundPlayer(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-on.wav"));
+                System.Media.SoundPlayer player = new System.Media.SoundPlayer(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-on.wav"));
                 player.Play();
                 if (Properties.Settings.Default.AutoOpen)
                 {
@@ -142,7 +142,7 @@ namespace unreal_GUI.ViewModel
             catch (Exception ex)
             {
                 TipText = "清理失败: " + ex.Message;
-                var player = new System.Media.SoundPlayer(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav"));
+                System.Media.SoundPlayer player = new System.Media.SoundPlayer(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav"));
                 player.Play();
             }
         }

@@ -47,7 +47,7 @@ namespace unreal_GUI.Model
             }
             catch (Exception ex) 
             {
-                await ModernDialog.ShowInfoAsync($"下载失败：{ex.Message}", "提示");
+                await ModernDialog.ShowInfoAsync($"获取更新失败：{ex.Message}", "提示");
             }            
         }
 
