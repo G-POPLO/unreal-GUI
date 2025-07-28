@@ -46,7 +46,7 @@ namespace unreal_GUI.Model
             string message,
             string title,
             string primaryButton,
-            string secondaryButton = null,
+            string? secondaryButton = null,
             string closeButton = "取消")
         {
             var dialog = new ContentDialog

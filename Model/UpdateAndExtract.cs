@@ -32,7 +32,8 @@ namespace unreal_GUI.Model
 
                 if (Version.Parse(latestVersion) > Version.Parse(currentVersion))
                 {
-                    bool? result = await ModernDialog.ShowConfirmAsync($"发现新版本{latestVersion},是否下载？", "提示");
+                    string updateBody = release_info["body"]?.ToString() ?? "无更新内容";
+                    bool? result = await ModernDialog.ShowConfirmAsync($"发现新版本{latestVersion}\n\n更新内容:\n{updateBody}\n\n是否下载？", "提示");
                     if (result == true)
                     {
                         await DownloadAndUpdateAsync();                       
