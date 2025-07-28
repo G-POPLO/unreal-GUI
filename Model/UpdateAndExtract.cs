@@ -20,7 +20,7 @@ namespace unreal_GUI.Model
             var currentVersion = Application.ResourceAssembly.GetName().Version.ToString();
             try
             {
-                using var client = new HttpClient();
+                using HttpClient client = new HttpClient();
                 client.DefaultRequestHeaders.UserAgent.ParseAdd("unreal-GUI");
                 // 从API获取最新版本信息
                 var response = Properties.Settings.Default.Gitcode

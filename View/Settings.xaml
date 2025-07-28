@@ -4,10 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:unreal_GUI"
-             xmlns:ui="http://schemas.modernwpf.com/2019" x:Class="unreal_GUI.Settings"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:viewmodel="clr-namespace:unreal_GUI.ViewModel" x:Class="unreal_GUI.Settings"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-
+    <UserControl.DataContext>
+        <viewmodel:SettingsViewModel />
+    </UserControl.DataContext>
     <Grid Margin="20,20,20,20">
         <Grid.RowDefinitions>
 
@@ -18,13 +21,13 @@
             <StackPanel Margin="10,10,10,10">
                 <TextBlock x:Name="Title" TextWrapping="Wrap" FontWeight="Bold" FontSize="15" Text="设置" Margin="10,10,10,10"/>
                 <Separator/>
-                <TextBlock x:Name="text" TextWrapping="Wrap" Margin="10,0,10,0" FontWeight="Bold"><Run Text="引擎目录"/><Run Text="设定"/></TextBlock>
-                <ListBox x:Name="EnginePathsList" Height="100" Margin="10,10,10,10"/>
+                <TextBlock x:Name="SubTitle" TextWrapping="Wrap" Margin="10,0,10,0" FontWeight="Bold"><Run Text="引擎目录设定"/></TextBlock>
+                <ListBox x:Name="EnginePathsList" ItemsSource="{Binding EnginePathsDisplay}" Height="100" Margin="10,10,10,10"/>
                 <StackPanel Orientation="Horizontal" Margin="10,10,10,10">
-                    <Button Content="新增" Margin="0,0,10,0" Click="AddEnginePath_Click"/>
-                    <Button Content="删除" Margin="10,0,10,0" Click="RemoveEnginePath_Click"/>
-                    <Button Content="自动设置引擎路径" Margin="10,0,10,0" Click="AutoPath_Click"/>
-                    <Button Click="SavePaths_Click" Margin="10,10,10,10" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Button Content="新增" Margin="0,0,10,0" Command="{Binding AddEnginePathCommand}"/>
+                    <Button Content="删除" Margin="10,0,10,0" Command="{Binding RemoveEnginePathCommand}" CommandParameter="{Binding SelectedItem, ElementName=EnginePathsList}"/>
+                    <Button Content="自动设置引擎路径" Margin="10,0,10,0" Command="{Binding AutoPathCommand}"/>
+                    <Button Command="{Binding SavePathsCommand}" Margin="10,10,10,10" HorizontalAlignment="Right" VerticalAlignment="Center">
                         <StackPanel Orientation="Horizontal">
                             <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE74E;"/>
                             <TextBlock Text="保存设置" Margin="5,0,0,0"/>
@@ -32,36 +35,38 @@
                     </Button>
 
                 </StackPanel>
+                <TextBlock x:Name="Tips" Text="{Binding TipText}" TextWrapping="Wrap" Margin="10,0,10,0"></TextBlock>
 
-                <TextBlock x:Name="Tip" TextWrapping="Wrap" Margin="10,0,20,0" Visibility="Hidden"><Run Text="输入"/><Run Text="提示信息"/></TextBlock>
+
+
                 <Separator/>
                 <StackPanel Margin="10,10,10,10">
                     <TextBlock x:Name="Settings_title" TextWrapping="Wrap" FontWeight="Bold" FontSize="15"><Run Language="zh-cn" Text="应用设置"/></TextBlock>
                     <StackPanel Orientation="Horizontal">
                     </StackPanel>
                     <StackPanel x:Name="Setting_Panel" Orientation="Horizontal">
-                        <ui:AppBarToggleButton x:Name="Button0" Label="任务完成后打开输出文件夹" Checked="Button0_Checked" Margin="0,0,10,0" >
+                        <ui:AppBarToggleButton x:Name="Button0" Label="任务完成后打开输出文件夹" IsChecked="{Binding AutoOpen}" Margin="0,0,10,0" >
                             <ui:AppBarToggleButton.Icon>
                                 <ui:FontIcon
                                         FontFamily="Segoe MDL2 Assets"
                                         Glyph="&#xE8B7;" />
                             </ui:AppBarToggleButton.Icon>
                         </ui:AppBarToggleButton>
-                        <ui:AppBarToggleButton x:Name="Button1" Label="使用Gitcode作为更新下载源" Checked="Button1_Checked" Margin="0,0,10,0" >
+                        <ui:AppBarToggleButton x:Name="Button1" Label="使用Gitcode作为更新下载源" IsChecked="{Binding Gitcode}" Margin="0,0,10,0" >
                             <ui:AppBarToggleButton.Icon>
                                 <ui:FontIcon
                                         FontFamily="Segoe MDL2 Assets"
                                         Glyph="&#xE895;" />
                             </ui:AppBarToggleButton.Icon>
                         </ui:AppBarToggleButton>
-                        <ui:AppBarToggleButton x:Name="Button2" Label="使用ZenDash来查看缓存信息" Checked="Button2_Checked" Margin="0,0,10,0" >
+                        <ui:AppBarToggleButton x:Name="Button2" Label="使用ZenDash来查看缓存信息" IsChecked="{Binding ZenDashborad}" Margin="0,0,10,0" >
                             <ui:AppBarToggleButton.Icon>
                                 <ui:FontIcon
                 FontFamily="Segoe MDL2 Assets"
                 Glyph="&#xE83B;" />
                             </ui:AppBarToggleButton.Icon>
                         </ui:AppBarToggleButton>
-                        <ui:AppBarToggleButton x:Name="Button3" Label="应用程序启动时自动检查更新" Checked="Button3_Checked" >
+                        <ui:AppBarToggleButton x:Name="Button3" Label="应用程序启动时自动检查更新" IsChecked="{Binding AutoUpdate}" >
                             <ui:AppBarToggleButton.Icon>
                                 <ui:FontIcon
                                     FontFamily="Segoe MDL2 Assets"

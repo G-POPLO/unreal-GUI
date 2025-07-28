@@ -1,6 +1,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Diagnostics;
+using System.Reflection;
+using System.Windows;
 
 namespace unreal_GUI.ViewModel
 {
@@ -8,28 +10,20 @@ namespace unreal_GUI.ViewModel
     {
         [ObservableProperty]
         private string _versionText;
-        
-        [ObservableProperty]
-        private string _latestVersion;
-        
-        [ObservableProperty]
-        private string _lastUpdateTime;
-        
-        [ObservableProperty]
-        private string _tip;
-        
+
         public AboutViewModel()
         {
-            VersionText = "当前版本：" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-            LastUpdateTime = Properties.Settings.Default.LastUpdateTime.ToString();
-            LatestVersion = Properties.Settings.Default.LatestVersion.ToString();
-            Tip = $"最新可用版本：{LatestVersion}";
+            _versionText = "当前版本：" + Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
-        
+
         [RelayCommand]
-        private static void CheckUpdate()
+        private void OpenUpdateUrl()
         {
-            Process.Start(new ProcessStartInfo { FileName = "https://github.com/G-POPLO/unreal-GUI/releases/", UseShellExecute = true });
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://github.com/G-POPLO/unreal-GUI/releases/",
+                UseShellExecute = true
+            });
         }
     }
 }

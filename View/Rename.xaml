@@ -29,10 +29,10 @@
             <Button Content="设定输入路径" Margin="10,10,10,10" Command="{Binding SelectFolderCommand}"/>
             <TextBlock x:Name="tip1" TextWrapping="Wrap" Text="输入重命名名称" Margin="{DynamicResource Common}"/>
                 <TextBlock TextWrapping="Wrap" Text="为避免潜在的崩溃，请勿使用中文来命名你的C++项目！" Margin="10,0,10,0" FontWeight="Bold"/>
-                <TextBox x:Name="Output" Margin="10,10,10,10"/>
+                <TextBox x:Name="Output" Margin="10,10,10,10" Text="{Binding OutputPath}"/>
 
-                <Button x:Name="RenameButton" Content="重命名" Margin="10,10,10,10" Click="RenameButton_Click"/>
-            <TextBlock x:Name="msg" TextWrapping="Wrap" Text="TextBlock" Margin="10,0,10,0" Visibility="Hidden"/>
+                <Button x:Name="RenameButton" Content="重命名" Margin="10,10,10,10" Command="{Binding RenameCommand}"/>
+            <TextBlock x:Name="msg" TextWrapping="Wrap" Text="{Binding Message}" Margin="10,0,10,0" Visibility="{Binding MessageVisibility}"/>
         </StackPanel>
 
     </Grid>
