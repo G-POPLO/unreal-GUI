@@ -152,25 +152,23 @@ namespace unreal_GUI.ViewModel
         {
             try
             {
-                using (var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\\Epic Games\\GlobalDataCachePath"))
+                using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\\Epic Games\\GlobalDataCachePath");
+                var localPath = key?.GetValue("UE-LocalDataCachePath")?.ToString();
+                var sharedPath = key?.GetValue("UE-SharedDataCachePath")?.ToString();
+
+                if (!string.IsNullOrEmpty(localPath))
                 {
-                    var localPath = key?.GetValue("UE-LocalDataCachePath")?.ToString();
-                    var sharedPath = key?.GetValue("UE-SharedDataCachePath")?.ToString();
-
-                    if (!string.IsNullOrEmpty(localPath))
-                    {
-                        DDCPath = $"DDC全局缓存路径：{localPath}";
-                        Properties.Settings.Default.DDC = localPath;
-                    }
-
-                    if (!string.IsNullOrEmpty(sharedPath))
-                    {
-                        DDCSharePath = $"DDC共享缓存路径：{sharedPath}";
-                        Properties.Settings.Default.DDCShare = sharedPath;
-                    }
-
-                    Properties.Settings.Default.Save();
+                    DDCPath = $"DDC全局缓存路径：{localPath}";
+                    Properties.Settings.Default.DDC = localPath;
                 }
+
+                if (!string.IsNullOrEmpty(sharedPath))
+                {
+                    DDCSharePath = $"DDC共享缓存路径：{sharedPath}";
+                    Properties.Settings.Default.DDCShare = sharedPath;
+                }
+
+                Properties.Settings.Default.Save();
             }
             catch (Exception ex)
             {
@@ -231,7 +229,7 @@ namespace unreal_GUI.ViewModel
         }
 
         [RelayCommand]
-        private void OpenDocumentation()
+        private static void OpenDocumentation()
         {
             Process.Start(new ProcessStartInfo
             {
@@ -240,7 +238,7 @@ namespace unreal_GUI.ViewModel
             });
         }
 
-        private float CalculateDirectorySize(string path)
+        private static float CalculateDirectorySize(string path)
         {
             if (!Directory.Exists(path)) return 0;
 
@@ -257,7 +255,7 @@ namespace unreal_GUI.ViewModel
             return size / (1024 * 1024 * 1024); // 转换为GB
         }
 
-        private void DeleteDirectoryIfExists(string path)
+        private static void DeleteDirectoryIfExists(string path)
         {
             if (Directory.Exists(path))
                 Directory.Delete(path, true);
@@ -266,6 +264,7 @@ namespace unreal_GUI.ViewModel
         partial void OnInputPathChanged(string value)
         {
             IsCleanButtonEnabled = !string.IsNullOrWhiteSpace(value);
+            OnPropertyChanged(nameof(IsCleanButtonEnabled));
         }
     }
 }

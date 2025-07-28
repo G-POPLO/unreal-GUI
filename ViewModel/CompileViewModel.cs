@@ -17,7 +17,7 @@ namespace unreal_GUI.ViewModel
 {
     public class CompileViewModel : INotifyPropertyChanged
     {
-        private List<SettingsViewModel.EngineInfo> engineList = new List<SettingsViewModel.EngineInfo>();
+        private List<SettingsViewModel.EngineInfo> engineList = [];
         private SettingsViewModel.EngineInfo selectedEngine;
         private string inputPath;
         private string outputPath;
@@ -44,7 +44,7 @@ namespace unreal_GUI.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public ObservableCollection<object> EngineVersions { get; } = new ObservableCollection<object>();
+        public ObservableCollection<SettingsViewModel.EngineInfo> EngineVersions { get; } = new ObservableCollection<SettingsViewModel.EngineInfo>();
 
         public SettingsViewModel.EngineInfo SelectedEngine
         {
@@ -53,6 +53,7 @@ namespace unreal_GUI.ViewModel
             {
                 selectedEngine = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(IsCompileButtonEnabled));
                 ((RelayCommand)CompileCommand).NotifyCanExecuteChanged();
             }
         }
@@ -64,6 +65,7 @@ namespace unreal_GUI.ViewModel
             {
                 inputPath = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(IsCompileButtonEnabled));
                 ((RelayCommand)CompileCommand).NotifyCanExecuteChanged();
             }
         }
@@ -75,6 +77,7 @@ namespace unreal_GUI.ViewModel
             {
                 outputPath = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(IsCompileButtonEnabled));
                 ((RelayCommand)CompileCommand).NotifyCanExecuteChanged();
             }
         }
@@ -91,7 +94,7 @@ namespace unreal_GUI.ViewModel
 
         public bool IsCompileButtonEnabled
         {
-            get => isCompileButtonEnabled;
+            get => CanCompile();
             set
             {
                 isCompileButtonEnabled = value;
@@ -118,9 +121,9 @@ namespace unreal_GUI.ViewModel
             if (File.Exists("settings.json"))
             {
                 engineList = JsonConvert.DeserializeObject<List<SettingsViewModel.EngineInfo>>(File.ReadAllText("settings.json"));
-                foreach (var engine in engineList)
+                foreach (SettingsViewModel.EngineInfo engine in engineList)
                 {
-                    EngineVersions.Add(new { DisplayName = $"UE {engine.Version}", Path = engine.Path, Version = engine.Version });
+                    EngineVersions.Add(engine);
                 }
             }
         }

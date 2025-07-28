@@ -31,7 +31,7 @@
                 <TextBlock TextWrapping="Wrap" Text="为避免潜在的崩溃，请勿使用中文来命名你的C++项目！" Margin="10,0,10,0" FontWeight="Bold"/>
                 <TextBox x:Name="Output" Margin="10,10,10,10" Text="{Binding OutputPath}"/>
 
-                <Button x:Name="RenameButton" Content="重命名" Margin="10,10,10,10" Command="{Binding RenameCommand}"/>
+                <Button x:Name="RenameButton" Content="重命名" Margin="10,10,10,10" Command="{Binding RenameCommand}" IsEnabled="{Binding CanRename}"/>
             <TextBlock x:Name="msg" TextWrapping="Wrap" Text="{Binding Message}" Margin="10,0,10,0" Visibility="{Binding MessageVisibility}"/>
         </StackPanel>
 

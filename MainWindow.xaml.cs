@@ -15,7 +15,7 @@ namespace unreal_GUI
         {
             if (ViewModel is MainWindowViewModel mainWindowViewModel)
             {
-                mainWindowViewModel.ContentContainer = ContentContainer;
+                mainWindowViewModel.ContentContainer = ContentContainer; // ContentContainer����Ϊ��ʱ��ֱ���л���ͼ
             }
         }
     }
