@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -8,13 +8,13 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-    <Platforms>AnyCPU;x64</Platforms>
+    <Platforms>x64</Platforms>
     <NuGetAuditLevel>moderate</NuGetAuditLevel>
     <ApplicationIcon>Icon\icon.ico</ApplicationIcon>
     <SignAssembly>False</SignAssembly>
     <Authors>C-Poplo</Authors>
     <Company />
-    <Version>0.2.1.0</Version>
+    <Version>0.2.1.1</Version>
     <Title>Unreal-GUI</Title>
     <AssemblyName>Unreal-GUI</AssemblyName>
     <DelaySign>True</DelaySign>
@@ -48,14 +48,7 @@
     <!-- 暂时禁用MordenWPF的多语言资源生成 -->
     <!-- <SatelliteResourceLanguages>en</SatelliteResourceLanguages> -->
     <IncludeSatelliteResourceLanguages>false</IncludeSatelliteResourceLanguages>
-  </PropertyGroup>
-  
-    
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>full</DebugType>
-    <WarningLevel>3</WarningLevel>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-    <Optimize>True</Optimize>
+    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DebugType>full</DebugType>
@@ -63,22 +56,12 @@
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <Optimize>True</Optimize>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>none</DebugType>
-    <WarningLevel>3</WarningLevel>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <DebugType>none</DebugType>
     <WarningLevel>3</WarningLevel>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="View-Model\**" />
-    <EmbeddedResource Remove="View-Model\**" />
-    <None Remove="View-Model\**" />
-    <Page Remove="View-Model\**" />
-  </ItemGroup>
+
   
 
 
@@ -109,7 +92,5 @@
       <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModel\" />
-  </ItemGroup>
+
 </Project>
