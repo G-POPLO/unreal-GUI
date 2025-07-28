@@ -15,6 +15,7 @@ namespace unreal_GUI.ViewModel
         private bool _isProjectSelected = true;
         private string _message;
         private Visibility _messageVisibility = Visibility.Hidden;
+        private bool _canRename = false;
 
         public string InputPath
         {
@@ -35,6 +36,16 @@ namespace unreal_GUI.ViewModel
                 _outputPath = value;
                 OnPropertyChanged(nameof(OutputPath));
                 CheckCanRename();
+            }
+        }
+
+        public bool CanRename
+        {
+            get => _canRename;
+            set
+            {
+                _canRename = value;
+                OnPropertyChanged(nameof(CanRename));
             }
         }
 
@@ -93,6 +104,7 @@ namespace unreal_GUI.ViewModel
 
         private void CheckCanRename()
         {
+            CanRename = !string.IsNullOrEmpty(InputPath) && !string.IsNullOrEmpty(OutputPath);
             if (RenameCommand is RelayCommand relayCommand)
             {
                 relayCommand.NotifyCanExecuteChanged();
