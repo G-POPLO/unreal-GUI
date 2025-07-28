@@ -177,7 +177,7 @@ namespace unreal_GUI.ViewModel
         }
 
         [RelayCommand]
-        private async void CalculateTotalSize()
+        private async Task CalculateTotalSize()
         {
             try
             {
