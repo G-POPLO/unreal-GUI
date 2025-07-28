@@ -13,31 +13,20 @@
             <TextBlock TextWrapping="Wrap" FontSize="18" Text="快速访问" Height="23" Width="760" Margin="10,10,10,10" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold"/>
                 <Separator/>
                 <TextBlock TextWrapping="Wrap" FontSize="14" Height="23" Width="760" Margin="10,10,10,10" Text="打开插件目录"/>
-                <ItemsControl x:Name="EnginesList" Margin="10,0,10,5">
+                <ItemsControl ItemsSource="{Binding Engines}" Margin="10,0,10,5">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button Content="{Binding DisplayName}" Margin="0,5,0,5" Click="OpenPluginDirectory_Click"/>
+                        <Button Content="{Binding DisplayName}" Margin="0,5,0,5" Command="{Binding DataContext.OpenPluginDirectoryCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
                 <Separator/>
             
                 <TextBlock TextWrapping="Wrap" FontSize="14" Height="23" Width="760" Margin="10,10,10,10" Text="常用网站访问"/>
-                <StackPanel x:Name="Website_Pannel" Margin="10,0,10,0" Orientation="Horizontal">
-                    <Button Content="Fab官网" Click="Button_Click_0"/>
-                    <Button Content="Unreal Engine学习库" Click="Button_Click_1" Margin="10,0,0,0"/>
-
+                <StackPanel Margin="10,0,10,0" Orientation="Horizontal">
+                    <Button Content="Fab官网" Command="{Binding OpenWebsiteCommand}" CommandParameter="https://www.fab.com/"/>
+                    <Button Content="Unreal Engine学习库" Command="{Binding OpenWebsiteCommand}" CommandParameter="https://dev.epicgames.com/community/unreal-engine/learning" Margin="10,0,0,0"/>
                 </StackPanel>
-
-                <!--<ItemsControl x:Name="WebsiteList" Height="100">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Button Content="{Binding DisplayName}" Margin="0,5,0,5" Click="OpenPluginDirectory_Click"/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>-->
-
-
             </StackPanel>
     </Grid>
 </ScrollViewer>

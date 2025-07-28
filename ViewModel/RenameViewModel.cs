@@ -1,78 +1,145 @@
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Win32;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Windows.Forms;
-using unreal_GUI.Properties;
+using System.Windows;
+using System.Windows.Input;
 
 namespace unreal_GUI.ViewModel
 {
-    public partial class RenameViewModel : ObservableObject
+    public class RenameViewModel : INotifyPropertyChanged
     {
-        [ObservableProperty]
         private string _inputPath;
-        
-        [ObservableProperty]
-        private string _outputName;
-        
-        [ObservableProperty]
-        private string _message;
-        
-        [ObservableProperty]
+        private string _outputPath;
         private bool _isProjectSelected = true;
-        
-        [RelayCommand]
-        private void SelectFolder()
+        private string _message;
+        private Visibility _messageVisibility = Visibility.Hidden;
+
+        public string InputPath
         {
-            var folderBrowserDialog = new FolderBrowserDialog();
-            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+            get => _inputPath;
+            set
             {
-                InputPath = folderBrowserDialog.SelectedPath;
+                _inputPath = value;
+                OnPropertyChanged(nameof(InputPath));
+                CheckCanRename();
             }
         }
-        
-        [RelayCommand]
+
+        public string OutputPath
+        {
+            get => _outputPath;
+            set
+            {
+                _outputPath = value;
+                OnPropertyChanged(nameof(OutputPath));
+                CheckCanRename();
+            }
+        }
+
+        public bool IsProjectSelected
+        {
+            get => _isProjectSelected;
+            set
+            {
+                _isProjectSelected = value;
+                OnPropertyChanged(nameof(IsProjectSelected));
+            }
+        }
+
+        public string Message
+        {
+            get => _message;
+            set
+            {
+                _message = value;
+                OnPropertyChanged(nameof(Message));
+            }
+        }
+
+        public Visibility MessageVisibility
+        {
+            get => _messageVisibility;
+            set
+            {
+                _messageVisibility = value;
+                OnPropertyChanged(nameof(MessageVisibility));
+            }
+        }
+
+        public ICommand SelectFolderCommand { get; }
+        public ICommand RenameCommand { get; }
+
+        public RenameViewModel()
+        {
+            SelectFolderCommand = new RelayCommand(SelectFolder);
+            RenameCommand = new RelayCommand(Rename, CanRename);
+        }
+
+        private void SelectFolder()
+        {
+            using var dialog = new System.Windows.Forms.FolderBrowserDialog();
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                InputPath = dialog.SelectedPath;
+            }
+        }
+
+        private bool CanRename()
+        {
+            return !string.IsNullOrEmpty(InputPath) && !string.IsNullOrEmpty(OutputPath);
+        }
+
+        private void CheckCanRename()
+        {
+            if (RenameCommand is RelayCommand relayCommand)
+            {
+                relayCommand.NotifyCanExecuteChanged();
+            }
+        }
+
         private void Rename()
         {
+            string projectPath = InputPath;
+            string newName = OutputPath;
+            string command;
+
+            if (IsProjectSelected)
+            {
+                command = $"renom rename-project --project {projectPath} --new-name {newName}";
+            }
+            else
+            {
+                command = $"renom rename-plugin --project {projectPath} --plugin {projectPath} --new-name {newName}";
+            }
+
             try
             {
-                string command = IsProjectSelected 
-                    ? $"renom rename-project --project {InputPath} --new-name {OutputName}"
-                    : $"renom rename-plugin --project {InputPath} --plugin {InputPath} --new-name {OutputName}";
-
-                string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App", "renom.exe");
-                Process.Start(new ProcessStartInfo
+                string exePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App", "renom.exe");
+                var processInfo = new ProcessStartInfo
                 {
                     FileName = exePath,
                     Arguments = command.Replace("renom ", ""),
                     UseShellExecute = true,
-                    CreateNoWindow = true
-                });
+                    CreateNoWindow = false
+                };
+                var process = System.Diagnostics.Process.Start(processInfo);
+                process.WaitForExit(); // 等待重命名进程完成
 
                 Message = "重命名成功！";
-     
+                MessageVisibility = Visibility.Visible;
 
-
+                // 检查AutoOpen设置来决定是否打开文件夹
                 if (Properties.Settings.Default.AutoOpen)
                 {
-                    string originalPath = InputPath;
-                    string newPath = Path.Combine(Path.GetDirectoryName(InputPath), OutputName);
-                    
-                    // 先执行重命名命令
-                    Process.Start(new ProcessStartInfo
-                    {
-                        FileName = exePath,
-                        Arguments = command.Replace("renom ", ""),
-                        UseShellExecute = true,
-                        CreateNoWindow = true
-                    });
-
-                    // 等待重命名完成后再打开新路径
-                    OnPropertyChanged(InputPath);
+                    // 更新输入框为新的路径
+                    string newPath = Path.Combine(System.IO.Path.GetDirectoryName(projectPath), newName);
                     InputPath = newPath;
-                    
+                    Message = "重命名成功！";
+                    System.Media.SoundPlayer player = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-on.wav"));
+                    player.Play();
+                    MessageVisibility = Visibility.Visible;
                     Process.Start(new ProcessStartInfo
                     {
                         FileName = "explorer.exe",
@@ -84,7 +151,17 @@ namespace unreal_GUI.ViewModel
             catch (Exception ex)
             {
                 Message = $"重命名失败：{ex.Message}";
+                MessageVisibility = Visibility.Visible;
+                var player = new System.Media.SoundPlayer(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav"));
+                player.Play();
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
