@@ -5,24 +5,24 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using unreal_GUI.Model;
-using static unreal_GUI.ViewModel.SettingsViewModel;
 
 namespace unreal_GUI.ViewModel
 {
     public partial class ClearViewModel : ObservableObject
     {
         [ObservableProperty]
-        private List<SettingsViewModel.EngineInfo> _engineList = new List<SettingsViewModel.EngineInfo>();
+        private List<SettingsViewModel.EngineInfo> _engineList = [];
 
         [ObservableProperty]
         private string _inputPath = "";
 
         [ObservableProperty]
         private string _tipText = "";
+
+        [ObservableProperty]
+        private string _tipText2 = "";
 
         [ObservableProperty]
         private string _dDCPath = "";
@@ -76,7 +76,7 @@ namespace unreal_GUI.ViewModel
                 catch
                 {
                     // 如果JSON文件损坏，初始化为空列表
-                    EngineList = new List<SettingsViewModel.EngineInfo>();
+                    EngineList = [];
                 }
             }
         }
@@ -132,7 +132,7 @@ namespace unreal_GUI.ViewModel
                     File.Delete(file);
 
                 TipText = "清理完毕";
-                System.Media.SoundPlayer player = new System.Media.SoundPlayer(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-on.wav"));
+                System.Media.SoundPlayer player = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-on.wav"));
                 player.Play();
                 if (Properties.Settings.Default.AutoOpen)
                 {
@@ -142,7 +142,7 @@ namespace unreal_GUI.ViewModel
             catch (Exception ex)
             {
                 TipText = "清理失败: " + ex.Message;
-                System.Media.SoundPlayer player = new System.Media.SoundPlayer(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav"));
+                System.Media.SoundPlayer player = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav"));
                 player.Play();
             }
         }
@@ -259,6 +259,45 @@ namespace unreal_GUI.ViewModel
         {
             if (Directory.Exists(path))
                 Directory.Delete(path, true);
+        }
+
+        [RelayCommand]
+        private void CleanLog()
+        {
+            try
+            {
+                // 清理 AutomationTool\Logs 目录下的所有内容
+                string automationToolLogsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Unreal Engine", "AutomationTool", "Logs");
+                if (Directory.Exists(automationToolLogsPath))
+                {
+                    Directory.Delete(automationToolLogsPath, true);
+                    // 重新创建空目录
+                    Directory.CreateDirectory(automationToolLogsPath);
+                }
+
+                // 清理 Local\UnrealEngine 目录下的 .bin 和 XmlConfigCache 文件
+                string localUnrealEnginePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "UnrealEngine");
+                if (Directory.Exists(localUnrealEnginePath))
+                {
+                    // 删除 .bin 文件
+                    foreach (var file in Directory.GetFiles(localUnrealEnginePath, "*.bin", SearchOption.TopDirectoryOnly))
+                    {
+                        File.Delete(file);
+                    }
+                    
+
+                }
+
+                TipText2 = "Log清理完毕";
+                System.Media.SoundPlayer player = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-on.wav"));
+                player.Play();
+            }
+            catch (Exception ex)
+            {
+                TipText2 = "Log清理失败: " + ex.Message;
+                System.Media.SoundPlayer player = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav"));
+                player.Play();
+            }
         }
 
         partial void OnInputPathChanged(string value)
