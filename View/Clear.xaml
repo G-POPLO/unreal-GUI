@@ -17,22 +17,42 @@
             <StackPanel>
                 <TextBlock x:Name="Title" TextWrapping="Wrap" FontSize="18" Margin="0,10,0,10" FontWeight="Bold"><Run Language="zh-cn" Text="清除缓存"/></TextBlock>
                 <Separator/>
-                <TextBlock TextWrapping="Wrap" Margin="0,10,0,10"><Run Language="zh-cn" Text="清除项目文件夹中的目录，部分数据可以选择性保留"/></TextBlock>
-                <StackPanel Orientation="Horizontal">
-                    <CheckBox IsChecked="{Binding IsDerivedDataCacheChecked}" Content="保留着色器文件(DerivedDataCache)" Margin="0,0,10,0"/>
-                    <CheckBox IsChecked="{Binding IsSaveGameChecked}" Content="保留项目游戏存档(SaveGames)"/>
+                <StackPanel x:Name="CleanCache_Panel" Orientation="Vertical">
+                    <TextBlock TextWrapping="Wrap"><Run Language="zh-cn" Text="清除项目文件夹中的目录，部分数据可以选择性保留"/></TextBlock>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox IsChecked="{Binding IsDerivedDataCacheChecked}" Content="保留着色器文件(DerivedDataCache)" Margin="0,0,10,0"/>
+                        <CheckBox IsChecked="{Binding IsSaveGameChecked}" Content="保留项目游戏存档(SaveGames)"/>
+                    </StackPanel>
+                    <TextBlock TextWrapping="Wrap" Margin="0,0,0,10"><Run Language="zh-cn" Text="设定要进行清理的工程路径"/></TextBlock>
+                    <TextBox Text="{Binding InputPath, UpdateSourceTrigger=PropertyChanged}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
+                        <Button Content="设定工程路径" Margin="0,0,10,0" Command="{Binding SelectInputPathCommand}"/>
+                        <Button Content="清理缓存" x:Name="CleanCacheButton" Command="{Binding CleanCacheCommand}" IsEnabled="{Binding IsCleanButtonEnabled}"/>
+                    </StackPanel>
+                    <TextBlock x:Name="Tip" Text="{Binding TipText}" TextWrapping="Wrap" Visibility="{Binding TipText, Converter={StaticResource StringToVisibilityConverter}}"/>
                 </StackPanel>
-                <TextBlock TextWrapping="Wrap" Margin="0,10,0,10"><Run Language="zh-cn" Text="设定要进行清理的工程路径"/></TextBlock>
-                <TextBox Text="{Binding InputPath, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"/>
-                <StackPanel Orientation="Horizontal">
-                    <Button Content="设定工程路径" Margin="0,0,10,0" Command="{Binding SelectInputPathCommand}"/>
-                    <Button Content="清理缓存" x:Name="CleanButton" Command="{Binding CleanCacheCommand}" IsEnabled="{Binding IsCleanButtonEnabled}"/>
-                </StackPanel>
-                <TextBlock Text="{Binding TipText}" TextWrapping="Wrap" Visibility="{Binding TipText, Converter={StaticResource StringToVisibilityConverter}}"/>
                 <Separator/>
-                <StackPanel x:Name="OldDDC_Panel" Orientation="Vertical" Visibility="{Binding IsOldDDCPanelVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <TextBlock x:Name="Title_DDC" TextWrapping="Wrap" FontSize="14" FontWeight="Bold" Text="DDC缓存信息（旧）"/>
-                    <TextBlock x:Name="Tip_DDC" TextWrapping="Wrap" Text="在项目工作过程中会生成缓存文件，该软件可以帮你检测缓存空间的占用大小。若觉得空间占用过大，可以将缓存保存在其他位置或者使用UE5自带的DDC清理来清除缓存"/>
+                <StackPanel x:Name="Zen_Panel" Margin="0,10,0,0" Visibility="{Binding IsZenPanelVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <TextBlock TextWrapping="Wrap" Text="DDC缓存信息" FontSize="14" FontWeight="Bold"/>
+                    <TextBlock TextWrapping="Wrap" Text="在项目工作过程中会生成缓存文件，可以打开UE5自带的ZenDashboard查看详情。"/>
+                    <StackPanel Orientation="Horizontal">
+                        <ComboBox ItemsSource="{Binding EngineList}" SelectedItem="{Binding SelectedEngine}" Margin="10,10,10,10" DisplayMemberPath="Version" SelectedValuePath="Path"/>
+                        <Button x:Name="ZenButton" Content="打开ZenDashboard" Command="{Binding OpenZenDashboardCommand}" />
+                        <Button Content="查看相关文档" Command="{Binding OpenDocumentationCommand}"  Margin="10,0,10,0" />
+                        <TextBlock Text="{Binding DDCErrorText}" TextWrapping="Wrap" Margin="10,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding DDCErrorText, Converter={StaticResource StringToVisibilityConverter}}"/>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel x:Name="CleanLog_Panel" Margin="0,10,0,10">
+                    <TextBlock TextWrapping="Wrap" Text="Log清理" FontSize="14" FontWeight="Bold"/>
+                    <TextBlock TextWrapping="Wrap" Text="在项目工作过程中会生成log，这些log不会被自动清理，该程序可以帮你删掉这些多余的log"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
+                        <Button x:Name="CleanLogButton" Content="清理Log" Margin="10,0,10,0" Command="{Binding CleanLogCommand}"/>
+                        <TextBlock TextWrapping="Wrap" Text="{Binding TipText2}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel x:Name="OldDDC_Panel" Orientation="Vertical" Visibility="{Binding IsOldDDCPanelVisible, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsHidden="True">
+                    <TextBlock TextWrapping="Wrap" FontSize="14" FontWeight="Bold" Text="DDC缓存信息（旧）"/>
+                    <TextBlock TextWrapping="Wrap" Text="在项目工作过程中会生成缓存文件，该软件可以帮你检测缓存空间的占用大小。若觉得空间占用过大，可以将缓存保存在其他位置或者使用UE5自带的DDC清理来清除缓存"/>
                     <StackPanel>
                         <TextBlock Text="{Binding DDCPath}" TextWrapping="Wrap"/>
                         <TextBlock Text="{Binding DDCSharePath}" TextWrapping="Wrap"/>
@@ -41,16 +61,6 @@
                     <StackPanel Orientation="Horizontal">
                         <Button Content="寻找DDC缓存路径" Margin="0,0,10,0" Command="{Binding FindDDCPathsCommand}"/>
                         <Button Content="更新占用空间" Command="{Binding CalculateTotalSizeCommand}" />
-                    </StackPanel>
-                </StackPanel>
-                <StackPanel x:Name="Zen_Panel" Margin="0,10,0,0" Visibility="{Binding IsZenPanelVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <TextBlock TextWrapping="Wrap" Text="DDC缓存信息" FontSize="14" FontWeight="Bold"/>
-                    <TextBlock x:Name="Tip2_DDC" TextWrapping="Wrap" Text="在项目工作过程中会生成缓存文件，可以打开UE5自带的ZenDashboard查看详情。"/>
-                    <StackPanel Orientation="Horizontal">
-                        <ComboBox ItemsSource="{Binding EngineList}" SelectedItem="{Binding SelectedEngine}" Margin="10,10,10,10" DisplayMemberPath="Version" SelectedValuePath="Path"/>
-                        <Button x:Name="ZenButton" Content="打开ZenDashboard" Command="{Binding OpenZenDashboardCommand}" />
-                        <Button Content="查看相关文档" Command="{Binding OpenDocumentationCommand}"  Margin="10,0,10,0" />
-                        <TextBlock Text="{Binding DDCErrorText}" TextWrapping="Wrap" Margin="10,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding DDCErrorText, Converter={StaticResource StringToVisibilityConverter}}"/>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
