@@ -1,0 +1,12 @@
+﻿<UserControl x:Class="unreal_GUI.Model.Delete_DialogContent"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:unreal_GUI.Model">
+    <StackPanel>
+        <TextBlock TextWrapping="Wrap" Text="请选择预删除的按钮"/>
+        <ListBox d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,10,0,10"/>
+        <Button Content="删除"/>
+    </StackPanel>
+</UserControl>
