@@ -29,7 +29,7 @@ namespace unreal_GUI.ViewModel
         {
             //await InitializeJson_Async();
             //await AutoUpdate();
-            ModernDialog.ShowInputDialogAsync("121233");
+            ModernDialog.ShowInputDialogAsync();
         }
 
         private static async Task AutoUpdate()
@@ -62,6 +62,7 @@ namespace unreal_GUI.ViewModel
             }
         }
 
+ 
         // 使用动画效果跳转到指定视图
         private void NavigateToView(UIElement view)
         {

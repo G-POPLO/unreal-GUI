@@ -17,7 +17,7 @@ namespace unreal_GUI.ViewModel
         }
 
         [RelayCommand]
-        private void OpenUpdateUrl()
+        private static void OpenUpdateUrl()
         {
             Process.Start(new ProcessStartInfo
             {

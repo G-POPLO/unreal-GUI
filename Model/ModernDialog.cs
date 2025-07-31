@@ -3,7 +3,8 @@ using ModernWpf.Controls;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 namespace unreal_GUI.Model
 {
     public static class ModernDialog
@@ -63,39 +64,18 @@ namespace unreal_GUI.Model
         }
 
         /// <summary>
-        /// 显示一个允许用户输入内容并带有确认/取消按钮的对话框
+        /// 仅用于“快速访问”页面的输入框
         /// </summary>
-        public static async Task<(ContentDialogResult result, string input)> ShowInputDialogAsync(string title/*,/*string placeholderText*/)
-        {
-            var textBox = new TextBox
-            {
-                // PlaceholderText = placeholderText, // 注释掉不存在的属性
-                Margin = new Thickness(0, 10, 0, 0),
-                MinWidth = 300,
-            };
-
-            // 设置占位符文本提示
-
-            //textBox.ToolTip = placeholderText;
-
-
-            ContentDialog dialog = new ContentDialog();
-
-            // XamlRoot must be set in the case of a ContentDialog running in a Desktop app
-            
-            dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
-            dialog.Title = title;
-            dialog.PrimaryButtonText = "Save";
-            dialog.SecondaryButtonText = "Don't Save";
-            dialog.CloseButtonText = "Cancel";
+        public static async Task<ContentDialogResult> ShowInputDialogAsync()
+        {                  
+            ContentDialog dialog = new ContentDialog();                      
+            dialog.Title = "添加自定义文件夹";
+            dialog.PrimaryButtonText = "添加";           
+            dialog.CloseButtonText = "取消";
             dialog.DefaultButton = ContentDialogButton.Primary;
-            
-
+            dialog.Content = new Add_DialogContent();
             var result = await dialog.ShowAsync();
-
-
-           
-            return (result, textBox.Text);
+            return result;
         }
     }
 }

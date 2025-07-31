@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="unreal_GUI.Model.Add_DialogContent"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:unreal_GUI.Model">
+    <StackPanel>
+        <!-- Content body -->
+        <TextBlock TextWrapping="Wrap" Text="自定义按钮名称"/>
+        <TextBox TextWrapping="Wrap"  Width="auto" Margin="0,10,0,10"/>
+        <TextBlock TextWrapping="Wrap" Text="按钮路径"/>
+        <TextBox TextWrapping="Wrap"  Width="auto" Margin="0,10,0,10"/>
+        <Button HorizontalAlignment="Left" Content="设置路径"/>
+    </StackPanel>
+</UserControl>
