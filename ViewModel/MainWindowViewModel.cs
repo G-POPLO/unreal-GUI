@@ -27,8 +27,9 @@ namespace unreal_GUI.ViewModel
 
         private async void Loaded()
         {
-            await InitializeJson_Async();
-            await AutoUpdate();
+            //await InitializeJson_Async();
+            //await AutoUpdate();
+            ModernDialog.ShowInputDialogAsync("121233");
         }
 
         private static async Task AutoUpdate()
@@ -64,14 +65,7 @@ namespace unreal_GUI.ViewModel
         // 使用动画效果跳转到指定视图
         private void NavigateToView(UIElement view)
         {
-            if (ContentContainer != null)
-            {
-                PageTransitionAnimation.ApplyTransition(ContentContainer, view);
-            }
-            else
-            {
-                CurrentView = view;
-            }
+            PageTransitionAnimation.ApplyTransition(ContentContainer, view);                    
         }
 
         [RelayCommand]
