@@ -29,7 +29,7 @@ namespace unreal_GUI.ViewModel
         {
             //await InitializeJson_Async();
             //await AutoUpdate();
-            ModernDialog.ShowInputDialogAsync();
+            //ModernDialog.ShowAddCustomDialogAsync();
         }
 
         private static async Task AutoUpdate()

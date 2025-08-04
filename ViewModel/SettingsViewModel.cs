@@ -47,7 +47,9 @@ namespace unreal_GUI.ViewModel
             {
                 try
                 {
-                    EngineInfos = JsonConvert.DeserializeObject<List<EngineInfo>>(File.ReadAllText("settings.json"));
+                    var json = File.ReadAllText("settings.json");
+                    var settings = JsonConvert.DeserializeObject<SettingsData>(json);
+                    EngineInfos = settings.Engines ?? new List<EngineInfo>();
                     UpdateEnginePathsDisplay();
                 }
                 catch
@@ -123,7 +125,29 @@ namespace unreal_GUI.ViewModel
             Properties.Settings.Default.Save();
 
             // 保存JSON文件
-            File.WriteAllText("settings.json", JsonConvert.SerializeObject(EngineInfos));
+            var settings = new SettingsData
+            {
+                Engines = EngineInfos,
+                CustomButtons = new List<CustomButton>()
+            };
+            
+            // 读取现有的自定义按钮数据
+            if (File.Exists("settings.json"))
+            {
+                try
+                {
+                    var json = File.ReadAllText("settings.json");
+                    var existingSettings = JsonConvert.DeserializeObject<SettingsData>(json);
+                    settings.CustomButtons = existingSettings?.CustomButtons ?? new List<CustomButton>();
+                }
+                catch
+                {
+                    // 如果JSON文件损坏，初始化为空列表
+                    settings.CustomButtons = new List<CustomButton>();
+                }
+            }
+            
+            File.WriteAllText("settings.json", JsonConvert.SerializeObject(settings, Formatting.Indented));
 
             TipText = "设置已保存";
         }
@@ -160,6 +184,18 @@ namespace unreal_GUI.ViewModel
         {
             public string Path { get; set; }
             public string Version { get; set; }
+        }
+
+        public class SettingsData
+        {
+            public List<EngineInfo> Engines { get; set; }
+            public List<CustomButton> CustomButtons { get; set; }
+        }
+
+        public class CustomButton
+        {
+            public string Name { get; set; }
+            public string Path { get; set; }
         }
 
     }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -21,6 +22,8 @@ namespace unreal_GUI.ViewModel
             LoadEngineList();
             OpenPluginDirectoryCommand = new RelayCommand<object>(OpenPluginDirectory);
             OpenWebsiteCommand = new RelayCommand<string>(OpenWebsite);
+            AddCustomCommand = new RelayCommand(AddCustom);
+            DeleteCustomCommand = new RelayCommand(DeleteCustom);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -42,12 +45,16 @@ namespace unreal_GUI.ViewModel
 
         public ICommand OpenPluginDirectoryCommand { get; }
         public ICommand OpenWebsiteCommand { get; }
+        public ICommand AddCustomCommand { get; }
+        public ICommand DeleteCustomCommand { get; }
 
         private void LoadEngineList()
         {
             if (File.Exists("settings.json"))
             {
-                var engineList = JsonConvert.DeserializeObject<ObservableCollection<SettingsViewModel.EngineInfo>>(File.ReadAllText("settings.json"));
+                var json = File.ReadAllText("settings.json");
+                var settings = JsonConvert.DeserializeObject<SettingsViewModel.SettingsData>(json);
+                var engineList = settings?.Engines ?? new List<SettingsViewModel.EngineInfo>();
                 Engines = new ObservableCollection<object>(engineList.Select(e => new { DisplayName = $"UE {e.Version}", Path = e.Path }));
             }
         }
@@ -77,5 +84,17 @@ namespace unreal_GUI.ViewModel
                 Process.Start(new ProcessStartInfo { FileName = url, UseShellExecute = true });
             }
         }
+
+        private async void AddCustom()
+        {
+            await ModernDialog.ShowAddCustomDialogAsync();
+        }
+
+        private async void DeleteCustom()
+        {
+            await ModernDialog.ShowDeleteCustomDialogAsync();
+        }
+
+        
     }
 }
