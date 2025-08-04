@@ -29,11 +29,11 @@
                 </StackPanel>
                 <Separator/>
                 <TextBlock TextWrapping="Wrap" FontSize="14" Height="23" Width="760" Text="自定义文件夹" Margin="10,0,9,0"/>
-                <TextBlock TextWrapping="Wrap" FontSize="10" Width="760" Text="可将常用的文件夹放在这里方便打开" Margin="10,0,10,0" VerticalAlignment="Center"/>
+                <TextBlock x:Name="DialogResult" TextWrapping="Wrap" FontSize="10" Width="760" Text="可将常用的文件夹放在这里方便打开" Margin="10,0,10,0" VerticalAlignment="Center"/>
                 <!--这里插入自定义文件夹的按钮-->
                 <StackPanel Orientation="Horizontal" Margin="10,10,10,10">
-                    <Button Content="添加"/>
-                    <Button Content="删除" Margin="10,0,0,0"/>
+                    <Button Content="添加" Command="{Binding AddCustomCommand}"/>
+                    <Button Content="删除" Margin="10,0,0,0" Command="{Binding DeleteCustomCommand}"/>
                 </StackPanel>
 
             </StackPanel>

@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="unreal_GUI.Model.Add_DialogContent"
+<UserControl x:Class="unreal_GUI.Model.Add_DialogContent"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,9 +7,9 @@
     <StackPanel>
         <!-- Content body -->
         <TextBlock TextWrapping="Wrap" Text="自定义按钮名称"/>
-        <TextBox TextWrapping="Wrap"  Width="auto" Margin="0,10,0,10"/>
+        <TextBox x:Name="ButtonNameTextBox" TextWrapping="Wrap"  Width="auto" Margin="0,10,0,10" TextChanged="TextBox_TextChanged"/>
         <TextBlock TextWrapping="Wrap" Text="按钮路径"/>
-        <TextBox TextWrapping="Wrap"  Width="auto" Margin="0,10,0,10"/>
-        <Button HorizontalAlignment="Left" Content="设置路径"/>
+        <TextBox x:Name="FolderPathTextBox" TextWrapping="Wrap" Width="auto" Margin="0,10,0,10" IsReadOnly="True" TextChanged="TextBox_TextChanged"/>
+        <Button HorizontalAlignment="Left" Content="设置路径" Click="Button_Click"/>
     </StackPanel>
 </UserControl>
