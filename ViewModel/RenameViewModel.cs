@@ -1,116 +1,52 @@
-using CommunityToolkit.Mvvm.Input;
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace unreal_GUI.ViewModel
 {
-    public class RenameViewModel : INotifyPropertyChanged
+    public partial class RenameViewModel : ObservableObject
     {
+        [ObservableProperty]
         private string _inputPath;
+
+        [ObservableProperty]
         private string _outputPath;
+
+        [ObservableProperty]
         private bool _isProjectSelected = true;
+
+        [ObservableProperty]
         private string _message;
+
+        [ObservableProperty]
         private Visibility _messageVisibility = Visibility.Hidden;
+
+        [ObservableProperty]
         private bool _isRenameButtonEnabled = false;
-
-        public string InputPath
-        {
-            get => _inputPath;
-            set
-            {
-                _inputPath = value;
-                OnPropertyChanged(nameof(InputPath));
-                CheckCanRename();
-            }
-        }
-
-        public string OutputPath
-        {
-            get => _outputPath;
-            set
-            {
-                _outputPath = value;
-                OnPropertyChanged(nameof(OutputPath));
-                CheckCanRename();
-            }
-        }
-
-        public bool IsRenameButtonEnabled
-        {
-            get => _isRenameButtonEnabled;
-            set
-            {
-                _isRenameButtonEnabled = value;
-                OnPropertyChanged(nameof(IsRenameButtonEnabled));
-            }
-        }
-
-        public bool IsProjectSelected
-        {
-            get => _isProjectSelected;
-            set
-            {
-                _isProjectSelected = value;
-                OnPropertyChanged(nameof(IsProjectSelected));
-            }
-        }
-
-        public string Message
-        {
-            get => _message;
-            set
-            {
-                _message = value;
-                OnPropertyChanged(nameof(Message));
-            }
-        }
-
-        public Visibility MessageVisibility
-        {
-            get => _messageVisibility;
-            set
-            {
-                _messageVisibility = value;
-                OnPropertyChanged(nameof(MessageVisibility));
-            }
-        }
-
-        public ICommand SelectFolderCommand { get; }
-        public ICommand RenameCommand { get; }
 
         public RenameViewModel()
         {
-            SelectFolderCommand = new RelayCommand(SelectFolder);
-            RenameCommand = new RelayCommand(Rename, CanRename);
+            // 构造函数现在为空，因为命令将通过[RelayCommand]特性自动生成
         }
 
+        [RelayCommand]
         private void SelectFolder()
         {
-            using var dialog = new System.Windows.Forms.FolderBrowserDialog();
-            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
             {
-                InputPath = dialog.SelectedPath;
+                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    InputPath = dialog.SelectedPath;
+                }
             }
         }
 
-        private bool CanRename()
-        {
-            return !string.IsNullOrEmpty(InputPath) && !string.IsNullOrEmpty(OutputPath);
-        }
-
-        private void CheckCanRename()
-        {
-            IsRenameButtonEnabled = !string.IsNullOrEmpty(InputPath) && !string.IsNullOrEmpty(OutputPath);
-            if (RenameCommand is RelayCommand relayCommand)
-            {
-                relayCommand.NotifyCanExecuteChanged();
-            }
-        }
-
+        [RelayCommand(CanExecute = nameof(CanRename))]
         private void Rename()
         {
             string projectPath = InputPath;
@@ -128,7 +64,7 @@ namespace unreal_GUI.ViewModel
 
             try
             {
-                string exePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App", "renom.exe");
+                string exePath = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "App", "renom.exe");
                 var processInfo = new ProcessStartInfo
                 {
                     FileName = exePath,
@@ -149,7 +85,7 @@ namespace unreal_GUI.ViewModel
                     string newPath = Path.Combine(System.IO.Path.GetDirectoryName(projectPath), newName);
                     InputPath = newPath;
                     Message = "重命名成功！";
-                    System.Media.SoundPlayer player = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-on.wav"));
+                    System.Media.SoundPlayer player = new(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-on.wav"));
                     player.Play();
                     MessageVisibility = Visibility.Visible;
                     Process.Start(new ProcessStartInfo
@@ -164,16 +100,26 @@ namespace unreal_GUI.ViewModel
             {
                 Message = $"重命名失败：{ex.Message}";
                 MessageVisibility = Visibility.Visible;
-                var player = new System.Media.SoundPlayer(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav"));
+                var player = new System.Media.SoundPlayer(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav"));
                 player.Play();
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName)
+        private bool CanRename()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            return !string.IsNullOrEmpty(InputPath) && !string.IsNullOrEmpty(OutputPath);
+        }
+
+        partial void OnInputPathChanged(string value)
+        {
+            IsRenameButtonEnabled = CanRename();
+            RenameCommand.NotifyCanExecuteChanged();
+        }
+
+        partial void OnOutputPathChanged(string value)
+        {
+            IsRenameButtonEnabled = CanRename();
+            RenameCommand.NotifyCanExecuteChanged();
         }
     }
 }

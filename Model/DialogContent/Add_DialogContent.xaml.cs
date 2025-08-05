@@ -48,8 +48,8 @@ namespace unreal_GUI.Model
         {
             if (Dialog != null)
             {
-                Dialog.IsPrimaryButtonEnabled = !string.IsNullOrWhiteSpace(ButtonNameTextBox.Text) && 
-                                               !string.IsNullOrWhiteSpace(FolderPathTextBox.Text);
+                Dialog.IsPrimaryButtonEnabled = !string.IsNullOrWhiteSpace(ButtonNameTextBox.Text) && !string.IsNullOrWhiteSpace(FolderPathTextBox.Text);
+
             }
         }
     }

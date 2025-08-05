@@ -1,5 +1,3 @@
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using ModernWpf;
 using ModernWpf.Controls;
 using Newtonsoft.Json;
@@ -8,7 +6,6 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
 using unreal_GUI.ViewModel;
 namespace unreal_GUI.Model
 {
@@ -69,7 +66,7 @@ namespace unreal_GUI.Model
         }
 
         /// <summary>
-        /// 仅用于“快速访问”页面的输入框
+        /// 显示"添加自定义按钮"的对话框
         /// </summary>
         public static async Task<ContentDialogResult> ShowAddCustomDialogAsync()
         {
@@ -106,21 +103,25 @@ namespace unreal_GUI.Model
                     // 添加新的自定义按钮信息
                     if (settings.CustomButtons == null)
                     {
-                        settings.CustomButtons = new List<SettingsViewModel.CustomButton>();
+                        settings.CustomButtons = [];
                     }
                     settings.CustomButtons.Add(new SettingsViewModel.CustomButton { Name = buttonName, Path = folderPath });
                     
                     // 保存更新后的设置
                     var jsonSettings = JsonConvert.SerializeObject(settings, Formatting.Indented);
                     File.WriteAllText("settings.json", jsonSettings);
-                    
-                    
+
+                    // 这段刷新UI的代码被注释掉了，因为并没有作用
+                    //var viewModel = Application.Current.MainWindow?.DataContext as QuickAccessViewModel;
+                    //viewModel?.LoadCustomButtons();
                 }
             }
             return result;
         }
-       
 
+        /// <summary>
+        /// 显示"删除自定义按钮"的对话框
+        /// </summary>
         public static async Task<ContentDialogResult> ShowDeleteCustomDialogAsync()
         {
             var content = new Delete_DialogContent();
@@ -136,22 +137,25 @@ namespace unreal_GUI.Model
                     content.ButtonsListBox.ItemsSource = settings.CustomButtons;
                 }
             }
-            
-            ContentDialog dialog = new ContentDialog();
-            dialog.Title = "删除自定义文件夹";
-            dialog.PrimaryButtonText = "关闭";           
-            dialog.DefaultButton = ContentDialogButton.Primary;
-            dialog.Content = content;
+
+            ContentDialog dialog = new ContentDialog
+            {
+                Title = "删除自定义文件夹",
+                PrimaryButtonText = "关闭",
+                DefaultButton = ContentDialogButton.Primary,
+                Content = content
+            };
             var result = await dialog.ShowAsync();
-            if (result == ContentDialogResult.Primary)
-            {
-                // 这里需要实现具体的逻辑来处理删除操作
-                // 例如：从JSON文件中删除相应的条目
-            }
-            else
-            {
-                // 取消操作
-            }
+            // 这段刷新UI的代码被注释掉了，因为并没有作用
+            //var viewModel = Application.Current.MainWindow?.DataContext as QuickAccessViewModel;
+            //viewModel?.LoadCustomButtons();
+            //if (result == ContentDialogResult.Primary)
+            //{
+            //}
+            //else
+            //{
+            //    
+            //}
             return result;
         }
     }

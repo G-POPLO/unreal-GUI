@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:unreal_GUI"
              xmlns:ui="http://schemas.modernwpf.com/2019"
              xmlns:viewmodel="clr-namespace:unreal_GUI.ViewModel" x:Class="unreal_GUI.Settings"
+    
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>

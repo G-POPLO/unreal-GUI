@@ -7,8 +7,7 @@
         mc:Ignorable="d"
         Title="Unreal-GUI" Height="550" Width="700"
     xmlns:ui="http://schemas.modernwpf.com/2019"
-    ui:WindowHelper.UseModernWindowStyle="True"
-    Loaded="WindowLoaded">
+    ui:WindowHelper.UseModernWindowStyle="True">
     <Window.DataContext>
         <viewModel:MainWindowViewModel x:Name="ViewModel" />
     </Window.DataContext>
