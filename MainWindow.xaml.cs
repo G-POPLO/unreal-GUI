@@ -12,13 +12,13 @@ namespace unreal_GUI
             Loaded += MainWindow_Loaded;
         }
         
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             if (ViewModel is MainWindowViewModel mainWindowViewModel)
             {
                 mainWindowViewModel.ContentContainer = ContentContainer;
-                mainWindowViewModel.InitializeJson_Async();
-                MainWindowViewModel.AutoUpdate();
+                await mainWindowViewModel.InitializeJson_Async();
+                await MainWindowViewModel.AutoUpdate();
             }
         }
     }

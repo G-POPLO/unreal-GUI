@@ -73,7 +73,7 @@ namespace unreal_GUI.ViewModel
                 {
                     var json = File.ReadAllText("settings.json");
                     var settings = JsonConvert.DeserializeObject<SettingsViewModel.SettingsData>(json);
-                    EngineList = settings?.Engines ?? new List<SettingsViewModel.EngineInfo>();
+                    EngineList = settings?.Engines ?? [];
                 }
                 catch
                 {

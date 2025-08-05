@@ -144,7 +144,7 @@ namespace unreal_GUI.Model
 
             }
 
-            ContentDialog dialog = new ContentDialog
+            ContentDialog dialog = new()
             {
                 Title = "删除自定义文件夹",
                 PrimaryButtonText = "关闭",
