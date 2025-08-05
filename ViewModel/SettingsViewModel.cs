@@ -157,7 +157,7 @@ namespace unreal_GUI.ViewModel
             EnginePathsDisplay = EngineInfos.Select(p => $"{p.Path} ({p.Version})").ToList();
         }
 
-        private string GetEngineVersion(string enginePath)
+        private static string GetEngineVersion(string enginePath)
         {
             try
             {

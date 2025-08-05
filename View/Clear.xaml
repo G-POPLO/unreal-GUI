@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:unreal_GUI"
              xmlns:viewmodel="clr-namespace:unreal_GUI.ViewModel"
              d:DataContext="{d:DesignInstance Type=viewmodel:ClearViewModel}"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -18,12 +19,12 @@
                 <TextBlock x:Name="Title" TextWrapping="Wrap" FontSize="18" Margin="0,10,0,10" FontWeight="Bold"><Run Language="zh-cn" Text="清除缓存"/></TextBlock>
                 <Separator/>
                 <StackPanel x:Name="CleanCache_Panel" Orientation="Vertical">
-                    <TextBlock TextWrapping="Wrap"><Run Language="zh-cn" Text="清除项目文件夹中的目录，部分数据可以选择性保留"/></TextBlock>
+                    <TextBlock TextWrapping="Wrap" Text="清除项目文件夹中的缓存数据，部分数据可以选择性保留"></TextBlock>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox IsChecked="{Binding IsDerivedDataCacheChecked}" Content="保留着色器文件(DerivedDataCache)" Margin="0,0,10,0"/>
-                        <CheckBox IsChecked="{Binding IsSaveGameChecked}" Content="保留项目游戏存档(SaveGames)"/>
+                        <CheckBox IsChecked="{Binding IsSaveGameChecked}" Content="保留项目游戏存档(Saved/SaveGames)"/>
                     </StackPanel>
-                    <TextBlock TextWrapping="Wrap" Margin="0,0,0,10"><Run Language="zh-cn" Text="设定要进行清理的工程路径"/></TextBlock>
+                    <TextBlock TextWrapping="Wrap" Margin="0,0,0,10" Text="设定要进行清理的工程路径"></TextBlock>
                     <TextBox Text="{Binding InputPath, UpdateSourceTrigger=PropertyChanged}"/>
                     <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
                         <Button Content="设定工程路径" Margin="0,0,10,0" Command="{Binding SelectInputPathCommand}"/>
@@ -44,7 +45,7 @@
                 </StackPanel>
                 <StackPanel x:Name="CleanLog_Panel" Margin="0,10,0,10">
                     <TextBlock TextWrapping="Wrap" Text="Log清理" FontSize="14" FontWeight="Bold"/>
-                    <TextBlock TextWrapping="Wrap" Text="在项目工作过程中会生成log，这些log不会被自动清理，该程序可以帮你删掉这些多余的log"/>
+                    <TextBlock TextWrapping="Wrap" Text="在项目工作过程中会生成Log，这些Log不会被自动清理，该程序可以帮你删掉这些多余的Log"/>
                     <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
                         <Button x:Name="CleanLogButton" Content="清理Log" Margin="10,0,10,0" Command="{Binding CleanLogCommand}"/>
                         <TextBlock TextWrapping="Wrap" Text="{Binding TipText2}" HorizontalAlignment="Center" VerticalAlignment="Center"/>

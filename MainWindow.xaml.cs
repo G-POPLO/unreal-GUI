@@ -9,13 +9,15 @@ namespace unreal_GUI
         public MainWindow()
         {
             InitializeComponent();
+            Loaded += MainWindow_Loaded;
         }
         
-        private void WindowLoaded(object sender, RoutedEventArgs e)
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             if (ViewModel is MainWindowViewModel mainWindowViewModel)
             {
-                mainWindowViewModel.ContentContainer = ContentContainer; // ContentContainer����Ϊ��ʱ��ֱ���л���ͼ
+                mainWindowViewModel.ContentContainer = ContentContainer;
+                mainWindowViewModel.InitializeJson_Async();
             }
         }
     }

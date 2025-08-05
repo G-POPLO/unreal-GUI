@@ -22,14 +22,8 @@ namespace unreal_GUI.ViewModel
 
         public MainWindowViewModel()
         {
-            Loaded();
-        }
-
-        private async void Loaded()
-        {
-            //await InitializeJson_Async();
-            //await AutoUpdate();
-            //ModernDialog.ShowAddCustomDialogAsync();
+            // 初始化时导航到编译视图
+            // 注意：在MainWindow_Loaded事件中会设置ContentContainer并调用NavigateToView
         }
 
         private static async Task AutoUpdate()
@@ -49,16 +43,16 @@ namespace unreal_GUI.ViewModel
 
                 if (result == true)
                 {
-                    NavigateToView(new Settings());
+                    ContentContainer.Content = new Settings();
                 }
                 else
                 {
-                    NavigateToView(new Compile());
+                    ContentContainer.Content = new Compile();
                 }
             }
             else
             {
-                NavigateToView(new Compile());
+                ContentContainer.Content = new Compile();
             }
         }
 

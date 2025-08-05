@@ -1,133 +1,50 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Media;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json;
 using unreal_GUI.Model;
 
 namespace unreal_GUI.ViewModel
 {
-    public class CompileViewModel : INotifyPropertyChanged
+    public partial class CompileViewModel : ObservableObject
     {
         private List<SettingsViewModel.EngineInfo> engineList = [];
+        
+        [ObservableProperty]
         private SettingsViewModel.EngineInfo selectedEngine;
+        
+        [ObservableProperty]
         private string inputPath;
+        
+        [ObservableProperty]
         private string outputPath;
+        
+        [ObservableProperty]
         private string tipsText;
-        private bool isCompileButtonEnabled;
+        
+        [ObservableProperty]
         private Visibility tipsVisibility;
 
         public CompileViewModel()
         {
             LoadEngineList();
-            SelectInputCommand = new RelayCommand(SelectInput);
-            SelectOutputCommand = new RelayCommand(SelectOutput);
-            CompileCommand = new RelayCommand(Compile, CanCompile);
             
             // 初始化属性
             TipsVisibility = Visibility.Hidden;
-            IsCompileButtonEnabled = false;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public ObservableCollection<SettingsViewModel.EngineInfo> EngineVersions { get; } = new ObservableCollection<SettingsViewModel.EngineInfo>();
 
-        public SettingsViewModel.EngineInfo SelectedEngine
-        {
-            get => selectedEngine;
-            set
-            {
-                selectedEngine = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(IsCompileButtonEnabled));
-                ((RelayCommand)CompileCommand).NotifyCanExecuteChanged();
-            }
-        }
+        public bool IsCompileButtonEnabled => CanCompile();
 
-        public string InputPath
-        {
-            get => inputPath;
-            set
-            {
-                inputPath = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(IsCompileButtonEnabled));
-                ((RelayCommand)CompileCommand).NotifyCanExecuteChanged();
-            }
-        }
-
-        public string OutputPath
-        {
-            get => outputPath;
-            set
-            {
-                outputPath = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(IsCompileButtonEnabled));
-                ((RelayCommand)CompileCommand).NotifyCanExecuteChanged();
-            }
-        }
-
-        public string TipsText
-        {
-            get => tipsText;
-            set
-            {
-                tipsText = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool IsCompileButtonEnabled
-        {
-            get => CanCompile();
-            set
-            {
-                isCompileButtonEnabled = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public Visibility TipsVisibility
-        {
-            get => tipsVisibility;
-            set
-            {
-                tipsVisibility = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ICommand SelectInputCommand { get; }
-        public ICommand SelectOutputCommand { get; }
-        public ICommand CompileCommand { get; }
-
-        private void LoadEngineList()
-        {
-            if (File.Exists("settings.json"))
-            {
-                engineList = JsonConvert.DeserializeObject<List<SettingsViewModel.EngineInfo>>(File.ReadAllText("settings.json"));
-                foreach (SettingsViewModel.EngineInfo engine in engineList)
-                {
-                    EngineVersions.Add(engine);
-                }
-            }
-        }
-
+        [RelayCommand]
         private void SelectInput()
         {
             var dialog = new System.Windows.Forms.OpenFileDialog
@@ -157,6 +74,7 @@ namespace unreal_GUI.ViewModel
             }
         }
 
+        [RelayCommand]
         private void SelectOutput()
         {
             var dialog = new System.Windows.Forms.FolderBrowserDialog();
@@ -174,6 +92,25 @@ namespace unreal_GUI.ViewModel
                    SelectedEngine != null;
         }
 
+        partial void OnInputPathChanged(string value)
+        {
+            OnPropertyChanged(nameof(IsCompileButtonEnabled));
+            CompileCommand.NotifyCanExecuteChanged();
+        }
+
+        partial void OnOutputPathChanged(string value)
+        {
+            OnPropertyChanged(nameof(IsCompileButtonEnabled));
+            CompileCommand.NotifyCanExecuteChanged();
+        }
+
+        partial void OnSelectedEngineChanged(SettingsViewModel.EngineInfo value)
+        {
+            OnPropertyChanged(nameof(IsCompileButtonEnabled));
+            CompileCommand.NotifyCanExecuteChanged();
+        }
+
+        [RelayCommand(CanExecute = nameof(CanCompile))]
         private async void Compile()
         {
             TipsVisibility = Visibility.Visible;
@@ -240,6 +177,20 @@ namespace unreal_GUI.ViewModel
                 TipsText = $"编译错误：{ex.Message}";
                 var player = new SoundPlayer(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav"));
                 player.Play();
+            }
+        }
+
+        private void LoadEngineList()
+        {
+            if (File.Exists("settings.json"))
+            {
+                var json = File.ReadAllText("settings.json");
+                var settings = JsonConvert.DeserializeObject<SettingsViewModel.SettingsData>(json);
+                engineList = settings?.Engines ?? new List<SettingsViewModel.EngineInfo>();
+                foreach (SettingsViewModel.EngineInfo engine in engineList)
+                {
+                    EngineVersions.Add(engine);
+                }
             }
         }
     }

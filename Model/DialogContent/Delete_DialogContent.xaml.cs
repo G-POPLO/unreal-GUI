@@ -39,7 +39,7 @@ namespace unreal_GUI.Model
                     var settings = JsonConvert.DeserializeObject<SettingsViewModel.SettingsData>(json);
                     ButtonsListBox.ItemsSource = settings?.CustomButtons ?? new List<SettingsViewModel.CustomButton>();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // 如果JSON文件损坏或读取失败，初始化为空列表
                     ButtonsListBox.ItemsSource = new List<SettingsViewModel.CustomButton>();

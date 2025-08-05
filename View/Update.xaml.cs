@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using unreal_GUI.Model;
+using CommunityToolkit.Mvvm.Input;
+using System.Diagnostics;
 
 namespace unreal_GUI.View.Update
 {
@@ -33,9 +35,10 @@ namespace unreal_GUI.View.Update
             
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        [RelayCommand]
+        private static void OpenSourceCode()
         {
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo { FileName = "https://github.com/G-POPLO/unreal-GUI/", UseShellExecute = true });
+            Process.Start(new ProcessStartInfo { FileName = "https://github.com/G-POPLO/unreal-GUI/", UseShellExecute = true });
         }
     }
 }
