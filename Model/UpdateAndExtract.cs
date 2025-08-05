@@ -20,7 +20,7 @@ namespace unreal_GUI.Model
             var currentVersion = Application.ResourceAssembly.GetName().Version.ToString();
             try
             {
-                using HttpClient client = new HttpClient();
+                using HttpClient client = new();
                 client.DefaultRequestHeaders.UserAgent.ParseAdd("unreal-GUI");
                 // 从API获取最新版本信息
                 var response = Properties.Settings.Default.Gitcode
@@ -85,7 +85,7 @@ namespace unreal_GUI.Model
                         // 设置7zxa.dll
                         _7z.ConfigureSevenZip();
                         // 解压到download文件夹
-                        SevenZipExtractor extractor = new SevenZipExtractor(downloadPath);
+                        SevenZipExtractor extractor = new(downloadPath);
                         string extractPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "download");
                         extractor.ExtractArchive(extractPath);
                         File.Delete(downloadPath);

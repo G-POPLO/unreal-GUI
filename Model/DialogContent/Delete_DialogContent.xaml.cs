@@ -37,7 +37,7 @@ namespace unreal_GUI.Model
                 {
                     var json = File.ReadAllText("settings.json");
                     var settings = JsonConvert.DeserializeObject<SettingsViewModel.SettingsData>(json);
-                    ButtonsListBox.ItemsSource = settings?.CustomButtons ?? new List<SettingsViewModel.CustomButton>();
+                    ButtonsListBox.ItemsSource = settings?.CustomButtons ?? [];
                 }
                 catch (Exception)
                 {

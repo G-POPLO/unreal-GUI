@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json;
@@ -14,10 +15,10 @@ namespace unreal_GUI.ViewModel
     public partial class QuickAccessViewModel : ObservableObject
     {
         [ObservableProperty]
-        private ObservableCollection<object> engines = new ObservableCollection<object>();
+        private ObservableCollection<object> engines = [];
         
         [ObservableProperty]
-        private ObservableCollection<object> customButtons = new ObservableCollection<object>();
+        private ObservableCollection<object> customButtons = [];
         
         public QuickAccessViewModel()
         {
@@ -25,7 +26,7 @@ namespace unreal_GUI.ViewModel
         }
 
         [RelayCommand]
-        private void OpenPluginDirectory(object selectedEngine)
+        private static void OpenPluginDirectory(object selectedEngine)
         {
             if (selectedEngine != null)
             {
@@ -44,7 +45,7 @@ namespace unreal_GUI.ViewModel
         }
 
         [RelayCommand]
-        private void OpenCustomDirectory(object selectedCustomButton)
+        private static void OpenCustomDirectory(object selectedCustomButton)
         {
             if (selectedCustomButton != null)
             {
@@ -67,7 +68,7 @@ namespace unreal_GUI.ViewModel
         }
 
         [RelayCommand]
-        private void OpenWebsite(string url)
+        private static void OpenWebsite(string url)
         {
             if (!string.IsNullOrEmpty(url))
             {
@@ -76,13 +77,13 @@ namespace unreal_GUI.ViewModel
         }
 
         [RelayCommand]
-        private async void AddCustom()
+        private static async Task AddCustom()
         {
             await ModernDialog.ShowAddCustomDialogAsync();
         }
 
         [RelayCommand]
-        private async void DeleteCustom()
+        private static async Task DeleteCustom()
         {
             await ModernDialog.ShowDeleteCustomDialogAsync();
         }
@@ -93,11 +94,11 @@ namespace unreal_GUI.ViewModel
             {
                 var json = File.ReadAllText("settings.json");
                 var settings = JsonConvert.DeserializeObject<SettingsViewModel.SettingsData>(json);
-                var engineList = settings?.Engines ?? new List<SettingsViewModel.EngineInfo>();
-                Engines = new ObservableCollection<object>(engineList.Select(e => new { DisplayName = $"UE {e.Version}", Path = e.Path }));
+                var engineList = settings?.Engines ?? [];
+                Engines = new ObservableCollection<object>(engineList.Select(e => new { DisplayName = $"UE {e.Version}", e.Path }));
                 
-                var customButtonList = settings?.CustomButtons ?? new List<SettingsViewModel.CustomButton>();
-                CustomButtons = new ObservableCollection<object>(customButtonList.Select(cb => new { DisplayName = cb.Name, Path = cb.Path }));
+                var customButtonList = settings?.CustomButtons ?? [];
+                CustomButtons = new ObservableCollection<object>(customButtonList.Select(cb => new { DisplayName = cb.Name, cb.Path }));
             }
         }
 
@@ -107,8 +108,8 @@ namespace unreal_GUI.ViewModel
             {
                 var json = File.ReadAllText("settings.json");
                 var settings = JsonConvert.DeserializeObject<SettingsViewModel.SettingsData>(json);
-                var customButtonList = settings?.CustomButtons ?? new List<SettingsViewModel.CustomButton>();
-                CustomButtons = new ObservableCollection<object>(customButtonList.Select(cb => new { DisplayName = cb.Name, Path = cb.Path }));
+                var customButtonList = settings?.CustomButtons ?? [];
+                CustomButtons = new ObservableCollection<object>(customButtonList.Select(cb => new { DisplayName = cb.Name, cb.Path }));
             }
         }
 

@@ -249,3 +249,6 @@ dotnet_diagnostic.CS8600.severity = none
 
 [*.{cs,vb}]
 end_of_line = crlf
+
+# IDE0074: 使用复合分配
+dotnet_diagnostic.IDE0074.severity = none

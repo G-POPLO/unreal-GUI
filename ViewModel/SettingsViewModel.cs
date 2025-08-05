@@ -15,10 +15,10 @@ namespace unreal_GUI.ViewModel
     public partial class SettingsViewModel : ObservableObject
     {
         [ObservableProperty]
-        private List<EngineInfo> _engineInfos = new List<EngineInfo>();
+        private List<EngineInfo> _engineInfos = [];
 
         [ObservableProperty]
-        private List<string> _enginePathsDisplay = new List<string>();
+        private List<string> _enginePathsDisplay = [];
 
         [ObservableProperty]
         private string _tipText = "";
@@ -49,13 +49,13 @@ namespace unreal_GUI.ViewModel
                 {
                     var json = File.ReadAllText("settings.json");
                     var settings = JsonConvert.DeserializeObject<SettingsData>(json);
-                    EngineInfos = settings.Engines ?? new List<EngineInfo>();
+                    EngineInfos = settings.Engines ?? [];
                     UpdateEnginePathsDisplay();
                 }
                 catch
                 {
                     // 如果JSON文件损坏，初始化为空列表
-                    EngineInfos = new List<EngineInfo>();
+                    EngineInfos = [];
                 }
             }
         }
@@ -63,13 +63,11 @@ namespace unreal_GUI.ViewModel
         [RelayCommand]
         private void AddEnginePath()
         {
-            using (var folderDialog = new System.Windows.Forms.FolderBrowserDialog())
+            using var folderDialog = new System.Windows.Forms.FolderBrowserDialog();
+            if (folderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                if (folderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    EngineInfos.Add(new EngineInfo { Path = folderDialog.SelectedPath, Version = GetEngineVersion(folderDialog.SelectedPath) });
-                    UpdateEnginePathsDisplay();
-                }
+                EngineInfos.Add(new EngineInfo { Path = folderDialog.SelectedPath, Version = GetEngineVersion(folderDialog.SelectedPath) });
+                UpdateEnginePathsDisplay();
             }
         }
 
@@ -89,23 +87,19 @@ namespace unreal_GUI.ViewModel
         {
             try
             {
-                using (var key = Registry.LocalMachine.OpenSubKey("SOFTWARE\\EpicGames\\Unreal Engine"))
+                using var key = Registry.LocalMachine.OpenSubKey("SOFTWARE\\EpicGames\\Unreal Engine");
+                if (key != null)
                 {
-                    if (key != null)
+                    foreach (var subKeyName in key.GetSubKeyNames())
                     {
-                        foreach (var subKeyName in key.GetSubKeyNames())
+                        using var subKey = key.OpenSubKey(subKeyName);
+                        var path = subKey?.GetValue("InstalledDirectory") as string;
+                        if (!string.IsNullOrEmpty(path) && !EngineInfos.Any(x => x.Path == path))
                         {
-                            using (var subKey = key.OpenSubKey(subKeyName))
-                            {
-                                var path = subKey?.GetValue("InstalledDirectory") as string;
-                                if (!string.IsNullOrEmpty(path) && !EngineInfos.Any(x => x.Path == path))
-                                {
-                                    EngineInfos.Add(new EngineInfo { Path = path, Version = GetEngineVersion(path) });
-                                }
-                            }
+                            EngineInfos.Add(new EngineInfo { Path = path, Version = GetEngineVersion(path) });
                         }
-                        UpdateEnginePathsDisplay();
                     }
+                    UpdateEnginePathsDisplay();
                 }
             }
             catch (Exception)
@@ -128,7 +122,7 @@ namespace unreal_GUI.ViewModel
             var settings = new SettingsData
             {
                 Engines = EngineInfos,
-                CustomButtons = new List<CustomButton>()
+                CustomButtons = []
             };
             
             // 读取现有的自定义按钮数据
@@ -138,12 +132,12 @@ namespace unreal_GUI.ViewModel
                 {
                     var json = File.ReadAllText("settings.json");
                     var existingSettings = JsonConvert.DeserializeObject<SettingsData>(json);
-                    settings.CustomButtons = existingSettings?.CustomButtons ?? new List<CustomButton>();
+                    settings.CustomButtons = existingSettings?.CustomButtons ?? [];
                 }
                 catch
                 {
                     // 如果JSON文件损坏，初始化为空列表
-                    settings.CustomButtons = new List<CustomButton>();
+                    settings.CustomButtons = [];
                 }
             }
             
@@ -154,7 +148,7 @@ namespace unreal_GUI.ViewModel
 
         private void UpdateEnginePathsDisplay()
         {
-            EnginePathsDisplay = EngineInfos.Select(p => $"{p.Path} ({p.Version})").ToList();
+            EnginePathsDisplay = [.. EngineInfos.Select(p => $"{p.Path} ({p.Version})")];
         }
 
         private static string GetEngineVersion(string enginePath)
@@ -162,14 +156,14 @@ namespace unreal_GUI.ViewModel
             try
             {
                 // 尝试从路径中提取版本号
-                var dirName = Path.GetFileName(enginePath.TrimEnd(System.IO.Path.DirectorySeparatorChar));
+                var dirName = Path.GetFileName(enginePath.TrimEnd(Path.DirectorySeparatorChar));
                 if (dirName.StartsWith("UE_"))
                 {
                     return dirName.Substring(3);
                 }
 
                 // 尝试读取.version文件
-                var versionFile = System.IO.Path.Combine(enginePath, "Engine", "Build", "Build.version");
+                var versionFile = Path.Combine(enginePath, "Engine", "Build", "Build.version");
                 if (File.Exists(versionFile))
                 {
                     dynamic versionInfo = JsonConvert.DeserializeObject(File.ReadAllText(versionFile));

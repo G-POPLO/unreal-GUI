@@ -40,7 +40,7 @@ namespace unreal_GUI.ViewModel
             TipsVisibility = Visibility.Hidden;
         }
 
-        public ObservableCollection<SettingsViewModel.EngineInfo> EngineVersions { get; } = new ObservableCollection<SettingsViewModel.EngineInfo>();
+        public ObservableCollection<SettingsViewModel.EngineInfo> EngineVersions { get; } = [];
 
         public bool IsCompileButtonEnabled => CanCompile();
 
@@ -111,7 +111,7 @@ namespace unreal_GUI.ViewModel
         }
 
         [RelayCommand(CanExecute = nameof(CanCompile))]
-        private async void Compile()
+        private async Task Compile()
         {
             TipsVisibility = Visibility.Visible;
 
@@ -154,7 +154,7 @@ namespace unreal_GUI.ViewModel
 
                 using (var process = Process.Start(startInfo))
                 {
-                    await Task.Run(() => process.WaitForExit());
+                    await Task.Run(process.WaitForExit);
                     if (process.ExitCode == 0)
                     {
                         TipsText = "编译成功！";
@@ -186,7 +186,7 @@ namespace unreal_GUI.ViewModel
             {
                 var json = File.ReadAllText("settings.json");
                 var settings = JsonConvert.DeserializeObject<SettingsViewModel.SettingsData>(json);
-                engineList = settings?.Engines ?? new List<SettingsViewModel.EngineInfo>();
+                engineList = settings?.Engines ?? [];
                 foreach (SettingsViewModel.EngineInfo engine in engineList)
                 {
                     EngineVersions.Add(engine);
