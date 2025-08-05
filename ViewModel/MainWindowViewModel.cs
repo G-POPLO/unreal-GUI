@@ -58,7 +58,7 @@ namespace unreal_GUI.ViewModel
 
  
         // 使用动画效果跳转到指定视图
-        private void NavigateToView(UIElement view)
+        public void NavigateToView(UIElement view)
         {
             PageTransitionAnimation.ApplyTransition(ContentContainer, view);                    
         }

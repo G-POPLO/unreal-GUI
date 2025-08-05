@@ -53,8 +53,8 @@ namespace unreal_GUI.Model
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            // 这里需要实现具体的逻辑来处理删除操作
-            // 例如：从JSON文件中删除相应的条目
+            
+            // 从JSON文件中删除相应的条目
             if (ButtonsListBox.SelectedItem != null)
             {
                 var selectedItem = ButtonsListBox.SelectedItem as SettingsViewModel.CustomButton;
