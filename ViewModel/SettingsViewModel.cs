@@ -180,22 +180,31 @@ namespace unreal_GUI.ViewModel
             return "未知版本";
         }
 
-        public class EngineInfo
+        public partial class EngineInfo : ObservableObject
         {
-            public string Path { get; set; }
-            public string Version { get; set; }
+            [ObservableProperty]
+            private string _path;
+
+            [ObservableProperty]
+            private string _version;
         }
 
-        public class SettingsData
+        public partial class SettingsData : ObservableObject
         {
-            public List<EngineInfo> Engines { get; set; }
-            public List<CustomButton> CustomButtons { get; set; }
+            [ObservableProperty]
+            private List<EngineInfo> _engines;
+
+            [ObservableProperty]
+            private List<CustomButton> _customButtons;
         }
 
-        public class CustomButton
+        public partial class CustomButton : ObservableObject
         {
-            public string Name { get; set; }
-            public string Path { get; set; }
+            [ObservableProperty]
+            private string _name;
+
+            [ObservableProperty]
+            private string _path;
         }
 
     }

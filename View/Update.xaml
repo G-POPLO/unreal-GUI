@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:unreal_GUI.View.Update"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         mc:Ignorable="d"
-        Title="Unreal-GUI更新程序" Height="450" Width="800">
+        Title="Unreal-GUI更新程序" Height="180" Width="450">
     <StackPanel Margin="10,10,10,10">
         <TextBlock TextWrapping="Wrap" Text="更新" Margin="10,0,10,0" FontSize="18" FontWeight="Bold"/>
         <Separator/>
@@ -20,7 +20,7 @@
         <StackPanel x:Name="No_Update" Margin="10,10,10,10" Visibility="Collapsed">
 
             <TextBlock x:Name="Version" TextWrapping="Wrap"><Run Language="zh-cn" Text="当前版本："/></TextBlock>
-            <TextBlock TextWrapping="Wrap"><Run Language="zh-cn" Text="软件长期没有内容更新？如果你熟悉C#，何不自己动手将想要的功能加上去"/></TextBlock>
+            <TextBlock TextWrapping="Wrap" Text="软件长期没有内容更新？如果你熟悉C#，何不自己动手将想要的功能加上去"></TextBlock>
             <Button Content="查看软件源代码" Command="{Binding OpenSourceCodeCommand}" HorizontalAlignment="Left"/>
         </StackPanel>
     </StackPanel>

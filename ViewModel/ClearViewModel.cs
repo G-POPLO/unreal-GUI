@@ -275,7 +275,7 @@ namespace unreal_GUI.ViewModel
                     Directory.CreateDirectory(automationToolLogsPath);
                 }
 
-                // 清理 Local\UnrealEngine 目录下的 .bin 和 XmlConfigCache 文件
+                // 清理 Local\UnrealEngine 目录下的 XmlConfigCache.bin文件
                 string localUnrealEnginePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "UnrealEngine");
                 if (Directory.Exists(localUnrealEnginePath))
                 {
@@ -303,7 +303,6 @@ namespace unreal_GUI.ViewModel
         partial void OnInputPathChanged(string value)
         {
             IsCleanButtonEnabled = !string.IsNullOrWhiteSpace(value);
-            OnPropertyChanged(nameof(IsCleanButtonEnabled));
         }
     }
 }
