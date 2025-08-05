@@ -26,7 +26,7 @@ namespace unreal_GUI.ViewModel
             // 注意：在MainWindow_Loaded事件中会设置ContentContainer并调用NavigateToView
         }
 
-        private static async Task AutoUpdate()
+        public static async Task AutoUpdate()
         {
             if (Properties.Settings.Default.AutoUpdate)
             {

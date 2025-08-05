@@ -18,6 +18,7 @@ namespace unreal_GUI
             {
                 mainWindowViewModel.ContentContainer = ContentContainer;
                 mainWindowViewModel.InitializeJson_Async();
+                MainWindowViewModel.AutoUpdate();
             }
         }
     }
