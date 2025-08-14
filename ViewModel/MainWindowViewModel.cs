@@ -1,14 +1,10 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using unreal_GUI.Model;
-using unreal_GUI.View;
 
 namespace unreal_GUI.ViewModel
 {
@@ -16,7 +12,7 @@ namespace unreal_GUI.ViewModel
     {
         [ObservableProperty]
         private UIElement _currentView;
-        
+
         // 用于页面跳转动画的 ContentControl
         public ContentControl ContentContainer { get; set; }
 
@@ -56,7 +52,7 @@ namespace unreal_GUI.ViewModel
             }
         }
 
- 
+
         // 跳转到指定视图
         public void NavigateToView(UIElement view)
         {

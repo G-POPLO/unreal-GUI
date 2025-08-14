@@ -1,3 +1,6 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -6,36 +9,32 @@ using System.IO;
 using System.Media;
 using System.Threading.Tasks;
 using System.Windows;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using Newtonsoft.Json;
-using unreal_GUI.Model;
 
 namespace unreal_GUI.ViewModel
 {
     public partial class CompileViewModel : ObservableObject
     {
         private List<SettingsViewModel.EngineInfo> engineList = [];
-        
+
         [ObservableProperty]
         private SettingsViewModel.EngineInfo selectedEngine;
-        
+
         [ObservableProperty]
         private string inputPath;
-        
+
         [ObservableProperty]
         private string outputPath;
-        
+
         [ObservableProperty]
         private string tipsText;
-        
+
         [ObservableProperty]
         private Visibility tipsVisibility;
 
         public CompileViewModel()
         {
             LoadEngineList();
-            
+
             // 初始化属性
             TipsVisibility = Visibility.Hidden;
         }
@@ -55,7 +54,7 @@ namespace unreal_GUI.ViewModel
             if (result == System.Windows.Forms.DialogResult.OK)
             {
                 InputPath = dialog.FileName;
-                
+
                 // 读取.uplugin文件内容
                 string pluginContent = File.ReadAllText(InputPath);
                 dynamic pluginInfo = JsonConvert.DeserializeObject(pluginContent);
@@ -168,7 +167,7 @@ namespace unreal_GUI.ViewModel
                         TipsText = $"编译失败，错误代码：{process.ExitCode}";
                     }
                 }
-                
+
                 var player = new SoundPlayer(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-on.wav"));
                 player.Play();
             }

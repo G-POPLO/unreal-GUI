@@ -4,10 +4,8 @@ using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Windows;
 using unreal_GUI.Model;
 
 namespace unreal_GUI.ViewModel
@@ -129,7 +127,7 @@ namespace unreal_GUI.ViewModel
                 Engines = EngineInfos,
                 CustomButtons = []
             };
-            
+
             // 读取现有的自定义按钮数据
             if (File.Exists("settings.json"))
             {
@@ -145,7 +143,7 @@ namespace unreal_GUI.ViewModel
                     settings.CustomButtons = [];
                 }
             }
-            
+
             File.WriteAllText("settings.json", JsonConvert.SerializeObject(settings, Formatting.Indented));
 
             TipText = "设置已保存";

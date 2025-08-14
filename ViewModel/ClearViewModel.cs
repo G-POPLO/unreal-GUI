@@ -62,7 +62,7 @@ namespace unreal_GUI.ViewModel
             DDCPath = $"DDC全局缓存路径：{Properties.Settings.Default.DDC}";
             DDCSharePath = $"DDC共享缓存路径：{Properties.Settings.Default.DDCShare}";
             TotalSize = $"总计大小：{Properties.Settings.Default.DDCTotal:0.00} GB";
-            
+
         }
 
         private void LoadEngineList()
@@ -286,7 +286,7 @@ namespace unreal_GUI.ViewModel
                     {
                         File.Delete(file);
                     }
-                    
+
 
                 }
 

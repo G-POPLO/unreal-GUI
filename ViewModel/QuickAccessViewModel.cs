@@ -1,13 +1,11 @@
-using System;
-using System.Collections.Generic;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using Newtonsoft.Json;
 using unreal_GUI.Model;
 
 namespace unreal_GUI.ViewModel
@@ -16,10 +14,10 @@ namespace unreal_GUI.ViewModel
     {
         [ObservableProperty]
         private ObservableCollection<object> engines = [];
-        
+
         [ObservableProperty]
         private ObservableCollection<object> customButtons = [];
-        
+
         public QuickAccessViewModel()
         {
             LoadEngineList();
@@ -96,7 +94,7 @@ namespace unreal_GUI.ViewModel
                 var settings = JsonConvert.DeserializeObject<SettingsViewModel.SettingsData>(json);
                 var engineList = settings?.Engines ?? [];
                 Engines = new ObservableCollection<object>(engineList.Select(e => new { DisplayName = $"UE {e.Version}", e.Path }));
-                
+
                 var customButtonList = settings?.CustomButtons ?? [];
                 CustomButtons = new ObservableCollection<object>(customButtonList.Select(cb => new { DisplayName = cb.Name, cb.Path }));
             }
@@ -113,6 +111,6 @@ namespace unreal_GUI.ViewModel
             }
         }
 
-        
+
     }
 }

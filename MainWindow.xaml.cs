@@ -1,4 +1,3 @@
-using System;
 using System.Windows;
 using unreal_GUI.ViewModel;
 
@@ -11,7 +10,7 @@ namespace unreal_GUI
             InitializeComponent();
             Loaded += MainWindow_Loaded;
         }
-        
+
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             if (ViewModel is MainWindowViewModel mainWindowViewModel)

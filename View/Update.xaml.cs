@@ -1,19 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using unreal_GUI.Model;
 using CommunityToolkit.Mvvm.Input;
 using System.Diagnostics;
+using System.Windows;
+using unreal_GUI.Model;
 
 namespace unreal_GUI.View.Update
 {
@@ -30,9 +18,9 @@ namespace unreal_GUI.View.Update
 
         private async void UpdateWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            
-                await UpdateAndExtract.DownloadAndUpdateAsync();
-            
+
+            await UpdateAndExtract.DownloadAndUpdateAsync();
+
         }
 
         [RelayCommand]

@@ -1,4 +1,3 @@
-using ModernWpf.Controls;
 using Newtonsoft.Json.Linq;
 using SevenZip;
 using System;
@@ -36,7 +35,7 @@ namespace unreal_GUI.Model
                     bool? result = await ModernDialog.ShowConfirmAsync($"发现新版本{latestVersion}\n\n更新内容:\n{updateBody}\n\n是否下载？", "提示");
                     if (result == true)
                     {
-                        await DownloadAndUpdateAsync();                       
+                        await DownloadAndUpdateAsync();
                     }
                     else
                     {
@@ -46,10 +45,10 @@ namespace unreal_GUI.Model
 
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 await ModernDialog.ShowInfoAsync($"获取更新失败：{ex.Message}", "提示");
-            }            
+            }
         }
 
         public static async Task DownloadAndUpdateAsync()
@@ -77,7 +76,7 @@ namespace unreal_GUI.Model
 
                     await ModernDialog.ShowInfoAsync($"已下载到：{downloadPath}", "下载完成");
 
-                
+
 
                     try
                     {
@@ -114,8 +113,8 @@ namespace unreal_GUI.Model
         }
     }
 }
-    
-          
+
+
 
 
 

@@ -2,7 +2,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Diagnostics;
 using System.Reflection;
-using System.Windows;
 
 namespace unreal_GUI.ViewModel
 {
