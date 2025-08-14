@@ -28,7 +28,7 @@
                     <Button Content="新增" Margin="0,0,10,0" Command="{Binding AddEnginePathCommand}"/>
                     <Button Content="删除" Margin="10,0,10,0" Command="{Binding RemoveEnginePathCommand}" CommandParameter="{Binding SelectedItem, ElementName=EnginePathsList}"/>
                     <Button Content="自动设置引擎路径" Margin="10,0,10,0" Command="{Binding AutoPathCommand}"/>
-                    <Button Command="{Binding SavePathsCommand}" Margin="10,10,10,10" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Button Command="{Binding SaveSettingsCommand}" Margin="10,10,10,10" HorizontalAlignment="Right" VerticalAlignment="Center">
                         <StackPanel Orientation="Horizontal">
                             <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE74E;"/>
                             <TextBlock Text="保存设置" Margin="5,0,0,0"/>
@@ -37,12 +37,9 @@
 
                 </StackPanel>
                 <TextBlock x:Name="Tips" Text="{Binding TipText}" TextWrapping="Wrap" Margin="10,0,10,0"></TextBlock>
-
-
-
                 <Separator/>
                 <StackPanel Margin="10,10,10,10">
-                    <TextBlock x:Name="Settings_title" TextWrapping="Wrap" FontWeight="Bold" FontSize="15"><Run Language="zh-cn" Text="应用设置"/></TextBlock>
+                    <TextBlock x:Name="Settings_title" TextWrapping="Wrap" FontWeight="Bold" FontSize="15" Margin="0,0,0,10"><Run Language="zh-cn" Text="应用设置"/></TextBlock>
                     <StackPanel Orientation="Horizontal">
                     </StackPanel>
                     <StackPanel x:Name="Setting_Panel" Orientation="Horizontal">
@@ -57,7 +54,7 @@
                             <ui:AppBarToggleButton.Icon>
                                 <ui:FontIcon
                                         FontFamily="Segoe MDL2 Assets"
-                                        Glyph="&#xE895;" />
+                                        Glyph="&#xEC05;" />
                             </ui:AppBarToggleButton.Icon>
                         </ui:AppBarToggleButton>
                         <ui:AppBarToggleButton x:Name="Button2" Label="使用ZenDash来查看缓存信息" IsChecked="{Binding ZenDashborad}" Margin="0,0,10,0" >
@@ -67,11 +64,18 @@
                 Glyph="&#xE83B;" />
                             </ui:AppBarToggleButton.Icon>
                         </ui:AppBarToggleButton>
-                        <ui:AppBarToggleButton x:Name="Button3" Label="应用程序启动时自动检查更新" IsChecked="{Binding AutoUpdate}" >
+                        <ui:AppBarToggleButton x:Name="Button3" Label="应用程序启动时自动检查更新" IsChecked="{Binding AutoUpdate}" Margin="0,0,10,0" >
                             <ui:AppBarToggleButton.Icon>
                                 <ui:FontIcon
                                     FontFamily="Segoe MDL2 Assets"
                                     Glyph="&#xECC5;"/>
+                            </ui:AppBarToggleButton.Icon>
+                        </ui:AppBarToggleButton>
+                        <ui:AppBarToggleButton x:Name="Button4" Label="开启动画效果" IsChecked="{Binding AnimationEnabled}">
+                            <ui:AppBarToggleButton.Icon>
+                                <ui:FontIcon
+                                     FontFamily="Segoe MDL2 Assets"
+                                     Glyph="&#xE7FD;"/>
                             </ui:AppBarToggleButton.Icon>
                         </ui:AppBarToggleButton>
                     </StackPanel>
