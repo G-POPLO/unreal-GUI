@@ -109,25 +109,13 @@ namespace unreal_GUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string LatestVersion {
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AmimateEnabled {
             get {
-                return ((string)(this["LatestVersion"]));
+                return ((bool)(this["AmimateEnabled"]));
             }
             set {
-                this["LatestVersion"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("GitHub")]
-        public string SelectedUpdateSource {
-            get {
-                return ((string)(this["SelectedUpdateSource"]));
-            }
-            set {
-                this["SelectedUpdateSource"] = value;
+                this["AmimateEnabled"] = value;
             }
         }
     }

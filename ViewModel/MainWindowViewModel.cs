@@ -57,10 +57,18 @@ namespace unreal_GUI.ViewModel
         }
 
  
-        // 使用动画效果跳转到指定视图
+        // 跳转到指定视图
         public void NavigateToView(UIElement view)
         {
-            PageTransitionAnimation.ApplyTransition(ContentContainer, view);                    
+            if (Properties.Settings.Default.AmimateEnabled)
+            {
+                PageTransitionAnimation.ApplyTransition(ContentContainer, view);
+            }
+            else
+            {
+                ContentContainer.Content = view;
+            }
+
         }
 
         [RelayCommand]

@@ -35,6 +35,9 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private bool _autoUpdate;
 
+        [ObservableProperty]
+        private bool _animationEnabled;
+
         public SettingsViewModel()
         {
             // 初始化设置
@@ -42,6 +45,7 @@ namespace unreal_GUI.ViewModel
             Gitcode = Properties.Settings.Default.Gitcode;
             ZenDashborad = Properties.Settings.Default.ZenDashborad;
             AutoUpdate = Properties.Settings.Default.AutoUpdate;
+            AnimationEnabled = Properties.Settings.Default.AmimateEnabled; // 默认启用动画效果
 
             if (File.Exists("settings.json"))
             {
@@ -109,13 +113,14 @@ namespace unreal_GUI.ViewModel
         }
 
         [RelayCommand]
-        private void SavePaths()
+        private void SaveSettings()
         {
             // 保存应用程序设置
             Properties.Settings.Default.AutoOpen = AutoOpen;
             Properties.Settings.Default.Gitcode = Gitcode;
             Properties.Settings.Default.ZenDashborad = ZenDashborad;
             Properties.Settings.Default.AutoUpdate = AutoUpdate;
+            Properties.Settings.Default.AmimateEnabled = AnimationEnabled;
             Properties.Settings.Default.Save();
 
             // 保存JSON文件
