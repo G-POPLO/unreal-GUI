@@ -106,7 +106,7 @@ namespace unreal_GUI.ViewModel
             }
             catch (Exception)
             {
-                _ = ModernDialog.ShowConfirmAsync("未检测到引擎，请手动设置引擎目录");
+                _ = ModernDialog.ShowConfirmAsync("未检测到引擎，请手动设置引擎目录",2);
             }
         }
 

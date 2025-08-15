@@ -38,7 +38,7 @@ namespace unreal_GUI.ViewModel
                 }
                 else
                 {
-                    _ = ModernDialog.ShowInfoAsync( $"未找到插件目录：\n{pluginPath}");
+                    _ = ModernDialog.ShowInfoAsync( $"未找到插件目录：\n{pluginPath}",2);
                 }
             }
         }
@@ -61,7 +61,7 @@ namespace unreal_GUI.ViewModel
                 }
                 else
                 {
-                    _ = ModernDialog.ShowInfoAsync(Lang.exPath);
+                    _ = ModernDialog.ShowInfoAsync(Lang.exPath,3);
                 }
             }
         }
