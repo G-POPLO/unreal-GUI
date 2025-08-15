@@ -4,6 +4,8 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using unreal_GUI.ViewModel;
+using unreal_GUI.Properties;
+
 namespace unreal_GUI.Model
 {
     public static class ModernDialog
@@ -11,14 +13,22 @@ namespace unreal_GUI.Model
         /// <summary>
         /// 显示一个带 Yes/No 按钮的对话框
         /// </summary>
-        public static async Task<bool?> ShowConfirmAsync(string message, string title = "提示")
+        public static async Task<bool?> ShowConfirmAsync(string message,int state)
         {
+            string title = state switch
+            {
+                0 => Lang.msgNotification,
+                1 => Lang.msgSuccess,
+                2 => Lang.msgWarning,
+                3 => Lang.msgError,
+                _ => Lang.msgNotification
+            };
             var dialog = new ContentDialog
             {
                 Title = title,
                 Content = message,
-                PrimaryButtonText = "是",
-                CloseButtonText = "否"
+                PrimaryButtonText = Lang.msgYes,
+                CloseButtonText = Lang.msgNo,
             };
 
             var result = await dialog.ShowAsync();
@@ -28,27 +38,43 @@ namespace unreal_GUI.Model
         /// <summary>
         /// 显示一个仅 OK 按钮的对话框
         /// </summary>
-        public static async Task ShowInfoAsync(string message, string title = "提示")
+        public static async Task ShowInfoAsync(string message, int state)
         {
+
+            string title = state switch
+            {
+                0 => Lang.msgNotification,
+                1 => Lang.msgSuccess,
+                2 => Lang.msgWarning,
+                3 => Lang.msgError,
+                _ => Lang.msgNotification
+            };
+
             var dialog = new ContentDialog
             {
                 Title = title,
                 Content = message,
-                CloseButtonText = "确定"
+                CloseButtonText = Lang.msgOk
             };
 
             await dialog.ShowAsync();
         }
+                
+        
 
         /// <summary>
         /// 显示带自定义按钮的对话框
-        /// </summary>
-        public static async Task<ContentDialogResult> ShowCustomAsync(
+        /// </summary> 
+
+
+        public static async Task<ContentDialogResult> ShowCustomAsync
+            (
             string message,
             string title,
             string primaryButton,
-            string? secondaryButton = null,
-            string closeButton = "取消")
+            string closeButton,
+            string secondaryButton         
+            )
         {
             var dialog = new ContentDialog
             {
@@ -62,6 +88,8 @@ namespace unreal_GUI.Model
             return await dialog.ShowAsync();
         }
 
+
+
         /// <summary>
         /// 显示"添加自定义按钮"的对话框
         /// </summary>
@@ -70,9 +98,9 @@ namespace unreal_GUI.Model
             var content = new Add_DialogContent();
             var dialog = new ContentDialog
             {
-                Title = "添加自定义按钮",
-                PrimaryButtonText = "添加",
-                CloseButtonText = "取消",
+                Title = Lang.msgAddCustomButtom,
+                PrimaryButtonText = Lang.msgAdd,
+                CloseButtonText = Lang.msgCancel,
                 Content = content,
                 DefaultButton = ContentDialogButton.Primary,
                 IsPrimaryButtonEnabled = false // 初始禁用添加按钮
@@ -142,8 +170,8 @@ namespace unreal_GUI.Model
 
             ContentDialog dialog = new()
             {
-                Title = "删除自定义文件夹",
-                PrimaryButtonText = "关闭",
+                Title = Lang.msgDeleteCustomButtom,
+                PrimaryButtonText = Lang.msgClose,
                 DefaultButton = ContentDialogButton.Primary,
                 Content = content
             };

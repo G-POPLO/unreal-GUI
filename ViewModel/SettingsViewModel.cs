@@ -43,7 +43,7 @@ namespace unreal_GUI.ViewModel
             Gitcode = Properties.Settings.Default.Gitcode;
             ZenDashborad = Properties.Settings.Default.ZenDashborad;
             AutoUpdate = Properties.Settings.Default.AutoUpdate;
-            AnimationEnabled = Properties.Settings.Default.AmimateEnabled; // 默认启用动画效果
+            AnimationEnabled = Properties.Settings.Default.AmimateEnabled; 
 
             if (File.Exists("settings.json"))
             {
@@ -106,7 +106,7 @@ namespace unreal_GUI.ViewModel
             }
             catch (Exception)
             {
-                _ = ModernDialog.ShowConfirmAsync("未检测到引擎，请手动设置引擎目录", "提示");
+                _ = ModernDialog.ShowConfirmAsync("未检测到引擎，请手动设置引擎目录");
             }
         }
 

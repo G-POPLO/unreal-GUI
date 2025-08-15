@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
+using unreal_GUI.Properties;
 
 namespace unreal_GUI.Model
 {
@@ -31,8 +32,8 @@ namespace unreal_GUI.Model
 
                 if (Version.Parse(latestVersion) > Version.Parse(currentVersion))
                 {
-                    string updateBody = release_info["body"]?.ToString() ?? "无更新内容";
-                    bool? result = await ModernDialog.ShowConfirmAsync($"发现新版本{latestVersion}\n\n更新内容:\n{updateBody}\n\n是否下载？", "提示");
+                    string updateBody = release_info["body"]?.ToString() ?? Lang.msgNoUpdateContent;
+                    bool? result = await ModernDialog.ShowConfirmAsync(Lang.msgCheckForUpdates,0);
                     if (result == true)
                     {
                         await DownloadAndUpdateAsync();
@@ -45,9 +46,9 @@ namespace unreal_GUI.Model
 
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                await ModernDialog.ShowInfoAsync($"获取更新失败：{ex.Message}", "提示");
+                await ModernDialog.ShowInfoAsync(Lang.exUpdate, 3);
             }
         }
 
@@ -74,7 +75,7 @@ namespace unreal_GUI.Model
                         await download.Content.CopyToAsync(fileStream);
                     }
 
-                    await ModernDialog.ShowInfoAsync($"已下载到：{downloadPath}", "下载完成");
+                    await ModernDialog.ShowInfoAsync(Lang.msgDownloadPath,1);
 
 
 
@@ -98,17 +99,17 @@ namespace unreal_GUI.Model
                     }
                     catch (Exception ex)
                     {
-                        await ModernDialog.ShowInfoAsync($"解压失败：{ex.Message}", "提示");
+                        await ModernDialog.ShowInfoAsync(Lang.exDecompression,3);
                     }
                 }
                 else
                 {
-                    await ModernDialog.ShowInfoAsync("下载失败，无法从服务器获取下载链接", "提示");
+                    await ModernDialog.ShowInfoAsync(Lang.exNoInternet,3);
                 }
             }
             catch (Exception ex)
             {
-                await ModernDialog.ShowInfoAsync($"下载失败：{ex.Message}", "提示");
+                await ModernDialog.ShowInfoAsync(Lang.exDownload,3);
             }
         }
     }

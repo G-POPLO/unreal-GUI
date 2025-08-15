@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using unreal_GUI.Model;
+using unreal_GUI.Properties;
 
 namespace unreal_GUI.ViewModel
 {
@@ -37,7 +38,7 @@ namespace unreal_GUI.ViewModel
                 }
                 else
                 {
-                    _ = ModernDialog.ShowInfoAsync("目录不存在", $"未找到插件目录：\n{pluginPath}");
+                    _ = ModernDialog.ShowInfoAsync( $"未找到插件目录：\n{pluginPath}");
                 }
             }
         }
@@ -60,7 +61,7 @@ namespace unreal_GUI.ViewModel
                 }
                 else
                 {
-                    _ = ModernDialog.ShowInfoAsync("目录不存在", $"未找到目录：\n{path}");
+                    _ = ModernDialog.ShowInfoAsync(Lang.exPath);
                 }
             }
         }

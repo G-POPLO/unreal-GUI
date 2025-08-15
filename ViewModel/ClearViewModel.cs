@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using unreal_GUI.Model;
+using unreal_GUI.Properties;
 
 namespace unreal_GUI.ViewModel
 {
@@ -174,7 +175,7 @@ namespace unreal_GUI.ViewModel
             }
             catch (Exception ex)
             {
-                _ = ModernDialog.ShowConfirmAsync($"找不到DDC缓存路径：" + ex.Message, "提示");
+                _ = ModernDialog.ShowConfirmAsync($"找不到DDC缓存路径：" + ex.Message);
             }
         }
 
@@ -198,7 +199,7 @@ namespace unreal_GUI.ViewModel
             }
             catch (Exception ex)
             {
-                await ModernDialog.ShowInfoAsync("计算失败: " + ex.Message, "错误提示");
+                await ModernDialog.ShowInfoAsync("计算失败: " + ex.Message);
                 TotalSize = $"总计大小：{Properties.Settings.Default.DDCTotal:0.00} GB";
             }
         }
@@ -221,12 +222,12 @@ namespace unreal_GUI.ViewModel
                 }
                 else
                 {
-                    _ = ModernDialog.ShowInfoAsync("ZenDashboard.exe未找到，请确认引擎安装", "路径错误");
+                    _ = ModernDialog.ShowInfoAsync("ZenDashboard.exe未找到，请确认引擎安装");
                 }
             }
             catch (Exception ex)
             {
-                _ = ModernDialog.ShowInfoAsync($"打开失败：{ex.Message}", "错误提示");
+                _ = ModernDialog.ShowInfoAsync($"打开失败：{ex.Message}");
             }
         }
 

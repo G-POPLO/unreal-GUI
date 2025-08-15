@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using unreal_GUI.Model;
+using unreal_GUI.Properties;
 
 namespace unreal_GUI.ViewModel
 {
@@ -35,7 +36,7 @@ namespace unreal_GUI.ViewModel
         {
             if (!File.Exists("settings.json"))
             {
-                bool? result = await ModernDialog.ShowConfirmAsync("未检测到引擎，请先去设置引擎目录", "提示");
+                bool? result = await ModernDialog.ShowConfirmAsync("未检测到引擎，请先去设置引擎目录");
 
                 if (result == true)
                 {
