@@ -118,5 +118,17 @@ namespace unreal_GUI.Properties {
                 this["AmimateEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool FabAsset {
+            get {
+                return ((bool)(this["FabAsset"]));
+            }
+            set {
+                this["FabAsset"] = value;
+            }
+        }
     }
 }

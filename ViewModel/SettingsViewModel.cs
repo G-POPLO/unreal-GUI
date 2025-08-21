@@ -38,6 +38,9 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private bool _animationEnabled;
 
+        [ObservableProperty]
+        private bool _fabAsset;
+
         public SettingsViewModel()
         {
             // 初始化设置
@@ -46,6 +49,7 @@ namespace unreal_GUI.ViewModel
             ZenDashborad = Properties.Settings.Default.ZenDashborad;
             AutoUpdate = Properties.Settings.Default.AutoUpdate;
             AnimationEnabled = Properties.Settings.Default.AmimateEnabled; // 默认启用动画效果
+            FabAsset = Properties.Settings.Default.FabAsset; // 初始化FabAsset
 
             if (File.Exists("settings.json"))
             {
@@ -121,6 +125,7 @@ namespace unreal_GUI.ViewModel
             Properties.Settings.Default.ZenDashborad = ZenDashborad;
             Properties.Settings.Default.AutoUpdate = AutoUpdate;
             Properties.Settings.Default.AmimateEnabled = AnimationEnabled;
+            Properties.Settings.Default.FabAsset = FabAsset; // 保存FabAsset设置
             Properties.Settings.Default.Save();
 
             // 保存JSON文件
