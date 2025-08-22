@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using unreal_GUI.Model;
 
@@ -41,6 +42,9 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private bool _fabAsset;
 
+        [ObservableProperty]
+        private DateTime _limitedTime;
+
         public SettingsViewModel()
         {
             // 初始化设置
@@ -50,6 +54,7 @@ namespace unreal_GUI.ViewModel
             AutoUpdate = Properties.Settings.Default.AutoUpdate;
             AnimationEnabled = Properties.Settings.Default.AmimateEnabled; // 默认启用动画效果
             FabAsset = Properties.Settings.Default.FabAsset; // 初始化FabAsset
+            LimitedTime = Properties.Settings.Default.LimitedTime; // 初始化LimitedTime
 
             if (File.Exists("settings.json"))
             {
@@ -117,7 +122,7 @@ namespace unreal_GUI.ViewModel
         }
 
         [RelayCommand]
-        private void SaveSettings()
+        private async Task SaveSettings()
         {
             // 保存应用程序设置
             Properties.Settings.Default.AutoOpen = AutoOpen;
@@ -126,6 +131,7 @@ namespace unreal_GUI.ViewModel
             Properties.Settings.Default.AutoUpdate = AutoUpdate;
             Properties.Settings.Default.AmimateEnabled = AnimationEnabled;
             Properties.Settings.Default.FabAsset = FabAsset; // 保存FabAsset设置
+            Properties.Settings.Default.LimitedTime = LimitedTime; // 保存LimitedTime设置
             Properties.Settings.Default.Save();
 
             // 保存JSON文件

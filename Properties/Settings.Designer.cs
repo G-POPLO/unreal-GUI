@@ -130,5 +130,17 @@ namespace unreal_GUI.Properties {
                 this["FabAsset"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1990-01-01")]
+        public global::System.DateTime LimitedTime {
+            get {
+                return ((global::System.DateTime)(this["LimitedTime"]));
+            }
+            set {
+                this["LimitedTime"] = value;
+            }
+        }
     }
 }

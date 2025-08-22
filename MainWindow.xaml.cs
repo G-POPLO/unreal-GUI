@@ -19,6 +19,7 @@ namespace unreal_GUI
                 mainWindowViewModel.ContentContainer = ContentContainer;
                 await mainWindowViewModel.InitializeJson_Async();
                 await MainWindowViewModel.AutoUpdate();
+                await MainWindowViewModel.CheckFabAsset();
             }
         }
     }

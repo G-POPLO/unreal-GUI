@@ -34,6 +34,14 @@ namespace unreal_GUI.ViewModel
             }
         }
 
+        public static async Task CheckFabAsset()
+        {
+            if (Properties.Settings.Default.FabAsset)
+            {
+                await Fab_Notification.GetLimitedTimeFreeEndDate();
+            }
+        }
+
         // 若没有发现设置JSON文件，则弹窗提示
         public async Task InitializeJson_Async()
         {
