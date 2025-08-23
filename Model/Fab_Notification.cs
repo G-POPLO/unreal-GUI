@@ -1,6 +1,9 @@
 using HtmlAgilityPack;
+using Microsoft.Toolkit.Uwp.Notifications;
+
 using ModernWpf.Controls;
 using System;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
@@ -61,9 +64,13 @@ namespace unreal_GUI.Model
 
                         // 保存到设置
                         Properties.Settings.Default.LimitedTime = chinaTime;
-                        Properties.Settings.Default.Save();
-                        //await ModernDialog.ShowInfoAsync($"{chinaTime}", "测试");
-                        return chinaTime;
+                Properties.Settings.Default.Save();
+                //await ModernDialog.ShowInfoAsync($"{chinaTime}", "测试");
+                
+                // 检查是否需要发送通知
+                await CheckAndSendNotification(chinaTime);
+                
+                return chinaTime;
                     }
                 }
             }
@@ -76,6 +83,56 @@ namespace unreal_GUI.Model
             }
 
             return null;
+        }
+        
+        /// <summary>
+        /// 检查LimitedTime值并发送通知
+        /// </summary>
+        /// <param name="limitedTime">LimitedTime值</param>
+        private static Task CheckAndSendNotification(DateTime limitedTime)
+        {
+            // 检查LimitedTime值是否为空或已截至
+            if (Properties.Settings.Default.LimitedTime == DateTime.MinValue || 
+                limitedTime > Properties.Settings.Default.LimitedTime)
+            {
+                // 检查LimitedTime是否大于本机时间
+                if (limitedTime > DateTime.Now)
+                {
+                    // 发送Windows通知
+                    SendWindowsNotification(limitedTime);
+                    
+                    // 更新上次通知时间
+                    Properties.Settings.Default.LimitedTime = limitedTime;
+                    Properties.Settings.Default.Save();
+                }
+            }
+
+            return Task.CompletedTask;
+        }
+        
+        /// <summary>
+        /// 发送Windows通知
+        /// </summary>
+        /// <param name="limitedTime">LimitedTime值</param>
+        private static void SendWindowsNotification(DateTime limitedTime)
+        {
+            // 创建通知
+
+            // Requires Microsoft.Toolkit.Uwp.Notifications NuGet package version 7.0 or greater
+            new ToastContentBuilder()
+              .AddText("Fab资产领取提醒")
+              .AddText($"新的Fab免费资产可领取，截至时间:{limitedTime}")
+
+              .AddButton(
+                new ToastButton()
+              .SetContent("访问Fab")
+              .AddArgument("action", "OpenFab")
+              .SetContent("关闭")
+              .AddArgument("action", "Close")
+              )
+              .Show();
+
+            // Not seeing the Show() method? Make sure you have version 7.0, and if you're using .NET 6 (or later), then your TFM must be net6.0-windows10.0.17763.0 or greater
         }
     }
 }

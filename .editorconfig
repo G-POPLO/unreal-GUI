@@ -247,6 +247,9 @@ dotnet_naming_style.begins_with_i.capitalization = pascal_case
 # CS8600: 将 null 字面量或可能为 null 的值转换为非 null 类型。
 dotnet_diagnostic.CS8600.severity = none
 
+# MVVMTK0045: Using [ObservableProperty] on fields is not AOT compatible for WinRT
+dotnet_diagnostic.MVVMTK0045.severity = none
+
 [*.{cs,vb}]
 end_of_line = crlf
 

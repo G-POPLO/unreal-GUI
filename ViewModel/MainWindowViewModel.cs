@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Toolkit.Uwp.Notifications;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
@@ -16,7 +17,7 @@ namespace unreal_GUI.ViewModel
     {
         [ObservableProperty]
         private UIElement _currentView;
-        
+
         // 用于页面跳转动画的 ContentControl
         public ContentControl ContentContainer { get; set; }
 
@@ -38,7 +39,9 @@ namespace unreal_GUI.ViewModel
         {
             if (Properties.Settings.Default.FabAsset)
             {
-                await Fab_Notification.GetLimitedTimeFreeEndDate();
+
+                //await Fab_Notification.GetLimitedTimeFreeEndDate();
+
             }
         }
 
@@ -64,7 +67,7 @@ namespace unreal_GUI.ViewModel
             }
         }
 
- 
+
         // 跳转到指定视图
         public void NavigateToView(UIElement view)
         {
@@ -113,6 +116,12 @@ namespace unreal_GUI.ViewModel
         private void NavigateToAbout()
         {
             NavigateToView(new About());
+        }
+
+        [RelayCommand]
+        private async Task CheckFabAssetNotification()
+        {
+            await CheckFabAsset();
         }
     }
 }
