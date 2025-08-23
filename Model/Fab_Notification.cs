@@ -1,8 +1,6 @@
-﻿using HtmlAgilityPack;
+using HtmlAgilityPack;
 using ModernWpf.Controls;
 using System;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
@@ -12,44 +10,12 @@ namespace unreal_GUI.Model
 {
     internal class Fab_Notification
     {
-        private static readonly HttpClient client = new HttpClient();
-
-        static Fab_Notification()
-        {
-            // 设置默认请求头以模拟真实浏览器访问
-            client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0");
-            client.DefaultRequestHeaders.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
-            client.DefaultRequestHeaders.Add("Accept-Language", "en-US,en;q=0.9");
-            client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate, br");
-            client.DefaultRequestHeaders.Add("Connection", "keep-alive");
-            client.DefaultRequestHeaders.Add("Upgrade-Insecure-Requests", "1");
-            client.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "document");
-            client.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "navigate");
-            client.DefaultRequestHeaders.Add("Sec-Fetch-Site", "none");
-            client.DefaultRequestHeaders.Add("Cache-Control", "max-age=0");
-        }
-
         public static async Task<DateTime?> GetLimitedTimeFreeEndDate()
         {
             try
             {
-                // 创建请求消息
-                var request = new HttpRequestMessage(HttpMethod.Get, "https://www.fab.com/limited-time-free");
-
-                // 发送请求并获取响应
-                var response = await client.SendAsync(request);
-                string html;
-                if (response.IsSuccessStatusCode)
-                {
-                    html = await response.Content.ReadAsStringAsync();
-                }
-                else
-                {
-                    // 处理HTTP错误状态码
-                    string errorMessage = $"HTTP Error: {response.StatusCode} - {response.ReasonPhrase}";
-                    _ = ModernDialog.ShowInfoAsync($"无法获取Fab免费资产信息: {errorMessage}", "错误");
-                    return null;
-                }
+                // 使用Puppeteer获取页面内容
+                string html = await Puppeteer.GetPageContentAsync("https://www.fab.com/limited-time-free");
 
                 // 使用HtmlAgilityPack解析网页
                 var doc = new HtmlDocument();
@@ -89,14 +55,14 @@ namespace unreal_GUI.Model
                         TimeZoneInfo easternZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
                         DateTime easternTime = new DateTime(year, Array.IndexOf(new string[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" }, month) + 1, day, hour + (amPm == "PM" ? 12 : 0), minute, 0);
                         
-                        // 转换为北京时间
+                        // 转换为北京时间 (后续软件多语言支持的时候可以更改成根据用户地区切换时区)
                         TimeZoneInfo chinaZone = TimeZoneInfo.FindSystemTimeZoneById("China Standard Time");
                         DateTime chinaTime = TimeZoneInfo.ConvertTime(easternTime, easternZone, chinaZone);
 
                         // 保存到设置
                         Properties.Settings.Default.LimitedTime = chinaTime;
                         Properties.Settings.Default.Save();
-                        _ = ModernDialog.ShowInfoAsync($"{chinaTime}", "测试");
+                        //await ModernDialog.ShowInfoAsync($"{chinaTime}", "测试");
                         return chinaTime;
                     }
                 }
