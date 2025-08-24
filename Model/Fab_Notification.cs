@@ -1,8 +1,9 @@
-using HtmlAgilityPack;
+using Microsoft.Playwright;
 using Microsoft.Toolkit.Uwp.Notifications;
 
 using ModernWpf.Controls;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -17,19 +18,17 @@ namespace unreal_GUI.Model
         {
             try
             {
-                // 使用Puppeteer获取页面内容
-                string html = await Puppeteer.GetPageContentAsync("https://www.fab.com/limited-time-free");
+                // 使用Playwright直接查找具有指定class的h2元素
+                string dateString = await Playwright.GetH2ElementTextAsync(
+                    "https://www.fab.com/limited-time-free",
+                    "fabkit-Typography-root",
+                    "fabkit-Typography--align-start",
+                    "fabkit-Typography--intent-primary",
+                    "fabkit-Heading--xl",
+                    "ArhVH7Um");
 
-                // 使用HtmlAgilityPack解析网页
-                var doc = new HtmlDocument();
-                doc.LoadHtml(html);
-
-                // 查找具有指定class的h2元素
-                var h2Node = doc.DocumentNode.SelectSingleNode("//h2[contains(@class, 'fabkit-Typography-root') and contains(@class, 'fabkit-Typography--align-start') and contains(@class, 'fabkit-Typography--intent-primary') and contains(@class, 'fabkit-Heading--xl') and contains(@class, 'ArhVH7Um')]");
-
-                if (h2Node != null)
+                if (!string.IsNullOrEmpty(dateString))
                 {
-                    string dateString = h2Node.InnerText;
                     // 提取日期时间部分
                     var dateRegex = new Regex(@"Limited-Time Free \(Until ([A-Za-z0-9 :,AMPamp]+)\)");
                     var dateMatch = dateRegex.Match(dateString);
@@ -57,34 +56,42 @@ namespace unreal_GUI.Model
                         // 创建 Eastern Time 时间
                         TimeZoneInfo easternZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
                         DateTime easternTime = new DateTime(year, Array.IndexOf(new string[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" }, month) + 1, day, hour + (amPm == "PM" ? 12 : 0), minute, 0);
-                        
+
                         // 转换为北京时间 (后续软件多语言支持的时候可以更改成根据用户地区切换时区)
                         TimeZoneInfo chinaZone = TimeZoneInfo.FindSystemTimeZoneById("China Standard Time");
                         DateTime chinaTime = TimeZoneInfo.ConvertTime(easternTime, easternZone, chinaZone);
 
                         // 保存到设置
                         Properties.Settings.Default.LimitedTime = chinaTime;
-                Properties.Settings.Default.Save();
-                //await ModernDialog.ShowInfoAsync($"{chinaTime}", "测试");
-                
-                // 发送通知
-                SendFabNotification(chinaTime);               
-                return chinaTime;
+                        Properties.Settings.Default.Save();
+                        //await ModernDialog.ShowInfoAsync($"{chinaTime}", "测试");
+
+                        // 发送通知
+                        SendFabNotification(chinaTime);
+                        return chinaTime;
                     }
                 }
             }
             catch (Exception ex)
             {
                 // 显示错误信息
-                _ = ModernDialog.ShowInfoAsync($"无法获取Fab免费资产信息: {ex.Message}", "错误");
-                // 返回null
+                string errorMessage = ex.Message;
+                if (errorMessage.Contains("403"))
+                {
+                    _ = ModernDialog.ShowInfoAsync($"无法获取Fab免费资产信息: 网站返回403错误，可能已被反爬虫机制拦截。请稍后再试。", "错误");
+                }
+                else
+                {
+                    _ = ModernDialog.ShowInfoAsync($"无法获取Fab免费资产信息: {ex.Message}", "错误");
+                }
+
                 return null;
             }
 
             return null;
         }
-        
-      
+
+
         /// <summary>
         /// 发送Windows通知
         /// </summary>
