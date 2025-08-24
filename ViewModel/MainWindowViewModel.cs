@@ -39,9 +39,14 @@ namespace unreal_GUI.ViewModel
         {
             if (Properties.Settings.Default.FabAsset)
             {
-
-                //await Fab_Notification.GetLimitedTimeFreeEndDate();
-
+                // 只有当本机时间大于LimitedTime或LimitedTime为空时才调用
+                DateTime limitedTime = Properties.Settings.Default.LimitedTime;
+                DateTime defaultTime = new DateTime(1990, 1, 1);
+                
+                if (DateTime.Now > limitedTime || limitedTime == defaultTime)
+                {
+                    await Fab_Notification.GetLimitedTimeFreeEndDate();
+                }
             }
         }
 

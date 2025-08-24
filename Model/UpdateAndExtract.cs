@@ -1,3 +1,4 @@
+using Microsoft.Toolkit.Uwp.Notifications;
 using ModernWpf.Controls;
 using Newtonsoft.Json.Linq;
 using SevenZip;
@@ -52,6 +53,15 @@ namespace unreal_GUI.Model
             }            
         }
 
+        private static void SendWindowsNotification()
+        {
+            // 创建通知
+            new ToastContentBuilder()
+                .AddText("下载完毕")
+                .AddText("应用程序即将重启以应用更新，请稍后···")
+                .Show();
+        }
+
         public static async Task DownloadAndUpdateAsync()
         {
             //if (release_info == null) return;
@@ -75,7 +85,7 @@ namespace unreal_GUI.Model
                         await download.Content.CopyToAsync(fileStream);
                     }
 
-                    await ModernDialog.ShowInfoAsync($"已下载到：{downloadPath}", "下载完成");
+                    //await ModernDialog.ShowInfoAsync($"已下载到：{downloadPath}", "下载完成");
 
                 
 
@@ -94,6 +104,7 @@ namespace unreal_GUI.Model
                         // 启动Update.bat并退出程序
                         var updateBatPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Update.bat");
                         System.Diagnostics.Process.Start(updateBatPath);
+                        SendWindowsNotification();
                         Environment.Exit(0);
 
                     }

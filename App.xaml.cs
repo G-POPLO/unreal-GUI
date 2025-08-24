@@ -1,3 +1,4 @@
+using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using System.Configuration;
 using System.Data;
@@ -16,11 +17,39 @@ namespace unreal_GUI
             AppDomain currentDomain = AppDomain.CurrentDomain;
             currentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             
-            
+            // 注册通知激活事件处理程序
+            ToastNotificationManagerCompat.OnActivated += ToastNotificationManagerCompat_OnActivated;
         }
-        
+        // 通知激活事件处理程序
+        private void ToastNotificationManagerCompat_OnActivated(ToastNotificationActivatedEventArgsCompat e)
+        {
+            // 获取通知参数
+            var args = ToastArguments.Parse(e.Argument);
+            
+            // 根据参数执行相应操作
+            if (args.Contains("action"))
+            {
+                string action = args["action"];
+                
+                switch (action)
+                {
+                    case "openUrl":
+                        // 打开网站
+                        if (args.Contains("url"))
+                        {
+                            string url = args["url"];
+                            Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+                        }
+                        break;
+                    case "dismiss":
+                        // 忽略通知，什么都不做
+                        break;
+                }
+            }
+        }
 
 
+        // 全局异常处理
         private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             // 处理异常
