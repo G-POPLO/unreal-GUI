@@ -14,7 +14,7 @@
     <SignAssembly>False</SignAssembly>
     <Authors>C-Poplo</Authors>
     <Company />
-    <Version>0.3.1.0</Version>
+    <Version>0.3.2.0</Version>
     <Title>Unreal-GUI</Title>
     <AssemblyName>Unreal-GUI</AssemblyName>
     <DelaySign>True</DelaySign>
@@ -43,14 +43,19 @@
       <DestinationFolder>$(OutputPath)Sound</DestinationFolder>
     </Content>
   </ItemGroup>
+  <!--Playwright运行时驱动程序仅发布win版本-->
+  <PropertyGroup>
+    <PlaywrightPlatform>win</PlaywrightPlatform>
+  </PropertyGroup>
   
   <PropertyGroup>  
     <IncludeSatelliteResource>false</IncludeSatelliteResource>
-    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion>10.0.18362.0</SupportedOSPlatformVersion>
   </PropertyGroup>
   <!--要求不生成.deps.json文件-->  
   <PropertyGroup>
     <GenerateDependencyFile>false</GenerateDependencyFile>
+    <RepositoryUrl>https://github.com/G-POPLO/unreal-GUI</RepositoryUrl>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -74,6 +79,7 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="Markdig" Version="0.41.3" />
+    <PackageReference Include="Markdig.Wpf" Version="0.5.0.1" />
     <PackageReference Include="Microsoft.Playwright" Version="1.54.0" />
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
     <PackageReference Include="ModernWpfUI" Version="0.9.6" />

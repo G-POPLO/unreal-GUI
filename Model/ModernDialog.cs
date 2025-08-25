@@ -1,3 +1,4 @@
+using Markdig;
 using ModernWpf;
 using ModernWpf.Controls;
 using Newtonsoft.Json;
@@ -30,6 +31,26 @@ namespace unreal_GUI.Model
         }
 
         /// <summary>
+        /// 显示一个带 Yes/No 按钮的对话框，但消息内容支持 Markdown 格式
+        /// </summary>
+        public static async Task<bool?> ShowMarkdownAsync(string message, string title)
+        {
+            string markdownContent = Markdig.Markdown.ToHtml(message);
+            var webBrowser = new System.Windows.Controls.WebBrowser();
+            webBrowser.NavigateToString(markdownContent);
+            var dialog = new ContentDialog
+            {
+                Title = title,
+                Content = webBrowser,
+                PrimaryButtonText = "是",
+                CloseButtonText = "否"
+            };
+
+            var result = await dialog.ShowAsync();
+            return result == ContentDialogResult.Primary;
+        }
+
+        /// <summary>
         /// 显示一个仅 OK 按钮的对话框
         /// </summary>
         public static async Task ShowInfoAsync(string message, string title = "提示")
@@ -45,7 +66,7 @@ namespace unreal_GUI.Model
         }
 
         /// <summary>
-        /// 显示带自定义按钮的对话框
+        /// 显示可自定义按钮的对话框
         /// </summary>
         public static async Task<ContentDialogResult> ShowCustomAsync(
             string message,

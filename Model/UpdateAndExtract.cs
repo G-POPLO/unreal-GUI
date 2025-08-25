@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
+using Windows.UI.Notifications;
 
 namespace unreal_GUI.Model
 {
@@ -34,10 +35,10 @@ namespace unreal_GUI.Model
                 if (Version.Parse(latestVersion) > Version.Parse(currentVersion))
                 {
                     string updateBody = release_info["body"]?.ToString() ?? "无更新内容";
-                    bool? result = await ModernDialog.ShowConfirmAsync($"发现新版本{latestVersion}\n\n更新内容:\n{updateBody}\n\n是否下载？", "提示");
+                    bool? result = await ModernDialog.ShowMarkdownAsync($"发现新版本{latestVersion}\n\n更新内容:\n{updateBody}\n\n是否下载？", "提示");
                     if (result == true)
                     {
-                        await DownloadAndUpdateAsync();                       
+                        await DownloadAndUpdateAsync();
                     }
                     else
                     {
@@ -47,20 +48,16 @@ namespace unreal_GUI.Model
 
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 await ModernDialog.ShowInfoAsync($"获取更新失败：{ex.Message}", "提示");
-            }            
+            }
         }
 
-        private static void SendWindowsNotification()
-        {
-            // 创建通知
-            new ToastContentBuilder()
-                .AddText("下载完毕")
-                .AddText("应用程序即将重启以应用更新，请稍后···")
-                .Show();
-        }
+        //private static void SendDownloadNotification()
+        //{
+        //    // TBD
+        //}
 
         public static async Task DownloadAndUpdateAsync()
         {
@@ -76,18 +73,59 @@ namespace unreal_GUI.Model
                     var downloadDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "download");
                     Directory.CreateDirectory(downloadDir);
                     var downloadPath = Path.Combine(downloadDir, $"{latestVersion}.7z");
+                    // 创建 Toast 通知用于显示进度
+                    var toastContentBuilder = new ToastContentBuilder()
+                        .AddText("正在下载更新...")
+                        .AddVisualChild(new AdaptiveProgressBar()
+                        {
+                            Value = new BindableProgressBarValue("progressValue"),
+                            ValueStringOverride = new BindableString("progressValueString")
+                        });
+
+                    var toastNotification = new ToastNotification(toastContentBuilder.GetXml());
+                    ToastNotificationManager.CreateToastNotifier().Show(toastNotification);
+
                     using (var fileStream = File.Create(downloadPath))
                     {
-
                         using var client = new HttpClient();
                         client.DefaultRequestHeaders.UserAgent.ParseAdd("unreal-GUI");
-                        HttpResponseMessage download = await client.GetAsync(downloadUrl);
-                        await download.Content.CopyToAsync(fileStream);
+
+                        // 使用 HttpRequestMessage 来支持进度报告
+                        using var request = new HttpRequestMessage(HttpMethod.Get, downloadUrl);
+                        using var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+                        var totalBytes = response.Content.Headers.ContentLength ?? -1L;
+                        var canReportProgress = totalBytes != -1;
+                        var totalBytesRead = 0L;
+                        var buffer = new byte[8192];
+                        var bytesRead = 0;
+
+                        using (var downloadStream = await response.Content.ReadAsStreamAsync())
+                        {
+                            while ((bytesRead = await downloadStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                            {
+                                await fileStream.WriteAsync(buffer, 0, bytesRead);
+                                totalBytesRead += bytesRead;
+
+                                if (canReportProgress)
+                                {
+                                    var progress = (double)totalBytesRead / totalBytes;
+                                    // 更新 Toast 通知的进度
+                                    toastNotification.Data = new NotificationData();
+                                    toastNotification.Data.Values["progressValue"] = progress.ToString();
+                                    toastNotification.Data.Values["progressValueString"] = $"{progress:P0}";
+                                    ToastNotificationManager.CreateToastNotifier().Update(toastNotification.Data, toastNotification.Tag, toastNotification.Group);
+                                }
+                            }
+                        }
                     }
 
-                    //await ModernDialog.ShowInfoAsync($"已下载到：{downloadPath}", "下载完成");
+                    // 下载完成后更新 Toast 通知
+                    toastContentBuilder = new ToastContentBuilder()
+                        .AddText("下载完成")
+                        .AddText("正在解压资源，请稍后...");
+                    toastNotification = new ToastNotification(toastContentBuilder.GetXml());
+                    ToastNotificationManager.CreateToastNotifier().Show(toastNotification);
 
-                
 
                     try
                     {
@@ -104,7 +142,6 @@ namespace unreal_GUI.Model
                         // 启动Update.bat并退出程序
                         var updateBatPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Update.bat");
                         System.Diagnostics.Process.Start(updateBatPath);
-                        SendWindowsNotification();
                         Environment.Exit(0);
 
                     }
@@ -125,8 +162,8 @@ namespace unreal_GUI.Model
         }
     }
 }
-    
-          
+
+
 
 
 
