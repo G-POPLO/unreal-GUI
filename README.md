@@ -4,6 +4,7 @@
 ![GitHub License](https://img.shields.io/github/license/G-POPLO/unreal-GUI)
 
 Unreal-GUI 是一款旨在简化虚幻引擎（Unreal Engine）相关操作流程的图形用户界面应用程序。它允许用户通过直观的图形界面执行复杂的终端命令，而无需直接与命令行交互。
+原开发目的是辅助用户将繁杂的命令操作转成简单的GUI操作，现正考虑将其打造成集合各种开发小工具的统一平台。
 
 ## 目录
 
@@ -23,8 +24,10 @@ Unreal-GUI 是一款旨在简化虚幻引擎（Unreal Engine）相关操作流�
 4. **缓存清理**: 清理项目文件的缓存，包括编译生成的中间文件和临时文件。同时可以查看DDC的缓存情况等。
 
 ## 安装说明
+应用程序需安装[.NET 9 Runtime](https://dotnet.microsoft.com/zh-cn/download/dotnet/9.0/runtime)，否则会提示缺少依赖项。
+由于应用程序部分使用了Win32 API，因此只提供在Windows 10(1809)及以上版本上的运行版本。
 
-1. 从 [Releases](https://github.com/G-POPLO/unreal-GUI/releases) 页面下载 v0.3.1.0 版本。
+1. 从 [Releases](https://github.com/G-POPLO/unreal-GUI/releases) 页面下载最新版本的 Unreal-GUI。
 2. 解压下载的文件到您想要安装的目录。
 3. 运行 `Unreal-GUI.exe` 启动应用程序。
 
