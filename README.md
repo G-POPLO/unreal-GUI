@@ -25,10 +25,11 @@ Unreal-GUI 是一款旨在简化虚幻引擎（Unreal Engine）相关操作流�
 
 ## 安装说明
 应用程序需安装[.NET 9 Runtime](https://dotnet.microsoft.com/zh-cn/download/dotnet/9.0/runtime)，否则会提示缺少依赖项。
-由于应用程序部分使用了Win32 API，因此只提供在Windows 10(1809)及以上版本上的运行版本。
+由于应用程序部分使用了 Windows 运行时(WinRT) API，因此只提供在Windows 10(1903)及以上版本上的运行版本。
+#### 注意：从版本v0.3.1.0开始，应用体积极度膨胀，主要是因为集成了Playwright的浏览器引擎和微软的Windows.SDK，如果你对应用程序体积敏感且不需要新功能所需的特性，请选择[v0.3.0.0](https://github.com/G-POPLO/unreal-GUI/releases/tag/0.3.0.0)。
 
 1. 从 [Releases](https://github.com/G-POPLO/unreal-GUI/releases) 页面下载最新版本的 Unreal-GUI。
-2. 解压下载的文件到您想要安装的目录。
+2. 解压下载的文件到安装的目录。
 3. 运行 `Unreal-GUI.exe` 启动应用程序。
 
 ## 使用方法
