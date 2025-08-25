@@ -23,7 +23,7 @@
             <MenuItem Header="清除缓存" Command="{Binding NavigateToClearCommand}"/>
             <MenuItem Header="设置" Command="{Binding NavigateToSettingsCommand}"/>
             <MenuItem Header="关于" Command="{Binding NavigateToAboutCommand}"/>
-            <MenuItem Header="检查Fab资产" Command="{Binding CheckFabAssetNotificationCommand}"/>
+            
         </Menu>
         <ContentControl x:Name="ContentContainer" Content="{Binding CurrentView}" Grid.Row="1" Margin="0,0,0,60" />
     </Grid>

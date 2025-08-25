@@ -123,10 +123,5 @@ namespace unreal_GUI.ViewModel
             NavigateToView(new About());
         }
 
-        [RelayCommand]
-        private async Task CheckFabAssetNotification()
-        {
-            await CheckFabAsset();
-        }
     }
 }
