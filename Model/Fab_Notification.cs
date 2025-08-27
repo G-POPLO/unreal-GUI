@@ -48,7 +48,7 @@ namespace unreal_GUI.Model
 
                         // 确定年份（假设为当前年或下一年）
                         int year = DateTime.Now.Year;
-                        if (DateTime.Now.Month > Array.IndexOf(new string[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" }, month) + 1)
+                        if (DateTime.Now.Month > Array.IndexOf(new string[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec" }, month) + 1)
                         {
                             year++;
                         }

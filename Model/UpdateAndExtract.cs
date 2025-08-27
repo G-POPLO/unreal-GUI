@@ -136,7 +136,7 @@ namespace unreal_GUI.Model
                         SevenZipExtractor extractor = new(downloadPath);
                         string extractPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "download");
                         extractor.ExtractArchive(extractPath);
-                        File.Delete(downloadPath);
+                        File.Delete(downloadPath); // 删除压缩包
 
 
                         // 启动Update.bat并退出程序
