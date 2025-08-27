@@ -83,7 +83,7 @@ namespace unreal_GUI.Model
                             Status = "正在下载..."
                         });
 
-                    var toastNotification = new ToastNotification(toastContentBuilder.GetXml());
+                    ToastNotification toastNotification = new ToastNotification(toastContentBuilder.GetXml());
                     ToastNotificationManager.CreateToastNotifier().Show(toastNotification);
 
                     using (var fileStream = File.Create(downloadPath))
@@ -114,6 +114,7 @@ namespace unreal_GUI.Model
                                     toastNotification.Data = new NotificationData();
                                     toastNotification.Data.Values["progressValue"] = progress.ToString();
                                     toastNotification.Data.Values["progressValueString"] = $"{progress:P0}";
+                                    toastNotification.Data.Values["Status"] = "Downloading"; // 修复：添加Status属性
                                     ToastNotificationManager.CreateToastNotifier().Update(toastNotification.Data, toastNotification.Tag, toastNotification.Group);
                                 }
                             }
@@ -163,6 +164,17 @@ namespace unreal_GUI.Model
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
