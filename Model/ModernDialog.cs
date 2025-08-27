@@ -1,4 +1,5 @@
 using Markdig;
+using Markdig.Wpf;
 using ModernWpf;
 using ModernWpf.Controls;
 using Newtonsoft.Json;
@@ -35,13 +36,12 @@ namespace unreal_GUI.Model
         /// </summary>
         public static async Task<bool?> ShowMarkdownAsync(string message, string title)
         {
-            string markdownContent = Markdig.Markdown.ToHtml(message);
-            var webBrowser = new System.Windows.Controls.WebBrowser();
-            webBrowser.NavigateToString(markdownContent);
+            var markdownViewer = new Markdig.Wpf.MarkdownViewer();
+            markdownViewer.Markdown = message;
             var dialog = new ContentDialog
             {
                 Title = title,
-                Content = webBrowser,
+                Content = markdownViewer,
                 PrimaryButtonText = "是",
                 CloseButtonText = "否"
             };

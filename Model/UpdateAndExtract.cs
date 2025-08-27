@@ -32,7 +32,7 @@ namespace unreal_GUI.Model
                 release_info = JObject.Parse(await response.Content.ReadAsStringAsync());
                 latestVersion = release_info["tag_name"]?.ToString();
 
-                if (Version.Parse(latestVersion) > Version.Parse(currentVersion))
+                if (Version.Parse(latestVersion) >= Version.Parse(currentVersion))
                 {
                     string updateBody = release_info["body"]?.ToString() ?? "无更新内容";
                     bool? result = await ModernDialog.ShowMarkdownAsync($"发现新版本{latestVersion}\n\n更新内容:\n{updateBody}\n\n是否下载？", "提示");
