@@ -79,7 +79,8 @@ namespace unreal_GUI.Model
                         .AddVisualChild(new AdaptiveProgressBar()
                         {
                             Value = new BindableProgressBarValue("progressValue"),
-                            ValueStringOverride = new BindableString("progressValueString")
+                            ValueStringOverride = new BindableString("progressValueString"),
+                            Status = "正在下载..."
                         });
 
                     var toastNotification = new ToastNotification(toastContentBuilder.GetXml());
