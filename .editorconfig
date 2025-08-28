@@ -250,6 +250,9 @@ dotnet_diagnostic.CS8600.severity = none
 # MVVMTK0045: Using [ObservableProperty] on fields is not AOT compatible for WinRT
 dotnet_diagnostic.MVVMTK0045.severity = none
 
+# CA1416: 验证平台兼容性
+dotnet_diagnostic.CA1416.severity = none
+
 [*.{cs,vb}]
 end_of_line = crlf
 

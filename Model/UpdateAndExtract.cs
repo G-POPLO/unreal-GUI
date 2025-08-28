@@ -17,6 +17,23 @@ namespace unreal_GUI.Model
         public static JObject release_info;
         public static string? latestVersion;
 
+        /// <summary>
+        /// 将字节数格式化为更易读的格式（如KB, MB等）
+        /// </summary>
+        /// <param name="bytes">字节数</param>
+        /// <returns>格式化后的字符串</returns>
+        private static string FormatBytes(double bytes)
+        {
+            string[] sizes = { "B", "KB", "MB", "GB", "TB" };
+            int order = 0;
+            while (bytes >= 1024 && order < sizes.Length - 1)
+            {
+                order++;
+                bytes /= 1024;
+            }
+            return $"{bytes:0.##} {sizes[order]}";
+        }
+
         public static async Task CheckForUpdatesAsync()
         {
             var currentVersion = Application.ResourceAssembly.GetName().Version.ToString();
@@ -32,7 +49,7 @@ namespace unreal_GUI.Model
                 release_info = JObject.Parse(await response.Content.ReadAsStringAsync());
                 latestVersion = release_info["tag_name"]?.ToString();
 
-                if (Version.Parse(latestVersion) >= Version.Parse(currentVersion))
+                if (Version.Parse(latestVersion) > Version.Parse(currentVersion))
                 {
                     string updateBody = release_info["body"]?.ToString() ?? "无更新内容";
                     bool? result = await ModernDialog.ShowMarkdownAsync($"发现新版本{latestVersion}\n\n更新内容:\n{updateBody}\n\n是否下载？", "提示");
@@ -80,18 +97,37 @@ namespace unreal_GUI.Model
                     // Toast 通知初始化（带进度条）
                     string toastTag = "download-progress";
                     string toastGroup = "update-group";
+                    string fileSizeText = totalBytes != -1 ? $"文件大小: {FormatBytes(totalBytes)}" : "文件大小: 未知";
                     var toastContent = new ToastContentBuilder()
                         .AddText($"正在下载更新包 {latestVersion}")
+                        .AddText(fileSizeText) // 显示文件大小
                         .AddVisualChild(new AdaptiveProgressBar()
                         {
                             Title = "下载进度",
                             Value = new BindableProgressBarValue("progressValue"),
                             ValueStringOverride = new BindableString("progressText"),
-                            Status = "下载中"
+                            Status = new BindableString("downloadSpeed") // 绑定到下载速度
                         })
                         .GetToastContent();
 
-                    ToastNotificationManagerCompat.CreateToastNotifier().Show(new ToastNotification(toastContent.GetXml()));
+                    // 创建通知并设置初始数据
+                    var toast = new ToastNotification(toastContent.GetXml())
+                    {
+                        Tag = toastTag,
+                        Group = toastGroup,
+                        Data = new NotificationData()
+                        {
+                            Values =
+                            {
+                                ["progressValue"] = "0.00",
+                                ["progressText"] = "0%",
+                                ["downloadSpeed"] = "计算中..."
+                            },
+                            SequenceNumber = 1
+                        }
+                    };
+
+                    ToastNotificationManagerCompat.CreateToastNotifier().Show(toast);
 
                     // 在后台线程执行下载操作，避免阻塞UI线程
                     await Task.Run(async () =>
@@ -103,10 +139,27 @@ namespace unreal_GUI.Model
                             long totalRead = 0;
                             int read;
                             uint sequenceNumber = 1; // 添加序列号以确保更新顺序正确
+                            DateTime lastUpdateTime = DateTime.Now;
+                            long lastTotalRead = 0;
+                            string downloadSpeed = "计算中...";
+                            
                             while ((read = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
                             {
                                 await fileStream.WriteAsync(buffer, 0, read);
                                 totalRead += read;
+                                
+                                // 计算下载速度
+                                DateTime now = DateTime.Now;
+                                TimeSpan timeSpan = now - lastUpdateTime;
+                                if (timeSpan.TotalSeconds >= 1) // 每秒更新一次速度
+                                {
+                                    long bytesDownloaded = totalRead - lastTotalRead;
+                                    double speed = bytesDownloaded / timeSpan.TotalSeconds;
+                                    downloadSpeed = $"下载速度: {FormatBytes(speed)}/s";
+                                    lastTotalRead = totalRead;
+                                    lastUpdateTime = now;
+                                }
+                                
                                 if (canReportProgress)
                                 {
                                     double progress = totalRead / (double)totalBytes;
@@ -118,6 +171,7 @@ namespace unreal_GUI.Model
                                     };
                                     data.Values["progressValue"] = progress.ToString("F2");
                                     data.Values["progressText"] = $"{percent}%";
+                                    data.Values["downloadSpeed"] = downloadSpeed; // 更新下载速度
                                     
                                     // 在UI线程上更新Toast通知
                                     Application.Current.Dispatcher.Invoke(() =>
@@ -129,12 +183,18 @@ namespace unreal_GUI.Model
                         }
                         
                         // 下载完成后更新通知状态为"正在解压文件"
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            var data = new NotificationData();
-                            data.Values["status"] = "正在解压文件";
-                            ToastNotificationManagerCompat.CreateToastNotifier().Update(data, toastTag, toastGroup);
-                        });
+                        //Application.Current.Dispatcher.Invoke(() =>
+                        //{
+                        //    uint sequenceNumber = 1; // 添加序列号以确保更新顺序正确
+                        //    var data = new NotificationData
+                        //    {
+                        //        SequenceNumber = sequenceNumber++
+                        //    };
+                        //    data.Values["progressValue"] = "1.00";
+                        //    data.Values["progressText"] = "100%";
+                        //    data.Values["downloadSpeed"] = "正在解压文件";
+                        //    ToastNotificationManagerCompat.CreateToastNotifier().Update(data, toastTag, toastGroup);
+                        //});
                     });
 
 
