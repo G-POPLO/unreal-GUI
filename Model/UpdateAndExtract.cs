@@ -54,15 +54,10 @@ namespace unreal_GUI.Model
             }
         }
 
-        //private static void SendDownloadNotification()
-        //{
-        //    // TBD
-        //}
+
 
         public static async Task DownloadAndUpdateAsync()
         {
-            //if (release_info == null) return;
-
             try
             {
                 string? downloadUrl = release_info["assets"]
@@ -73,73 +68,100 @@ namespace unreal_GUI.Model
                     var downloadDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "download");
                     Directory.CreateDirectory(downloadDir);
                     var downloadPath = Path.Combine(downloadDir, $"{latestVersion}.7z");
-                    // 创建 Toast 通知用于显示进度
-                    var toastContentBuilder = new ToastContentBuilder()
-                        .AddText("正在下载更新...")
+
+                    // 获取文件大小
+                    using var client = new HttpClient();
+                    client.DefaultRequestHeaders.UserAgent.ParseAdd("unreal-GUI");
+                    var response = await client.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead);
+                    response.EnsureSuccessStatusCode();
+                    var totalBytes = response.Content.Headers.ContentLength ?? -1L;
+                    var canReportProgress = totalBytes != -1;
+
+                    // Toast 通知初始化（带进度条）
+                    string toastTag = "download-progress";
+                    string toastGroup = "update-group";
+                    var toastContent = new ToastContentBuilder()
+                        .AddText($"正在下载更新包 {latestVersion}")
                         .AddVisualChild(new AdaptiveProgressBar()
                         {
+                            Title = "下载进度",
                             Value = new BindableProgressBarValue("progressValue"),
-                            ValueStringOverride = new BindableString("progressValueString"),
-                            Status = "正在下载..."
-                        });
+                            ValueStringOverride = new BindableString("progressText"),
+                            Status = "下载中"
+                        })
+                        .GetToastContent();
 
-                    ToastNotification toastNotification = new ToastNotification(toastContentBuilder.GetXml());
-                    ToastNotificationManager.CreateToastNotifier().Show(toastNotification);
+                    ToastNotificationManagerCompat.CreateToastNotifier().Show(new ToastNotification(toastContent.GetXml()));
 
-                    using (var fileStream = File.Create(downloadPath))
+                    // 在后台线程执行下载操作，避免阻塞UI线程
+                    await Task.Run(async () =>
                     {
-                        using var client = new HttpClient();
-                        client.DefaultRequestHeaders.UserAgent.ParseAdd("unreal-GUI");
-
-                        // 使用 HttpRequestMessage 来支持进度报告
-                        using var request = new HttpRequestMessage(HttpMethod.Get, downloadUrl);
-                        using var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-                        var totalBytes = response.Content.Headers.ContentLength ?? -1L;
-                        var canReportProgress = totalBytes != -1;
-                        var totalBytesRead = 0L;
-                        var buffer = new byte[8192];
-                        var bytesRead = 0;
-
-                        using (var downloadStream = await response.Content.ReadAsStreamAsync())
+                        using (var stream = await response.Content.ReadAsStreamAsync())
+                        using (var fileStream = File.Create(downloadPath))
                         {
-                            while ((bytesRead = await downloadStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                            var buffer = new byte[81920];
+                            long totalRead = 0;
+                            int read;
+                            uint sequenceNumber = 1; // 添加序列号以确保更新顺序正确
+                            while ((read = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
                             {
-                                await fileStream.WriteAsync(buffer, 0, bytesRead);
-                                totalBytesRead += bytesRead;
-
+                                await fileStream.WriteAsync(buffer, 0, read);
+                                totalRead += read;
                                 if (canReportProgress)
                                 {
-                                    var progress = (double)totalBytesRead / totalBytes;
-                                    // 更新 Toast 通知的进度
-                                    toastNotification.Data = new NotificationData();
-                                    toastNotification.Data.Values["progressValue"] = progress.ToString();
-                                    toastNotification.Data.Values["progressValueString"] = $"{progress:P0}";
-                                    toastNotification.Data.Values["Status"] = "Downloading"; // 修复：添加Status属性
-                                    ToastNotificationManager.CreateToastNotifier().Update(toastNotification.Data, toastNotification.Tag, toastNotification.Group);
+                                    double progress = totalRead / (double)totalBytes;
+                                    int percent = (int)(progress * 100);
+                                    // 每次读取都实时更新进度条
+                                    var data = new NotificationData
+                                    {
+                                        SequenceNumber = sequenceNumber++ // 递增序列号
+                                    };
+                                    data.Values["progressValue"] = progress.ToString("F2");
+                                    data.Values["progressText"] = $"{percent}%";
+                                    
+                                    // 在UI线程上更新Toast通知
+                                    Application.Current.Dispatcher.Invoke(() =>
+                                    {
+                                        ToastNotificationManagerCompat.CreateToastNotifier().Update(data, toastTag, toastGroup);
+                                    });
                                 }
                             }
                         }
-                    }
+                        
+                        // 下载完成后更新通知状态为"正在解压文件"
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            var data = new NotificationData();
+                            data.Values["status"] = "正在解压文件";
+                            ToastNotificationManagerCompat.CreateToastNotifier().Update(data, toastTag, toastGroup);
+                        });
+                    });
 
-                    // 下载完成后更新 Toast 通知
-                    toastContentBuilder = new ToastContentBuilder()
-                        .AddText("下载完成")
-                        .AddText("正在解压资源，请稍后...");
-                    toastNotification = new ToastNotification(toastContentBuilder.GetXml());
-                    ToastNotificationManager.CreateToastNotifier().Show(toastNotification);
 
-
+                    // 设置7zxa.dll
+                    _7z.ConfigureSevenZip();
+                    
                     try
                     {
-
-                        // 设置7zxa.dll
-                        _7z.ConfigureSevenZip();
                         // 解压到download文件夹
-                        SevenZipExtractor extractor = new(downloadPath);
                         string extractPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "download");
-                        extractor.ExtractArchive(extractPath);
+                        
+                        // 在后台线程执行解压操作，避免阻塞UI线程
+                        await Task.Run(() =>
+                        {
+                            using (var extractor = new SevenZipExtractor(downloadPath))
+                            {
+                                extractor.ExtractArchive(extractPath);
+                            }
+                            
+                            // 解压完成后关闭通知
+                            Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                ToastNotificationManagerCompat.History.Remove(toastTag, toastGroup);
+                            });
+                        });
+                        
                         File.Delete(downloadPath); // 删除压缩包
-
 
                         // 启动Update.bat并退出程序
                         var updateBatPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Update.bat");
@@ -159,31 +181,8 @@ namespace unreal_GUI.Model
             }
             catch (Exception ex)
             {
-                await ModernDialog.ShowInfoAsync($"下载失败：{ex.Message}", "提示");
+                await ModernDialog.ShowInfoAsync($"下载失败：{ex}", "提示");
             }
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

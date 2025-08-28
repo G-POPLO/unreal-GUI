@@ -13,6 +13,8 @@ namespace unreal_GUI
     {
         public App()
         {
+           
+
             this.DispatcherUnhandledException += App_DispatcherUnhandledException;
             AppDomain currentDomain = AppDomain.CurrentDomain;
             currentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);

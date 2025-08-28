@@ -1,4 +1,4 @@
-﻿using SevenZip;
+using SevenZip;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ namespace unreal_GUI.Model
         public static void ConfigureSevenZip()
         {
             // 从App目录加载
-            SevenZipBase.SetLibraryPath("App/7zxa.dll");
+            SevenZipBase.SetLibraryPath(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "App", "7zxa.dll"));
         }
     }
 }
