@@ -37,14 +37,13 @@ namespace unreal_GUI
                 {
                     case "openUrl":
                         // 打开网站
-                        if (args.Contains("url"))
-                        {
-                            string url = args["url"];
-                            Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
-                        }
+                        Process.Start(new ProcessStartInfo("https://www.fab.com/limited-time-free") { UseShellExecute = true });
                         break;
                     case "dismiss":
                         // 忽略通知，什么都不做
+                        break;
+                    default:
+                        // 未来可以添加更多操作类型
                         break;
                 }
             }

@@ -97,19 +97,14 @@ namespace unreal_GUI.Model
         /// </summary>
         private static void SendFabNotification(DateTime limitedTime)
         {
-            // 创建通知
-            new ToastContentBuilder()
-                .AddArgument("action", "viewFabAssets")
-                .AddArgument("url", "https://www.fab.com/limited-time-free")
-                .AddText("Fab资产领取提醒")
-                .AddText($"新的Fab免费资产可领取，截至时间:{limitedTime}")
-                .AddButton(new ToastButton()
-                    .SetContent("是")
-                    .AddArgument("action", "openUrl"))
-                .AddButton(new ToastButton()
-                    .SetContent("否")
-                    .AddArgument("action", "dismiss"))
-                .Show();
+            // 使用 WindowsNotification 类显示带操作按钮的通知
+            WindowsNotification.ShowNotificationWithActions(
+                "Fab资产领取提醒",
+                $"新的Fab免费资产可领取，截至时间:{limitedTime}",
+                "是",
+                "openUrl",
+                "否",
+                "dismiss");
         }
     }
 }
