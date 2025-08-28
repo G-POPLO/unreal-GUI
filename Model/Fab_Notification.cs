@@ -19,6 +19,7 @@ namespace unreal_GUI.Model
             try
             {
                 // 使用Playwright直接查找具有指定class的h2元素
+                // fabkit-Typography-root fabkit-Typography--align-start fabkit-Typography--intent-primary fabkit-Heading--xl ArhVH7Um
                 string dateString = await Playwright.GetH2ElementTextAsync(
                     "https://www.fab.com/limited-time-free",
                     "fabkit-Typography-root",
@@ -39,25 +40,31 @@ namespace unreal_GUI.Model
                         // 解析日期时间字符串
                         // 格式示例: "Aug 26 at 9:59 AM ET"
                         string[] parts = dateTimeString.Split(' ');
+                        // 替换原有月份数组和解析逻辑
+                        string[] monthNames = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
                         string month = parts[0];
+                        // 兼容 "Sept" 为 "Sep"
+                        if (month.Equals("Sept", StringComparison.OrdinalIgnoreCase))
+                        {
+                            month = "Sep";
+                        }
+                        int monthIndex = Array.IndexOf(monthNames, month) + 1;
+                        if (monthIndex < 1 || monthIndex > 12)
+                            throw new ArgumentException($"无法识别的月份: {month}");
+
                         int day = int.Parse(parts[1]);
                         int hour = int.Parse(parts[3].Split(':')[0]);
                         int minute = int.Parse(parts[3].Split(':')[1]);
                         string amPm = parts[4];
-                        // "ET" 是 Eastern Time，需要转换为北京时间
-
-                        // 确定年份（假设为当前年或下一年）
                         int year = DateTime.Now.Year;
-                        if (DateTime.Now.Month > Array.IndexOf(new string[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec" }, month) + 1)
+                        if (DateTime.Now.Month > monthIndex)
                         {
                             year++;
                         }
 
-                        // 创建 Eastern Time 时间
                         TimeZoneInfo easternZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-                        DateTime easternTime = new DateTime(year, Array.IndexOf(new string[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" }, month) + 1, day, hour + (amPm == "PM" ? 12 : 0), minute, 0);
-
-                        // 转换为北京时间 (后续软件多语言支持的时候可以更改成根据用户地区切换时区)
+                        int hour24 = hour % 12 + (amPm.ToUpper() == "PM" ? 12 : 0);
+                        DateTime easternTime = new DateTime(year, monthIndex, day, hour24, minute, 0);
                         TimeZoneInfo chinaZone = TimeZoneInfo.FindSystemTimeZoneById("China Standard Time");
                         DateTime chinaTime = TimeZoneInfo.ConvertTime(easternTime, easternZone, chinaZone);
 
