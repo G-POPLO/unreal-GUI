@@ -9,64 +9,93 @@
              xmlns:ui="http://schemas.modernwpf.com/2019"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid Margin="20,20,20,20">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="0*"/>
-            </Grid.ColumnDefinitions>
-            <StackPanel>
-                <TextBlock x:Name="Title" TextWrapping="Wrap" FontSize="18" Margin="0,10,0,10" FontWeight="Bold"><Run Language="zh-cn" Text="清除缓存"/></TextBlock>
-                <Separator/>
-                <StackPanel x:Name="CleanCache_Panel" Orientation="Vertical">
-                    <TextBlock TextWrapping="Wrap" Text="清除项目文件夹中的缓存数据，部分数据可以选择性保留"></TextBlock>
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox IsChecked="{Binding IsDerivedDataCacheChecked}" Content="保留着色器文件(DerivedDataCache)" Margin="0,0,10,0"/>
-                        <CheckBox IsChecked="{Binding IsSaveGameChecked}" Content="保留项目游戏存档(Saved/SaveGames)"/>
+    <UserControl.DataContext>
+        <viewmodel:ClearViewModel />
+    </UserControl.DataContext>
+    <Grid Margin="20">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="10">
+                <!-- 页面标题 -->
+                <TextBlock Text="缓存清理" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+                
+                <!-- 目录选择卡片 -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                        BorderThickness="1" CornerRadius="4" Margin="0,0,0,20">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="目录选择" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        
+                        <TextBlock TextWrapping="Wrap" Text="选择需要清理的目录：" Margin="0,0,0,10"/>
+                        <TextBox x:Name="PathBox" Text="{Binding PathText, Mode=TwoWay}" Margin="0,0,0,10" IsReadOnly="True"/>
+                        <Button x:Name="SelectPath" Margin="0,0,0,0" Command="{Binding SelectPathCommand}" 
+                                Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
+                                <TextBlock Text="浏览"/>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
-                    <TextBlock TextWrapping="Wrap" Margin="0,0,0,10" Text="设定要进行清理的工程路径"></TextBlock>
-                    <TextBox Text="{Binding InputPath, UpdateSourceTrigger=PropertyChanged}"/>
-                    <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
-                        <Button Content="设定工程路径" Margin="0,0,10,0" Command="{Binding SelectInputPathCommand}"/>
-                        <Button Content="清理缓存" x:Name="CleanCacheButton" Command="{Binding CleanCacheCommand}" IsEnabled="{Binding IsCleanButtonEnabled}"/>
+                </Border>
+                
+                <!-- 文件类型选择卡片 -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                        BorderThickness="1" CornerRadius="4" Margin="0,0,0,20">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE74C;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="文件类型选择" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        
+                        <TextBlock TextWrapping="Wrap" Text="选择需要清理的文件类型：" Margin="0,0,0,10"/>
+                        <CheckBox x:Name="Saved" Margin="0,0,0,10" IsChecked="{Binding SavedChecked}">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;" Margin="0,0,5,0" FontSize="12"/>
+                                <TextBlock Text="Saved"/>
+                            </StackPanel>
+                        </CheckBox>
+                        <CheckBox x:Name="ContentCheckBox" Margin="0,0,0,10" IsChecked="{Binding ContentChecked}">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;" Margin="0,0,5,0" FontSize="12"/>
+                                <TextBlock Text="Content"/>
+                            </StackPanel>
+                        </CheckBox>
+                        <CheckBox x:Name="Intermediate" Margin="0,0,0,0" IsChecked="{Binding IntermediateChecked}">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;" Margin="0,0,5,0" FontSize="12"/>
+                                <TextBlock Text="Intermediate"/>
+                            </StackPanel>
+                        </CheckBox>
                     </StackPanel>
-                    <TextBlock x:Name="Tip" Text="{Binding TipText}" TextWrapping="Wrap" Visibility="{Binding TipText, Converter={StaticResource StringToVisibilityConverter}}"/>
-                </StackPanel>
-                <Separator/>
-                <StackPanel x:Name="Zen_Panel" Margin="0,10,0,0" Visibility="{Binding IsZenPanelVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <TextBlock TextWrapping="Wrap" Text="DDC缓存信息" FontSize="14" FontWeight="Bold"/>
-                    <TextBlock TextWrapping="Wrap" Text="在项目工作过程中会生成缓存文件，可以打开UE5自带的ZenDashboard查看详情。"/>
-                    <StackPanel Orientation="Horizontal">
-                        <ComboBox ItemsSource="{Binding EngineList}" SelectedItem="{Binding SelectedEngine}" Margin="10,10,10,10" DisplayMemberPath="Version" SelectedValuePath="Path"/>
-                        <Button x:Name="ZenButton" Content="打开ZenDashboard" Command="{Binding OpenZenDashboardCommand}" />
-                        <Button Content="查看相关文档" Command="{Binding OpenDocumentationCommand}"  Margin="10,0,10,0" />
-                        <TextBlock Text="{Binding DDCErrorText}" TextWrapping="Wrap" Margin="10,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding DDCErrorText, Converter={StaticResource StringToVisibilityConverter}}"/>
+                </Border>
+                
+                <!-- 操作按钮卡片 -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                        BorderThickness="1" CornerRadius="4" Margin="0,0,0,20">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE945;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="执行操作" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        
+                        <Button x:Name="ClearButton" Margin="0,0,0,15" Command="{Binding CleanCacheCommand}" 
+                                Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE74D;" Margin="0,0,5,0"/>
+                                <TextBlock Text="开始清理"/>
+                            </StackPanel>
+                        </Button>
+                        
+                        <TextBlock x:Name="Result" TextWrapping="Wrap" Text="{Binding ResultText}" Margin="0,0,0,0"/>
                     </StackPanel>
-                </StackPanel>
-                <StackPanel x:Name="CleanLog_Panel" Margin="0,10,0,10">
-                    <TextBlock TextWrapping="Wrap" Text="Log清理" FontSize="14" FontWeight="Bold"/>
-                    <TextBlock TextWrapping="Wrap" Text="在项目工作过程中会生成Log，这些Log不会被自动清理，该程序可以帮你删掉这些多余的Log"/>
-                    <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
-                        <Button x:Name="CleanLogButton" Content="清理Log" Margin="10,0,10,0" Command="{Binding CleanLogCommand}"/>
-                        <TextBlock TextWrapping="Wrap" Text="{Binding TipText2}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </StackPanel>
-                <StackPanel x:Name="OldDDC_Panel" Orientation="Vertical" Visibility="{Binding IsOldDDCPanelVisible, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsHidden="True">
-                    <TextBlock TextWrapping="Wrap" FontSize="14" FontWeight="Bold" Text="DDC缓存信息（旧）"/>
-                    <TextBlock TextWrapping="Wrap" Text="在项目工作过程中会生成缓存文件，该软件可以帮你检测缓存空间的占用大小。若觉得空间占用过大，可以将缓存保存在其他位置或者使用UE5自带的DDC清理来清除缓存"/>
-                    <StackPanel>
-                        <TextBlock Text="{Binding DDCPath}" TextWrapping="Wrap"/>
-                        <TextBlock Text="{Binding DDCSharePath}" TextWrapping="Wrap"/>
-                        <TextBlock Text="{Binding TotalSize}" TextWrapping="Wrap"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Button Content="寻找DDC缓存路径" Margin="0,0,10,0" Command="{Binding FindDDCPathsCommand}"/>
-                        <Button Content="更新占用空间" Command="{Binding CalculateTotalSizeCommand}" />
-                    </StackPanel>
-                </StackPanel>
+                </Border>
             </StackPanel>
-        </Grid>
-    </ScrollViewer>
+        </ScrollViewer>
+    </Grid>
 </UserControl>
 
 

@@ -52,6 +52,15 @@ namespace unreal_GUI.ViewModel
         private bool _isSaveGameChecked = false;
 
         [ObservableProperty]
+        private bool _savedChecked = false;
+
+        [ObservableProperty]
+        private bool _contentChecked = false;
+
+        [ObservableProperty]
+        private bool _intermediateChecked = false;
+
+        [ObservableProperty]
         private SettingsViewModel.EngineInfo _selectedEngine;
 
         public ClearViewModel()

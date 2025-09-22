@@ -5,99 +5,147 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:unreal_GUI"
              xmlns:ui="http://schemas.modernwpf.com/2019"
-             xmlns:viewmodel="clr-namespace:unreal_GUI.ViewModel" x:Class="unreal_GUI.Settings"
-    
+             xmlns:viewmodel="clr-namespace:unreal_GUI.ViewModel" x:Class="unreal_GUI.Settings"  
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>
         <viewmodel:SettingsViewModel />
     </UserControl.DataContext>
-    <Grid Margin="20,20,20,20">
-        <Grid.RowDefinitions>
-
-
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" CanContentScroll="True" VerticalScrollBarVisibility="Auto">
-            <StackPanel Margin="10,10,10,10">
-                <TextBlock x:Name="Title" TextWrapping="Wrap" FontWeight="Bold" FontSize="15" Text="设置" Margin="10,10,10,10"/>
-                <Separator/>
-                <TextBlock x:Name="SubTitle" TextWrapping="Wrap" Margin="10,0,10,0" FontWeight="Bold"><Run Text="引擎目录设定"/></TextBlock>
-                <ListBox x:Name="EnginePathsList" ItemsSource="{Binding EnginePathsDisplay}" Height="100" Margin="10,10,10,10"/>
-                <StackPanel Orientation="Horizontal" Margin="10,10,10,10">
-                    <Button Content="新增" Margin="0,0,10,0" Command="{Binding AddEnginePathCommand}"/>
-                    <Button Content="删除" Margin="10,0,10,0" Command="{Binding RemoveEnginePathCommand}" CommandParameter="{Binding SelectedItem, ElementName=EnginePathsList}"/>
-                    <Button Content="自动设置引擎路径" Margin="10,0,10,0" Command="{Binding AutoPathCommand}"/>
-                    <Button Command="{Binding SaveSettingsCommand}" Margin="10,10,10,10" HorizontalAlignment="Right" VerticalAlignment="Center">
-                        <StackPanel Orientation="Horizontal">
-                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE74E;"/>
-                            <TextBlock Text="保存设置" Margin="5,0,0,0"/>
+    <Grid Margin="20">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="10">
+                <!-- 页面标题 -->
+                <TextBlock Text="设置" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+                
+                <!-- 引擎目录设置卡片 -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                        BorderThickness="1" CornerRadius="4" Margin="0,0,0,20">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE90B;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="引擎目录设定" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
-                    </Button>
-
-                </StackPanel>
-                <TextBlock x:Name="Tips" Text="{Binding TipText}" TextWrapping="Wrap" Margin="10,0,10,0"></TextBlock>
-                <Separator/>
-                <StackPanel Margin="10,10,10,10">
-                    <TextBlock x:Name="Settings_title" TextWrapping="Wrap" FontWeight="Bold" FontSize="15" Margin="0,0,0,10"><Run Language="zh-cn" Text="应用设置"/></TextBlock>
-                    <TextBlock TextWrapping="Wrap" Text="默认设置" Margin="0,0,0,10"/>
-                    <StackPanel x:Name="Setting_Panel" Orientation="Horizontal">
-                        <ui:AppBarToggleButton x:Name="Button0" Label="任务完成后打开输出文件夹" IsChecked="{Binding AutoOpen}" Margin="0,0,10,0" >
+                        
+                        <ListBox x:Name="EnginePathsList" ItemsSource="{Binding EnginePathsDisplay}" 
+                                 Height="120" Margin="0,0,0,15"/>
+                        
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="新增" Margin="0,0,10,0" Command="{Binding AddEnginePathCommand}"/>
+                            <Button Content="删除" Margin="0,0,10,0" Command="{Binding RemoveEnginePathCommand}" 
+                                    CommandParameter="{Binding SelectedItem, ElementName=EnginePathsList}"/>
+                            <Button Content="自动设置引擎路径" Margin="0,0,10,0" Command="{Binding AutoPathCommand}"/>
+                            <Button Command="{Binding SaveSettingsCommand}" Margin="0,0,0,0" HorizontalAlignment="Right" 
+                                    Style="{DynamicResource AccentButtonStyle}">
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE74E;" Margin="0,0,5,0"/>
+                                    <TextBlock Text="保存设置"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                        
+                        <TextBlock x:Name="Tips" Text="{Binding TipText}" TextWrapping="Wrap" 
+                                   Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" 
+                                   Margin="0,10,0,0"/>
+                    </StackPanel>
+                </Border>
+                
+                <!-- 应用设置卡片 -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                        BorderThickness="1" CornerRadius="4" Margin="0,0,0,20">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE71D;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="应用设置" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        
+                        <TextBlock Text="默认设置" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                        
+                        <WrapPanel x:Name="Setting_Panel" Orientation="Horizontal">
+                            <ui:AppBarToggleButton x:Name="Button0" Label="任务完成后打开输出文件夹" 
+                                                   IsChecked="{Binding AutoOpen}" Margin="0,0,10,0" HorizontalAlignment="Left">
+                                <ui:AppBarToggleButton.Icon>
+                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;"/>
+                                </ui:AppBarToggleButton.Icon>
+                            </ui:AppBarToggleButton>
+                            
+                            <ui:AppBarToggleButton x:Name="Button1" Label="使用Gitcode作为更新下载源" 
+                                                   IsChecked="{Binding Gitcode}" Margin="0,0,10,0" HorizontalAlignment="Left">
+                                <ui:AppBarToggleButton.Icon>
+                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEC05;"/>
+                                </ui:AppBarToggleButton.Icon>
+                            </ui:AppBarToggleButton>
+                            
+                            <ui:AppBarToggleButton x:Name="Button2" Label="使用ZenDash来查看缓存信息" 
+                                                   IsChecked="{Binding ZenDashborad}" Margin="0,0,10,0" HorizontalAlignment="Left">
+                                <ui:AppBarToggleButton.Icon>
+                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE83B;"/>
+                                </ui:AppBarToggleButton.Icon>
+                            </ui:AppBarToggleButton>
+                            
+                            <ui:AppBarToggleButton x:Name="Button3" Label="应用程序启动时自动检查更新" 
+                                                   IsChecked="{Binding AutoUpdate}" Margin="0,0,10,0" HorizontalAlignment="Left">
+                                <ui:AppBarToggleButton.Icon>
+                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xECC5;"/>
+                                </ui:AppBarToggleButton.Icon>
+                            </ui:AppBarToggleButton>
+                            
+                            <ui:AppBarToggleButton x:Name="Button4" Label="开启动画效果" 
+                                                   IsChecked="{Binding AnimationEnabled}" HorizontalAlignment="Left">
+                                <ui:AppBarToggleButton.Icon>
+                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE7FD;"/>
+                                </ui:AppBarToggleButton.Icon>
+                            </ui:AppBarToggleButton>
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
+                
+                <!-- 实验性选项卡片 -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                        BorderThickness="1" CornerRadius="4">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEC7A;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="实验性选项" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        
+                        <TextBlock Text="开启实验性选项后会启用一些尚未完成开发的实验性功能，这些功能可能会不适应未来版本" 
+                                   TextWrapping="Wrap" Margin="0,0,0,15"/>
+                        
+                        <TextBlock x:Name="LimitedTime" Text="{Binding LimitedTime, StringFormat=Fab免费资产获取截至时间：\{0:yyyy-MM-dd HH:mm:ss\}}" 
+                                   TextWrapping="Wrap" Margin="0,0,0,15" FontWeight="SemiBold"/>
+                        
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="开机启动Fab提醒（检查完毕后应用程序会自动退出）" 
+                                       VerticalAlignment="Center"/>
+                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right"/>
+                        </Grid>
+                        
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="使用Epic来打开Fab网站" 
+                                       VerticalAlignment="Center"/>
+                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right"/>
+                        </Grid>
+                        
+                        <ui:AppBarToggleButton x:Name="beta_Button0" Label="Fab免费资产领取通知" 
+                                               IsChecked="{Binding FabNotification}" HorizontalAlignment="Left">
                             <ui:AppBarToggleButton.Icon>
-                                <ui:FontIcon
-                                        FontFamily="Segoe MDL2 Assets"
-                                        Glyph="&#xE8B7;" />
-                            </ui:AppBarToggleButton.Icon>
-                        </ui:AppBarToggleButton>
-                        <ui:AppBarToggleButton x:Name="Button1" Label="使用Gitcode作为更新下载源" IsChecked="{Binding Gitcode}" Margin="0,0,10,0" >
-                            <ui:AppBarToggleButton.Icon>
-                                <ui:FontIcon
-                                        FontFamily="Segoe MDL2 Assets"
-                                        Glyph="&#xEC05;" />
-                            </ui:AppBarToggleButton.Icon>
-                        </ui:AppBarToggleButton>
-                        <ui:AppBarToggleButton x:Name="Button2" Label="使用ZenDash来查看缓存信息" IsChecked="{Binding ZenDashborad}" Margin="0,0,10,0" >
-                            <ui:AppBarToggleButton.Icon>
-                                <ui:FontIcon
-                FontFamily="Segoe MDL2 Assets"
-                Glyph="&#xE83B;" />
-                            </ui:AppBarToggleButton.Icon>
-                        </ui:AppBarToggleButton>
-                        <ui:AppBarToggleButton x:Name="Button3" Label="应用程序启动时自动检查更新" IsChecked="{Binding AutoUpdate}" Margin="0,0,10,0" >
-                            <ui:AppBarToggleButton.Icon>
-                                <ui:FontIcon
-                                    FontFamily="Segoe MDL2 Assets"
-                                    Glyph="&#xECC5;"/>
-                            </ui:AppBarToggleButton.Icon>
-                        </ui:AppBarToggleButton>
-                        <ui:AppBarToggleButton x:Name="Button4" Label="开启动画效果" IsChecked="{Binding AnimationEnabled}">
-                            <ui:AppBarToggleButton.Icon>
-                                <ui:FontIcon
-                                     FontFamily="Segoe MDL2 Assets"
-                                     Glyph="&#xE7FD;"/>
+                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEC24;"/>
                             </ui:AppBarToggleButton.Icon>
                         </ui:AppBarToggleButton>
                     </StackPanel>
-                    <GroupBox Height="100">
-                        <GroupBox.Header>
-                            <TextBlock TextWrapping="Wrap" Text="实验性选项"/>
-                        </GroupBox.Header>
-                        <Grid Height="111">
-                            <TextBlock x:Name="LimitedTime" TextWrapping="Wrap" Text="{Binding LimitedTime, StringFormat=Fab免费资产获取截至时间：\{0:yyyy-MM-dd HH:mm:ss\}}" Margin="0,0,0,96"/>
-                            <TextBlock TextWrapping="Wrap" Text="开启实验性选项后会启用一些尚未完成开发的实验性功能，这些功能可能会不适应未来版本" Margin="0,15,0,81"/>
-                            <ui:AppBarToggleButton x:Name="beta_Button0" Label="Fab免费资产领取通知" IsChecked="{Binding FabNotification}" Margin="0,40,0,0" >
-                                <ui:AppBarToggleButton.Icon>
-                                    <ui:FontIcon
-                                    FontFamily="Segoe MDL2 Assets"
-                                    Glyph="&#xEC24;" />
-                                </ui:AppBarToggleButton.Icon>
-                            </ui:AppBarToggleButton>
-                        </Grid>
-                    </GroupBox>
-                    <!--实验性设置界面-->
-                </StackPanel>
+                </Border>
             </StackPanel>
         </ScrollViewer>
-
     </Grid>
 </UserControl>
