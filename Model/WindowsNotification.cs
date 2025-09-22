@@ -82,16 +82,18 @@ namespace unreal_GUI.Model
         /// <param name="message">通知内容</param>
         /// <param name="button1Text">按钮1文本</param>
         /// <param name="button1Action">按钮1操作</param>
+        /// <param name="button1Url">按钮1要打开的URL</param>
         /// <param name="button2Text">按钮2文本</param>
         /// <param name="button2Action">按钮2操作</param>
-        public static void ShowNotificationWithActions(string title, string message, string button1Text, string button1Action, string button2Text, string button2Action)
+        public static void ShowNotificationWithUrls(string title, string message, string button1Text, string button1Action, string button1Url, string button2Text, string button2Action)
         {
             var toastContent = new ToastContentBuilder()
                 .AddText(title)
                 .AddText(message)
                 .AddButton(new ToastButton()
                     .SetContent(button1Text)
-                    .AddArgument("action", button1Action))
+                    .AddArgument("action", button1Action)
+                    .AddArgument("url", button1Url))
                 .AddButton(new ToastButton()
                     .SetContent(button2Text)
                     .AddArgument("action", button2Action))

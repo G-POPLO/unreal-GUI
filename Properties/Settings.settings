@@ -26,11 +26,17 @@
     <Setting Name="AmimateEnabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="FabAsset" Type="System.Boolean" Scope="User">
+    <Setting Name="FabNotificationEnabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="LimitedTime" Type="System.DateTime" Scope="User">
       <Value Profile="(Default)">1990-01-01</Value>
+    </Setting>
+    <Setting Name="AutoStart" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="OpenEpic" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

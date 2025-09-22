@@ -78,18 +78,23 @@
                             </ui:AppBarToggleButton.Icon>
                         </ui:AppBarToggleButton>
                     </StackPanel>
-                    <TextBlock TextWrapping="Wrap" Text="实验性选项" Margin="0,10,0,10"/>
-                    <TextBlock TextWrapping="Wrap" Text="开启实验性选项后会启用一些尚未完成开发的实验性功能，这些功能可能会不适应未来版本" Margin="0,0,0,10"/>
-                    <TextBlock x:Name="LimitedTime" TextWrapping="Wrap" Text="{Binding LimitedTime, StringFormat='Fab免费资产获取截至时间：{0:yyyy-MM-dd HH:mm:ss}'}" Margin="0,0,0,10"/>
-                    <StackPanel x:Name="Setting_Panel_Beta" Orientation="Horizontal">
-                        <ui:AppBarToggleButton x:Name="beta_Button0" Label="Fab免费资产领取通知" IsChecked="{Binding FabAsset}" Margin="0,0,10,0" >
-                            <ui:AppBarToggleButton.Icon>
-                                <ui:FontIcon
+                    <GroupBox Height="100">
+                        <GroupBox.Header>
+                            <TextBlock TextWrapping="Wrap" Text="实验性选项"/>
+                        </GroupBox.Header>
+                        <Grid Height="111">
+                            <TextBlock x:Name="LimitedTime" TextWrapping="Wrap" Text="{Binding LimitedTime, StringFormat=Fab免费资产获取截至时间：\{0:yyyy-MM-dd HH:mm:ss\}}" Margin="0,0,0,96"/>
+                            <TextBlock TextWrapping="Wrap" Text="开启实验性选项后会启用一些尚未完成开发的实验性功能，这些功能可能会不适应未来版本" Margin="0,15,0,81"/>
+                            <ui:AppBarToggleButton x:Name="beta_Button0" Label="Fab免费资产领取通知" IsChecked="{Binding FabNotification}" Margin="0,40,0,0" >
+                                <ui:AppBarToggleButton.Icon>
+                                    <ui:FontIcon
                                     FontFamily="Segoe MDL2 Assets"
                                     Glyph="&#xEC24;" />
-                            </ui:AppBarToggleButton.Icon>
-                        </ui:AppBarToggleButton>
-                    </StackPanel>
+                                </ui:AppBarToggleButton.Icon>
+                            </ui:AppBarToggleButton>
+                        </Grid>
+                    </GroupBox>
+                    <!--实验性设置界面-->
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>

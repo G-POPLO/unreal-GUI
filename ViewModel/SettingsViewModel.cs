@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using unreal_GUI.Model;
+using Windows.Networking.PushNotifications;
 
 namespace unreal_GUI.ViewModel
 {
@@ -40,7 +41,7 @@ namespace unreal_GUI.ViewModel
         private bool _animationEnabled;
 
         [ObservableProperty]
-        private bool _fabAsset;
+        private bool _fabNotification;
 
         [ObservableProperty]
         private DateTime _limitedTime;
@@ -52,9 +53,9 @@ namespace unreal_GUI.ViewModel
             Gitcode = Properties.Settings.Default.Gitcode;
             ZenDashborad = Properties.Settings.Default.ZenDashborad;
             AutoUpdate = Properties.Settings.Default.AutoUpdate;
-            AnimationEnabled = Properties.Settings.Default.AmimateEnabled; // 默认启用动画效果
-            FabAsset = Properties.Settings.Default.FabAsset; // 初始化FabAsset
-            LimitedTime = Properties.Settings.Default.LimitedTime; // 初始化LimitedTime
+            AnimationEnabled = Properties.Settings.Default.AmimateEnabled;
+            FabNotification = Properties.Settings.Default.FabNotificationEnabled; 
+            LimitedTime = Properties.Settings.Default.LimitedTime; 
 
             if (File.Exists("settings.json"))
             {
@@ -130,7 +131,7 @@ namespace unreal_GUI.ViewModel
             Properties.Settings.Default.ZenDashborad = ZenDashborad;
             Properties.Settings.Default.AutoUpdate = AutoUpdate;
             Properties.Settings.Default.AmimateEnabled = AnimationEnabled;
-            Properties.Settings.Default.FabAsset = FabAsset; // 保存FabAsset设置
+            Properties.Settings.Default.FabNotificationEnabled = FabNotification; // 保存FabNotification设置
             Properties.Settings.Default.LimitedTime = LimitedTime; // 保存LimitedTime设置
             Properties.Settings.Default.Save();
 

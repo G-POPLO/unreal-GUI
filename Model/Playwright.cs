@@ -40,7 +40,7 @@ namespace unreal_GUI.Model
             // 等待页面加载完成
             await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
 
-            // 截图并保存
+            // 截图并保存，仅供测试使用
             await page.ScreenshotAsync(new PageScreenshotOptions()
             {
                 Path = "screenshot.png"

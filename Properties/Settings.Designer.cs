@@ -122,12 +122,12 @@ namespace unreal_GUI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool FabAsset {
+        public bool FabNotificationEnabled {
             get {
-                return ((bool)(this["FabAsset"]));
+                return ((bool)(this["FabNotificationEnabled"]));
             }
             set {
-                this["FabAsset"] = value;
+                this["FabNotificationEnabled"] = value;
             }
         }
         
@@ -140,6 +140,30 @@ namespace unreal_GUI.Properties {
             }
             set {
                 this["LimitedTime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoStart {
+            get {
+                return ((bool)(this["AutoStart"]));
+            }
+            set {
+                this["AutoStart"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool OpenEpic {
+            get {
+                return ((bool)(this["OpenEpic"]));
+            }
+            set {
+                this["OpenEpic"] = value;
             }
         }
     }

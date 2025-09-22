@@ -32,22 +32,16 @@ Unreal-GUI 是一款旨在简化虚幻引擎（Unreal Engine）相关操作流�
 2. 解压下载的文件到安装的目录。
 3. 运行 `Unreal-GUI.exe` 启动应用程序。
 
-## 使用方法
-
-1. 启动 Unreal-GUI 应用程序。
-2. 根据界面提示选择您需要执行的操作。
-3. 按照操作向导完成相应任务。
-
 ## 贡献指南
 
-我们欢迎任何形式的贡献！如果您想为项目贡献代码，请遵循以下步骤：
+我们欢迎任何形式的贡献！如想为项目贡献代码，请遵循以下步骤：
 
 1. Fork 本仓库
 2. 创建您的特性分支 (`git checkout -b feature/NewFeature`)
 3. 提交您的更改 (`git commit -m 'Add some NewFeature'`)
 4. 推送到分支 (`git push origin feature/develop`)
 5. 开启一个 Pull Request
-6. 等待代码审查，若完毕，则会合并您的更改到主分支并随新版本发布。
+6. 等待代码审查，若完毕，则会合并更改到主分支并随新版本发布。
 
 ## 许可证
 
@@ -59,7 +53,7 @@ Unreal-GUI 是一款旨在简化虚幻引擎（Unreal Engine）相关操作流�
 
 - [Playwright](https://github.com/microsoft/playwright-dotnet)
 - [renom](https://github.com/UnrealisticDev/Renom)
-- [ModernWpf](https://github.com/ModernWpf/ModernWpf)
+- [ModernWpf](https://github.com/Kinnara/ModernWpf)
 - [SevenZipSharp](https://github.com/squid-box/SevenZipSharp)
 - [MVVM Toolkit](https://github.com/CommunityToolkit/dotnet)
 - [Newtonsoft.Json](https://www.newtonsoft.com/json)
