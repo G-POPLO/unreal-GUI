@@ -1,7 +1,5 @@
 using Microsoft.Playwright;
 using Microsoft.Toolkit.Uwp.Notifications;
-
-using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

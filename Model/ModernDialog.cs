@@ -1,7 +1,6 @@
+using iNKORE.UI.WPF.Modern.Controls;
 using Markdig;
 using Markdig.Wpf;
-using ModernWpf;
-using ModernWpf.Controls;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -137,8 +136,9 @@ namespace unreal_GUI.Model
             if (result == ContentDialogResult.Primary)
             {
                 // 通知MainWindow页面刷新
-                var mainWindowViewModel = Application.Current.MainWindow.DataContext as MainWindowViewModel;
-                mainWindowViewModel?.NavigateToQuickAccessCommand.Execute(null);
+                // 由于已切换到NavigationView，不再需要手动导航命令
+                // var mainWindowViewModel = Application.Current.MainWindow.DataContext as MainWindowViewModel;
+                // mainWindowViewModel?.NavigateToQuickAccessCommand.Execute(null);
             }
             return result;
         }
@@ -178,8 +178,9 @@ namespace unreal_GUI.Model
             if (result == ContentDialogResult.Primary)
             {
                 // 通知MainWindow页面刷新
-                var mainWindowViewModel = Application.Current.MainWindow.DataContext as MainWindowViewModel;
-                mainWindowViewModel?.NavigateToQuickAccessCommand.Execute(null);
+                // 由于已切换到NavigationView，不再需要手动导航命令
+                // var mainWindowViewModel = Application.Current.MainWindow.DataContext as MainWindowViewModel;
+                // mainWindowViewModel?.NavigateToQuickAccessCommand.Execute(null);
             }
 
             return result;

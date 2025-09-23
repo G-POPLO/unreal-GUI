@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using unreal_GUI.Model;
-using unreal_GUI.View;
 
 namespace unreal_GUI.ViewModel
 {
@@ -19,7 +18,7 @@ namespace unreal_GUI.ViewModel
         private UIElement _currentView;
 
         // 用于页面跳转动画的 ContentControl
-        public ContentControl ContentContainer { get; set; }
+        // public ContentControl ContentContainer { get; set; }
 
         public MainWindowViewModel()
         {
@@ -53,27 +52,30 @@ namespace unreal_GUI.ViewModel
         // 若没有发现设置JSON文件，则弹窗提示
         public async Task InitializeJson_Async()
         {
+            // 由于已切换到NavigationView，此方法中的ContentContainer相关代码已不再需要
             if (!File.Exists("settings.json"))
             {
-                bool? result = await ModernDialog.ShowConfirmAsync("未检测到引擎，请先去设置引擎目录", "提示");
-
-                if (result == true)
-                {
-                    ContentContainer.Content = new Settings();
-                }
-                else
-                {
-                    ContentContainer.Content = new Compile();
-                }
+                // bool? result = await ModernDialog.ShowConfirmAsync("未检测到引擎，请先去设置引擎目录", "提示");
+                // 
+                // if (result == true)
+                // {
+                //     ContentContainer.Content = new Settings();
+                // }
+                // else
+                // {
+                //     ContentContainer.Content = new Compile();
+                // }
             }
-            else
-            {
-                ContentContainer.Content = new Compile();
-            }
+            // else
+            // {
+            //     ContentContainer.Content = new Compile();
+            // }
         }
 
 
         // 跳转到指定视图
+        // 由于NavigationView自带页面切换动画，因此注释掉自定义动画效果
+        /*
         public void NavigateToView(UIElement view)
         {
             if (Properties.Settings.Default.AmimateEnabled)
@@ -86,7 +88,10 @@ namespace unreal_GUI.ViewModel
             }
 
         }
+        */
 
+        // 由于已切换到NavigationView，不再需要这些命令
+        /*
         [RelayCommand]
         private void NavigateToCompile()
         {
@@ -122,6 +127,7 @@ namespace unreal_GUI.ViewModel
         {
             NavigateToView(new About());
         }
+        */
 
     }
 }

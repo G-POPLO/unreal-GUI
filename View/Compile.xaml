@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:unreal_GUI"
-             xmlns:ui="http://schemas.modernwpf.com/2019"
+            xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Margin="20">
@@ -82,14 +82,16 @@
                             <TextBlock Text="执行编译" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
                         
-                        <TextBlock Text="{Binding TipsText}" TextWrapping="Wrap" Margin="0,0,0,15" Visibility="{Binding TipsVisibility}"/>
+                        
                         <Button Margin="0,0,0,0" Command="{Binding CompileCommand}" IsEnabled="{Binding IsCompileButtonEnabled}" 
                                 Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
                             <StackPanel Orientation="Horizontal">
                                 <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE768;" Margin="0,0,5,0"/>
                                 <TextBlock Text="开始编译"/>
+                                
                             </StackPanel>
                         </Button>
+                        <TextBlock Text="{Binding TipsText}" TextWrapping="Wrap" Margin="0,0,0,15" Visibility="{Binding TipsVisibility}"/>
                     </StackPanel>
                 </Border>
             </StackPanel>
