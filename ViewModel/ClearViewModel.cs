@@ -19,46 +19,38 @@ namespace unreal_GUI.ViewModel
         private string _inputPath = "";
 
         [ObservableProperty]
-        private string _tipText = "";
+        private string _tipClearCache = "";
 
         [ObservableProperty]
-        private string _tipText2 = "";
+        private string _tipClearLog = "";
 
-        [ObservableProperty]
-        private string _dDCPath = "";
+        //[ObservableProperty]
+        //private string _dDCPath = "";
 
-        [ObservableProperty]
-        private string _dDCSharePath = "";
+        //[ObservableProperty]
+        //private string _dDCSharePath = "";
 
-        [ObservableProperty]
-        private string _totalSize = "";
+        //[ObservableProperty]
+        //private string _totalSize = "";
 
-        [ObservableProperty]
-        private string _dDCErrorText = "";
+        //[ObservableProperty]
+        //private string _dDCErrorText = "";
 
         [ObservableProperty]
         private bool _isCleanButtonEnabled = false;
 
-        [ObservableProperty]
-        private bool _isOldDDCPanelVisible = false;
+        //[ObservableProperty]
+        //private bool _isOldDDCPanelVisible = false;
 
-        [ObservableProperty]
-        private bool _isZenPanelVisible = true;
-
-        [ObservableProperty]
-        private bool _isDerivedDataCacheChecked = false;
+        //[ObservableProperty]
+        //private bool _isZenPanelVisible = true;
 
         [ObservableProperty]
         private bool _isSaveGameChecked = false;
 
         [ObservableProperty]
-        private bool _savedChecked = false;
+        private bool _isDerivedDataCacheChecked = false;
 
-        [ObservableProperty]
-        private bool _contentChecked = false;
-
-        [ObservableProperty]
-        private bool _intermediateChecked = false;
 
         [ObservableProperty]
         private SettingsViewModel.EngineInfo _selectedEngine;
@@ -66,11 +58,11 @@ namespace unreal_GUI.ViewModel
         public ClearViewModel()
         {
             // 初始化设置
-            UpdatePanelVisibility();
+            //UpdatePanelVisibility();
             LoadEngineList();
-            DDCPath = $"DDC全局缓存路径：{Properties.Settings.Default.DDC}";
-            DDCSharePath = $"DDC共享缓存路径：{Properties.Settings.Default.DDCShare}";
-            TotalSize = $"总计大小：{Properties.Settings.Default.DDCTotal:0.00} GB";
+            //DDCPath = $"DDC全局缓存路径：{Properties.Settings.Default.DDC}";
+            //DDCSharePath = $"DDC共享缓存路径：{Properties.Settings.Default.DDCShare}";
+            //TotalSize = $"总计大小：{Properties.Settings.Default.DDCTotal:0.00} GB";
             
         }
 
@@ -87,16 +79,17 @@ namespace unreal_GUI.ViewModel
                 catch
                 {
                     // 如果JSON文件损坏，初始化为空列表
+                    _ = ModernDialog.ShowInfoAsync("JSON文件已损坏，已重置为默认状态");
                     EngineList = [];
                 }
             }
         }
 
-        private void UpdatePanelVisibility()
-        {
-            IsOldDDCPanelVisible = !Properties.Settings.Default.ZenDashborad;
-            IsZenPanelVisible = Properties.Settings.Default.ZenDashborad;
-        }
+        //private void UpdatePanelVisibility()
+        //{
+        //    IsOldDDCPanelVisible = !Properties.Settings.Default.ZenDashborad;
+        //    IsZenPanelVisible = Properties.Settings.Default.ZenDashborad;
+        //}
 
         [RelayCommand]
         private void SelectInputPath()
@@ -105,7 +98,7 @@ namespace unreal_GUI.ViewModel
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 InputPath = dialog.SelectedPath;
-                TipText = "工程路径已设置: " + dialog.SelectedPath;
+                TipClearCache = "工程路径已设置: " + dialog.SelectedPath;
                 IsCleanButtonEnabled = !string.IsNullOrWhiteSpace(InputPath);
             }
         }
@@ -117,7 +110,7 @@ namespace unreal_GUI.ViewModel
             {
                 if (string.IsNullOrEmpty(InputPath))
                 {
-                    TipText = "请先设置工程路径";
+                    TipClearCache = "请先设置工程路径";
                     return;
                 }
 
@@ -142,7 +135,7 @@ namespace unreal_GUI.ViewModel
                 foreach (var file in Directory.GetFiles(InputPath, "*.sln", SearchOption.TopDirectoryOnly))
                     File.Delete(file);
 
-                TipText = "清理完毕";
+                TipClearCache = "清理完毕";
                 System.Media.SoundPlayer player = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-on.wav"));
                 player.Play();
                 if (Properties.Settings.Default.AutoOpen)
@@ -152,65 +145,66 @@ namespace unreal_GUI.ViewModel
             }
             catch (Exception ex)
             {
-                TipText = "清理失败: " + ex.Message;
+                
+                TipClearCache = "清理失败: " + ex.Message;
                 System.Media.SoundPlayer player = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav"));
                 player.Play();
             }
         }
 
-        [RelayCommand]
-        private void FindDDCPaths()
-        {
-            try
-            {
-                using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\\Epic Games\\GlobalDataCachePath");
-                var localPath = key?.GetValue("UE-LocalDataCachePath")?.ToString();
-                var sharedPath = key?.GetValue("UE-SharedDataCachePath")?.ToString();
+        //[RelayCommand]
+        //private void FindDDCPaths()
+        //{
+        //    try
+        //    {
+        //        using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\\Epic Games\\GlobalDataCachePath");
+        //        var localPath = key?.GetValue("UE-LocalDataCachePath")?.ToString();
+        //        var sharedPath = key?.GetValue("UE-SharedDataCachePath")?.ToString();
 
-                if (!string.IsNullOrEmpty(localPath))
-                {
-                    DDCPath = $"DDC全局缓存路径：{localPath}";
-                    Properties.Settings.Default.DDC = localPath;
-                }
+        //        if (!string.IsNullOrEmpty(localPath))
+        //        {
+        //            DDCPath = $"DDC全局缓存路径：{localPath}";
+        //            Properties.Settings.Default.DDC = localPath;
+        //        }
 
-                if (!string.IsNullOrEmpty(sharedPath))
-                {
-                    DDCSharePath = $"DDC共享缓存路径：{sharedPath}";
-                    Properties.Settings.Default.DDCShare = sharedPath;
-                }
+        //        if (!string.IsNullOrEmpty(sharedPath))
+        //        {
+        //            DDCSharePath = $"DDC共享缓存路径：{sharedPath}";
+        //            Properties.Settings.Default.DDCShare = sharedPath;
+        //        }
 
-                Properties.Settings.Default.Save();
-            }
-            catch (Exception ex)
-            {
-                _ = ModernDialog.ShowConfirmAsync($"找不到DDC缓存路径：" + ex.Message, "提示");
-            }
-        }
+        //        Properties.Settings.Default.Save();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _ = ModernDialog.ShowConfirmAsync($"找不到DDC缓存路径：" + ex.Message, "提示");
+        //    }
+        //}
 
-        [RelayCommand]
-        private async Task CalculateTotalSize()
-        {
-            try
-            {
-                var ddcPath = Properties.Settings.Default.DDC;
-                var sharePath = Properties.Settings.Default.DDCShare;
+        //[RelayCommand]
+        //private async Task CalculateTotalSize()
+        //{
+        //    try
+        //    {
+        //        var ddcPath = Properties.Settings.Default.DDC;
+        //        var sharePath = Properties.Settings.Default.DDCShare;
 
-                if (string.IsNullOrEmpty(ddcPath) || string.IsNullOrEmpty(sharePath))
-                {
-                    throw new Exception("请先获取DDC缓存路径");
-                }
+        //        if (string.IsNullOrEmpty(ddcPath) || string.IsNullOrEmpty(sharePath))
+        //        {
+        //            throw new Exception("请先获取DDC缓存路径");
+        //        }
 
-                float totalSize = await Task.Run(() => CalculateDirectorySize(ddcPath) + CalculateDirectorySize(sharePath));
-                Properties.Settings.Default.DDCTotal = totalSize;
-                TotalSize = $"总计大小：{totalSize:0.00} GB";
-                Properties.Settings.Default.Save();
-            }
-            catch (Exception ex)
-            {
-                await ModernDialog.ShowInfoAsync("计算失败: " + ex.Message, "错误提示");
-                TotalSize = $"总计大小：{Properties.Settings.Default.DDCTotal:0.00} GB";
-            }
-        }
+        //        float totalSize = await Task.Run(() => CalculateDirectorySize(ddcPath) + CalculateDirectorySize(sharePath));
+        //        Properties.Settings.Default.DDCTotal = totalSize;
+        //        TotalSize = $"总计大小：{totalSize:0.00} GB";
+        //        Properties.Settings.Default.Save();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        await ModernDialog.ShowInfoAsync("计算失败: " + ex.Message, "错误提示");
+        //        TotalSize = $"总计大小：{Properties.Settings.Default.DDCTotal:0.00} GB";
+        //    }
+        //}
 
         [RelayCommand]
         private void OpenZenDashboard()
@@ -219,7 +213,7 @@ namespace unreal_GUI.ViewModel
             {
                 if (SelectedEngine == null)
                 {
-                    DDCErrorText = "请先从下拉框中选择引擎版本";
+                    TipClearCache = "请先从下拉框中选择引擎版本";
                     return;
                 }
 
@@ -249,22 +243,22 @@ namespace unreal_GUI.ViewModel
             });
         }
 
-        private static float CalculateDirectorySize(string path)
-        {
-            if (!Directory.Exists(path)) return 0;
+        //private static float CalculateDirectorySize(string path)
+        //{
+        //    if (!Directory.Exists(path)) return 0;
 
-            float size = 0;
-            try
-            {
-                foreach (var file in Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories))
-                {
-                    var info = new FileInfo(file);
-                    size += info.Length;
-                }
-            }
-            catch { }
-            return size / (1024 * 1024 * 1024); // 转换为GB
-        }
+        //    float size = 0;
+        //    try
+        //    {
+        //        foreach (var file in Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories))
+        //        {
+        //            var info = new FileInfo(file);
+        //            size += info.Length;
+        //        }
+        //    }
+        //    catch { }
+        //    return size / (1024 * 1024 * 1024); // 转换为GB
+        //}
 
         private static void DeleteDirectoryIfExists(string path)
         {
@@ -299,21 +293,21 @@ namespace unreal_GUI.ViewModel
 
                 }
 
-                TipText2 = "Log清理完毕";
+                TipClearLog = "Log清理完毕";
                 System.Media.SoundPlayer player = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-on.wav"));
                 player.Play();
             }
             catch (Exception ex)
             {
-                TipText2 = "Log清理失败: " + ex.Message;
+                TipClearLog = "Log清理失败: " + ex.Message;
                 System.Media.SoundPlayer player = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav"));
                 player.Play();
             }
         }
 
-        partial void OnInputPathChanged(string value)
-        {
-            IsCleanButtonEnabled = !string.IsNullOrWhiteSpace(value);
-        }
+        //partial void OnInputPathChanged(string value)
+        //{
+        //    IsCleanButtonEnabled = !string.IsNullOrWhiteSpace(value);
+        //}
     }
 }

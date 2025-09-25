@@ -167,6 +167,7 @@ namespace unreal_GUI.ViewModel
                 catch
                 {
                     // 如果JSON文件损坏，初始化为空列表
+                    _ = ModernDialog.ShowInfoAsync("JSON文件已损坏，已重置为默认状态");
                     settings.CustomButtons = [];
                 }
             }
