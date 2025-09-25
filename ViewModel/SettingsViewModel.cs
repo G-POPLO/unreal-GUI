@@ -46,6 +46,12 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private DateTime _limitedTime;
 
+        [ObservableProperty]
+        private bool _autoStart;
+
+        [ObservableProperty]
+        private bool _openEpic;
+
         public SettingsViewModel()
         {
             // 初始化设置
@@ -53,9 +59,12 @@ namespace unreal_GUI.ViewModel
             Gitcode = Properties.Settings.Default.Gitcode;
             ZenDashborad = Properties.Settings.Default.ZenDashborad;
             AutoUpdate = Properties.Settings.Default.AutoUpdate;
-            AnimationEnabled = Properties.Settings.Default.AmimateEnabled;
+           
             FabNotification = Properties.Settings.Default.FabNotificationEnabled; 
             LimitedTime = Properties.Settings.Default.LimitedTime; 
+            
+            AutoStart = Properties.Settings.Default.AutoStart;
+            OpenEpic = Properties.Settings.Default.OpenEpic;
 
             if (File.Exists("settings.json"))
             {
@@ -69,6 +78,7 @@ namespace unreal_GUI.ViewModel
                 catch
                 {
                     // 如果JSON文件损坏，初始化为空列表
+                    _ = ModernDialog.ShowInfoAsync("JSON文件已损坏，已重置为默认状态");
                     EngineInfos = [];
                 }
             }
@@ -130,9 +140,12 @@ namespace unreal_GUI.ViewModel
             Properties.Settings.Default.Gitcode = Gitcode;
             Properties.Settings.Default.ZenDashborad = ZenDashborad;
             Properties.Settings.Default.AutoUpdate = AutoUpdate;
-            Properties.Settings.Default.AmimateEnabled = AnimationEnabled;
+            
             Properties.Settings.Default.FabNotificationEnabled = FabNotification; // 保存FabNotification设置
             Properties.Settings.Default.LimitedTime = LimitedTime; // 保存LimitedTime设置
+            
+            Properties.Settings.Default.AutoStart = AutoStart; // 保存AutoStart设置
+            Properties.Settings.Default.OpenEpic = OpenEpic; // 保存OpenEpic设置
             Properties.Settings.Default.Save();
 
             // 保存JSON文件

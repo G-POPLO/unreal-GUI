@@ -50,7 +50,7 @@ namespace unreal_GUI.ViewModel
         }
 
         // 若没有发现设置JSON文件，则弹窗提示
-        public async Task InitializeJson_Async()
+        public Task InitializeJson_Async()
         {
             // 由于已切换到NavigationView，此方法中的ContentContainer相关代码已不再需要
             if (!File.Exists("settings.json"))
@@ -66,6 +66,8 @@ namespace unreal_GUI.ViewModel
                 //     ContentContainer.Content = new Compile();
                 // }
             }
+
+            return Task.CompletedTask;
             // else
             // {
             //     ContentContainer.Content = new Compile();

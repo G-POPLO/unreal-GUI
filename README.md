@@ -53,7 +53,7 @@ Unreal-GUI 是一款旨在简化虚幻引擎（Unreal Engine）相关操作流�
 
 - [Playwright](https://github.com/microsoft/playwright-dotnet)
 - [renom](https://github.com/UnrealisticDev/Renom)
-- [ModernWpf](https://github.com/Kinnara/ModernWpf)
+- [iNKORE.UI.WPF.Modern](https://github.com/iNKORE-NET/UI.WPF.Modern)
 - [SevenZipSharp](https://github.com/squid-box/SevenZipSharp)
 - [MVVM Toolkit](https://github.com/CommunityToolkit/dotnet)
 - [Newtonsoft.Json](https://www.newtonsoft.com/json)

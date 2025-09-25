@@ -135,10 +135,13 @@ namespace unreal_GUI.Model
             }
             if (result == ContentDialogResult.Primary)
             {
-                // 通知MainWindow页面刷新
-                // 由于已切换到NavigationView，不再需要手动导航命令
-                // var mainWindowViewModel = Application.Current.MainWindow.DataContext as MainWindowViewModel;
-                // mainWindowViewModel?.NavigateToQuickAccessCommand.Execute(null);
+                // 通知QuickAccess页面刷新
+                var mainWindow = Application.Current.MainWindow;
+                var quickAccess = mainWindow.FindName("QuickAccess") as QuickAccess;
+                if (quickAccess?.DataContext is QuickAccessViewModel viewModel)
+                {
+                    viewModel.LoadCustomButtons();
+                }
             }
             return result;
         }
@@ -177,10 +180,14 @@ namespace unreal_GUI.Model
 
             if (result == ContentDialogResult.Primary)
             {
-                // 通知MainWindow页面刷新
-                // 由于已切换到NavigationView，不再需要手动导航命令
-                // var mainWindowViewModel = Application.Current.MainWindow.DataContext as MainWindowViewModel;
-                // mainWindowViewModel?.NavigateToQuickAccessCommand.Execute(null);
+                // 通知QuickAccess页面刷新
+                var mainWindow = Application.Current.MainWindow;
+                var quickAccess = mainWindow.FindName("QuickAccess") as QuickAccess;
+                if (quickAccess?.DataContext is QuickAccessViewModel viewModel)
+                {
+                    //viewModel.LoadCustomButtons();
+                    //MainWindow.ContentFrame.Content = new Compile();
+                }
             }
 
             return result;

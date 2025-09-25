@@ -69,7 +69,14 @@
                                     <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;"/>
                                 </ui:AppBarToggleButton.Icon>
                             </ui:AppBarToggleButton>
-                            
+
+                            <ui:AppBarToggleButton x:Name="Button3" Label="应用程序启动时自动检查更新" 
+                        IsChecked="{Binding AutoUpdate}" Margin="0,0,10,0" HorizontalAlignment="Left">
+                                <ui:AppBarToggleButton.Icon>
+                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xECC5;"/>
+                                </ui:AppBarToggleButton.Icon>
+                            </ui:AppBarToggleButton>
+
                             <ui:AppBarToggleButton x:Name="Button1" Label="使用Gitcode作为更新下载源" 
                                                    IsChecked="{Binding Gitcode}" Margin="0,0,10,0" HorizontalAlignment="Left">
                                 <ui:AppBarToggleButton.Icon>
@@ -84,19 +91,9 @@
                                 </ui:AppBarToggleButton.Icon>
                             </ui:AppBarToggleButton>
                             
-                            <ui:AppBarToggleButton x:Name="Button3" Label="应用程序启动时自动检查更新" 
-                                                   IsChecked="{Binding AutoUpdate}" Margin="0,0,10,0" HorizontalAlignment="Left">
-                                <ui:AppBarToggleButton.Icon>
-                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xECC5;"/>
-                                </ui:AppBarToggleButton.Icon>
-                            </ui:AppBarToggleButton>
+                           
                             
-                            <ui:AppBarToggleButton x:Name="Button4" Label="开启动画效果" 
-                                                   IsChecked="{Binding AnimationEnabled}" HorizontalAlignment="Left">
-                                <ui:AppBarToggleButton.Icon>
-                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE7FD;"/>
-                                </ui:AppBarToggleButton.Icon>
-                            </ui:AppBarToggleButton>
+                           
                         </WrapPanel>
                     </StackPanel>
                 </Border>
@@ -124,7 +121,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="开机启动Fab提醒（检查完毕后应用程序会自动退出）" 
                                        VerticalAlignment="Center"/>
-                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right"/>
+                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding AutoStart}"/>
                         </Grid>
                         
                         <Grid Margin="0,0,0,15">
@@ -134,7 +131,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="使用Epic来打开Fab网站" 
                                        VerticalAlignment="Center"/>
-                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right"/>
+                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding OpenEpic}"/>
                         </Grid>
                         
                         <ui:AppBarToggleButton x:Name="beta_Button0" Label="Fab免费资产领取通知" 
