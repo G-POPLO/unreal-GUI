@@ -84,12 +84,7 @@
                                 </ui:AppBarToggleButton.Icon>
                             </ui:AppBarToggleButton>
                             
-                            <ui:AppBarToggleButton x:Name="Button2" Label="使用ZenDash来查看缓存信息" 
-                                                   IsChecked="{Binding ZenDashborad}" Margin="0,0,10,0" HorizontalAlignment="Left">
-                                <ui:AppBarToggleButton.Icon>
-                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE83B;"/>
-                                </ui:AppBarToggleButton.Icon>
-                            </ui:AppBarToggleButton>
+                           
                             
                            
                             

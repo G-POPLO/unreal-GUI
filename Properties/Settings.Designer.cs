@@ -25,18 +25,6 @@ namespace unreal_GUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DDC {
-            get {
-                return ((string)(this["DDC"]));
-            }
-            set {
-                this["DDC"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool AutoOpen {
             get {
@@ -44,42 +32,6 @@ namespace unreal_GUI.Properties {
             }
             set {
                 this["AutoOpen"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DDCShare {
-            get {
-                return ((string)(this["DDCShare"]));
-            }
-            set {
-                this["DDCShare"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public float DDCTotal {
-            get {
-                return ((float)(this["DDCTotal"]));
-            }
-            set {
-                this["DDCTotal"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ZenDashborad {
-            get {
-                return ((bool)(this["ZenDashborad"]));
-            }
-            set {
-                this["ZenDashborad"] = value;
             }
         }
         

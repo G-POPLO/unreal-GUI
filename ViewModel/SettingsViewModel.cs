@@ -57,7 +57,7 @@ namespace unreal_GUI.ViewModel
             // 初始化设置
             AutoOpen = Properties.Settings.Default.AutoOpen;
             Gitcode = Properties.Settings.Default.Gitcode;
-            ZenDashborad = Properties.Settings.Default.ZenDashborad;
+           
             AutoUpdate = Properties.Settings.Default.AutoUpdate;
            
             FabNotification = Properties.Settings.Default.FabNotificationEnabled; 
@@ -138,7 +138,7 @@ namespace unreal_GUI.ViewModel
             // 保存应用程序设置
             Properties.Settings.Default.AutoOpen = AutoOpen;
             Properties.Settings.Default.Gitcode = Gitcode;
-            Properties.Settings.Default.ZenDashborad = ZenDashborad;
+         
             Properties.Settings.Default.AutoUpdate = AutoUpdate;
             
             Properties.Settings.Default.FabNotificationEnabled = FabNotification; // 保存FabNotification设置
