@@ -101,22 +101,23 @@
                         
                         <TextBlock TextWrapping="Wrap" Text="选择引擎版本：" Margin="0,0,0,10"/>
                         <ComboBox ItemsSource="{Binding EngineList}" DisplayMemberPath="Version" SelectedItem="{Binding SelectedEngine}" Margin="0,0,0,15"/>
-                        
-                        <Button x:Name="OpenZenDashboardButton" Margin="0,0,0,10" Command="{Binding OpenZenDashboardCommand}" 
+                        <WrapPanel Orientation="Horizontal">
+                            <Button x:Name="OpenZenDashboardButton" Margin="0,0,10,0" Command="{Binding OpenZenDashboardCommand}" 
                                 Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
-                            <StackPanel Orientation="Horizontal">
-                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE7F4;" Margin="0,0,5,0"/>
-                                <TextBlock Text="打开Zen存储服务器仪表盘"/>
-                            </StackPanel>
-                        </Button>
-                        
-                        <Button x:Name="ZenDocumentationButton" Margin="0,0,0,0" Command="{Binding OpenDocumentationCommand}" 
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE7F4;" Margin="0,0,5,0"/>
+                                    <TextBlock Text="打开Zen存储服务器仪表盘"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button x:Name="ZenDocumentationButton" Margin="0,0,10,0" Command="{Binding OpenDocumentationCommand}" 
                                 Style="{DynamicResource DefaultButtonStyle}" HorizontalAlignment="Left">
-                            <StackPanel Orientation="Horizontal">
-                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE789;" Margin="0,0,5,0"/>
-                                <TextBlock Text="ZenDashboard文档"/>
-                            </StackPanel>
-                        </Button>
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE789;" Margin="0,0,5,0"/>
+                                    <TextBlock Text="ZenDashboard文档"/>
+                                </StackPanel>
+                            </Button>
+                        </WrapPanel>
                     </StackPanel>
                 </Border>
                 

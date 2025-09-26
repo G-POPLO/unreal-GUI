@@ -1,3 +1,6 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -5,9 +8,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using Newtonsoft.Json;
 using unreal_GUI.Model;
 
 namespace unreal_GUI.ViewModel
@@ -36,11 +36,15 @@ namespace unreal_GUI.ViewModel
 
                 if (Directory.Exists(pluginPath))
                 {
-                    Process.Start("explorer.exe", pluginPath);
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = pluginPath,
+                        UseShellExecute = true
+                    });
                 }
                 else
                 {
-                    _ = ModernDialog.ShowInfoAsync("目录不存在", $"未找到插件目录：\n{pluginPath}");
+                    _ = ModernDialog.ShowErrorAsync("目录不存在", $"未找到插件目录：\n{pluginPath}");
                 }
             }
         }
@@ -48,8 +52,7 @@ namespace unreal_GUI.ViewModel
         [RelayCommand]
         private static void OpenCustomDirectory(object selectedCustomButton)
         {
-            if (selectedCustomButton != null)
-            {
+          
                 dynamic customButton = selectedCustomButton;
                 string path = customButton.Path;
 
@@ -65,7 +68,7 @@ namespace unreal_GUI.ViewModel
                 {
                     _ = ModernDialog.ShowInfoAsync("目录不存在", $"未找到目录：\n{path}");
                 }
-            }
+            
         }
 
         [RelayCommand]

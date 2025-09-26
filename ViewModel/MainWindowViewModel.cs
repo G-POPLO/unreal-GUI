@@ -86,6 +86,7 @@ namespace unreal_GUI.ViewModel
                 }
                 else
                 {
+                    // 截图测试，仅Debug用
                     //await Playwright.GetPageContentAsync("https://bot.sannysoft.com/");
                 }
             }

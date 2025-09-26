@@ -28,13 +28,21 @@
                             <TextBlock Text="插件目录" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
                         
-                        <Button Margin="0,0,0,0" Command="{Binding OpenPluginDirectoryCommand}" 
-                                Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
-                            <StackPanel Orientation="Horizontal">
-                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
-                                <TextBlock Text="打开插件目录"/>
-                            </StackPanel>
-                        </Button>
+                        <!-- 根据引擎列表动态生成插件目录按钮 -->
+                        <ItemsControl ItemsSource="{Binding Engines}" Margin="0,0,0,10">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Margin="0,0,0,10" Command="{Binding DataContext.OpenPluginDirectoryCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                            CommandParameter="{Binding}" 
+                                            Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
+                                        <StackPanel Orientation="Horizontal">
+                                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
+                                            <TextBlock Text="{Binding DisplayName, StringFormat=' {0} 插件目录'}"/>
+                                        </StackPanel>
+                                    </Button>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </StackPanel>
                 </Border>
                 
@@ -47,25 +55,26 @@
                             <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE71B;" Margin="0,0,10,0" VerticalAlignment="Center"/>
                             <TextBlock Text="常用网站" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
-                        
-                        <Button Margin="0,0,0,10" Command="{Binding OpenWebsiteCommand}" HorizontalAlignment="Left">
-                            <StackPanel Orientation="Horizontal">
-                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE71B;" Margin="0,0,5,0"/>
-                                <TextBlock Text="访问官网"/>
-                            </StackPanel>
-                        </Button>
-                        <Button Margin="0,0,0,10" Command="{Binding OpenWebsiteCommand}" CommandParameter="https://docs.unrealengine.com/" HorizontalAlignment="Left">
-                            <StackPanel Orientation="Horizontal">
-                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE71B;" Margin="0,0,5,0"/>
-                                <TextBlock Text="官网"/>
-                            </StackPanel>
-                        </Button>
-                        <Button Margin="0,0,0,10" Command="{Binding OpenWebsiteCommand}" CommandParameter="https://docs.unrealengine.com/" HorizontalAlignment="Left">
-                            <StackPanel Orientation="Horizontal">
-                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE736;" Margin="0,0,5,0"/>
-                                <TextBlock Text="文档"/>
-                            </StackPanel>
-                        </Button>
+                        <WrapPanel Orientation="Horizontal">
+                            <Button Margin="0,0,10,10" Command="{Binding OpenWebsiteCommand}" CommandParameter="https://www.fab.com/" HorizontalAlignment="Left">
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE71B;" Margin="0,0,5,0"/>
+                                    <TextBlock Text="Fab"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Margin="0,0,10,10" Command="{Binding OpenWebsiteCommand}" CommandParameter="https://dev.epicgames.com/community/unreal-engine/learning" HorizontalAlignment="Left">
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE71B;" Margin="0,0,5,0"/>
+                                    <TextBlock Text="社区学习库"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Margin="0,0,10,10" Command="{Binding OpenWebsiteCommand}" CommandParameter="https://docs.unrealengine.com/" HorizontalAlignment="Left">
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE736;" Margin="0,0,5,0"/>
+                                    <TextBlock Text="文档"/>
+                                </StackPanel>
+                            </Button>
+                        </WrapPanel>
                     </StackPanel>
                 </Border>
                 
