@@ -28,9 +28,9 @@
                             <TextBlock Text="目录选择" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
                         
-                        <TextBlock TextWrapping="Wrap" Text="选择需要清理的目录：" Margin="0,0,0,10"/>
-                        <TextBox x:Name="PathBox" Text="{Binding PathText, Mode=TwoWay}" Margin="0,0,0,10" IsReadOnly="True"/>
-                        <Button x:Name="SelectPath" Margin="0,0,0,0" Command="{Binding SelectPathCommand}" 
+                        <TextBlock TextWrapping="Wrap" Text="选择需要清理的项目目录：" Margin="0,0,0,10"/>
+                        <TextBox x:Name="PathBox" Text="{Binding InputPath, Mode=TwoWay}" Margin="0,0,0,10" IsReadOnly="True"/>
+                        <Button x:Name="SelectPath" Margin="0,0,0,0" Command="{Binding SelectInputPathCommand}" 
                                 Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
                             <StackPanel Orientation="Horizontal">
                                 <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
@@ -50,7 +50,7 @@
                             <TextBlock Text="文件类型选择" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
                         
-                        <TextBlock TextWrapping="Wrap" Text="选择需要清理的文件类型：" Margin="0,0,0,10"/>
+                        <TextBlock TextWrapping="Wrap" Text="选择清理过程中需要排除的目录：" Margin="0,0,0,10"/>
                         <CheckBox x:Name="Saved" Margin="0,0,0,10" IsChecked="{Binding IsSaveGameChecked}">
                             <StackPanel Orientation="Horizontal">
                                 <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;" Margin="0,0,5,0" FontSize="12"/>
@@ -82,11 +82,41 @@
                             <StackPanel Orientation="Horizontal">
                                 <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE74D;" Margin="0,0,5,0"/>
                                 <TextBlock Text="开始清理"/>
-                                <TextBlock TextWrapping="Wrap" Text="{Binding TipText}" Margin="0,0,0,0"/>
                             </StackPanel>
                         </Button>
                         
-                        <TextBlock x:Name="Result" TextWrapping="Wrap" Text="{Binding ResultText}" Margin="0,0,0,0"/>
+                        <TextBlock x:Name="Result" TextWrapping="Wrap" Text="{Binding TipClearCache}" Margin="0,0,0,0"/>
+                    </StackPanel>
+                </Border>
+                
+                <!-- ZenDashboard卡片 -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                        BorderThickness="1" CornerRadius="4" Margin="0,0,0,20">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE7F4;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Zen存储服务器仪表盘" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        
+                        <TextBlock TextWrapping="Wrap" Text="选择引擎版本：" Margin="0,0,0,10"/>
+                        <ComboBox ItemsSource="{Binding EngineList}" DisplayMemberPath="Version" SelectedItem="{Binding SelectedEngine}" Margin="0,0,0,15"/>
+                        
+                        <Button x:Name="OpenZenDashboardButton" Margin="0,0,0,10" Command="{Binding OpenZenDashboardCommand}" 
+                                Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE7F4;" Margin="0,0,5,0"/>
+                                <TextBlock Text="打开Zen存储服务器仪表盘"/>
+                            </StackPanel>
+                        </Button>
+                        
+                        <Button x:Name="ZenDocumentationButton" Margin="0,0,0,0" Command="{Binding OpenDocumentationCommand}" 
+                                Style="{DynamicResource DefaultButtonStyle}" HorizontalAlignment="Left">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE789;" Margin="0,0,5,0"/>
+                                <TextBlock Text="ZenDashboard文档"/>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
                 </Border>
                 

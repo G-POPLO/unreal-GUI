@@ -56,6 +56,7 @@
   <PropertyGroup>
     <GenerateDependencyFile>false</GenerateDependencyFile>
     <RepositoryUrl>https://github.com/G-POPLO/unreal-GUI</RepositoryUrl>
+    <AnalysisLevel>latest</AnalysisLevel>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -64,18 +65,29 @@
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <Optimize>True</Optimize>
   </PropertyGroup>
+  
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <DebugType>none</DebugType>
     <WarningLevel>3</WarningLevel>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <Optimize>True</Optimize>
   </PropertyGroup>
+  
   <ItemGroup>
     <Compile Remove="Model\Puppeteer.cs" />
   </ItemGroup>
 
-  
+  <!--指定使用的浏览器-->
+  <PropertyGroup>
 
-
+    <Playwright>
+      <BrowserName>chromium</BrowserName>
+      <LaunchOptions>
+        <Channel>msedge</Channel>
+      </LaunchOptions>
+    </Playwright>
+    
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="iNKORE.UI.WPF.Modern" Version="0.10.1" />
@@ -95,6 +107,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
   </ItemGroup>
+  
   <ItemGroup>
     <None Update="Icon\icon.png">
       <Pack>True</Pack>

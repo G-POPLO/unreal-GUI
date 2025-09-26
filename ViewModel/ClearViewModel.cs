@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Win32;
 using unreal_GUI.Model;
 
 namespace unreal_GUI.ViewModel
@@ -94,11 +95,18 @@ namespace unreal_GUI.ViewModel
         [RelayCommand]
         private void SelectInputPath()
         {
-            var dialog = new System.Windows.Forms.FolderBrowserDialog();
-            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            var dialog = new OpenFileDialog
             {
-                InputPath = dialog.SelectedPath;
-                TipClearCache = "工程路径已设置: " + dialog.SelectedPath;
+                ValidateNames = false,
+                CheckFileExists = false,
+                CheckPathExists = true,               
+            };
+            
+            if (dialog.ShowDialog() == true)
+            {
+                // 获取选择的文件夹路径
+                InputPath = Path.GetDirectoryName(dialog.FileName);
+                TipClearCache = "工程路径已设置: " + InputPath;
                 IsCleanButtonEnabled = !string.IsNullOrWhiteSpace(InputPath);
             }
         }
