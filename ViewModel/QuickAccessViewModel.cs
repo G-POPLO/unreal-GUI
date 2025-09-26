@@ -23,6 +23,7 @@ namespace unreal_GUI.ViewModel
         public QuickAccessViewModel()
         {
             LoadEngineList();
+          
         }
 
         [RelayCommand]

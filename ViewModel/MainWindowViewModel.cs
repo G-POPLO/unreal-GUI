@@ -1,29 +1,67 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Toolkit.Uwp.Notifications;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Diagnostics;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using unreal_GUI.Model;
 
+
 namespace unreal_GUI.ViewModel
 {
     public partial class MainWindowViewModel : ObservableObject
     {
-        [ObservableProperty]
-        private UIElement _currentView;
+        // 定义页面跳转请求事件
+        public event EventHandler<string> NavigationRequested;
 
-        // 用于页面跳转动画的 ContentControl
-        // public ContentControl ContentContainer { get; set; }
+        // 当前选中的页面标签
+        [ObservableProperty]
+        private string currentPageTag = "Compile";
+
+
+        // 导航历史记录
+        [ObservableProperty]
+        private ObservableCollection<string> navigationHistory = new();
+        
+        // 导航到指定页面的命令
+        [RelayCommand]
+        private void NavigateToPage(string pageTag)
+        {
+         
+                CurrentPageTag = pageTag;
+                NavigationRequested?.Invoke(this, pageTag);
+                
+                // 添加到导航历史
+                if (!NavigationHistory.Contains(pageTag))
+                {
+                    NavigationHistory.Add(pageTag);
+                }
+
+            
+        }
+        
+        // 返回上一页的命令
+        [RelayCommand]
+        private void GoBack()
+        {
+            if (NavigationHistory.Count > 1)
+            {
+                // 移除当前页面
+                NavigationHistory.RemoveAt(NavigationHistory.Count - 1);
+                
+                // 获取上一个页面
+                string previousPage = NavigationHistory[NavigationHistory.Count - 1];
+                NavigateToPage(previousPage);
+            }
+        }
 
         public MainWindowViewModel()
         {
-            // 初始化时导航到编译视图
-            // 注意：在MainWindow_Loaded事件中会设置ContentContainer并调用NavigateToView
+            // 初始化时添加默认页面到历史记录
+            NavigationHistory.Add("Compile");
         }
 
         public static async Task AutoUpdate()
@@ -48,92 +86,56 @@ namespace unreal_GUI.ViewModel
                 }
                 else
                 {
-                    
-                    await Playwright.GetPageContentAsync("https://bot.sannysoft.com/");
+                    //await Playwright.GetPageContentAsync("https://bot.sannysoft.com/");
                 }
             }
         }
 
-        // 若没有发现设置JSON文件，则弹窗提示
-        public Task InitializeJson_Async()
+        // 根据页面标签获取页面类型
+        public Type GetPageTypeByTag(string tag)
         {
-            // 由于已切换到NavigationView，此方法中的ContentContainer相关代码已不再需要
+            return tag switch 
+            {
+                "Compile" => typeof(Compile),
+                "Rename" => typeof(Rename),
+                "QuickAccess" => typeof(QuickAccess),
+                "Clear" => typeof(Clear),
+                "Settings" => typeof(Settings),
+                "About" => typeof(About),
+                _ => typeof(Compile)
+            };
+        }
+        
+        // 处理来自视图的导航请求
+        public void HandleNavigationRequest(string pageTag)
+        {
+            NavigateToPage(pageTag);
+        }
+        
+        // 若没有发现设置JSON文件，则弹窗提示
+        public async Task InitializeJson_Async()
+        {
+            
             if (!File.Exists("settings.json"))
             {
-                // bool? result = await ModernDialog.ShowConfirmAsync("未检测到引擎，请先去设置引擎目录", "提示");
-                // 
-                // if (result == true)
-                // {
-                //     ContentContainer.Content = new Settings();
-                // }
-                // else
-                // {
-                //     ContentContainer.Content = new Compile();
-                // }
-            }
+                bool? result = await ModernDialog.ShowConfirmAsync("未检测到引擎，请先去设置引擎目录", "提示");
 
-            return Task.CompletedTask;
-            // else
-            // {
-            //     ContentContainer.Content = new Compile();
-            // }
-        }
-
-
-        // 跳转到指定视图
-        // 由于NavigationView自带页面切换动画，因此注释掉自定义动画效果
-        /*
-        public void NavigateToView(UIElement view)
-        {
-            if (Properties.Settings.Default.AmimateEnabled)
-            {
-                PageTransitionAnimation.ApplyTransition(ContentContainer, view);
+                if (result == true)
+                {
+                    // 用户选择"是"，触发导航到设置页面事件
+                    NavigateToPage("Settings");
+                }
+                else
+                {
+                    // 用户选择"否"，触发导航到编译页面事件
+                    NavigateToPage("Compile");
+                }
             }
             else
             {
-                ContentContainer.Content = view;
+                // 文件存在，触发导航到编译页面事件
+                NavigateToPage("Compile");
             }
-
         }
-        */
-
-        // 由于已切换到NavigationView，不再需要这些命令
-        /*
-        [RelayCommand]
-        private void NavigateToCompile()
-        {
-            NavigateToView(new Compile());
-        }
-
-        [RelayCommand]
-        private void NavigateToRename()
-        {
-            NavigateToView(new Rename());
-        }
-
-        [RelayCommand]
-        private void NavigateToQuickAccess()
-        {
-            NavigateToView(new QuickAccess());
-        }
-
-        [RelayCommand]
-        private void NavigateToClear()
-        {
-            NavigateToView(new Clear());
-        }
-
-        [RelayCommand]
-        private void NavigateToSettings()
-        {
-            NavigateToView(new Settings());
-        }
-
-        [RelayCommand]
-        private void NavigateToAbout()
-        {
-            NavigateToView(new About());
-        }
-        */
     }
 }

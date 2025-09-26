@@ -15,6 +15,8 @@ namespace unreal_GUI.Model
 {
     public static class ModernDialog
     {
+        public static event EventHandler<string> NavigationRequested;
+
         /// <summary>
         /// 显示一个带 Yes/No 按钮的对话框
         /// </summary>
@@ -210,19 +212,15 @@ namespace unreal_GUI.Model
                     var jsonSettings = JsonConvert.SerializeObject(settings, Formatting.Indented);
                     File.WriteAllText("settings.json", jsonSettings);
                 }
-
-
             }
+            
             if (result == ContentDialogResult.Primary)
             {
                 // 通知QuickAccess页面刷新
-                var mainWindow = Application.Current.MainWindow;
-                var quickAccess = mainWindow.FindName("QuickAccess") as QuickAccess;
-                if (quickAccess?.DataContext is QuickAccessViewModel viewModel)
-                {
-                    viewModel.LoadCustomButtons();
-                }
+                NavigationRequested?.Invoke(null, "QuickAccess");
+                return result;
             }
+            
             return result;
         }
 
@@ -260,14 +258,8 @@ namespace unreal_GUI.Model
 
             if (result == ContentDialogResult.Primary)
             {
-                // 通知QuickAccess页面刷新
-                var mainWindow = Application.Current.MainWindow;
-                var quickAccess = mainWindow.FindName("QuickAccess") as QuickAccess;
-                if (quickAccess?.DataContext is QuickAccessViewModel viewModel)
-                {
-                    //viewModel.LoadCustomButtons();
-                    //MainWindow.ContentFrame.Content = new Compile();
-                }
+                // 关闭时通知QuickAccess页面刷新
+                NavigationRequested?.Invoke(null, "QuickAccess");
             }
 
             return result;

@@ -11,13 +11,18 @@
     ui:WindowHelper.UseModernWindowStyle="True">
     
     <Window.DataContext>
-        <viewModel:MainWindowViewModel x:Name="ViewModel" />
+        <viewModel:MainWindowViewModel />
     </Window.DataContext>
     <Grid>
         <ui:NavigationView x:Name="NavigationView" 
+                           Tag="{Binding CurrentPageTag, Mode=TwoWay}"
+                           
                            SelectionChanged="NavigationView_SelectionChanged"
+                           BackRequested="NavigationView_BackRequested"
+                           
                            IsPaneOpen="False"
-                           PaneDisplayMode="Top">
+                           PaneDisplayMode="Top"
+                           IsBackButtonVisible="Auto">
             <ui:NavigationView.MenuItems>
                 <ui:NavigationViewItem Content="插件编译" Tag="Compile">
                     <ui:NavigationViewItem.Icon>
@@ -50,7 +55,7 @@
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
             </ui:NavigationView.MenuItems>
-            <ui:Frame x:Name="ContentFrame" Margin="0,0,0,0" />
+            <ui:Frame x:Name="ContentFrame" Margin="0,0,0,0" Navigated="ContentFrame_Navigated" />
         </ui:NavigationView>
     </Grid>
 </Window>

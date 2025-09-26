@@ -7,7 +7,8 @@
              xmlns:viewmodel="clr-namespace:unreal_GUI.ViewModel"
             xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             Unloaded="UserControl_Unloaded">
     <UserControl.DataContext>
         <viewmodel:QuickAccessViewModel />
     </UserControl.DataContext>
@@ -91,13 +92,22 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                         
-                        <Button Margin="0,0,0,0" Command="{Binding AddCustomCommand}" 
-                                Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
-                            <StackPanel Orientation="Horizontal">
-                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE710;" Margin="0,0,5,0"/>
-                                <TextBlock Text="添加自定义文件夹"/>
-                            </StackPanel>
-                        </Button>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Margin="0,0,10,0" Command="{Binding AddCustomCommand}" 
+                                    Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE710;" Margin="0,0,5,0"/>
+                                    <TextBlock Text="添加"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Margin="0,0,0,0" Command="{Binding DeleteCustomCommand}" 
+                                    Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE74D;" Margin="0,0,5,0"/>
+                                    <TextBlock Text="删除"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
                     </StackPanel>
                 </Border>
             </StackPanel>
