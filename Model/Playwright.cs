@@ -96,12 +96,6 @@ namespace unreal_GUI.Model
                 WaitUntil = WaitUntilState.DOMContentLoaded,               
             });
 
-            // 检查响应状态码
-            if (response?.Status == 403)
-            {
-                throw new Exception("网站返回403 Forbidden错误，可能已被反爬虫机制拦截");
-            }
-
             // 构建CSS选择器
             string selector = "h2";
             if (classSelectors != null && classSelectors.Length > 0)
