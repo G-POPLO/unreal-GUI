@@ -83,15 +83,6 @@
                                     <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEC05;"/>
                                 </ui:AppBarToggleButton.Icon>
                             </ui:AppBarToggleButton>
-<<<<<<< HEAD
-=======
-                            
-                           
-                            
-                           
-                            
-                           
->>>>>>> 1aea09494006f7f9a2a0b84e139d32de0df474f9
                         </WrapPanel>
                     </StackPanel>
                 </Border>

@@ -74,7 +74,7 @@ namespace unreal_GUI.Model
             using var playwright = await Microsoft.Playwright.Playwright.CreateAsync();
             await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
             {
-                Headless = true,
+                Headless = false,// 由于某些Fab网站反自动化机制，暂时关闭无头模式
                 Channel = "msedge",
                 Args = new[]
                 {
