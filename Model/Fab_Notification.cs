@@ -74,14 +74,9 @@ namespace unreal_GUI.Model
             {
                 // 显示错误信息
                 string errorMessage = ex.Message;
-                if (errorMessage.Contains("403"))
-                {
-                    _ = ModernDialog.ShowInfoAsync($"无法获取Fab免费资产信息: 网站返回403错误，可能已被反爬虫机制拦截。请稍后再试。", "错误");
-                }
-                else
-                {
+
                     _ = ModernDialog.ShowInfoAsync($"无法获取Fab免费资产信息: {ex.Message}", "错误");
-                }
+                
 
                 return null;
             }

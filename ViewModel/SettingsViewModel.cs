@@ -31,14 +31,10 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private bool _gitcode;
 
-        [ObservableProperty]
-        private bool _zenDashborad;
 
         [ObservableProperty]
         private bool _autoUpdate;
 
-        [ObservableProperty]
-        private bool _animationEnabled;
 
         [ObservableProperty]
         private bool _fabNotification;

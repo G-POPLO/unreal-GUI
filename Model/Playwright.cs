@@ -82,14 +82,13 @@ namespace unreal_GUI.Model
                     "--start-maximized"
                 }
             });
-            var page = await browser.NewPageAsync();
-
+            
             // 设置User-Agent以避免被检测为自动化浏览器
             var context = await browser.NewContextAsync(new BrowserNewContextOptions
             {
                 UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0",
             });
-
+            var page = await browser.NewPageAsync();
             // 导航到目标页面
             var response = await page.GotoAsync(url, new PageGotoOptions
             {

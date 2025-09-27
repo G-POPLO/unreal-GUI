@@ -78,7 +78,7 @@
   </ItemGroup>
 
   <!--指定使用的浏览器-->
-  <PropertyGroup>
+  <!--<PropertyGroup>
 
     <Playwright>
       <BrowserName>chromium</BrowserName>
@@ -87,7 +87,7 @@
       </LaunchOptions>
     </Playwright>
     
-  </PropertyGroup>
+  </PropertyGroup>-->
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="iNKORE.UI.WPF.Modern" Version="0.10.1" />
