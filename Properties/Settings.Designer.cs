@@ -106,5 +106,17 @@ namespace unreal_GUI.Properties {
                 this["OpenEpic"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool HeadlessEnabled {
+            get {
+                return ((bool)(this["HeadlessEnabled"]));
+            }
+            set {
+                this["HeadlessEnabled"] = value;
+            }
+        }
     }
 }

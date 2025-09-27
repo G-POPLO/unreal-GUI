@@ -85,7 +85,7 @@
                             </StackPanel>
                         </Button>
                         
-                        <TextBlock x:Name="Result" TextWrapping="Wrap" Text="{Binding TipClearCache}" Margin="0,0,0,0"/>
+                        <TextBlock x:Name="Result" TextWrapping="Wrap" Text="{Binding TipClearCache}" Margin="0,0,0,0" Visibility="Collapsed"/>
                     </StackPanel>
                 </Border>
                 
@@ -118,6 +118,7 @@
                                 </StackPanel>
                             </Button>
                         </WrapPanel>
+                        <TextBlock x:Name="ZenRusult" TextWrapping="Wrap" Text="{Binding TipZen}" Margin="0,0,0,0" Visibility="Collapsed"/>
                     </StackPanel>
                 </Border>
                 
@@ -130,7 +131,7 @@
                             <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE838;" Margin="0,0,10,0" VerticalAlignment="Center"/>
                             <TextBlock Text="清理日志" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
-                        
+                        <TextBlock TextWrapping="Wrap" Text="清理 AutomationTool\Logs 目录下的所有内容和 Local\UnrealEngine 目录下的所有 XmlConfigCache.bin 文件" Margin="0,0,10,0" FontWeight="Bold" FontSize="10" />
                         <Button x:Name="CleanLogButton" Margin="0,0,0,15" Command="{Binding CleanLogCommand}" 
                                 Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
                             <StackPanel Orientation="Horizontal">
