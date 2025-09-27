@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using unreal_GUI.Properties;
 
 namespace unreal_GUI.Model
 {
@@ -74,7 +75,7 @@ namespace unreal_GUI.Model
             using var playwright = await Microsoft.Playwright.Playwright.CreateAsync();
             await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
             {
-                Headless = false,// 由于某些Fab网站反自动化机制，暂时关闭无头模式
+                Headless = !Properties.Settings.Default.HeadlessEnabled, // 根据设置决定是否使用无头模式
                 Channel = "msedge",
                 Args = new[]
                 {

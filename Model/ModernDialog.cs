@@ -41,6 +41,7 @@ namespace unreal_GUI.Model
         {
             var markdownViewer = new Markdig.Wpf.MarkdownViewer();
             markdownViewer.Markdown = message;
+            markdownViewer.Document.FontFamily = new FontFamily("Microsoft YaHei UI");
             var dialog = new ContentDialog
             {
                 Title = title,

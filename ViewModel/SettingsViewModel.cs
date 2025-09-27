@@ -48,6 +48,9 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private bool _openEpic;
 
+        [ObservableProperty]
+        private bool _headlessEnabled;
+
         public SettingsViewModel()
         {
             // 初始化设置
@@ -61,6 +64,7 @@ namespace unreal_GUI.ViewModel
             
             AutoStart = Properties.Settings.Default.AutoStart;
             OpenEpic = Properties.Settings.Default.OpenEpic;
+            HeadlessEnabled = Properties.Settings.Default.HeadlessEnabled;
 
             if (File.Exists("settings.json"))
             {
@@ -142,6 +146,7 @@ namespace unreal_GUI.ViewModel
             
             Properties.Settings.Default.AutoStart = AutoStart; // 保存AutoStart设置
             Properties.Settings.Default.OpenEpic = OpenEpic; // 保存OpenEpic设置
+            Properties.Settings.Default.HeadlessEnabled = HeadlessEnabled; // 保存HeadlessEnabled设置
             Properties.Settings.Default.Save();
 
             // 保存JSON文件

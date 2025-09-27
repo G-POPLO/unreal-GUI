@@ -85,7 +85,7 @@
                             </StackPanel>
                         </Button>
                         
-                        <TextBlock x:Name="Result" TextWrapping="Wrap" Text="{Binding TipClearCache}" Margin="0,0,0,0" Visibility="Collapsed"/>
+                        <TextBlock x:Name="Result" TextWrapping="Wrap" Text="{Binding TipClearCache}" Margin="0,0,0,0"  />
                     </StackPanel>
                 </Border>
                 
@@ -118,7 +118,7 @@
                                 </StackPanel>
                             </Button>
                         </WrapPanel>
-                        <TextBlock x:Name="ZenRusult" TextWrapping="Wrap" Text="{Binding TipZen}" Margin="0,0,0,0" Visibility="Collapsed"/>
+                        <TextBlock x:Name="ZenRusult" TextWrapping="Wrap" Text="{Binding TipZen}" Margin="0,0,0,0" />
                     </StackPanel>
                 </Border>
                 
