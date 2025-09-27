@@ -25,26 +25,11 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private string _tipClearLog = "";
 
-        //[ObservableProperty]
-        //private string _dDCPath = "";
-
-        //[ObservableProperty]
-        //private string _dDCSharePath = "";
-
-        //[ObservableProperty]
-        //private string _totalSize = "";
-
-        //[ObservableProperty]
-        //private string _dDCErrorText = "";
+        [ObservableProperty]
+        private string _tipZen = "";
 
         [ObservableProperty]
         private bool _isCleanButtonEnabled = false;
-
-        //[ObservableProperty]
-        //private bool _isOldDDCPanelVisible = false;
-
-        //[ObservableProperty]
-        //private bool _isZenPanelVisible = true;
 
         [ObservableProperty]
         private bool _isSaveGameChecked = false;
@@ -58,13 +43,7 @@ namespace unreal_GUI.ViewModel
 
         public ClearViewModel()
         {
-            // 初始化设置
-            //UpdatePanelVisibility();
-            LoadEngineList();
-            //DDCPath = $"DDC全局缓存路径：{Properties.Settings.Default.DDC}";
-            //DDCSharePath = $"DDC共享缓存路径：{Properties.Settings.Default.DDCShare}";
-            //TotalSize = $"总计大小：{Properties.Settings.Default.DDCTotal:0.00} GB";
-            
+            LoadEngineList();           
         }
 
         private void LoadEngineList()
@@ -221,7 +200,7 @@ namespace unreal_GUI.ViewModel
             {
                 if (SelectedEngine == null)
                 {
-                    TipClearCache = "请先从下拉框中选择引擎版本";
+                    TipZen = "请先从下拉框中选择引擎版本";
                     return;
                 }
 
@@ -232,12 +211,12 @@ namespace unreal_GUI.ViewModel
                 }
                 else
                 {
-                    _ = ModernDialog.ShowInfoAsync("ZenDashboard.exe未找到，请确认引擎安装", "路径错误");
+                    _ = ModernDialog.ShowErrorAsync("ZenDashboard.exe未找到，请确认引擎安装", "路径错误");
                 }
             }
             catch (Exception ex)
             {
-                _ = ModernDialog.ShowInfoAsync($"打开失败：{ex.Message}", "错误提示");
+                _ = ModernDialog.ShowErrorAsync($"打开失败：{ex.Message}", "错误提示");
             }
         }
 
@@ -250,23 +229,6 @@ namespace unreal_GUI.ViewModel
                 UseShellExecute = true
             });
         }
-
-        //private static float CalculateDirectorySize(string path)
-        //{
-        //    if (!Directory.Exists(path)) return 0;
-
-        //    float size = 0;
-        //    try
-        //    {
-        //        foreach (var file in Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories))
-        //        {
-        //            var info = new FileInfo(file);
-        //            size += info.Length;
-        //        }
-        //    }
-        //    catch { }
-        //    return size / (1024 * 1024 * 1024); // 转换为GB
-        //}
 
         private static void DeleteDirectoryIfExists(string path)
         {

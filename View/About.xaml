@@ -75,11 +75,6 @@
                             重命名项目或插件目录的工具
                         </TextBlock>
                         
-                        <TextBlock TextWrapping="Wrap">
-                            <Run FontWeight="SemiBold">设置：</Run>
-                            <LineBreak/>
-                            配置应用程序的各种选项和参数
-                        </TextBlock>
                     </StackPanel>
                 </Border>
             </StackPanel>

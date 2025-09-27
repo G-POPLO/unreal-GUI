@@ -23,7 +23,7 @@
                         BorderThickness="1" CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE90B;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8FD;" Margin="0,0,10,0" VerticalAlignment="Center"/>
                             <TextBlock Text="引擎目录设定" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
 
@@ -83,6 +83,8 @@
                                     <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEC05;"/>
                                 </ui:AppBarToggleButton.Icon>
                             </ui:AppBarToggleButton>
+
+
                         </WrapPanel>
                     </StackPanel>
                 </Border>
@@ -123,12 +125,23 @@
                             <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding OpenEpic}"/>
                         </Grid>
 
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="使用Headless方式获取Fab信息（开启后可能会无法获取信息）" 
+                                       VerticalAlignment="Center"/>
+                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding OpenEpic}"/>
+                        </Grid>
+
                         <ui:AppBarToggleButton x:Name="beta_Button0" Label="Fab免费资产领取通知" 
                                                IsChecked="{Binding FabNotification}" HorizontalAlignment="Left">
                             <ui:AppBarToggleButton.Icon>
                                 <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEC24;"/>
                             </ui:AppBarToggleButton.Icon>
                         </ui:AppBarToggleButton>
+
                     </StackPanel>
                 </Border>
             </StackPanel>
