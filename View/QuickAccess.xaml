@@ -37,11 +37,7 @@
                                             Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
                                         <StackPanel Orientation="Horizontal">
                                             <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
-<<<<<<< HEAD
-                                            <TextBlock Text="{Binding DisplayName, StringFormat=' {0} 插件目录'}"/>
-=======
                                             <TextBlock Text="{Binding DisplayName, StringFormat='打开 {0} 插件目录'}"/>
->>>>>>> 1aea09494006f7f9a2a0b84e139d32de0df474f9
                                         </StackPanel>
                                     </Button>
                                 </DataTemplate>
