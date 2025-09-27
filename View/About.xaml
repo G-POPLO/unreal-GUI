@@ -5,26 +5,79 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:unreal_GUI"
              xmlns:viewmodel="clr-namespace:unreal_GUI.ViewModel"
-             xmlns:ui="http://schemas.modernwpf.com/2019"
+            xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>
         <viewmodel:AboutViewModel />
     </UserControl.DataContext>
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid Margin="20,20,20,20">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="0*"/>
-            </Grid.ColumnDefinitions>
-            <StackPanel>
-                <TextBlock x:Name="Title" TextWrapping="Wrap" Margin="10,10,10,10" Text="Unreal-GUI" FontSize="18"/>
-                <Separator/>
-                <TextBlock x:Name="Version" TextWrapping="Wrap" Margin="10,10,10,10" Text="{Binding VersionText}"/>
-                <TextBlock x:Name="Author" TextWrapping="Wrap" Margin="10,10,10,10" Text="作者：C-Poplo"/>
-                <TextBlock TextWrapping="Wrap" Margin="10,10,10,10" Text="一款简单的小工具，原开发目的是辅助用户将繁杂的命令操作转成简单的GUI操作，现正考虑将其打造成集合各种开发小工具的统一平台。"/>
-                <Button x:Name="Update" Content="获取更新" Margin="10,0,0,0" Command="{Binding OpenUpdateUrlCommand}"/>
+    <Grid Margin="20">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="10">
+                <!-- 页面标题 -->
+                <TextBlock Text="关于" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+                
+                <!-- 应用信息卡片 -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                        BorderThickness="1" CornerRadius="4" Margin="0,0,0,20">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE946;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Unreal-GUI" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        
+                        <TextBlock x:Name="Version" TextWrapping="Wrap" Margin="0,0,0,10" Text="{Binding VersionText}" FontWeight="SemiBold"/>
+                        <TextBlock x:Name="Author" TextWrapping="Wrap" Margin="0,0,0,15" Text="作者：C-Poplo"/>
+                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,15" Text="一款简单的小工具，原开发目的是辅助用户将繁杂的命令操作转成简单的GUI操作，现正考虑将其打造成集合各种开发小工具的统一平台。"/>
+                        
+                        <Button x:Name="Update" Margin="0,0,0,0" Command="{Binding OpenUpdateUrlCommand}" 
+                                Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE72C;" Margin="0,0,5,0"/>
+                                <TextBlock Text="获取更新"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Border>
+                
+                <!-- 使用说明卡片 -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                        BorderThickness="1" CornerRadius="4">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE945;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="使用说明" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        
+                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,10">
+                            <Run FontWeight="SemiBold">快速访问：</Run>
+                            <LineBreak/>
+                            提供常用目录和网站的快捷访问方式
+                        </TextBlock>
+                        
+                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,10">
+                            <Run FontWeight="SemiBold">编译工具：</Run>
+                            <LineBreak/>
+                            将插件编译成指定版本的工具
+                        </TextBlock>
+                        
+                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,10">
+                            <Run FontWeight="SemiBold">缓存清理：</Run>
+                            <LineBreak/>
+                            清理项目文件夹中的缓存数据和日志文件
+                        </TextBlock>
+                        
+                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,10">
+                            <Run FontWeight="SemiBold">重命名工具：</Run>
+                            <LineBreak/>
+                            重命名项目或插件目录的工具
+                        </TextBlock>
+                        
+                    </StackPanel>
+                </Border>
             </StackPanel>
-        </Grid>
-    </ScrollViewer>
+        </ScrollViewer>
+    </Grid>
 </UserControl>

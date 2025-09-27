@@ -5,6 +5,9 @@ using System.Windows.Media.Animation;
 
 namespace unreal_GUI.Model
 {
+    /// <summary>
+    /// 页面跳转动画，在引入新的UI框架后已废弃
+    /// </summary>
     public static class PageTransitionAnimation
     {
         public static void ApplyTransition(ContentControl contentControl, UIElement newContent)

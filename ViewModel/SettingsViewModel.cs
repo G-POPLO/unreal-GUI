@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using unreal_GUI.Model;
+using Windows.Networking.PushNotifications;
 
 namespace unreal_GUI.ViewModel
 {
@@ -30,31 +31,40 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private bool _gitcode;
 
-        [ObservableProperty]
-        private bool _zenDashborad;
 
         [ObservableProperty]
         private bool _autoUpdate;
 
-        [ObservableProperty]
-        private bool _animationEnabled;
 
         [ObservableProperty]
-        private bool _fabAsset;
+        private bool _fabNotification;
 
         [ObservableProperty]
         private DateTime _limitedTime;
+
+        [ObservableProperty]
+        private bool _autoStart;
+
+        [ObservableProperty]
+        private bool _openEpic;
+
+        [ObservableProperty]
+        private bool _headlessEnabled;
 
         public SettingsViewModel()
         {
             // 初始化设置
             AutoOpen = Properties.Settings.Default.AutoOpen;
             Gitcode = Properties.Settings.Default.Gitcode;
-            ZenDashborad = Properties.Settings.Default.ZenDashborad;
+           
             AutoUpdate = Properties.Settings.Default.AutoUpdate;
-            AnimationEnabled = Properties.Settings.Default.AmimateEnabled; // 默认启用动画效果
-            FabAsset = Properties.Settings.Default.FabAsset; // 初始化FabAsset
-            LimitedTime = Properties.Settings.Default.LimitedTime; // 初始化LimitedTime
+           
+            FabNotification = Properties.Settings.Default.FabNotificationEnabled; 
+            LimitedTime = Properties.Settings.Default.LimitedTime; 
+            
+            AutoStart = Properties.Settings.Default.AutoStart;
+            OpenEpic = Properties.Settings.Default.OpenEpic;
+            HeadlessEnabled = Properties.Settings.Default.HeadlessEnabled;
 
             if (File.Exists("settings.json"))
             {
@@ -68,6 +78,7 @@ namespace unreal_GUI.ViewModel
                 catch
                 {
                     // 如果JSON文件损坏，初始化为空列表
+                    _ = ModernDialog.ShowInfoAsync("JSON文件已损坏，已重置为默认状态");
                     EngineInfos = [];
                 }
             }
@@ -127,11 +138,15 @@ namespace unreal_GUI.ViewModel
             // 保存应用程序设置
             Properties.Settings.Default.AutoOpen = AutoOpen;
             Properties.Settings.Default.Gitcode = Gitcode;
-            Properties.Settings.Default.ZenDashborad = ZenDashborad;
+         
             Properties.Settings.Default.AutoUpdate = AutoUpdate;
-            Properties.Settings.Default.AmimateEnabled = AnimationEnabled;
-            Properties.Settings.Default.FabAsset = FabAsset; // 保存FabAsset设置
+            
+            Properties.Settings.Default.FabNotificationEnabled = FabNotification; // 保存FabNotification设置
             Properties.Settings.Default.LimitedTime = LimitedTime; // 保存LimitedTime设置
+            
+            Properties.Settings.Default.AutoStart = AutoStart; // 保存AutoStart设置
+            Properties.Settings.Default.OpenEpic = OpenEpic; // 保存OpenEpic设置
+            Properties.Settings.Default.HeadlessEnabled = HeadlessEnabled; // 保存HeadlessEnabled设置
             Properties.Settings.Default.Save();
 
             // 保存JSON文件
@@ -153,6 +168,7 @@ namespace unreal_GUI.ViewModel
                 catch
                 {
                     // 如果JSON文件损坏，初始化为空列表
+                    _ = ModernDialog.ShowInfoAsync("JSON文件已损坏，已重置为默认状态");
                     settings.CustomButtons = [];
                 }
             }

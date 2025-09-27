@@ -21,6 +21,8 @@ namespace unreal_GUI
             
             // 注册通知激活事件处理程序
             ToastNotificationManagerCompat.OnActivated += ToastNotificationManagerCompat_OnActivated;
+            
+           
         }
         // 通知激活事件处理程序
         private void ToastNotificationManagerCompat_OnActivated(ToastNotificationActivatedEventArgsCompat e)
@@ -36,8 +38,10 @@ namespace unreal_GUI
                 switch (action)
                 {
                     case "openUrl":
+                        // 从参数中获取URL，如果不存在则使用默认URL
+                        string url = args.Contains("url") ? args["url"] : "https://www.fab.com/limited-time-free";
                         // 打开网站
-                        Process.Start(new ProcessStartInfo("https://www.fab.com/limited-time-free") { UseShellExecute = true });
+                        Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
                         break;
                     case "dismiss":
                         // 忽略通知，什么都不做

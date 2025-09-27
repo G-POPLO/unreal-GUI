@@ -29,15 +29,15 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private string tipsText;
         
-        [ObservableProperty]
-        private Visibility tipsVisibility;
+
+
+
 
         public CompileViewModel()
         {
             LoadEngineList();
             
-            // 初始化属性
-            TipsVisibility = Visibility.Hidden;
+            
         }
 
         public ObservableCollection<SettingsViewModel.EngineInfo> EngineVersions { get; } = [];
@@ -70,7 +70,7 @@ namespace unreal_GUI.ViewModel
                 {
                     TipsText = $"读取到插件版本{pluginEngineVersion}，请先选择目标引擎版本";
                 }
-                TipsVisibility = Visibility.Visible;
+             
             }
         }
 
@@ -113,7 +113,7 @@ namespace unreal_GUI.ViewModel
         [RelayCommand(CanExecute = nameof(CanCompile))]
         private async Task Compile()
         {
-            TipsVisibility = Visibility.Visible;
+            
 
             if (SelectedEngine == null)
             {

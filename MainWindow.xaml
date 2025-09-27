@@ -6,26 +6,56 @@
         xmlns:viewModel="clr-namespace:unreal_GUI.ViewModel"
         mc:Ignorable="d"
         Title="Unreal-GUI" Height="550" Width="700"
-    xmlns:ui="http://schemas.modernwpf.com/2019"
+    xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
+        ui:WindowHelper.SystemBackdropType="Mica"
     ui:WindowHelper.UseModernWindowStyle="True">
+    
     <Window.DataContext>
-        <viewModel:MainWindowViewModel x:Name="ViewModel" />
+        <viewModel:MainWindowViewModel />
     </Window.DataContext>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Menu Grid.Row="0">
-            <MenuItem Header="插件编译" Command="{Binding NavigateToCompileCommand}"/>
-            <MenuItem Header="项目重命名" Command="{Binding NavigateToRenameCommand}"/>
-            <MenuItem Header="快速访问" Command="{Binding NavigateToQuickAccessCommand}"/>
-            <MenuItem Header="清除缓存" Command="{Binding NavigateToClearCommand}"/>
-            <MenuItem Header="设置" Command="{Binding NavigateToSettingsCommand}"/>
-            <MenuItem Header="关于" Command="{Binding NavigateToAboutCommand}"/>
-            
-        </Menu>
-        <ContentControl x:Name="ContentContainer" Content="{Binding CurrentView}" Grid.Row="1" Margin="0,0,0,60" />
+        <ui:NavigationView x:Name="NavigationView" 
+                           Tag="{Binding CurrentPageTag, Mode=TwoWay}"
+                           
+                           SelectionChanged="NavigationView_SelectionChanged"
+                           BackRequested="NavigationView_BackRequested"
+                           
+                           IsPaneOpen="False"
+                           PaneDisplayMode="Top"
+                           IsBackButtonVisible="Auto">
+            <ui:NavigationView.MenuItems>
+                <ui:NavigationViewItem Content="插件编译" Tag="Compile">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Play}"/>
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="项目重命名" Tag="Rename">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Rename}"/>
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="快速访问" Tag="QuickAccess">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Link}"/>
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="清除缓存" Tag="Clear">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Delete}"/>
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="设置" Tag="Settings">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Settings}"/>
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="关于" Tag="About">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Help}"/>
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+            </ui:NavigationView.MenuItems>
+            <ui:Frame x:Name="ContentFrame" Margin="0,0,0,0" Navigated="ContentFrame_Navigated" />
+        </ui:NavigationView>
     </Grid>
-
 </Window>

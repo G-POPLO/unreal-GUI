@@ -1,7 +1,5 @@
 using Microsoft.Playwright;
 using Microsoft.Toolkit.Uwp.Notifications;
-
-using ModernWpf.Controls;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -83,14 +81,9 @@ namespace unreal_GUI.Model
             {
                 // 显示错误信息
                 string errorMessage = ex.Message;
-                if (errorMessage.Contains("403"))
-                {
-                    _ = ModernDialog.ShowInfoAsync($"无法获取Fab免费资产信息: 网站返回403错误，可能已被反爬虫机制拦截。请稍后再试。", "错误");
-                }
-                else
-                {
+
                     _ = ModernDialog.ShowInfoAsync($"无法获取Fab免费资产信息: {ex.Message}", "错误");
-                }
+                
 
                 return null;
             }
@@ -105,11 +98,12 @@ namespace unreal_GUI.Model
         private static void SendFabNotification(DateTime limitedTime)
         {
             // 使用 WindowsNotification 类显示带操作按钮的通知
-            WindowsNotification.ShowNotificationWithActions(
+            WindowsNotification.ShowNotificationWithUrls(
                 "Fab资产领取提醒",
                 $"新的Fab免费资产可领取，截至时间:{limitedTime}",
                 "是",
                 "openUrl",
+                "https://www.fab.com/limited-time-free",
                 "否",
                 "dismiss");
         }

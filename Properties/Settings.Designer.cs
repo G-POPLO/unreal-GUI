@@ -25,18 +25,6 @@ namespace unreal_GUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DDC {
-            get {
-                return ((string)(this["DDC"]));
-            }
-            set {
-                this["DDC"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool AutoOpen {
             get {
@@ -44,42 +32,6 @@ namespace unreal_GUI.Properties {
             }
             set {
                 this["AutoOpen"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DDCShare {
-            get {
-                return ((string)(this["DDCShare"]));
-            }
-            set {
-                this["DDCShare"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public float DDCTotal {
-            get {
-                return ((float)(this["DDCTotal"]));
-            }
-            set {
-                this["DDCTotal"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ZenDashborad {
-            get {
-                return ((bool)(this["ZenDashborad"]));
-            }
-            set {
-                this["ZenDashborad"] = value;
             }
         }
         
@@ -109,25 +61,13 @@ namespace unreal_GUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool AmimateEnabled {
-            get {
-                return ((bool)(this["AmimateEnabled"]));
-            }
-            set {
-                this["AmimateEnabled"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool FabAsset {
+        public bool FabNotificationEnabled {
             get {
-                return ((bool)(this["FabAsset"]));
+                return ((bool)(this["FabNotificationEnabled"]));
             }
             set {
-                this["FabAsset"] = value;
+                this["FabNotificationEnabled"] = value;
             }
         }
         
@@ -140,6 +80,42 @@ namespace unreal_GUI.Properties {
             }
             set {
                 this["LimitedTime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoStart {
+            get {
+                return ((bool)(this["AutoStart"]));
+            }
+            set {
+                this["AutoStart"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool OpenEpic {
+            get {
+                return ((bool)(this["OpenEpic"]));
+            }
+            set {
+                this["OpenEpic"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool HeadlessEnabled {
+            get {
+                return ((bool)(this["HeadlessEnabled"]));
+            }
+            set {
+                this["HeadlessEnabled"] = value;
             }
         }
     }

@@ -1,5 +1,4 @@
 using Microsoft.Toolkit.Uwp.Notifications;
-using ModernWpf.Controls;
 using Newtonsoft.Json.Linq;
 using SevenZip;
 using System;

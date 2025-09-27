@@ -24,10 +24,31 @@ namespace unreal_GUI
     /// </summary>
     public partial class QuickAccess : System.Windows.Controls.UserControl
     {
+        private QuickAccessViewModel viewModel;
+
         public QuickAccess()
         {
             InitializeComponent();
-            DataContext = new QuickAccessViewModel();
+            viewModel = new QuickAccessViewModel();
+            DataContext = viewModel;
+            
+            // 订阅ModernDialog的导航请求事件以刷新自定义按钮
+            ModernDialog.NavigationRequested += OnNavigationRequested;
+        }
+        
+        private void OnNavigationRequested(object sender, string pageTag)
+        {
+            // 如果导航到QuickAccess页面，则刷新自定义按钮数据
+            if (pageTag == "QuickAccess")
+            {
+                viewModel.LoadCustomButtons();
+            }
+        }
+
+        // 在控件卸载时取消事件订阅
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            ModernDialog.NavigationRequested -= OnNavigationRequested;
         }
     }
 }

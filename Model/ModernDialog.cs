@@ -1,7 +1,6 @@
+using iNKORE.UI.WPF.Modern.Controls;
 using Markdig;
 using Markdig.Wpf;
-using ModernWpf;
-using ModernWpf.Controls;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -9,11 +8,15 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using unreal_GUI.ViewModel;
+
 namespace unreal_GUI.Model
 {
     public static class ModernDialog
     {
+        public static event EventHandler<string> NavigationRequested;
+
         /// <summary>
         /// 显示一个带 Yes/No 按钮的对话框
         /// </summary>
@@ -38,6 +41,7 @@ namespace unreal_GUI.Model
         {
             var markdownViewer = new Markdig.Wpf.MarkdownViewer();
             markdownViewer.Markdown = message;
+            markdownViewer.Document.FontFamily = new FontFamily("Microsoft YaHei UI");
             var dialog = new ContentDialog
             {
                 Title = title,
@@ -55,10 +59,37 @@ namespace unreal_GUI.Model
         /// </summary>
         public static async Task ShowInfoAsync(string message, string title = "提示")
         {
+            // 创建包含图标和文本内容的StackPanel
+            var stackPanel = new StackPanel
+            {
+                Orientation = Orientation.Horizontal
+            };
+
+            // 添加提示图标
+            var icon = new FontIcon
+            {
+                Glyph = "\uF167", // InfoSolid图标
+                FontFamily = new FontFamily("Segoe MDL2 Assets"),
+                FontSize = 16,
+                Margin = new Thickness(0, 0, 10, 0),
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            // 添加消息文本
+            var textBlock = new TextBlock
+            {
+                Text = message,
+                TextWrapping = TextWrapping.Wrap,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            stackPanel.Children.Add(icon);
+            stackPanel.Children.Add(textBlock);
+
             var dialog = new ContentDialog
             {
                 Title = title,
-                Content = message,
+                Content = stackPanel,
                 CloseButtonText = "确定"
             };
 
@@ -66,14 +97,65 @@ namespace unreal_GUI.Model
         }
 
         /// <summary>
+        /// 显示一个带错误信息的对话框，包含"复制信息到剪切板"和"确认"按钮
+        /// </summary>
+        public static async Task ShowErrorAsync(string message, string title = "错误")
+        {
+            // 创建包含图标和文本内容的StackPanel
+            var stackPanel = new StackPanel
+            {
+                Orientation = Orientation.Horizontal
+            };
+
+            // 添加错误图标
+            var icon = new FontIcon
+            {
+                Glyph = "\uEA39", // ErrorBadge图标
+                FontFamily = new FontFamily("Segoe MDL2 Assets"),
+                FontSize = 16,
+                Margin = new Thickness(0, 0, 10, 0),
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            // 添加消息文本
+            var textBlock = new TextBlock
+            {
+                Text = message,
+                TextWrapping = TextWrapping.Wrap,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            stackPanel.Children.Add(icon);
+            stackPanel.Children.Add(textBlock);
+
+            var dialog = new ContentDialog
+            {
+                Title = title,
+                Content = stackPanel,
+                PrimaryButtonText = "复制信息到剪切板",
+                CloseButtonText = "确认"
+            };
+
+            var result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                // 复制信息到剪切板
+                Clipboard.SetText(message);
+            }
+        }
+
+        /// <summary>
         /// 显示可自定义按钮的对话框
         /// </summary>
-        public static async Task<ContentDialogResult> ShowCustomAsync(
+        public static async Task<ContentDialogResult> ShowCustomAsync
+            (
             string message,
             string title,
             string primaryButton,
-            string? secondaryButton = null,
-            string closeButton = "取消")
+            string closeButton,
+            string? secondaryButton
+             )
+
         {
             var dialog = new ContentDialog
             {
@@ -131,15 +213,15 @@ namespace unreal_GUI.Model
                     var jsonSettings = JsonConvert.SerializeObject(settings, Formatting.Indented);
                     File.WriteAllText("settings.json", jsonSettings);
                 }
-
-
             }
+            
             if (result == ContentDialogResult.Primary)
             {
-                // 通知MainWindow页面刷新
-                var mainWindowViewModel = Application.Current.MainWindow.DataContext as MainWindowViewModel;
-                mainWindowViewModel?.NavigateToQuickAccessCommand.Execute(null);
+                // 通知QuickAccess页面刷新
+                NavigationRequested?.Invoke(null, "QuickAccess");
+                return result;
             }
+            
             return result;
         }
 
@@ -177,9 +259,8 @@ namespace unreal_GUI.Model
 
             if (result == ContentDialogResult.Primary)
             {
-                // 通知MainWindow页面刷新
-                var mainWindowViewModel = Application.Current.MainWindow.DataContext as MainWindowViewModel;
-                mainWindowViewModel?.NavigateToQuickAccessCommand.Execute(null);
+                // 关闭时通知QuickAccess页面刷新
+                NavigationRequested?.Invoke(null, "QuickAccess");
             }
 
             return result;

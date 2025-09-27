@@ -1,14 +1,16 @@
 using Microsoft.Playwright;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
+using unreal_GUI.Properties;
 
 namespace unreal_GUI.Model
 {
     internal class Playwright
     {
         /// <summary>
-        /// 启动浏览器并导航到指定URL获取页面内容
+        /// 启动浏览器并导航到指定URL并截图获取结果(Debug Only)
         /// </summary>
         /// <param name="url">要导航到的URL</param>
         /// <returns>页面内容</returns>
@@ -17,34 +19,46 @@ namespace unreal_GUI.Model
             using var playwright = await Microsoft.Playwright.Playwright.CreateAsync();
             await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
             {
-                Headless = true, // 设置为false可以查看浏览器操作
-                Channel = "msedge"
-            });
-            var page = await browser.NewPageAsync();
-
-            // 设置User-Agent以避免被检测为自动化浏览器
-            await page.SetExtraHTTPHeadersAsync(new Dictionary<string, string>
-            {
-                ["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
+                Headless = true,
+                Channel = "msedge",
+                Args = new[]
+                {
+                    "--disable-blink-features=AutomationControlled",
+                    "--start-maximized"
+                }
             });
 
-            // 导航到目标页面
-            var response = await page.GotoAsync(url);
-
-            // 检查响应状态码
-            if (response?.Status == 403)
+            // 设置 UserAgent
+            var context = await browser.NewContextAsync(new BrowserNewContextOptions
             {
-                throw new Exception("网站返回403 Forbidden错误，可能已被反爬虫机制拦截");
-            }
+                UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0",                          
+            });
 
-            // 等待页面加载完成
-            await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+            var page = await context.NewPageAsync();
 
-            // 截图并保存
+            // 注入脚本隐藏常见自动化特征
+            //await page.AddInitScriptAsync(@"Object.defineProperty(navigator, 'webdriver', { get: () => undefined });");
+            //await page.AddInitScriptAsync(@"window.chrome = { runtime: {} };");
+            // 实测：add_init_script 设置为 false才能更好隐藏特征
+
+
+            var response = await page.GotoAsync(url, new PageGotoOptions
+            {
+                WaitUntil = WaitUntilState.DOMContentLoaded,
+            });      
+
+            // 截图保存到本地
+            string screenshotPath = "screenshot.png";
             await page.ScreenshotAsync(new PageScreenshotOptions()
             {
-                Path = "screenshot.png"
+                Path = screenshotPath,
+                FullPage = true // 截取完整网页
             });
+
+            // 复制到桌面
+            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            string destPath = Path.Combine(desktopPath, "screenshot.png");
+            File.Copy(screenshotPath, destPath, true);
 
             // 获取页面内容
             return await page.ContentAsync();
@@ -61,28 +75,26 @@ namespace unreal_GUI.Model
             using var playwright = await Microsoft.Playwright.Playwright.CreateAsync();
             await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
             {
-                Headless = true,
-                Channel = "msedge"
+                Headless = !Properties.Settings.Default.HeadlessEnabled, // 根据设置决定是否使用无头模式
+                Channel = "msedge",
+                Args = new[]
+                {
+                    "--disable-blink-features=AutomationControlled",
+                    "--start-maximized"
+                }
+            });
+            
+            // 设置User-Agent以避免被检测为自动化浏览器
+            var context = await browser.NewContextAsync(new BrowserNewContextOptions
+            {
+                UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0",
             });
             var page = await browser.NewPageAsync();
-
-            // 设置User-Agent以避免被检测为自动化浏览器
-            await page.SetExtraHTTPHeadersAsync(new Dictionary<string, string>
-            {
-                ["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
-            });
-
             // 导航到目标页面
-            var response = await page.GotoAsync(url);
-
-            // 检查响应状态码
-            if (response?.Status == 403)
+            var response = await page.GotoAsync(url, new PageGotoOptions
             {
-                throw new Exception("网站返回403 Forbidden错误，可能已被反爬虫机制拦截");
-            }
-
-            // 等待页面加载完成
-            //await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+                WaitUntil = WaitUntilState.DOMContentLoaded,               
+            });
 
             // 构建CSS选择器
             string selector = "h2";

@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:unreal_GUI"
              xmlns:converters="clr-namespace:unreal_GUI.Converters"
              StartupUri="MainWindow.xaml"
-             xmlns:ui="http://schemas.modernwpf.com/2019">
+             xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
