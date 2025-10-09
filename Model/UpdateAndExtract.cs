@@ -66,7 +66,7 @@ namespace unreal_GUI.Model
             }
             catch (Exception ex)
             {
-                await ModernDialog.ShowInfoAsync($"获取更新失败：{ex.Message}", "提示");
+                await ModernDialog.ShowErrorAsync($"获取更新失败：{ex.Message}", "提示");
             }
         }
 
@@ -230,17 +230,17 @@ namespace unreal_GUI.Model
                     }
                     catch (Exception ex)
                     {
-                        await ModernDialog.ShowInfoAsync($"解压失败：{ex.Message}", "提示");
+                        await ModernDialog.ShowErrorAsync($"解压失败：{ex.Message}", "提示");
                     }
                 }
                 else
                 {
-                    await ModernDialog.ShowInfoAsync("下载失败，无法从服务器获取下载链接", "提示");
+                    await ModernDialog.ShowErrorAsync("下载失败，无法从服务器获取下载链接", "提示");
                 }
             }
             catch (Exception ex)
             {
-                await ModernDialog.ShowInfoAsync($"下载失败：{ex}", "提示");
+                await ModernDialog.ShowErrorAsync($"下载失败：{ex}", "提示");
             }
         }
     }

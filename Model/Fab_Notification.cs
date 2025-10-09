@@ -39,7 +39,7 @@ namespace unreal_GUI.Model
                         // 格式示例: "Aug 26 at 9:59 AM ET"
                         string[] parts = dateTimeString.Split(' ');
                         // 替换原有月份数组和解析逻辑
-                        string[] monthNames = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+                        string[] monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
                         string month = parts[0];
                         // 兼容 "Sept" 为 "Sep"
                         if (month.Equals("Sept", StringComparison.OrdinalIgnoreCase))
@@ -62,7 +62,7 @@ namespace unreal_GUI.Model
 
                         TimeZoneInfo easternZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
                         int hour24 = hour % 12 + (amPm.ToUpper() == "PM" ? 12 : 0);
-                        DateTime easternTime = new DateTime(year, monthIndex, day, hour24, minute, 0);
+                        DateTime easternTime = new(year, monthIndex, day, hour24, minute, 0);
                         TimeZoneInfo chinaZone = TimeZoneInfo.FindSystemTimeZoneById("China Standard Time");
                         DateTime chinaTime = TimeZoneInfo.ConvertTime(easternTime, easternZone, chinaZone);
 
@@ -79,12 +79,9 @@ namespace unreal_GUI.Model
             }
             catch (Exception ex)
             {
-                // 显示错误信息
-                string errorMessage = ex.Message;
-
-                    _ = ModernDialog.ShowInfoAsync($"无法获取Fab免费资产信息: {ex.Message}", "错误");
+                // 显示错误信息                
+                    _ = ModernDialog.ShowErrorAsync($"无法获取Fab免费资产信息: {ex.Message}", "错误");
                 
-
                 return null;
             }
 

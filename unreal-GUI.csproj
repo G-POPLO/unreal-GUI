@@ -14,7 +14,7 @@
     <SignAssembly>False</SignAssembly>
     <Authors>C-Poplo</Authors>
     <Company />
-    <Version>0.4.0.5</Version>
+    <Version>0.4.0.6</Version>
     <Title>Unreal-GUI</Title>
     <AssemblyName>Unreal-GUI</AssemblyName>
     <DelaySign>True</DelaySign>
@@ -63,7 +63,7 @@
     <DebugType>full</DebugType>
     <WarningLevel>3</WarningLevel>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-    <Optimize>True</Optimize>
+    <!--<Optimize>True</Optimize>-->
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

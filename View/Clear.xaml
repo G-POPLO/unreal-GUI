@@ -132,7 +132,7 @@
                             <TextBlock Text="清理日志" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
                         <TextBlock TextWrapping="Wrap" Text="清理 AutomationTool\Logs 目录下的所有内容和 Local\UnrealEngine 目录下的所有 XmlConfigCache.bin 文件" Margin="0,0,10,0" FontWeight="Bold" FontSize="10" />
-                        <Button x:Name="CleanLogButton" Margin="0,0,0,15" Command="{Binding CleanLogCommand}" 
+                        <Button x:Name="CleanLogButton" Margin="0,10,10,10" Command="{Binding CleanLogCommand}" 
                                 Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
                             <StackPanel Orientation="Horizontal">
                                 <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE838;" Margin="0,0,5,0"/>

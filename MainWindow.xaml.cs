@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Controls;
 using iNKORE.UI.WPF.Modern.Controls;
 using unreal_GUI.ViewModel;
-using iNKORE.UI.WPF.Modern.Controls.Primitives;
 using unreal_GUI.Model;
 using System.Reflection;
 using System.Windows.Navigation;
@@ -23,17 +22,18 @@ namespace unreal_GUI
             Loaded += MainWindow_Loaded;
         }
         
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+
             // 订阅 ViewModel 的导航请求事件
             if (DataContext is MainWindowViewModel viewModel)
             {
                 viewModel.NavigationRequested += OnNavigationRequested;
                 // 初始化默认导航到编译页面
-                viewModel.InitializeJson_Async();
+                await viewModel.InitializeJson_Async();
             }
-            
-            MainWindowViewModel.AutoUpdate();
+
+            await MainWindowViewModel.AutoUpdate();
             MainWindowViewModel.CheckFabAsset();
         }
         

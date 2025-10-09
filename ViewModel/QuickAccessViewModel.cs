@@ -66,7 +66,7 @@ namespace unreal_GUI.ViewModel
                 }
                 else
                 {
-                    _ = ModernDialog.ShowInfoAsync("目录不存在", $"未找到目录：\n{path}");
+                    _ = ModernDialog.ShowErrorAsync("目录不存在", $"未找到目录：\n{path}");
                 }
             
         }

@@ -21,11 +21,11 @@ namespace unreal_GUI.Model
             {
                 Headless = true,
                 Channel = "msedge",
-                Args = new[]
-                {
+                Args =
+                [
                     "--disable-blink-features=AutomationControlled",
                     "--start-maximized"
-                }
+                ]
             });
 
             // 设置 UserAgent
@@ -75,13 +75,13 @@ namespace unreal_GUI.Model
             using var playwright = await Microsoft.Playwright.Playwright.CreateAsync();
             await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
             {
-                Headless = !Properties.Settings.Default.HeadlessEnabled, // 根据设置决定是否使用无头模式
+                Headless = Properties.Settings.Default.HeadlessEnabled, // 根据设置决定是否使用无头模式
                 Channel = "msedge",
-                Args = new[]
-                {
+                Args =
+                [
                     "--disable-blink-features=AutomationControlled",
                     "--start-maximized"
-                }
+                ]
             });
             
             // 设置User-Agent以避免被检测为自动化浏览器
@@ -90,10 +90,10 @@ namespace unreal_GUI.Model
                 UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0",
             });
             var page = await browser.NewPageAsync();
-            // 导航到目标页面
-            var response = await page.GotoAsync(url, new PageGotoOptions
+            // 导航到目标页面，不等待整个DOM加载完成
+            await page.GotoAsync(url, new PageGotoOptions
             {
-                WaitUntil = WaitUntilState.DOMContentLoaded,               
+                WaitUntil = WaitUntilState.Commit, // 只等待导航请求提交
             });
 
             // 构建CSS选择器
@@ -103,11 +103,24 @@ namespace unreal_GUI.Model
                 selector += "." + string.Join(".", classSelectors);
             }
 
-            // 查找元素
-            var element = await page.QuerySelectorAsync(selector);
+            try
+            {
+                // 等待目标元素出现，设置适当的超时时间（15秒）
+                var element = await page.WaitForSelectorAsync(selector, new PageWaitForSelectorOptions
+                {
+                    Timeout = 15000, // 超时时间设置为15秒
+                    State = WaitForSelectorState.Visible // 等待元素可见
+                });
 
-            // 返回元素文本内容
-            return element != null ? await element.InnerTextAsync() : string.Empty;
+                // 返回元素文本内容
+                return await element.InnerTextAsync();
+            }
+            catch (TimeoutException)
+            {
+                // 元素超时未出现，尝试使用QuerySelector查找，兼容可能已经存在但不可见的情况
+                var element = await page.QuerySelectorAsync(selector);
+                return element != null ? await element.InnerTextAsync() : string.Empty;
+            }
         }
     }
 }

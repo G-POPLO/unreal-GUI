@@ -39,8 +39,10 @@ namespace unreal_GUI.Model
         /// </summary>
         public static async Task<bool?> ShowMarkdownAsync(string message, string title)
         {
-            var markdownViewer = new Markdig.Wpf.MarkdownViewer();
-            markdownViewer.Markdown = message;
+            var markdownViewer = new Markdig.Wpf.MarkdownViewer
+            {
+                Markdown = message
+            };
             markdownViewer.Document.FontFamily = new FontFamily("Microsoft YaHei UI");
             var dialog = new ContentDialog
             {
@@ -75,16 +77,24 @@ namespace unreal_GUI.Model
                 VerticalAlignment = VerticalAlignment.Center
             };
 
-            // 添加消息文本
+            // 用ScrollViewer包裹TextBlock，支持长文本滚动
             var textBlock = new TextBlock
             {
                 Text = message,
                 TextWrapping = TextWrapping.Wrap,
                 VerticalAlignment = VerticalAlignment.Center
             };
+            var scrollViewer = new ScrollViewer
+            {
+                Content = textBlock,
+                VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+                HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
+                MaxHeight = 300,
+                MaxWidth = 500
+            };
 
             stackPanel.Children.Add(icon);
-            stackPanel.Children.Add(textBlock);
+            stackPanel.Children.Add(scrollViewer);
 
             var dialog = new ContentDialog
             {
@@ -117,16 +127,24 @@ namespace unreal_GUI.Model
                 VerticalAlignment = VerticalAlignment.Center
             };
 
-            // 添加消息文本
+            // 用ScrollViewer包裹TextBlock，支持长文本滚动
             var textBlock = new TextBlock
             {
                 Text = message,
                 TextWrapping = TextWrapping.Wrap,
                 VerticalAlignment = VerticalAlignment.Center
             };
+            var scrollViewer = new ScrollViewer
+            {
+                Content = textBlock,
+                VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+                HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
+                MaxHeight = 300,
+                MaxWidth = 500
+            };
 
             stackPanel.Children.Add(icon);
-            stackPanel.Children.Add(textBlock);
+            stackPanel.Children.Add(scrollViewer);
 
             var dialog = new ContentDialog
             {
