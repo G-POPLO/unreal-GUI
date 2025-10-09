@@ -56,12 +56,12 @@ namespace unreal_GUI.ViewModel
             // 初始化设置
             AutoOpen = Properties.Settings.Default.AutoOpen;
             Gitcode = Properties.Settings.Default.Gitcode;
-           
+
             AutoUpdate = Properties.Settings.Default.AutoUpdate;
-           
-            FabNotification = Properties.Settings.Default.FabNotificationEnabled; 
-            LimitedTime = Properties.Settings.Default.LimitedTime; 
-            
+
+            FabNotification = Properties.Settings.Default.FabNotificationEnabled;
+            LimitedTime = Properties.Settings.Default.LimitedTime;
+
             AutoStart = Properties.Settings.Default.AutoStart;
             OpenEpic = Properties.Settings.Default.OpenEpic;
             HeadlessEnabled = Properties.Settings.Default.HeadlessEnabled;
@@ -133,17 +133,17 @@ namespace unreal_GUI.ViewModel
         }
 
         [RelayCommand]
-        private async Task SaveSettings()
+        private Task SaveSettings()
         {
             // 保存应用程序设置
             Properties.Settings.Default.AutoOpen = AutoOpen;
             Properties.Settings.Default.Gitcode = Gitcode;
-         
+
             Properties.Settings.Default.AutoUpdate = AutoUpdate;
-            
+
             Properties.Settings.Default.FabNotificationEnabled = FabNotification; // 保存FabNotification设置
             Properties.Settings.Default.LimitedTime = LimitedTime; // 保存LimitedTime设置
-            
+
             Properties.Settings.Default.AutoStart = AutoStart; // 保存AutoStart设置
             Properties.Settings.Default.OpenEpic = OpenEpic; // 保存OpenEpic设置
             Properties.Settings.Default.HeadlessEnabled = HeadlessEnabled; // 保存HeadlessEnabled设置
@@ -155,7 +155,7 @@ namespace unreal_GUI.ViewModel
                 Engines = EngineInfos,
                 CustomButtons = []
             };
-            
+
             // 读取现有的自定义按钮数据
             if (File.Exists("settings.json"))
             {
@@ -172,10 +172,11 @@ namespace unreal_GUI.ViewModel
                     settings.CustomButtons = [];
                 }
             }
-            
+
             File.WriteAllText("settings.json", JsonConvert.SerializeObject(settings, Formatting.Indented));
 
             TipText = "设置已保存";
+            return Task.CompletedTask;
         }
 
         private void UpdateEnginePathsDisplay()

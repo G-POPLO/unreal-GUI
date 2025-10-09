@@ -21,11 +21,11 @@ namespace unreal_GUI.Model
             {
                 Headless = true,
                 Channel = "msedge",
-                Args = new[]
-                {
+                Args =
+                [
                     "--disable-blink-features=AutomationControlled",
                     "--start-maximized"
-                }
+                ]
             });
 
             // 设置 UserAgent
@@ -75,7 +75,7 @@ namespace unreal_GUI.Model
             using var playwright = await Microsoft.Playwright.Playwright.CreateAsync();
             await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
             {
-                Headless = !Properties.Settings.Default.HeadlessEnabled, // 根据设置决定是否使用无头模式
+                Headless = Properties.Settings.Default.HeadlessEnabled, // 根据设置决定是否使用无头模式
                 Channel = "msedge",
                 Args = new[]
                 {

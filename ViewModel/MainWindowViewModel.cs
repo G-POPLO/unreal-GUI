@@ -53,7 +53,7 @@ namespace unreal_GUI.ViewModel
                 NavigationHistory.RemoveAt(NavigationHistory.Count - 1);
                 
                 // 获取上一个页面
-                string previousPage = NavigationHistory[NavigationHistory.Count - 1];
+                string previousPage = NavigationHistory[^1];
                 NavigateToPage(previousPage);
             }
         }
@@ -78,7 +78,7 @@ namespace unreal_GUI.ViewModel
             {
                 // 只有当本机时间大于LimitedTime或LimitedTime为空时才调用
                 DateTime limitedTime = Properties.Settings.Default.LimitedTime;
-                DateTime defaultTime = new DateTime(1990, 1, 1);
+                DateTime defaultTime = new(1990, 1, 1);
 
                 if (DateTime.Now > limitedTime || limitedTime == defaultTime)
                 {
@@ -94,7 +94,7 @@ namespace unreal_GUI.ViewModel
         }
 
         // 根据页面标签获取页面类型
-        public Type GetPageTypeByTag(string tag)
+        public static Type GetPageTypeByTag(string tag)
         {
             return tag switch 
             {

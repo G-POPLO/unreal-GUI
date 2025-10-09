@@ -39,8 +39,10 @@ namespace unreal_GUI.Model
         /// </summary>
         public static async Task<bool?> ShowMarkdownAsync(string message, string title)
         {
-            var markdownViewer = new Markdig.Wpf.MarkdownViewer();
-            markdownViewer.Markdown = message;
+            var markdownViewer = new Markdig.Wpf.MarkdownViewer
+            {
+                Markdown = message
+            };
             markdownViewer.Document.FontFamily = new FontFamily("Microsoft YaHei UI");
             var dialog = new ContentDialog
             {
