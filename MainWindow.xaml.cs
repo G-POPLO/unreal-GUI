@@ -22,7 +22,7 @@ namespace unreal_GUI
             Loaded += MainWindow_Loaded;
         }
         
-        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
 
             // 订阅 ViewModel 的导航请求事件
@@ -30,10 +30,10 @@ namespace unreal_GUI
             {
                 viewModel.NavigationRequested += OnNavigationRequested;
                 // 初始化默认导航到编译页面
-                await viewModel.InitializeJson_Async();
+               viewModel.InitializeJson_Async();
             }
 
-            await MainWindowViewModel.AutoUpdate();
+            MainWindowViewModel.AutoUpdate();
             MainWindowViewModel.CheckFabAsset();
         }
         
