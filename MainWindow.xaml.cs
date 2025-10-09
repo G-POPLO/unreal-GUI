@@ -25,6 +25,8 @@ namespace unreal_GUI
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
 
+            await MainWindowViewModel.AutoUpdate();
+            await MainWindowViewModel.CheckFabAsset();
             // 订阅 ViewModel 的导航请求事件
             if (DataContext is MainWindowViewModel viewModel)
             {
