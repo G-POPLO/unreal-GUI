@@ -5,7 +5,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <TargetFramework>net9.0-windows10.0.18362.0</TargetFramework>
     <RootNamespace>unreal_GUI</RootNamespace>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <Platforms>x64</Platforms>
@@ -25,6 +25,9 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
   </PropertyGroup>
+
+
+  
  <!--编译时要求额外生成的文件-->
   <ItemGroup>
     <Content Include="$(ProjectDir)App\renom.exe">
@@ -48,7 +51,8 @@
     <PlaywrightPlatform>win</PlaywrightPlatform>
   </PropertyGroup>
   
-  <PropertyGroup>  
+  <PropertyGroup>
+   
     <IncludeSatelliteResource>false</IncludeSatelliteResource>
     <SupportedOSPlatformVersion>10.0.18362.0</SupportedOSPlatformVersion>
   </PropertyGroup>
@@ -71,6 +75,7 @@
     <WarningLevel>3</WarningLevel>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <Optimize>True</Optimize>
+    <!--<TieredPGO>true</TieredPGO>-->
   </PropertyGroup>
   
   <ItemGroup>
@@ -88,6 +93,7 @@
     </Playwright>
     
   </PropertyGroup>-->
+  
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="iNKORE.UI.WPF.Modern" Version="0.10.1" />

@@ -77,30 +77,26 @@ namespace unreal_GUI.Model
                 VerticalAlignment = VerticalAlignment.Center
             };
 
-            // 用ScrollViewer包裹TextBlock，支持长文本滚动
+            // 直接使用TextBlock，支持文本换行和自适应大小
             var textBlock = new TextBlock
             {
                 Text = message,
                 TextWrapping = TextWrapping.Wrap,
-                VerticalAlignment = VerticalAlignment.Center
-            };
-            var scrollViewer = new ScrollViewer
-            {
-                Content = textBlock,
-                VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
-                HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
-                MaxHeight = 300,
-                MaxWidth = 500
+                VerticalAlignment = VerticalAlignment.Center,
+                MaxWidth = 400 // 限制最大宽度以确保可读性
             };
 
             stackPanel.Children.Add(icon);
-            stackPanel.Children.Add(scrollViewer);
+            stackPanel.Children.Add(textBlock);
 
             var dialog = new ContentDialog
             {
                 Title = title,
                 Content = stackPanel,
-                CloseButtonText = "确定"
+                CloseButtonText = "确定",
+                // 启用自适应大小
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch
             };
 
             await dialog.ShowAsync();
@@ -127,31 +123,27 @@ namespace unreal_GUI.Model
                 VerticalAlignment = VerticalAlignment.Center
             };
 
-            // 用ScrollViewer包裹TextBlock，支持长文本滚动
+            // 直接使用TextBlock，支持文本换行和自适应大小
             var textBlock = new TextBlock
             {
                 Text = message,
                 TextWrapping = TextWrapping.Wrap,
-                VerticalAlignment = VerticalAlignment.Center
-            };
-            var scrollViewer = new ScrollViewer
-            {
-                Content = textBlock,
-                VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
-                HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
-                MaxHeight = 300,
-                MaxWidth = 500
+                VerticalAlignment = VerticalAlignment.Center,
+                MaxWidth = 400 // 限制最大宽度以确保可读性
             };
 
             stackPanel.Children.Add(icon);
-            stackPanel.Children.Add(scrollViewer);
+            stackPanel.Children.Add(textBlock);
 
             var dialog = new ContentDialog
             {
                 Title = title,
                 Content = stackPanel,
                 PrimaryButtonText = "复制信息到剪切板",
-                CloseButtonText = "确认"
+                CloseButtonText = "确认",
+                // 启用自适应大小
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch
             };
 
             var result = await dialog.ShowAsync();
