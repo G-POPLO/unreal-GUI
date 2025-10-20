@@ -78,7 +78,7 @@ namespace unreal_GUI.ViewModel
             {
                 ValidateNames = false,
                 CheckFileExists = false,
-                CheckPathExists = true,               
+                CheckPathExists = true,
             };
             
             if (dialog.ShowDialog() == true)

@@ -10,7 +10,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json;
 using unreal_GUI.Model;
-
+using Microsoft.Win32; 
 namespace unreal_GUI.ViewModel
 {
     public partial class CompileViewModel : ObservableObject
@@ -47,12 +47,12 @@ namespace unreal_GUI.ViewModel
         [RelayCommand]
         private void SelectInput()
         {
-            var dialog = new System.Windows.Forms.OpenFileDialog
+            var dialog = new OpenFileDialog
             {
                 Filter = "Unreal Plugin Files (*.uplugin)|*.uplugin"
             };
             var result = dialog.ShowDialog();
-            if (result == System.Windows.Forms.DialogResult.OK)
+            if (result == true)
             {
                 InputPath = dialog.FileName;
                 
@@ -77,11 +77,17 @@ namespace unreal_GUI.ViewModel
         [RelayCommand]
         private void SelectOutput()
         {
-            var dialog = new System.Windows.Forms.FolderBrowserDialog();
-            var result = dialog.ShowDialog();
-            if (result == System.Windows.Forms.DialogResult.OK)
+            var dialog = new OpenFileDialog
             {
-                OutputPath = dialog.SelectedPath;
+                CheckFileExists = false,
+                CheckPathExists = true,
+                ValidateNames = false,
+               
+            };
+            var result = dialog.ShowDialog();
+            if (result == true)
+            {
+                OutputPath = Path.GetDirectoryName(dialog.FileName);
             }
         }
 

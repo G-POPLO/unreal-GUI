@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <UseWindowsForms>true</UseWindowsForms>
+    <UseWindowsForms>False</UseWindowsForms>
     <TargetFramework>net9.0-windows10.0.18362.0</TargetFramework>
     <RootNamespace>unreal_GUI</RootNamespace>
     <Nullable>disable</Nullable>

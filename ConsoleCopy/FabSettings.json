@@ -1,0 +1,7 @@
+{
+  "FabNotificationEnabled": false,
+  "LimitedTime": "1990-01-01T00:00:00",
+  "HeadlessEnabled": false,
+  "AutoStart": false,
+  "OpenEpic": false
+}
