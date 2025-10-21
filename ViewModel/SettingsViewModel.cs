@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using unreal_GUI.Model;
 using Windows.Networking.PushNotifications;
-using MahApps.Metro.Controls.Dialogs;
 
 namespace unreal_GUI.ViewModel
 {
@@ -79,7 +78,7 @@ namespace unreal_GUI.ViewModel
                 catch
                 {
                     // 如果JSON文件损坏，初始化为空列表
-                    _ = ModernDialog.ShowErrorAsync("JSON文件已损坏，已重置为默认状态");
+                    _ = Task.Run(() => MessageBox.Show("JSON文件已损坏，已重置为默认状态", "错误", MessageBoxButton.OK, MessageBoxImage.Error));
                     EngineInfos = [];
                 }
             }
@@ -129,7 +128,7 @@ namespace unreal_GUI.ViewModel
             }
             catch (Exception)
             {
-                _ = ModernDialog.ShowConfirmAsync("未检测到引擎，请手动设置引擎目录", "提示");
+                _ = Task.Run(() => MessageBox.Show("未检测到引擎，请手动设置引擎目录", "提示", MessageBoxButton.OK, MessageBoxImage.Information));
             }
         }
 
@@ -151,7 +150,8 @@ namespace unreal_GUI.ViewModel
             Properties.Settings.Default.Save();
 
             // 保存JSON文件
-            var settings = new()
+            var settings = new SettingsData
+
             {
                 Engines = EngineInfos,
                 CustomButtons = []
@@ -167,11 +167,11 @@ namespace unreal_GUI.ViewModel
                     settings.CustomButtons = existingSettings?.CustomButtons ?? [];
                 }
                 catch
-                {
-                    // 如果JSON文件损坏，初始化为空列表
-                    _ = ModernDialog.ShowInfoAsync("JSON文件已损坏，已重置为默认状态");
-                    settings.CustomButtons = [];
-                }
+                    {
+                        // 如果JSON文件损坏，初始化为空列表
+                        _ = Task.Run(() => MessageBox.Show("JSON文件已损坏，已重置为默认状态", "信息", MessageBoxButton.OK, MessageBoxImage.Information));
+                        settings.CustomButtons = [];
+                    }
             }
 
             File.WriteAllText("settings.json", JsonConvert.SerializeObject(settings, Formatting.Indented));
