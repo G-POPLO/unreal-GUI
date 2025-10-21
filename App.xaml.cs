@@ -66,7 +66,7 @@ namespace unreal_GUI
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             // 记录错误信息
-            Exception? ex = e.ExceptionObject as Exception;
+            Exception ex = e.ExceptionObject as Exception;
             MessageBox.Show("An unhandled exception occurred in a non-UI thread: " + (ex?.Message ?? "Unknown error"), "Unhandled Exception", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }

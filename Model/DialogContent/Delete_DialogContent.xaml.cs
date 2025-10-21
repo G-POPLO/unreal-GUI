@@ -43,11 +43,13 @@ namespace unreal_GUI.Model
                 {
                     // 如果JSON文件损坏或读取失败，初始化为空列表
                     ButtonsListBox.ItemsSource = new List<SettingsViewModel.CustomButton>();
+
                 }
             }
             else
             {
                 ButtonsListBox.ItemsSource = new List<SettingsViewModel.CustomButton>();
+
             }
         }
 

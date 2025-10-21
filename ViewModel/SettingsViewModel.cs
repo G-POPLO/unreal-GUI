@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using unreal_GUI.Model;
 using Windows.Networking.PushNotifications;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace unreal_GUI.ViewModel
 {
@@ -87,10 +88,10 @@ namespace unreal_GUI.ViewModel
         [RelayCommand]
         private void AddEnginePath()
         {
-            using var folderDialog = new System.Windows.Forms.FolderBrowserDialog();
-            if (folderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            var folderDialog = new OpenFolderDialog();
+            if (folderDialog.ShowDialog() == true)
             {
-                EngineInfos.Add(new EngineInfo { Path = folderDialog.SelectedPath, Version = GetEngineVersion(folderDialog.SelectedPath) });
+                EngineInfos.Add(new EngineInfo { Path = folderDialog.FolderName, Version = GetEngineVersion(folderDialog.FolderName) });
                 UpdateEnginePathsDisplay();
             }
         }
@@ -150,7 +151,7 @@ namespace unreal_GUI.ViewModel
             Properties.Settings.Default.Save();
 
             // 保存JSON文件
-            var settings = new SettingsData
+            var settings = new()
             {
                 Engines = EngineInfos,
                 CustomButtons = []

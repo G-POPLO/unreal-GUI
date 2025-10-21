@@ -163,7 +163,7 @@ namespace unreal_GUI.Model
             string title,
             string primaryButton,
             string closeButton,
-            string? secondaryButton
+            string secondaryButton
              )
 
         {

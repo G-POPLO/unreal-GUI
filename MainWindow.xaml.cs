@@ -7,6 +7,7 @@ using unreal_GUI.ViewModel;
 using unreal_GUI.Model;
 using System.Reflection;
 using System.Windows.Navigation;
+using System.Threading.Tasks;
 
 
 namespace unreal_GUI
@@ -22,7 +23,7 @@ namespace unreal_GUI
             Loaded += MainWindow_Loaded;
         }
         
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
 
             // 订阅 ViewModel 的导航请求事件
@@ -30,11 +31,11 @@ namespace unreal_GUI
             {
                 viewModel.NavigationRequested += OnNavigationRequested;
                 // 初始化默认导航到编译页面
-               viewModel.InitializeJson_Async();
+                await viewModel.InitializeJson_Async();
             }
 
-            MainWindowViewModel.AutoUpdate();
-            MainWindowViewModel.CheckFabAsset();
+            await MainWindowViewModel.AutoUpdate();
+            await MainWindowViewModel.CheckFabAsset();
         }
         
         private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)

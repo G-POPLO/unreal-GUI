@@ -1,4 +1,5 @@
 using iNKORE.UI.WPF.Modern.Controls;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace unreal_GUI.Model
     /// </summary>
     public partial class Add_DialogContent : UserControl
     {
-        public ContentDialog? Dialog { get; set; }
+        public ContentDialog Dialog { get; set; }
         
         public Add_DialogContent()
         {
@@ -32,10 +33,10 @@ namespace unreal_GUI.Model
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var folderDialog = new System.Windows.Forms.FolderBrowserDialog();
-            if (folderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            var folderDialog = new OpenFolderDialog();
+            if (folderDialog.ShowDialog() == true)
             {
-                FolderPathTextBox.Text = folderDialog.SelectedPath;
+                FolderPathTextBox.Text = folderDialog.FolderName;
             }
         }
         

@@ -7,6 +7,6 @@
     <StackPanel>
         <TextBlock TextWrapping="Wrap" Text="请选择预删除的按钮"/>
         <ListBox x:Name="ButtonsListBox" Margin="0,10,0,10" DisplayMemberPath="Name"/>
-        <Button Content="删除" Click="DeleteButton_Click"/>
+        <Button Content="删除" Command="{Binding DeleteButtonCommand}" CommandParameter="{Binding SelectedItem, ElementName=ButtonsListBox}" IsEnabled="{Binding SelectedItem, ElementName=ButtonsListBox}"/>
     </StackPanel>
 </UserControl>

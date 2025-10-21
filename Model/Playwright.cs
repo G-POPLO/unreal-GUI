@@ -122,7 +122,7 @@ namespace unreal_GUI.Model
                 // 元素超时未出现，尝试使用QuerySelector查找，兼容可能已经存在但不可见的情况
                 var element = await page.QuerySelectorAsync(selector);
                 //testelement = element.ToString();
-                ModernDialog.ShowErrorAsync($"元素未找到或超时:{element}", "错误");
+                await ModernDialog.ShowErrorAsync($"元素未找到或超时:{element}", "错误");
                 return element != null ? await element.InnerTextAsync() : string.Empty;
                             
             }
