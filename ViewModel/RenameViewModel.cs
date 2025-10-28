@@ -30,7 +30,7 @@ namespace unreal_GUI.ViewModel
 
         public RenameViewModel()
         {
-            // 构造函数现在为空，因为命令将通过[RelayCommand]特性自动生成
+            
         }
 
         [RelayCommand]
@@ -70,7 +70,7 @@ namespace unreal_GUI.ViewModel
                     UseShellExecute = true,
                     CreateNoWindow = false
                 };
-                var process = System.Diagnostics.Process.Start(processInfo);
+                var process = Process.Start(processInfo);
                 process.WaitForExit(); // 等待重命名进程完成
 
                 Message = "重命名成功！";

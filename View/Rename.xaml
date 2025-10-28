@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:unreal_GUI" xmlns:converters="clr-namespace:unreal_GUI.Converters"
             xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="750" d:DesignWidth="800">
     <UserControl.Resources>
         <Thickness x:Key="Common">10,10,10,10</Thickness>
         <converters:BooleanToInverseBooleanConverter x:Key="InverseBooleanConverter"/>

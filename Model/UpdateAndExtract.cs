@@ -23,7 +23,7 @@ namespace unreal_GUI.Model
         /// <returns>格式化后的字符串</returns>
         private static string FormatBytes(double bytes)
         {
-            string[] sizes = { "B", "KB", "MB", "GB", "TB" };
+            string[] sizes = ["B", "KB", "MB", "GB", "TB"];
             int order = 0;
             while (bytes >= 1024 && order < sizes.Length - 1)
             {
@@ -131,56 +131,54 @@ namespace unreal_GUI.Model
                     // 在后台线程执行下载操作，避免阻塞UI线程
                     await Task.Run(async () =>
                     {
-                        using (var stream = await response.Content.ReadAsStreamAsync())
-                        using (var fileStream = File.Create(downloadPath))
+                        using var stream = await response.Content.ReadAsStreamAsync();
+                        using var fileStream = File.Create(downloadPath);
+                        var buffer = new byte[81920];
+                        long totalRead = 0;
+                        int read;
+                        uint sequenceNumber = 1; // 添加序列号以确保更新顺序正确
+                        DateTime lastUpdateTime = DateTime.Now;
+                        long lastTotalRead = 0;
+                        string downloadSpeed = "计算中...";
+
+                        while ((read = await stream.ReadAsync(buffer)) > 0)
                         {
-                            var buffer = new byte[81920];
-                            long totalRead = 0;
-                            int read;
-                            uint sequenceNumber = 1; // 添加序列号以确保更新顺序正确
-                            DateTime lastUpdateTime = DateTime.Now;
-                            long lastTotalRead = 0;
-                            string downloadSpeed = "计算中...";
-                            
-                            while ((read = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                            await fileStream.WriteAsync(buffer.AsMemory(0, read));
+                            totalRead += read;
+
+                            // 计算下载速度
+                            DateTime now = DateTime.Now;
+                            TimeSpan timeSpan = now - lastUpdateTime;
+                            if (timeSpan.TotalSeconds >= 1) // 每秒更新一次速度
                             {
-                                await fileStream.WriteAsync(buffer, 0, read);
-                                totalRead += read;
-                                
-                                // 计算下载速度
-                                DateTime now = DateTime.Now;
-                                TimeSpan timeSpan = now - lastUpdateTime;
-                                if (timeSpan.TotalSeconds >= 1) // 每秒更新一次速度
+                                long bytesDownloaded = totalRead - lastTotalRead;
+                                double speed = bytesDownloaded / timeSpan.TotalSeconds;
+                                downloadSpeed = $"下载速度: {FormatBytes(speed)}/s";
+                                lastTotalRead = totalRead;
+                                lastUpdateTime = now;
+                            }
+
+                            if (canReportProgress)
+                            {
+                                double progress = totalRead / (double)totalBytes;
+                                int percent = (int)(progress * 100);
+                                // 每次读取都实时更新进度条
+                                var data = new NotificationData
                                 {
-                                    long bytesDownloaded = totalRead - lastTotalRead;
-                                    double speed = bytesDownloaded / timeSpan.TotalSeconds;
-                                    downloadSpeed = $"下载速度: {FormatBytes(speed)}/s";
-                                    lastTotalRead = totalRead;
-                                    lastUpdateTime = now;
-                                }
-                                
-                                if (canReportProgress)
+                                    SequenceNumber = sequenceNumber++ // 递增序列号
+                                };
+                                data.Values["progressValue"] = progress.ToString("F2");
+                                data.Values["progressText"] = $"{percent}%";
+                                data.Values["downloadSpeed"] = downloadSpeed; // 更新下载速度
+
+                                // 在UI线程上更新Toast通知
+                                Application.Current.Dispatcher.Invoke(() =>
                                 {
-                                    double progress = totalRead / (double)totalBytes;
-                                    int percent = (int)(progress * 100);
-                                    // 每次读取都实时更新进度条
-                                    var data = new NotificationData
-                                    {
-                                        SequenceNumber = sequenceNumber++ // 递增序列号
-                                    };
-                                    data.Values["progressValue"] = progress.ToString("F2");
-                                    data.Values["progressText"] = $"{percent}%";
-                                    data.Values["downloadSpeed"] = downloadSpeed; // 更新下载速度
-                                    
-                                    // 在UI线程上更新Toast通知
-                                    Application.Current.Dispatcher.Invoke(() =>
-                                    {
-                                        ToastNotificationManagerCompat.CreateToastNotifier().Update(data, toastTag, toastGroup);
-                                    });
-                                }
+                                    ToastNotificationManagerCompat.CreateToastNotifier().Update(data, toastTag, toastGroup);
+                                });
                             }
                         }
-                        
+
                         // 下载完成后更新通知状态为"正在解压文件"
                         //Application.Current.Dispatcher.Invoke(() =>
                         //{

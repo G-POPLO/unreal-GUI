@@ -45,8 +45,8 @@ namespace unreal_GUI.Model
             var response = await page.GotoAsync(url, new PageGotoOptions
             {
                 WaitUntil = WaitUntilState.DOMContentLoaded,
-            });      
-
+            });
+#if DEBUG
             // 截图保存到本地
             string screenshotPath = "screenshot.png";
             await page.ScreenshotAsync(new PageScreenshotOptions()
@@ -59,7 +59,7 @@ namespace unreal_GUI.Model
             string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
             string destPath = Path.Combine(desktopPath, "screenshot.png");
             File.Copy(screenshotPath, destPath, true);
-
+#endif
             // 获取页面内容
             return await page.ContentAsync();
         }
@@ -117,6 +117,20 @@ namespace unreal_GUI.Model
             }
             catch (TimeoutException)
             {
+#if DEBUG
+                // 截图保存到本地
+                string screenshotPath = "screenshot.png";
+                await page.ScreenshotAsync(new PageScreenshotOptions()
+                {
+                    Path = screenshotPath,
+                    FullPage = true // 截取完整网页
+                });
+
+                // 复制到桌面
+                string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+                string destPath = Path.Combine(desktopPath, "screenshot.png");
+                File.Copy(screenshotPath, destPath, true);
+#endif
                 // 元素超时未出现，尝试使用QuerySelector查找，兼容可能已经存在但不可见的情况
                 var element = await page.QuerySelectorAsync(selector);
                 return element != null ? await element.InnerTextAsync() : string.Empty;
