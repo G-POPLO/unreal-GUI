@@ -112,7 +112,7 @@ namespace unreal_GUI.Model
         $"新的Fab免费资产可领取，截至时间:{limitedTime}",
         "是",
         "openUrl",
-        "https://www.fab.com/limited-time-free",
+        "https://www.fab.com/limited-time-free", // 使用浏览器链接
         "否",
         "dismiss");
                 }

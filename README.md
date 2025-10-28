@@ -57,4 +57,5 @@ Unreal-GUI 是一款旨在简化虚幻引擎（Unreal Engine）相关操作流�
 - [SevenZipSharp](https://github.com/squid-box/SevenZipSharp)
 - [MVVM Toolkit](https://github.com/CommunityToolkit/dotnet)
 - [Newtonsoft.Json](https://www.newtonsoft.com/json)
+- [Microsoft.Toolkit.Uwp.Notifications](https://learn.microsoft.com/zh-cn/windows/apps/develop/notifications/app-notifications/send-local-toast?tabs=desktop-msix)
 
