@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "unreal-GUI_Reminder", "..\unreal-GUI_Reminder\unreal-GUI_Reminder.csproj", "{C53E28FA-855E-49FC-B980-5E9A2CFF0030}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unreal-GUI-Reminder", "Unreal-GUI-Reminder\Unreal-GUI-Reminder.csproj", "{14DC1462-C0AB-4A50-8B12-014BEEBAF7F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +21,10 @@ Global
 		{152FF494-525F-417B-849B-9B7FC54DCA17}.Debug|x64.ActiveCfg = Debug|x64
 		{152FF494-525F-417B-849B-9B7FC54DCA17}.Release|x64.ActiveCfg = Release|x64
 		{152FF494-525F-417B-849B-9B7FC54DCA17}.Release|x64.Build.0 = Release|x64
-		{C53E28FA-855E-49FC-B980-5E9A2CFF0030}.Debug|x64.ActiveCfg = Debug|x64
-		{C53E28FA-855E-49FC-B980-5E9A2CFF0030}.Debug|x64.Build.0 = Debug|x64
-		{C53E28FA-855E-49FC-B980-5E9A2CFF0030}.Release|x64.ActiveCfg = Release|x64
+		{14DC1462-C0AB-4A50-8B12-014BEEBAF7F0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{14DC1462-C0AB-4A50-8B12-014BEEBAF7F0}.Debug|x64.Build.0 = Debug|Any CPU
+		{14DC1462-C0AB-4A50-8B12-014BEEBAF7F0}.Release|x64.ActiveCfg = Release|Any CPU
+		{14DC1462-C0AB-4A50-8B12-014BEEBAF7F0}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -80,29 +80,45 @@ namespace unreal_GUI.Model
             catch (Exception ex)
             {
                 // 显示错误信息                
-                    _ = ModernDialog.ShowErrorAsync($"无法获取Fab免费资产信息: {ex.Message}", "错误");
-                
+                _ = ModernDialog.ShowErrorAsync($"无法获取Fab免费资产信息: {ex.Message}", "错误");
+
                 return null;
             }
 
             return null;
         }
 
-
         /// <summary>
         /// 发送Windows通知
         /// </summary>
         private static void SendFabNotification(DateTime limitedTime)
         {
-            // 使用 WindowsNotification 类显示带操作按钮的通知
-            WindowsNotification.ShowNotificationWithUrls(
-                "Fab资产领取提醒",
-                $"新的Fab免费资产可领取，截至时间:{limitedTime}",
-                "是",
-                "openUrl",
-                "https://www.fab.com/limited-time-free",
-                "否",
-                "dismiss");
+
+                if (Properties.Settings.Default.OpenEpic)
+                {
+                    WindowsNotification.ShowNotificationWithUrls(
+        "Fab资产领取提醒",
+        $"新的Fab免费资产可领取，截至时间:{limitedTime}",
+        "是",
+        "openUrl",
+        "com.epicgames.launcher://fab", // com.epicgames.launcher://fab/limited-time-free用不了，会显示错误页面
+        "否",
+        "dismiss");
+                }
+                else
+                {
+                    WindowsNotification.ShowNotificationWithUrls(
+        "Fab资产领取提醒",
+        $"新的Fab免费资产可领取，截至时间:{limitedTime}",
+        "是",
+        "openUrl",
+        "https://www.fab.com/limited-time-free", // 使用浏览器链接
+        "否",
+        "dismiss");
+                }
+
+
+
         }
     }
 }
