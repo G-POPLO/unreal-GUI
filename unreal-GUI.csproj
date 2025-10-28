@@ -5,7 +5,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <TargetFramework>net9.0-windows10.0.18362.0</TargetFramework>
     <RootNamespace>unreal_GUI</RootNamespace>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <Platforms>x64</Platforms>
@@ -74,10 +74,17 @@
   </PropertyGroup>
   
   <ItemGroup>
+    <Compile Remove="Unreal-GUI-Reminder\**" />
+    <EmbeddedResource Remove="Unreal-GUI-Reminder\**" />
+    <None Remove="Unreal-GUI-Reminder\**" />
+    <Page Remove="Unreal-GUI-Reminder\**" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <Compile Remove="Model\Puppeteer.cs" />
   </ItemGroup>
 
-  <!--指定使用的浏览器-->
+  <!--指定Playwright所使用的浏览器-->
   <!--<PropertyGroup>
 
     <Playwright>

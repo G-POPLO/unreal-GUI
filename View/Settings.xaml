@@ -110,7 +110,7 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="开机启动Fab提醒（检查完毕后应用程序会自动退出）" 
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="开机启动Fab提醒（检查完毕后应用程序会自动退出）(TBD)" 
                                        VerticalAlignment="Center"/>
                             <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding AutoStart}"/>
                         </Grid>
