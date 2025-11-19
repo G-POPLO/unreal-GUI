@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <UseWindowsForms>False</UseWindowsForms>
+    <UseWindowsForms>True</UseWindowsForms>
     <TargetFramework>net9.0-windows10.0.18362.0</TargetFramework>
     <RootNamespace>unreal_GUI</RootNamespace>
     <Nullable>disable</Nullable>
@@ -13,7 +13,6 @@
     <ApplicationIcon>Icon\icon.ico</ApplicationIcon>
     <SignAssembly>False</SignAssembly>
     <Authors>C-Poplo</Authors>
-    <Company />
     <Version>0.4.1.0</Version>
     <Title>Unreal-GUI</Title>
     <AssemblyName>Unreal-GUI</AssemblyName>
@@ -24,6 +23,7 @@
     <Description>一款简单的小工具，辅助用户将复杂的UE5命令转成简单的GUI操作。</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    
   </PropertyGroup>
 
 
@@ -51,8 +51,7 @@
     <PlaywrightPlatform>win</PlaywrightPlatform>
   </PropertyGroup>
   
-  <PropertyGroup>
-   
+  <PropertyGroup> 
     <IncludeSatelliteResource>false</IncludeSatelliteResource>
     <SupportedOSPlatformVersion>10.0.18362.0</SupportedOSPlatformVersion>
   </PropertyGroup>
@@ -75,6 +74,10 @@
     <WarningLevel>3</WarningLevel>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <Optimize>True</Optimize>
+    <!--启用发布就绪运行时编译以提升性能-->
+    <!--<PublishTrimmed>True</PublishTrimmed>
+    <PublishReadyToRun>True</PublishReadyToRun>
+    <PublishReadyToRunComposite>true</PublishReadyToRunComposite>-->
     <!--<TieredPGO>true</TieredPGO>-->
   </PropertyGroup>
   
@@ -104,7 +107,7 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="iNKORE.UI.WPF.Modern" Version="0.10.1" />
-    <PackageReference Include="Markdig" Version="0.42.0" />
+    <PackageReference Include="Markdig" Version="0.43.0" />
     <PackageReference Include="Markdig.Wpf" Version="0.5.0.1" />
     <PackageReference Include="Microsoft.Playwright" Version="1.55.0" />
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />

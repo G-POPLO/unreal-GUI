@@ -6,11 +6,11 @@ using System.IO;
 using System.Media;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json;
 using unreal_GUI.Model;
-using Microsoft.Win32; 
 namespace unreal_GUI.ViewModel
 {
     public partial class CompileViewModel : ObservableObject
@@ -28,11 +28,7 @@ namespace unreal_GUI.ViewModel
         
         [ObservableProperty]
         private string tipsText;
-        
-
-
-
-
+       
         public CompileViewModel()
         {
             LoadEngineList();
@@ -51,8 +47,10 @@ namespace unreal_GUI.ViewModel
             {
                 Filter = "Unreal Plugin Files (*.uplugin)|*.uplugin"
             };
+
             var result = dialog.ShowDialog();
-            if (result == true)
+
+            if (result == DialogResult.OK)
             {
                 InputPath = dialog.FileName;
                 
@@ -77,17 +75,22 @@ namespace unreal_GUI.ViewModel
         [RelayCommand]
         private void SelectOutput()
         {
-            var dialog = new OpenFileDialog
+            using var dialog = new FolderBrowserDialog
             {
-                CheckFileExists = false,
-                CheckPathExists = true,
-                ValidateNames = false,
-               
+                Description = "选择输出文件夹",
+                UseDescriptionForTitle = true
             };
-            var result = dialog.ShowDialog();
-            if (result == true)
+            
+            // 如果已有输出路径，设置为初始目录
+            if (!string.IsNullOrWhiteSpace(OutputPath) && Directory.Exists(OutputPath))
             {
-                OutputPath = Path.GetDirectoryName(dialog.FileName);
+                dialog.SelectedPath = OutputPath;
+            }
+            
+            DialogResult result = dialog.ShowDialog();
+            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.SelectedPath))
+            {
+                OutputPath = dialog.SelectedPath;
             }
         }
 
@@ -145,6 +148,24 @@ namespace unreal_GUI.ViewModel
             {
                 TipsText = "输出路径无效";
                 return;
+            }
+            
+            // 检查输出文件夹是否为空
+            if (Directory.GetFileSystemEntries(OutputPath).Length > 0)
+            {
+                // 显示确认对话框
+                bool? confirmResult = await ModernDialog.ShowConfirmAsync(
+                    $"输出文件夹 '{OutputPath}' 不为空，编译过程将删除该文件夹中的所有内容。是否继续？", 
+                    "确认编译？");
+                
+                // 如果用户取消，则不执行编译
+                if (confirmResult != true)
+                {
+                    TipsText = "编译操作已取消";
+                    var player = new SoundPlayer(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav"));
+                    player.Play();
+                    return;
+                }
             }
 
             try

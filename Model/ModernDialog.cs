@@ -57,7 +57,7 @@ namespace unreal_GUI.Model
         }
 
         /// <summary>
-        /// 显示一个仅 OK 按钮的对话框
+        /// 显示一个仅 OK 按钮的对话框，用于信息提示
         /// </summary>
         public static async Task ShowInfoAsync(string message, string title = "提示")
         {
@@ -72,7 +72,7 @@ namespace unreal_GUI.Model
             {
                 Glyph = "\uF167", // InfoSolid图标
                 FontFamily = new FontFamily("Segoe MDL2 Assets"),
-                FontSize = 16,
+                FontSize = 18,
                 Margin = new Thickness(0, 0, 10, 0),
                 VerticalAlignment = VerticalAlignment.Center
             };
@@ -118,7 +118,7 @@ namespace unreal_GUI.Model
             {
                 Glyph = "\uEA39", // ErrorBadge图标
                 FontFamily = new FontFamily("Segoe MDL2 Assets"),
-                FontSize = 16,
+                FontSize = 18,
                 Margin = new Thickness(0, 0, 10, 0),
                 VerticalAlignment = VerticalAlignment.Center
             };
