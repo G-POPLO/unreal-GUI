@@ -8,7 +8,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="750" d:DesignWidth="800">
     <UserControl.Resources>
-        <Thickness x:Key="Common">10,10,10,10</Thickness>
         <converters:BooleanToInverseBooleanConverter x:Key="InverseBooleanConverter"/>
     </UserControl.Resources>
     <Grid Margin="20">
@@ -20,7 +19,7 @@
                 <!-- 类型选择卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
                         BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
-                        BorderThickness="1" CornerRadius="4" Margin="0,0,0,20">
+                         CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
                             <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE946;" Margin="0,0,10,0" VerticalAlignment="Center"/>
@@ -47,7 +46,7 @@
                 <!-- 路径设置卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
                         BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
-                        BorderThickness="1" CornerRadius="4" Margin="0,0,0,20">
+                       CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
                             <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;" Margin="0,0,10,0" VerticalAlignment="Center"/>
@@ -72,7 +71,7 @@
                 <!-- 重命名操作卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
                         BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
-                        BorderThickness="1" CornerRadius="4">
+                         CornerRadius="4">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
                             <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE945;" Margin="0,0,10,0" VerticalAlignment="Center"/>

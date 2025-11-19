@@ -21,7 +21,7 @@
                 <!-- 插件目录卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
                         BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
-                        BorderThickness="1" CornerRadius="4" Margin="0,0,0,20">
+                          CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
                             <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;" Margin="0,0,10,0" VerticalAlignment="Center"/>
@@ -49,7 +49,7 @@
                 <!-- 常用网站卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
                         BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
-                        BorderThickness="1" CornerRadius="4" Margin="0,0,0,20">
+                          CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
                             <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE71B;" Margin="0,0,10,0" VerticalAlignment="Center"/>
@@ -81,7 +81,7 @@
                 <!-- 自定义文件夹卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
                         BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
-                        BorderThickness="1" CornerRadius="4">
+                          CornerRadius="4">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
                             <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;" Margin="0,0,10,0" VerticalAlignment="Center"/>

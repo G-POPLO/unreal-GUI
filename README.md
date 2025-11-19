@@ -22,6 +22,7 @@ Unreal-GUI 是一款旨在简化虚幻引擎（Unreal Engine）相关操作流�
 2. **重命名项目**: 使用 [renom](https://github.com/UnrealisticDev/Renom) 进行重命名操作，需要管理员权限，否则会弹出拒绝访问`os error 5`。
 3. **快速访问**: 方便用户打开UE5的插件目录等。
 4. **缓存清理**: 清理项目文件的缓存，包括编译生成的中间文件和临时文件。同时可以查看DDC的缓存情况等。
+5. **Fab资产通知提醒（测试）**:该功能允许用户在Fab资产有更新时收到通知提醒，确保用户及时了解最新的资产动态。 
 
 ## 安装说明
 应用程序需安装[.NET 9 Runtime](https://dotnet.microsoft.com/zh-cn/download/dotnet/9.0/runtime)，否则会提示缺少依赖项。

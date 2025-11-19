@@ -20,7 +20,7 @@
                 <!-- 应用信息卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
                         BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
-                        BorderThickness="1" CornerRadius="4" Margin="0,0,0,20">
+                          CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
                             <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE946;" Margin="0,0,10,0" VerticalAlignment="Center"/>
@@ -44,7 +44,7 @@
                 <!-- 使用说明卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
                         BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
-                        BorderThickness="1" CornerRadius="4">
+                          CornerRadius="4">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
                             <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE945;" Margin="0,0,10,0" VerticalAlignment="Center"/>
