@@ -36,18 +36,14 @@ namespace unreal_GUI.ViewModel
         [RelayCommand]
         private void SelectFolder()
         {
-            var dialog = new Microsoft.Win32.OpenFileDialog
+            using var dialog = new System.Windows.Forms.FolderBrowserDialog
             {
-                CheckFileExists = false,
-                CheckPathExists = true,
-                ValidateNames = false,
-               
+                Description = "选择文件夹"
             };
             var result = dialog.ShowDialog();
-            if (result == true)
+            if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.SelectedPath))
             {
-                // 通过选择一个文件，获取其所在的文件夹路径
-                InputPath = Path.GetDirectoryName(dialog.FileName);
+                InputPath = dialog.SelectedPath;
             }
         }
 

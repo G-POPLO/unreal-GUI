@@ -9,8 +9,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using unreal_GUI.Model;
-using Windows.Networking.PushNotifications;
+using MessageBox = iNKORE.UI.WPF.Modern.Controls.MessageBox;
+
 
 namespace unreal_GUI.ViewModel
 {
@@ -51,6 +51,35 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private bool _headlessEnabled;
 
+
+        public partial class EngineInfo : ObservableObject
+        {
+            [ObservableProperty]
+            private string _path;
+
+            [ObservableProperty]
+            private string _version;
+        }
+
+        public partial class SettingsData : ObservableObject
+        {
+            [ObservableProperty]
+            private List<EngineInfo> _engines;
+
+            [ObservableProperty]
+            private List<CustomButton> _customButtons;
+        }
+
+        public partial class CustomButton : ObservableObject
+        {
+            [ObservableProperty]
+            private string _name;
+
+            [ObservableProperty]
+            private string _path;
+        }
+
+
         public SettingsViewModel()
         {
             // 初始化设置
@@ -78,7 +107,7 @@ namespace unreal_GUI.ViewModel
                 catch
                 {
                     // 如果JSON文件损坏，初始化为空列表
-                    _ = Task.Run(() => MessageBox.Show("JSON文件已损坏，已重置为默认状态", "错误", MessageBoxButton.OK, MessageBoxImage.Error));
+                    _ = Task.Run(() => MessageBox.Show("JSON文件已损坏，已重置为默认状态", "错误", MessageBoxButton.OK, MessageBoxImage.Hand));
                     EngineInfos = [];
                 }
             }
@@ -138,15 +167,12 @@ namespace unreal_GUI.ViewModel
             // 保存应用程序设置
             Properties.Settings.Default.AutoOpen = AutoOpen;
             Properties.Settings.Default.Gitcode = Gitcode;
-
             Properties.Settings.Default.AutoUpdate = AutoUpdate;
-
-            Properties.Settings.Default.FabNotificationEnabled = FabNotification; // 保存FabNotification设置
-            Properties.Settings.Default.LimitedTime = LimitedTime; // 保存LimitedTime设置
-
-            Properties.Settings.Default.AutoStart = AutoStart; // 保存AutoStart设置
-            Properties.Settings.Default.OpenEpic = OpenEpic; // 保存OpenEpic设置
-            Properties.Settings.Default.HeadlessEnabled = HeadlessEnabled; // 保存HeadlessEnabled设置
+            Properties.Settings.Default.FabNotificationEnabled = FabNotification;
+            Properties.Settings.Default.LimitedTime = LimitedTime;
+            Properties.Settings.Default.AutoStart = AutoStart;
+            Properties.Settings.Default.OpenEpic = OpenEpic;
+            Properties.Settings.Default.HeadlessEnabled = HeadlessEnabled;
             Properties.Settings.Default.Save();
 
             // 保存JSON文件
@@ -167,11 +193,11 @@ namespace unreal_GUI.ViewModel
                     settings.CustomButtons = existingSettings?.CustomButtons ?? [];
                 }
                 catch
-                    {
-                        // 如果JSON文件损坏，初始化为空列表
-                        _ = Task.Run(() => MessageBox.Show("JSON文件已损坏，已重置为默认状态", "信息", MessageBoxButton.OK, MessageBoxImage.Information));
-                        settings.CustomButtons = [];
-                    }
+                {
+                    // 如果JSON文件损坏，初始化为空列表
+                    _ = Task.Run(() => MessageBox.Show("JSON文件已损坏，已重置为默认状态", "信息", MessageBoxButton.OK, MessageBoxImage.Information));
+                    settings.CustomButtons = [];
+                }
             }
 
             File.WriteAllText("settings.json", JsonConvert.SerializeObject(settings, Formatting.Indented));
@@ -208,32 +234,7 @@ namespace unreal_GUI.ViewModel
             return "未知版本";
         }
 
-        public partial class EngineInfo : ObservableObject
-        {
-            [ObservableProperty]
-            private string _path;
 
-            [ObservableProperty]
-            private string _version;
-        }
-
-        public partial class SettingsData : ObservableObject
-        {
-            [ObservableProperty]
-            private List<EngineInfo> _engines;
-
-            [ObservableProperty]
-            private List<CustomButton> _customButtons;
-        }
-
-        public partial class CustomButton : ObservableObject
-        {
-            [ObservableProperty]
-            private string _name;
-
-            [ObservableProperty]
-            private string _path;
-        }
 
     }
 }
