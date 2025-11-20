@@ -23,7 +23,7 @@
                           CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE946;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE946;" Margin="0,0,10,0" VerticalAlignment="Center"/>
                             <TextBlock Text="Unreal-GUI" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
                         
@@ -34,7 +34,7 @@
                         <Button x:Name="Update" Margin="0,0,0,0" Command="{Binding OpenUpdateUrlCommand}" 
                                 Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
                             <StackPanel Orientation="Horizontal">
-                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE72C;" Margin="0,0,5,0"/>
+                                <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE72C;" Margin="0,0,5,0"/>
                                 <TextBlock Text="获取更新"/>
                             </StackPanel>
                         </Button>
@@ -47,7 +47,7 @@
                           CornerRadius="4">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE945;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE945;" Margin="0,0,10,0" VerticalAlignment="Center"/>
                             <TextBlock Text="使用说明" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
                         
@@ -74,7 +74,13 @@
                             <LineBreak/>
                             重命名项目或插件目录的工具
                         </TextBlock>
-                        
+
+                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,10">
+    <Run FontWeight="SemiBold">自定义模板：</Run>
+    <LineBreak/>
+    添加由用户自定义的模板以供项目创建时使用
+                        </TextBlock>
+
                     </StackPanel>
                 </Border>
             </StackPanel>

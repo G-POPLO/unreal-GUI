@@ -24,7 +24,7 @@
                           CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,10,0" VerticalAlignment="Center"/>
                             <TextBlock Text="插件目录" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
                         
@@ -36,7 +36,7 @@
                                             CommandParameter="{Binding}" 
                                             Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
                                         <StackPanel Orientation="Horizontal">
-                                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
+                                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
                                             <TextBlock Text="{Binding DisplayName, StringFormat='打开 {0} 插件目录'}"/>
                                         </StackPanel>
                                     </Button>
@@ -52,25 +52,25 @@
                           CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE71B;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE71B;" Margin="0,0,10,0" VerticalAlignment="Center"/>
                             <TextBlock Text="常用网站" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
                         <WrapPanel Orientation="Horizontal">
                             <Button Margin="0,0,10,10" Command="{Binding OpenWebsiteCommand}" CommandParameter="https://www.fab.com/" HorizontalAlignment="Left">
                                 <StackPanel Orientation="Horizontal">
-                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE71B;" Margin="0,0,5,0"/>
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE71B;" Margin="0,0,5,0"/>
                                     <TextBlock Text="Fab"/>
                                 </StackPanel>
                             </Button>
                             <Button Margin="0,0,10,10" Command="{Binding OpenWebsiteCommand}" CommandParameter="https://dev.epicgames.com/community/unreal-engine/learning" HorizontalAlignment="Left">
                                 <StackPanel Orientation="Horizontal">
-                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE71B;" Margin="0,0,5,0"/>
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE71B;" Margin="0,0,5,0"/>
                                     <TextBlock Text="社区学习库"/>
                                 </StackPanel>
                             </Button>
                             <Button Margin="0,0,10,10" Command="{Binding OpenWebsiteCommand}" CommandParameter="https://docs.unrealengine.com/" HorizontalAlignment="Left">
                                 <StackPanel Orientation="Horizontal">
-                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE736;" Margin="0,0,5,0"/>
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE736;" Margin="0,0,5,0"/>
                                     <TextBlock Text="文档"/>
                                 </StackPanel>
                             </Button>
@@ -84,7 +84,7 @@
                           CornerRadius="4">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,10,0" VerticalAlignment="Center"/>
                             <TextBlock Text="自定义文件夹" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
                         
@@ -93,7 +93,7 @@
                                 <DataTemplate>
                                     <Button Margin="0,0,0,10" Command="{Binding DataContext.OpenCustomDirectoryCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" HorizontalAlignment="Left">
                                         <StackPanel Orientation="Horizontal">
-                                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
+                                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
                                             <TextBlock Text="{Binding DisplayName}"/>
                                         </StackPanel>
                                     </Button>
@@ -105,14 +105,14 @@
                             <Button Margin="0,0,10,0" Command="{Binding AddCustomCommand}" 
                                     Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
                                 <StackPanel Orientation="Horizontal">
-                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE710;" Margin="0,0,5,0"/>
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE710;" Margin="0,0,5,0"/>
                                     <TextBlock Text="添加"/>
                                 </StackPanel>
                             </Button>
                             <Button Margin="0,0,0,0" Command="{Binding DeleteCustomCommand}" 
                                     Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
                                 <StackPanel Orientation="Horizontal">
-                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE74D;" Margin="0,0,5,0"/>
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74D;" Margin="0,0,5,0"/>
                                     <TextBlock Text="删除"/>
                                 </StackPanel>
                             </Button>

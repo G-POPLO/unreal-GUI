@@ -23,7 +23,7 @@
                       CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8FD;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8FD;" Margin="0,0,10,0" VerticalAlignment="Center"/>
                             <TextBlock Text="引擎目录设定" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
 
@@ -38,7 +38,7 @@
                             <Button Command="{Binding SaveSettingsCommand}" Margin="0,0,0,0" HorizontalAlignment="Right" 
                                     Style="{DynamicResource AccentButtonStyle}">
                                 <StackPanel Orientation="Horizontal">
-                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE74E;" Margin="0,0,5,0"/>
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74E;" Margin="0,0,5,0"/>
                                     <TextBlock Text="保存设置"/>
                                 </StackPanel>
                             </Button>
@@ -56,7 +56,7 @@
                         CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE71D;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE71D;" Margin="0,0,10,0" VerticalAlignment="Center"/>
                             <TextBlock Text="应用设置" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
 
@@ -66,21 +66,21 @@
                             <ui:AppBarToggleButton x:Name="Button0" Label="任务完成后打开输出文件夹" 
                                                    IsChecked="{Binding AutoOpen}" Margin="0,0,10,0" HorizontalAlignment="Left">
                                 <ui:AppBarToggleButton.Icon>
-                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;"/>
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;"/>
                                 </ui:AppBarToggleButton.Icon>
                             </ui:AppBarToggleButton>
 
                             <ui:AppBarToggleButton x:Name="Button3" Label="应用程序启动时自动检查更新" 
                         IsChecked="{Binding AutoUpdate}" Margin="0,0,10,0" HorizontalAlignment="Left">
                                 <ui:AppBarToggleButton.Icon>
-                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xECC5;"/>
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xECC5;"/>
                                 </ui:AppBarToggleButton.Icon>
                             </ui:AppBarToggleButton>
 
                             <ui:AppBarToggleButton x:Name="Button1" Label="使用Gitcode作为更新下载源" 
                                                    IsChecked="{Binding Gitcode}" Margin="0,0,10,0" HorizontalAlignment="Left">
                                 <ui:AppBarToggleButton.Icon>
-                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEC05;"/>
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEC05;"/>
                                 </ui:AppBarToggleButton.Icon>
                             </ui:AppBarToggleButton>
 
@@ -93,7 +93,7 @@
                        CornerRadius="4">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEC7A;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEC7A;" Margin="0,0,10,0" VerticalAlignment="Center"/>
                             <TextBlock Text="实验性选项" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
 
@@ -137,7 +137,7 @@
                         <ui:AppBarToggleButton x:Name="beta_Button0" Label="Fab免费资产领取通知" 
                                                IsChecked="{Binding FabNotification}" HorizontalAlignment="Left">
                             <ui:AppBarToggleButton.Icon>
-                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEC24;"/>
+                                <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEC24;"/>
                             </ui:AppBarToggleButton.Icon>
                         </ui:AppBarToggleButton>
 

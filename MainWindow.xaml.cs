@@ -8,6 +8,7 @@ using unreal_GUI.Model;
 using System.Reflection;
 using System.Windows.Navigation;
 using System.Threading.Tasks;
+using unreal_GUI.View;
 
 
 namespace unreal_GUI
@@ -53,6 +54,7 @@ namespace unreal_GUI
                     "Clear" => typeof(Clear),
                     "Settings" => typeof(Settings),
                     "About" => typeof(About),
+                    "Templates" => typeof(Templates),
                     _ => typeof(Compile)
                 };
                 
@@ -80,6 +82,7 @@ namespace unreal_GUI
             
             // 同步NavigationView选中项与当前页面                   
                 string pageTag = ContentFrame.Content.GetType().Name;   
+
             // 根据页面类型找到对应的菜单项并选中
             foreach (var item in NavigationView.MenuItems)
                 {

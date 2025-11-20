@@ -71,7 +71,7 @@ namespace unreal_GUI.Model
             var icon = new FontIcon
             {
                 Glyph = "\uF167", // InfoSolid图标
-                FontFamily = new FontFamily("Segoe MDL2 Assets"),
+                FontFamily = new FontFamily("Segoe Fluent Icons"),
                 FontSize = 18,
                 Margin = new Thickness(0, 0, 10, 0),
                 VerticalAlignment = VerticalAlignment.Center
@@ -117,7 +117,7 @@ namespace unreal_GUI.Model
             var icon = new FontIcon
             {
                 Glyph = "\uEA39", // ErrorBadge图标
-                FontFamily = new FontFamily("Segoe MDL2 Assets"),
+                FontFamily = new FontFamily("Segoe Fluent Icons"),
                 FontSize = 18,
                 Margin = new Thickness(0, 0, 10, 0),
                 VerticalAlignment = VerticalAlignment.Center

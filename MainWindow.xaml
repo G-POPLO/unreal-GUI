@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModel="clr-namespace:unreal_GUI.ViewModel"
         mc:Ignorable="d"
-        Title="Unreal-GUI" Height="550" Width="700"
+        Title="Unreal-GUI" Height="600" Width="800"
     xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
         ui:WindowHelper.SystemBackdropType="Mica"
     ui:WindowHelper.UseModernWindowStyle="True">
@@ -39,11 +39,19 @@
                         <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Link}"/>
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
+                
                 <ui:NavigationViewItem Content="清除缓存" Tag="Clear">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Delete}"/>
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
+
+                <ui:NavigationViewItem Content="自定义模板" Tag="Templates">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Edit}"/>
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+
                 <ui:NavigationViewItem Content="设置" Tag="Settings">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Settings}"/>

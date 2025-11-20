@@ -22,20 +22,20 @@
                          CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE946;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE946;" Margin="0,0,10,0" VerticalAlignment="Center"/>
                             <TextBlock Text="类型选择" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
                         
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
                             <RadioButton x:Name="rbProject" IsChecked="{Binding IsProjectSelected}" Margin="0,0,20,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B9;" Margin="0,0,5,0" FontSize="12"/>
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B9;" Margin="0,0,5,0" FontSize="12"/>
                                     <TextBlock Text="项目"/>
                                 </StackPanel>
                             </RadioButton>
                             <RadioButton x:Name="rbPlugin" IsChecked="{Binding IsProjectSelected, Converter={StaticResource InverseBooleanConverter}}">
                                 <StackPanel Orientation="Horizontal">
-                                    <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE74C;" Margin="0,0,5,0" FontSize="12"/>
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74C;" Margin="0,0,5,0" FontSize="12"/>
                                     <TextBlock Text="插件"/>
                                 </StackPanel>
                             </RadioButton>
@@ -49,7 +49,7 @@
                        CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,10,0" VerticalAlignment="Center"/>
                             <TextBlock Text="路径设置" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
                         
@@ -57,7 +57,7 @@
                         <TextBox x:Name="Input" Margin="0,0,0,10" Text="{Binding InputPath, UpdateSourceTrigger=PropertyChanged}"/>
                         <Button Margin="0,0,0,15" Command="{Binding SelectFolderCommand}" HorizontalAlignment="Left">
                             <StackPanel Orientation="Horizontal">
-                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
+                                <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
                                 <TextBlock Text="浏览"/>
                             </StackPanel>
                         </Button>
@@ -74,14 +74,14 @@
                          CornerRadius="4">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE945;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE945;" Margin="0,0,10,0" VerticalAlignment="Center"/>
                             <TextBlock Text="执行重命名" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
                         
                         <Button x:Name="RenameButton" Margin="0,0,0,15" Command="{Binding RenameCommand}" IsEnabled="{Binding IsRenameButtonEnabled}" 
                                 Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
                             <StackPanel Orientation="Horizontal">
-                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8AC;" Margin="0,0,5,0"/>
+                                <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8AC;" Margin="0,0,5,0"/>
                                 <TextBlock Text="开始重命名"/>
                             </StackPanel>
                         </Button>

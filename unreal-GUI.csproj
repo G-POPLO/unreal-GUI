@@ -13,7 +13,7 @@
     <ApplicationIcon>Icon\icon.ico</ApplicationIcon>
     <SignAssembly>False</SignAssembly>
     <Authors>C-Poplo</Authors>
-    <Version>0.4.1.1</Version>
+    <Version>0.4.2.0</Version>
     <Title>Unreal-GUI</Title>
     <AssemblyName>Unreal-GUI</AssemblyName>
     <DelaySign>True</DelaySign>

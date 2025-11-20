@@ -19,7 +19,7 @@
                           CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE946;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE946;" Margin="0,0,10,0" VerticalAlignment="Center"/>
                             <TextBlock Text="引擎版本选择" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
                         
@@ -34,7 +34,7 @@
                           CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,10,0" VerticalAlignment="Center"/>
                             <TextBlock Text="插件路径设置" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
                         
@@ -43,7 +43,7 @@
                         <Button Margin="0,0,0,0" Command="{Binding SelectInputCommand}" 
                                 Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
                             <StackPanel Orientation="Horizontal">
-                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
+                                <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
                                 <TextBlock Text="浏览"/>
                             </StackPanel>
                         </Button>
@@ -56,7 +56,7 @@
                           CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE74C;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74C;" Margin="0,0,10,0" VerticalAlignment="Center"/>
                             <TextBlock Text="输出路径设置" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
                         
@@ -65,7 +65,7 @@
                         <Button Margin="0,0,0,0" Command="{Binding SelectOutputCommand}" 
                                 Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
                             <StackPanel Orientation="Horizontal">
-                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
+                                <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
                                 <TextBlock Text="浏览"/>
                             </StackPanel>
                         </Button>
@@ -78,7 +78,7 @@
                           CornerRadius="4">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                            <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE945;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE945;" Margin="0,0,10,0" VerticalAlignment="Center"/>
                             <TextBlock Text="执行编译" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
                         
@@ -86,7 +86,7 @@
                         <Button Margin="0,0,0,0" Command="{Binding CompileCommand}" IsEnabled="{Binding IsCompileButtonEnabled}" 
                                 Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
                             <StackPanel Orientation="Horizontal">
-                                <ui:FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE768;" Margin="0,0,5,0"/>
+                                <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE768;" Margin="0,0,5,0"/>
                                 <TextBlock Text="开始编译"/>
                                 
                             </StackPanel>
