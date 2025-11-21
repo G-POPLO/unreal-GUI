@@ -9,7 +9,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using unreal_GUI.Model.DialogContent;
 using unreal_GUI.ViewModel;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+using System.Windows.Media;
 
 namespace unreal_GUI.Model
 {
@@ -275,6 +278,45 @@ namespace unreal_GUI.Model
 
             return result;
 
+        }
+
+        // 查找视觉子元素的辅助方法
+        public static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+        {
+            if (parent == null) return null;
+            
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(parent, i);
+                if (child is T)
+                {
+                    return (T)child;
+                }
+                
+                T childOfChild = FindVisualChild<T>(child);
+                if (childOfChild != null)
+                {
+                    return childOfChild;
+                }
+            }
+            
+            return null;
+        }
+        
+        public static async Task<ContentDialogResult> ShowCategoriesDialogAsync()
+        {
+            var content = new Add_Categories();
+
+            ContentDialog dialog = new()
+            {
+                Title = "添加模板类别",
+                PrimaryButtonText = "保存",
+                SecondaryButtonText = "取消",
+                DefaultButton = ContentDialogButton.Primary,
+                Content = content
+            };
+            var result = await dialog.ShowAsync();
+            return result;
         }
     }
 }

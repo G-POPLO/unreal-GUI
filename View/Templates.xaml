@@ -7,7 +7,7 @@
              xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
              xmlns:viewmodel="clr-namespace:unreal_GUI.ViewModel"
              mc:Ignorable="d" 
-             d:DesignHeight="1800" d:DesignWidth="800">
+             d:DesignHeight="2000" d:DesignWidth="800">
     <UserControl.DataContext>
         <viewmodel:TemplatesViewModel />
     </UserControl.DataContext>
@@ -57,12 +57,23 @@
 
                         <!-- 模板名称 -->
                         <StackPanel Margin="0,0,0,15">
+                            <TextBlock Text="以下信息将填入TemplateDefs.ini" 
+            FontSize="12" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" 
+            Margin="0,5,0,5"/>
                             <TextBlock Text="模板名称" Margin="0,0,0,5"/>
+                            
                             <TextBox Text="{Binding TemplateName}" Width="400"/>
                             <TextBlock Text="这将显示在新建项目对话框中的模板选择区域" 
                                        FontSize="12" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" 
                                        Margin="0,5,0,0"/>
                         </StackPanel>
+
+
+                        <!-- 模板ID -->
+                        <TextBlock Text="Project ID（唯一）:" 
+                          FontSize="12" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" 
+                          Margin="0,5,0,15"/>
+
 
                         <!-- 英文描述 -->
                         <StackPanel Margin="0,0,0,15">
@@ -107,9 +118,17 @@
                         <RadioButton Content="电影、电视和现场活动 (ME)" IsChecked="{Binding IsCategoryME}" Margin="0,0,0,10"/>
                         <RadioButton Content="建筑、工程和建造 (AEC)" IsChecked="{Binding IsCategoryAEC}" Margin="0,0,0,10"/>
                         <RadioButton Content="汽车、产品设计和生产 (MFG)" IsChecked="{Binding IsCategoryMFG}" Margin="0,0,0,10"/>
+                        <RadioButton Content="模拟、室外地理、AR/VR项目 (SIM)" IsChecked="{Binding IsCategorySIM}" Margin="0,0,0,10"/>
 
                         <TextBlock Text="选择模板将显示在新建项目对话框中的类别" 
                                    FontSize="12" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" />
+                        
+                        <Button Command="{Binding CreateTemplateCommand}" Style="{DynamicResource AccentButtonStyle}" Margin="0,10,10,0">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE770;" Margin="0,0,5,0"/>
+                                <TextBlock Text="创建新的分类"/>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
                 </Border>
 
@@ -144,7 +163,7 @@
                             <StackPanel>
                                 <TextBlock Text="模板预览图" Margin="0,0,0,5"/>
                                 <Border BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
-                                        BorderThickness="1" Width="400" Height="225" HorizontalAlignment="Left">
+                                        BorderThickness="1" Width="400" Height="200" HorizontalAlignment="Left">
                                     <Image Source="{Binding TemplatePreview}" Stretch="UniformToFill"/>
                                 </Border>
                                 <Button Command="{Binding BrowsePreviewCommand}" Margin="0,10,0,0" HorizontalAlignment="Left">
@@ -153,7 +172,7 @@
                                         <TextBlock Text="选择预览图"/>
                                     </StackPanel>
                                 </Button>
-                                <TextBlock Text="PNG格式，推荐400x225像素" 
+                                <TextBlock Text="PNG格式，推荐400x200像素" 
                                            FontSize="12" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" 
                                            Margin="0,5,0,0"/>
                             </StackPanel>
@@ -196,9 +215,9 @@
                 </StackPanel>
 
                 <!-- 状态信息 -->
-                <TextBlock x:Name="StatusText" Text="{Binding StatusMessage}" 
+                <!--<TextBlock x:Name="StatusText" Text="{Binding StatusMessage}" 
                            TextWrapping="Wrap" Margin="0,0,0,20" 
-                           Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+                           Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>-->
             </StackPanel>
         </ScrollViewer>
     </Grid>
