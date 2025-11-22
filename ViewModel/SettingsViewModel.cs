@@ -157,7 +157,7 @@ namespace unreal_GUI.ViewModel
             }
             catch (Exception)
             {
-                _ = Task.Run(() => MessageBox.Show("未检测到引擎，请手动设置引擎目录", "提示", MessageBoxButton.OK, MessageBoxImage.Information));
+                _ = Task.Run(() => MessageBox.Show("未检测到引擎，请手动设置引擎目录", "提示", MessageBoxButton.OK,MessageBoxImage.Information));
             }
         }
 
@@ -176,8 +176,7 @@ namespace unreal_GUI.ViewModel
             Properties.Settings.Default.Save();
 
             // 保存JSON文件
-            var settings = new SettingsData
-
+            SettingsData settings = new()
             {
                 Engines = EngineInfos,
                 CustomButtons = []

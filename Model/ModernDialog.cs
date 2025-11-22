@@ -11,8 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using unreal_GUI.Model.DialogContent;
 using unreal_GUI.ViewModel;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
-using System.Windows.Media;
+
 
 namespace unreal_GUI.Model
 {
@@ -257,8 +256,14 @@ namespace unreal_GUI.Model
                 {
                     content.ButtonsListBox.ItemsSource = settings.CustomButtons;
                 }
-
             }
+
+            // 为删除按钮添加删除完成后的刷新事件
+            content.DeleteCompleted += (sender, args) =>
+            {
+                // 删除完成后立即通知QuickAccess页面刷新
+                NavigationRequested?.Invoke(null, "QuickAccess");
+            };
 
             ContentDialog dialog = new()
             {
@@ -269,39 +274,34 @@ namespace unreal_GUI.Model
             };
             var result = await dialog.ShowAsync();
 
-
-            if (result == ContentDialogResult.Primary)
-            {
-                // 关闭时通知QuickAccess页面刷新
-                NavigationRequested?.Invoke(null, "QuickAccess");
-            }
+            // 关闭对话框时也刷新页面
+            //NavigationRequested?.Invoke(null, "QuickAccess");
 
             return result;
-
         }
 
         // 查找视觉子元素的辅助方法
-        public static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
-        {
-            if (parent == null) return null;
+        //public static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+        //{
+        //    if (parent == null) return null;
             
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
-            {
-                DependencyObject child = VisualTreeHelper.GetChild(parent, i);
-                if (child is T)
-                {
-                    return (T)child;
-                }
+        //    for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+        //    {
+        //        DependencyObject child = VisualTreeHelper.GetChild(parent, i);
+        //        if (child is T)
+        //        {
+        //            return (T)child;
+        //        }
                 
-                T childOfChild = FindVisualChild<T>(child);
-                if (childOfChild != null)
-                {
-                    return childOfChild;
-                }
-            }
+        //        T childOfChild = FindVisualChild<T>(child);
+        //        if (childOfChild != null)
+        //        {
+        //            return childOfChild;
+        //        }
+        //    }
             
-            return null;
-        }
+        //    return null;
+        //}
         
         public static async Task<ContentDialogResult> ShowCategoriesDialogAsync()
         {
