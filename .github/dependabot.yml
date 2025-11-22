@@ -1,5 +1,5 @@
 # .github/dependabot.yml
-
+version: 2
 updates:
   # NuGet packages (for C# WPF projects)
   - package-ecosystem: "nuget"
