@@ -1,0 +1,18 @@
+# .github/dependabot.yml
+
+updates:
+  # NuGet packages (for C# WPF projects)
+  - package-ecosystem: "nuget"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+      day: "monday"
+      time: "09:00"
+
+    open-pull-requests-limit: 10
+    reviewers:
+      - "G-POPLO"      
+    labels:
+      - "dependencies"
+      - "nuget"
+      - "wpf"
