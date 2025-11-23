@@ -1,6 +1,7 @@
 using iNKORE.UI.WPF.Modern.Controls;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using unreal_GUI.ViewModel;
@@ -32,6 +33,27 @@ namespace unreal_GUI.Model.DialogContent
         {
             ViewModel = new AddCategoriesViewModel();
             ViewModel.OnSaveRequested += ViewModel_OnSaveRequested;
+            // 监听ViewModel的PropertyChanged事件，以更新对话框按钮状态
+            ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+            // 监听DisplayNameItems集合变化
+            ViewModel.DisplayNameItems.CollectionChanged += (s, e) => UpdateDialogButtonState();
+        }
+
+        // 处理ViewModel的属性变化事件
+        private void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            // 当任何属性变化时，更新对话框按钮状态
+            UpdateDialogButtonState();
+        }
+
+        // 更新对话框按钮状态
+        private void UpdateDialogButtonState()
+        {
+            if (Dialog != null)
+            {
+                // 根据ViewModel的CanSave属性启用或禁用保存按钮
+                Dialog.IsPrimaryButtonEnabled = ViewModel.CanSave;
+            }
         }
 
         // ViewModel保存请求事件处理

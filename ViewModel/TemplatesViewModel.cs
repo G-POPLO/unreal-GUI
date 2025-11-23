@@ -88,13 +88,6 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private EngineInfo selectedEngine;
 
-        //引擎信息类
-        public class EngineInfo
-        {
-            public string DisplayName { get; set; }
-            public string Path { get; set; }
-        }
-
         // 1. 添加Id属性用于绑定
         [ObservableProperty]
         private string id;
@@ -102,6 +95,15 @@ namespace unreal_GUI.ViewModel
         // 控制是否允许项目创建
         [ObservableProperty]
         private bool isProjectSelected = true;
+
+        //引擎信息类
+        public class EngineInfo
+        {
+            public string DisplayName { get; set; }
+            public string Path { get; set; }
+        }
+
+      
 
         // 构造函数
         public TemplatesViewModel()
@@ -349,8 +351,8 @@ namespace unreal_GUI.ViewModel
                 Directory.CreateDirectory(templateDir);
                 // 备份TemplateCategories.ini文件
                 await BackupTemplateCategoriesAsync();
-                // 显示添加类别对话框
-                await ModernDialog.ShowCategoriesDialogAsync();
+                // 显示添加类别对话框，并传入引擎路径
+                await ModernDialog.ShowCategoriesDialogAsync(SelectedEngine.Path);
 
             }
             catch (Exception ex)
@@ -500,7 +502,7 @@ namespace unreal_GUI.ViewModel
                 string templateDefsPath = Path.Combine(configDir, "TemplateDefs.ini");
                 File.WriteAllText(templateDefsPath, iniContent);
                 
-                //await ModernDialog.ShowInfoAsync($"已创建TemplateDefs.ini文件并添加ProjectID: {Id}", "信息");
+                
 
                 return true;
             }

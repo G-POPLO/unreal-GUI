@@ -304,7 +304,11 @@ namespace unreal_GUI.Model
         //    return null;
         //}
 
-        public static async Task<ContentDialogResult> ShowCategoriesDialogAsync()
+        /// <summary>
+        /// 显示添加模板类别对话框
+        /// </summary>
+        /// <param name="enginePath">引擎安装路径，用于定位TemplateCategories.ini文件</param>
+        public static async Task<ContentDialogResult> ShowCategoriesDialogAsync(string enginePath = null)
         {
             var content = new Add_Categories();
 
@@ -315,7 +319,7 @@ namespace unreal_GUI.Model
                 SecondaryButtonText = "取消",
                 DefaultButton = ContentDialogButton.Primary,
                 Content = content,
-                IsPrimaryButtonEnabled = false // 初始禁用保存按钮
+                IsPrimaryButtonEnabled = true
             };
 
             // 设置对话框引用
@@ -331,8 +335,18 @@ namespace unreal_GUI.Model
                     // 生成类别配置内容
                     string categoryContent = GenerateCategoryContent(content);
 
-                    // 显示生成的内容（实际应用中应保存到文件）
-                    await ShowInfoAsync($"类别配置已生成:\n\n{categoryContent}", "保存成功");
+                    // 如果提供了引擎路径，则写入TemplateCategories.ini文件
+                    if (!string.IsNullOrEmpty(enginePath))
+                    {
+                        string templateCategoriesPath = Path.Combine(enginePath, "Templates", "TemplateCategories.ini");
+                        await SaveToTemplateCategoriesIni(templateCategoriesPath, categoryContent);
+                        await ShowInfoAsync($"类别已成功添加到引擎的模板配置中", "保存成功");
+                    }
+                    else
+                    {
+                        // 如果没有提供引擎路径，仅显示生成的内容
+                        await ShowInfoAsync($"类别配置已生成:\n\n{categoryContent}", "生成成功");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -341,6 +355,66 @@ namespace unreal_GUI.Model
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// 将类别配置保存到TemplateCategories.ini文件
+        /// </summary>
+        /// <param name="filePath">TemplateCategories.ini文件路径</param>
+        /// <param name="categoryContent">要添加的类别配置内容</param>
+        private static async Task SaveToTemplateCategoriesIni(string filePath, string categoryContent)
+        {
+            // 确保目录存在
+            string directoryPath = Path.GetDirectoryName(filePath);
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+
+            // 如果文件不存在，创建新文件并写入类别内容
+            if (!File.Exists(filePath))
+            {
+                await File.WriteAllTextAsync(filePath, categoryContent);
+                return;
+            }
+
+            // 读取现有文件内容
+            string existingContent = await File.ReadAllTextAsync(filePath);
+
+            // 检查文件是否已包含Categories=(
+            if (existingContent.Contains("Categories=(", StringComparison.OrdinalIgnoreCase))
+            {
+                // 如果文件已包含Categories=(", 我们需要在最后一个括号前插入新类别
+                int lastCloseBracketIndex = existingContent.LastIndexOf(")");
+                if (lastCloseBracketIndex > 0)
+                {
+                    // 移除末尾的括号
+                    string contentWithoutLastBracket = existingContent.Substring(0, lastCloseBracketIndex);
+                    
+                    // 检查是否需要添加逗号
+                    if (!contentWithoutLastBracket.EndsWith("(") && !contentWithoutLastBracket.TrimEnd().EndsWith(","))
+                    {
+                        contentWithoutLastBracket += ",";
+                    }
+                    
+                    // 插入新类别（去掉开头的"Categories=("和结尾的")"）
+                    string trimmedCategoryContent = categoryContent.Replace("Categories=(", "").TrimEnd(')');
+                    string updatedContent = contentWithoutLastBracket + Environment.NewLine + trimmedCategoryContent + ")";
+                    
+                    await File.WriteAllTextAsync(filePath, updatedContent);
+                }
+                else
+                {
+                    // 如果格式不正确，使用简单的追加方式
+                    string updatedContent = existingContent.TrimEnd() + Environment.NewLine + categoryContent;
+                    await File.WriteAllTextAsync(filePath, updatedContent);
+                }
+            }
+            else
+            {
+                // 如果文件不包含Categories=("，则直接写入类别内容
+                await File.WriteAllTextAsync(filePath, categoryContent);
+            }
         }
 
         // 生成类别配置内容
@@ -362,7 +436,8 @@ namespace unreal_GUI.Model
                     {
                         sb.Append(',');
                     }
-                    sb.Append($"(Language=\"{displayNameItem.LanguageCode}\",Text=\"{displayNameItem.DisplayName}\")");
+                    // 按照参考格式，每个Language-Text对需要用额外的括号包围
+                    sb.Append($"((Language=\"{displayNameItem.LanguageCode}\",Text=\"{displayNameItem.DisplayName}\"))");
                     hasDisplayName = true;
                 }
             }
@@ -379,7 +454,8 @@ namespace unreal_GUI.Model
                     {
                         sb.Append(',');
                     }
-                    sb.Append($"(Language=\"{descriptionItem.LanguageCode}\",Text=\"{descriptionItem.Description}\")");
+                    // 按照参考格式，每个Language-Text对需要用额外的括号包围
+                    sb.Append($"((Language=\"{descriptionItem.LanguageCode}\",Text=\"{descriptionItem.Description}\"))");
                     hasDescription = true;
                 }
             }
@@ -390,10 +466,23 @@ namespace unreal_GUI.Model
             {
                 sb.Append($", Icon=\"Media/{content.ViewModel.IconFileName}\")");
             }
+            else
+            {
+                // 如果没有图标，仍然需要添加类别结束括号
+                sb.Append(')');
+            }
 
-            // 添加是否为主类别
-            sb.Append($", IsMajorCategory={content.ViewModel.IsMajorCategory.ToString().ToLower()})");
-
+            // 添加是否为主类别（确保前面有逗号分隔）
+            if (!string.IsNullOrEmpty(content.ViewModel.IconFileName))
+            {
+                sb.Append($", IsMajorCategory={content.ViewModel.IsMajorCategory.ToString().ToLower()})");
+            }
+            else
+            {
+                // 如果没有图标，需要在括号外添加IsMajorCategory
+                sb.Replace(")", $", IsMajorCategory={content.ViewModel.IsMajorCategory.ToString().ToLower()})", sb.Length - 1, 1);
+            }
+            
             return sb.ToString();
         }
     }
