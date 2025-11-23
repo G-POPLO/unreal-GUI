@@ -1,9 +1,6 @@
 using iNKORE.UI.WPF.Modern.Controls;
-using Markdig;
-using Markdig.Wpf;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
@@ -159,7 +156,7 @@ namespace unreal_GUI.Model
         /// <summary>
         /// 显示可自定义按钮的对话框
         /// </summary>
-        
+
         public static async Task<ContentDialogResult> ShowCustomAsync
             (
             string message,
@@ -390,17 +387,17 @@ namespace unreal_GUI.Model
                 {
                     // 移除末尾的括号
                     string contentWithoutLastBracket = existingContent.Substring(0, lastCloseBracketIndex);
-                    
+
                     // 检查是否需要添加逗号
                     if (!contentWithoutLastBracket.EndsWith("(") && !contentWithoutLastBracket.TrimEnd().EndsWith(","))
                     {
                         contentWithoutLastBracket += ",";
                     }
-                    
+
                     // 插入新类别（去掉开头的"Categories=("和结尾的")"）
                     string trimmedCategoryContent = categoryContent.Replace("Categories=(", "").TrimEnd(')');
                     string updatedContent = contentWithoutLastBracket + Environment.NewLine + trimmedCategoryContent + ")";
-                    
+
                     await File.WriteAllTextAsync(filePath, updatedContent);
                 }
                 else
@@ -482,7 +479,7 @@ namespace unreal_GUI.Model
                 // 如果没有图标，需要在括号外添加IsMajorCategory
                 sb.Replace(")", $", IsMajorCategory={content.ViewModel.IsMajorCategory.ToString().ToLower()})", sb.Length - 1, 1);
             }
-            
+
             return sb.ToString();
         }
     }

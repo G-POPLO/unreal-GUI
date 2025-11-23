@@ -1,3 +1,6 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -5,35 +8,31 @@ using System.Diagnostics;
 using System.IO;
 using System.Media;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Forms;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using Newtonsoft.Json;
 using unreal_GUI.Model;
 namespace unreal_GUI.ViewModel
 {
     public partial class CompileViewModel : ObservableObject
     {
         private List<SettingsViewModel.EngineInfo> engineList = [];
-        
+
         [ObservableProperty]
         private SettingsViewModel.EngineInfo selectedEngine;
-        
+
         [ObservableProperty]
         private string inputPath;
-        
+
         [ObservableProperty]
         private string outputPath;
-        
+
         [ObservableProperty]
         private string tipsText;
-       
+
         public CompileViewModel()
         {
             LoadEngineList();
-            
-            
+
+
         }
 
         public ObservableCollection<SettingsViewModel.EngineInfo> EngineVersions { get; } = [];
@@ -53,7 +52,7 @@ namespace unreal_GUI.ViewModel
             if (result == DialogResult.OK)
             {
                 InputPath = dialog.FileName;
-                
+
                 // 读取.uplugin文件内容
                 string pluginContent = File.ReadAllText(InputPath);
                 dynamic pluginInfo = JsonConvert.DeserializeObject(pluginContent);
@@ -68,7 +67,7 @@ namespace unreal_GUI.ViewModel
                 {
                     TipsText = $"读取到插件版本{pluginEngineVersion}，请先选择目标引擎版本";
                 }
-             
+
             }
         }
 
@@ -80,13 +79,13 @@ namespace unreal_GUI.ViewModel
                 Description = "选择输出文件夹",
                 UseDescriptionForTitle = true
             };
-            
+
             // 如果已有输出路径，设置为初始目录
             if (!string.IsNullOrWhiteSpace(OutputPath) && Directory.Exists(OutputPath))
             {
                 dialog.SelectedPath = OutputPath;
             }
-            
+
             DialogResult result = dialog.ShowDialog();
             if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.SelectedPath))
             {
@@ -122,7 +121,7 @@ namespace unreal_GUI.ViewModel
         [RelayCommand(CanExecute = nameof(CanCompile))]
         private async Task Compile()
         {
-            
+
 
             if (SelectedEngine == null)
             {
@@ -149,15 +148,15 @@ namespace unreal_GUI.ViewModel
                 TipsText = "输出路径无效";
                 return;
             }
-            
+
             // 检查输出文件夹是否为空
             if (Directory.GetFileSystemEntries(OutputPath).Length > 0)
             {
                 // 显示确认对话框
                 bool? confirmResult = await ModernDialog.ShowConfirmAsync(
-                    $"输出文件夹 '{OutputPath}' 不为空，编译过程将删除该文件夹中的所有内容。是否继续？", 
+                    $"输出文件夹 '{OutputPath}' 不为空，编译过程将删除该文件夹中的所有内容。是否继续？",
                     "确认编译？");
-                
+
                 // 如果用户取消，则不执行编译
                 if (confirmResult != true)
                 {
@@ -195,7 +194,7 @@ namespace unreal_GUI.ViewModel
                         TipsText = $"编译失败，错误代码：{process.ExitCode}";
                     }
                 }
-                
+
                 var player = new SoundPlayer(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-on.wav"));
                 player.Play();
             }

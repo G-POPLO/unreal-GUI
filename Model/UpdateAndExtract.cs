@@ -197,12 +197,12 @@ namespace unreal_GUI.Model
 
                     // 设置7zxa.dll
                     _7z.ConfigureSevenZip();
-                    
+
                     try
                     {
                         // 解压到download文件夹
                         string extractPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "download");
-                        
+
                         // 在后台线程执行解压操作，避免阻塞UI线程
                         await Task.Run(() =>
                         {
@@ -210,14 +210,14 @@ namespace unreal_GUI.Model
                             {
                                 extractor.ExtractArchive(extractPath);
                             }
-                            
+
                             // 解压完成后关闭通知
                             Application.Current.Dispatcher.Invoke(() =>
                             {
                                 ToastNotificationManagerCompat.History.Remove(toastTag, toastGroup);
                             });
                         });
-                        
+
                         File.Delete(downloadPath); // 删除压缩包
 
                         // 启动Update.bat并退出程序

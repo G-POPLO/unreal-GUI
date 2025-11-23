@@ -1,12 +1,6 @@
-using Microsoft.Playwright;
-using Microsoft.Toolkit.Uwp.Notifications;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Xml;
-using unreal_GUI.Model;
 
 namespace unreal_GUI.Model
 {
@@ -94,28 +88,28 @@ namespace unreal_GUI.Model
         private static void SendFabNotification(DateTime limitedTime)
         {
 
-                if (Properties.Settings.Default.OpenEpic)
-                {
-                    WindowsNotification.ShowNotificationWithUrls(
-        "Fab资产领取提醒",
-        $"新的Fab免费资产可领取，截至时间:{limitedTime}",
-        "是",
-        "openUrl",
-        "com.epicgames.launcher://fab", // com.epicgames.launcher://fab/limited-time-free用不了，会显示错误页面
-        "否",
-        "dismiss");
-                }
-                else
-                {
-                    WindowsNotification.ShowNotificationWithUrls(
-        "Fab资产领取提醒",
-        $"新的Fab免费资产可领取，截至时间:{limitedTime}",
-        "是",
-        "openUrl",
-        "https://www.fab.com/limited-time-free", // 使用浏览器链接
-        "否",
-        "dismiss");
-                }
+            if (Properties.Settings.Default.OpenEpic)
+            {
+                WindowsNotification.ShowNotificationWithUrls(
+    "Fab资产领取提醒",
+    $"新的Fab免费资产可领取，截至时间:{limitedTime}",
+    "是",
+    "openUrl",
+    "com.epicgames.launcher://fab", // com.epicgames.launcher://fab/limited-time-free用不了，会显示错误页面
+    "否",
+    "dismiss");
+            }
+            else
+            {
+                WindowsNotification.ShowNotificationWithUrls(
+    "Fab资产领取提醒",
+    $"新的Fab免费资产可领取，截至时间:{limitedTime}",
+    "是",
+    "openUrl",
+    "https://www.fab.com/limited-time-free", // 使用浏览器链接
+    "否",
+    "dismiss");
+            }
 
 
 

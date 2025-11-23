@@ -1,12 +1,11 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Threading.Tasks;
-using Microsoft.Win32;
 using unreal_GUI.Model;
 
 namespace unreal_GUI.ViewModel
@@ -43,7 +42,7 @@ namespace unreal_GUI.ViewModel
 
         public ClearViewModel()
         {
-            LoadEngineList();           
+            LoadEngineList();
         }
 
         private void LoadEngineList()
@@ -80,7 +79,7 @@ namespace unreal_GUI.ViewModel
                 CheckFileExists = false,
                 CheckPathExists = true,
             };
-            
+
             if (dialog.ShowDialog() == true)
             {
                 // 获取选择的文件夹路径
@@ -132,7 +131,7 @@ namespace unreal_GUI.ViewModel
             }
             catch (Exception ex)
             {
-                
+
                 TipClearCache = "清理失败: " + ex.Message;
                 System.Media.SoundPlayer player = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav"));
                 player.Play();
@@ -259,7 +258,7 @@ namespace unreal_GUI.ViewModel
                     {
                         File.Delete(file);
                     }
-                    
+
 
                 }
 

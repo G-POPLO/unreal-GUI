@@ -2,18 +2,8 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using unreal_GUI.ViewModel;
 
 namespace unreal_GUI.Model
@@ -25,7 +15,7 @@ namespace unreal_GUI.Model
     {
         // 定义删除完成事件
         public event EventHandler DeleteCompleted;
-        
+
         public Delete_DialogContent()
         {
             InitializeComponent();
@@ -82,7 +72,7 @@ namespace unreal_GUI.Model
                         // 更新 ListBox 的数据源
                         ButtonsListBox.ItemsSource = null;
                         ButtonsListBox.ItemsSource = settings.CustomButtons;
-                        
+
                         // 触发删除完成事件
                         DeleteCompleted?.Invoke(this, EventArgs.Empty);
                     }

@@ -4,7 +4,6 @@ using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -157,7 +156,7 @@ namespace unreal_GUI.ViewModel
             }
             catch (Exception)
             {
-                _ = Task.Run(() => MessageBox.Show("未检测到引擎，请手动设置引擎目录", "提示", MessageBoxButton.OK,MessageBoxImage.Information));
+                _ = Task.Run(() => MessageBox.Show("未检测到引擎，请手动设置引擎目录", "提示", MessageBoxButton.OK, MessageBoxImage.Information));
             }
         }
 

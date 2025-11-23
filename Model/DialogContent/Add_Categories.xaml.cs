@@ -1,8 +1,6 @@
 using iNKORE.UI.WPF.Modern.Controls;
 using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows;
 using System.Windows.Controls;
 using unreal_GUI.ViewModel;
 

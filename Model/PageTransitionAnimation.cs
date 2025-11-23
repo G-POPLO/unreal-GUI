@@ -35,6 +35,6 @@ namespace unreal_GUI.Model
             contentControl.BeginAnimation(UIElement.OpacityProperty, fadeOut);
         }
 
-        
+
     }
 }

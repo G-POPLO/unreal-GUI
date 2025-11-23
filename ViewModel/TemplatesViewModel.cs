@@ -2,22 +2,12 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
 using System.IO;
-using System.Windows.Media.Imaging;
-using System.Windows.Input;
-using System.Windows;
-using System.Diagnostics;
-using System.Linq;
-using iNKORE.UI.WPF.Modern.Controls;
-using System.Windows.Forms;
-using System.Reflection;
-using System.Windows.Media;
-using unreal_GUI.Model.DialogContent;
-using unreal_GUI.Model;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Windows.Media.Imaging;
+using unreal_GUI.Model;
 
 namespace unreal_GUI.ViewModel
 {
@@ -73,10 +63,10 @@ namespace unreal_GUI.ViewModel
 
         [ObservableProperty]
         private string templatePreviewPath;
-        
+
         [ObservableProperty]
         private string pictureTipText = string.Empty;
-        
+
         [ObservableProperty]
         private string pictureTipLText = string.Empty;
 
@@ -103,7 +93,7 @@ namespace unreal_GUI.ViewModel
             public string Path { get; set; }
         }
 
-      
+
 
         // 构造函数
         public TemplatesViewModel()
@@ -246,11 +236,11 @@ namespace unreal_GUI.ViewModel
                         bitmap.UriSource = new Uri(openFileDialog.FileName, UriKind.Absolute);
                         bitmap.EndInit();
                         TemplatePreview = bitmap;
-                        
+
                         // 更新提示文本
                         PictureTipText = "已选择模板预览图。";
                         PictureTipLText = Path.GetFileName(openFileDialog.FileName);
-                        
+
 
                     }
                     else
@@ -360,7 +350,7 @@ namespace unreal_GUI.ViewModel
                 await ModernDialog.ShowErrorAsync($"添加类别失败: {ex.Message}", "错误");
             }
 
-            
+
         }
 
         // 重置命令
@@ -490,7 +480,7 @@ namespace unreal_GUI.ViewModel
                     iniContent += $"LocalizedDisplayNames=(Language=\"ko\", Text=\"{TemplateName}\")\n" +
                                 $"LocalizedDescriptions=(Language=\"ko\", Text=\"{TemplateDescriptionKo}\")\n";
                 }
-                
+
                 // 添加忽略的文件夹和文件
                 iniContent += $"\nFoldersToIgnore=Media\n" +
                             $"FilesToIgnore=\"Config/TemplateDefs.ini\"\n";
@@ -501,8 +491,8 @@ namespace unreal_GUI.ViewModel
 
                 string templateDefsPath = Path.Combine(configDir, "TemplateDefs.ini");
                 File.WriteAllText(templateDefsPath, iniContent);
-                
-                
+
+
 
                 return true;
             }
@@ -555,7 +545,7 @@ namespace unreal_GUI.ViewModel
                     File.Copy(TemplateIconPath, iconDestPath, true);
                     iconCopied = true;
                 }
-                
+
                 // 如果没有手动选择图标，尝试使用Saved目录下的AutoScreenshot.png作为默认图标
                 if (!iconCopied)
                 {
@@ -607,7 +597,7 @@ namespace unreal_GUI.ViewModel
         }
 
 
-     
+
     }
 
 

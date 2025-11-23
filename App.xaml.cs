@@ -1,7 +1,5 @@
 using Microsoft.Toolkit.Uwp.Notifications;
 using System;
-using System.Configuration;
-using System.Data;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Threading;
@@ -13,28 +11,28 @@ namespace unreal_GUI
     {
         public App()
         {
-           
+
 
             this.DispatcherUnhandledException += App_DispatcherUnhandledException;
             AppDomain currentDomain = AppDomain.CurrentDomain;
             currentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-            
+
             // 注册通知激活事件处理程序
             ToastNotificationManagerCompat.OnActivated += ToastNotificationManagerCompat_OnActivated;
-            
-           
+
+
         }
         // 通知激活事件处理程序
         private void ToastNotificationManagerCompat_OnActivated(ToastNotificationActivatedEventArgsCompat e)
         {
             // 获取通知参数
             var args = ToastArguments.Parse(e.Argument);
-            
+
             // 根据参数执行相应操作
             if (args.Contains("action"))
             {
                 string action = args["action"];
-                
+
                 switch (action)
                 {
                     case "openUrl":

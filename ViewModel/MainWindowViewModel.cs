@@ -1,12 +1,9 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
 using unreal_GUI.Model;
 
 
@@ -24,25 +21,25 @@ namespace unreal_GUI.ViewModel
 
         // 导航历史记录
         [ObservableProperty]
-        private ObservableCollection<string> navigationHistory = new();
-        
+        private ObservableCollection<string> navigationHistory = [];
+
         // 导航到指定页面的命令
         [RelayCommand]
         private void NavigateToPage(string pageTag)
         {
-         
-                CurrentPageTag = pageTag;
-                NavigationRequested?.Invoke(this, pageTag);
-                
-                // 添加到导航历史
-                if (!NavigationHistory.Contains(pageTag))
-                {
-                    NavigationHistory.Add(pageTag);
-                }
 
-            
+            CurrentPageTag = pageTag;
+            NavigationRequested?.Invoke(this, pageTag);
+
+            // 添加到导航历史
+            if (!NavigationHistory.Contains(pageTag))
+            {
+                NavigationHistory.Add(pageTag);
+            }
+
+
         }
-        
+
         // 返回上一页的命令
         [RelayCommand]
         private void GoBack()
@@ -51,7 +48,7 @@ namespace unreal_GUI.ViewModel
             {
                 // 移除当前页面
                 NavigationHistory.RemoveAt(NavigationHistory.Count - 1);
-                
+
                 // 获取上一个页面
                 string previousPage = NavigationHistory[^1];
                 NavigateToPage(previousPage);
@@ -96,7 +93,7 @@ namespace unreal_GUI.ViewModel
         // 根据页面标签获取页面类型
         public static Type GetPageTypeByTag(string tag)
         {
-            return tag switch 
+            return tag switch
             {
                 "Compile" => typeof(Compile),
                 "Rename" => typeof(Rename),
@@ -107,17 +104,17 @@ namespace unreal_GUI.ViewModel
                 _ => typeof(Compile)
             };
         }
-        
+
         // 处理来自视图的导航请求
         public void HandleNavigationRequest(string pageTag)
         {
             NavigateToPage(pageTag);
         }
-        
+
         // 若没有发现设置JSON文件，则弹窗提示
         public async Task InitializeJson_Async()
         {
-            
+
             if (!File.Exists("settings.json"))
             {
                 bool? result = await ModernDialog.ShowConfirmAsync("未检测到引擎，请先去设置引擎目录", "提示");

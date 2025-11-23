@@ -1,8 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -16,14 +14,14 @@ namespace unreal_GUI.ViewModel
     {
         [ObservableProperty]
         private ObservableCollection<object> engines = [];
-        
+
         [ObservableProperty]
         private ObservableCollection<object> customButtons = [];
-        
+
         public QuickAccessViewModel()
         {
             LoadEngineList();
-          
+
         }
 
         [RelayCommand]
@@ -52,23 +50,23 @@ namespace unreal_GUI.ViewModel
         [RelayCommand]
         private static void OpenCustomDirectory(object selectedCustomButton)
         {
-          
-                dynamic customButton = selectedCustomButton;
-                string path = customButton.Path;
 
-                if (Directory.Exists(path))
+            dynamic customButton = selectedCustomButton;
+            string path = customButton.Path;
+
+            if (Directory.Exists(path))
+            {
+                Process.Start(new ProcessStartInfo
                 {
-                    Process.Start(new ProcessStartInfo
-                    {
-                        FileName = path,
-                        UseShellExecute = true
-                    });
-                }
-                else
-                {
-                    _ = ModernDialog.ShowErrorAsync("目录不存在", $"未找到目录：\n{path}");
-                }
-            
+                    FileName = path,
+                    UseShellExecute = true
+                });
+            }
+            else
+            {
+                _ = ModernDialog.ShowErrorAsync("目录不存在", $"未找到目录：\n{path}");
+            }
+
         }
 
         [RelayCommand]
@@ -100,7 +98,7 @@ namespace unreal_GUI.ViewModel
                 var settings = JsonConvert.DeserializeObject<SettingsViewModel.SettingsData>(json);
                 var engineList = settings?.Engines ?? [];
                 Engines = new ObservableCollection<object>(engineList.Select(e => new { DisplayName = $"UE {e.Version}", e.Path }));
-                
+
                 var customButtonList = settings?.CustomButtons ?? [];
                 CustomButtons = new ObservableCollection<object>(customButtonList.Select(cb => new { DisplayName = cb.Name, cb.Path }));
             }
@@ -117,6 +115,6 @@ namespace unreal_GUI.ViewModel
             }
         }
 
-        
+
     }
 }

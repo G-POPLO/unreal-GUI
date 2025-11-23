@@ -1,9 +1,7 @@
 using Microsoft.Playwright;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using unreal_GUI.Properties;
 
 namespace unreal_GUI.Model
 {
@@ -115,7 +113,7 @@ namespace unreal_GUI.Model
                 // 返回元素文本内容
                 //testelement = element.ToString();
                 return await element.InnerTextAsync();
-                
+
             }
             catch (TimeoutException)
             {
@@ -138,7 +136,7 @@ namespace unreal_GUI.Model
                 //testelement = element.ToString();
                 await ModernDialog.ShowErrorAsync($"元素未找到或超时:{element}", "错误");
                 return element != null ? await element.InnerTextAsync() : string.Empty;
-                            
+
             }
             finally
             {
