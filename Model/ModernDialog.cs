@@ -159,6 +159,7 @@ namespace unreal_GUI.Model
         /// <summary>
         /// 显示可自定义按钮的对话框
         /// </summary>
+        
         public static async Task<ContentDialogResult> ShowCustomAsync
             (
             string message,
@@ -226,14 +227,14 @@ namespace unreal_GUI.Model
                     File.WriteAllText("settings.json", jsonSettings);
                 }
             }
-            
+
             if (result == ContentDialogResult.Primary)
             {
                 // 通知QuickAccess页面刷新
                 NavigationRequested?.Invoke(null, "QuickAccess");
                 return result;
             }
-            
+
             return result;
         }
 
@@ -284,7 +285,7 @@ namespace unreal_GUI.Model
         //public static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
         //{
         //    if (parent == null) return null;
-            
+
         //    for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
         //    {
         //        DependencyObject child = VisualTreeHelper.GetChild(parent, i);
@@ -292,17 +293,17 @@ namespace unreal_GUI.Model
         //        {
         //            return (T)child;
         //        }
-                
+
         //        T childOfChild = FindVisualChild<T>(child);
         //        if (childOfChild != null)
         //        {
         //            return childOfChild;
         //        }
         //    }
-            
+
         //    return null;
         //}
-        
+
         public static async Task<ContentDialogResult> ShowCategoriesDialogAsync()
         {
             var content = new Add_Categories();
@@ -313,10 +314,87 @@ namespace unreal_GUI.Model
                 PrimaryButtonText = "保存",
                 SecondaryButtonText = "取消",
                 DefaultButton = ContentDialogButton.Primary,
-                Content = content
+                Content = content,
+                IsPrimaryButtonEnabled = false // 初始禁用保存按钮
             };
+
+            // 设置对话框引用
+            content.Dialog = dialog;
+
             var result = await dialog.ShowAsync();
+
+            // 处理保存逻辑
+            if (result == ContentDialogResult.Primary)
+            {
+                try
+                {
+                    // 生成类别配置内容
+                    string categoryContent = GenerateCategoryContent(content);
+
+                    // 显示生成的内容（实际应用中应保存到文件）
+                    await ShowInfoAsync($"类别配置已生成:\n\n{categoryContent}", "保存成功");
+                }
+                catch (Exception ex)
+                {
+                    await ShowErrorAsync($"保存类别失败: {ex.Message}", "错误");
+                }
+            }
+
             return result;
+        }
+
+        // 生成类别配置内容
+        private static string GenerateCategoryContent(Add_Categories content)
+        {
+            var sb = new System.Text.StringBuilder();
+
+            sb.Append("Categories=(");
+            sb.Append($"Key=\"{content.ViewModel.CategoryKey}\", ");
+
+            // 添加本地化显示名称
+            sb.Append("LocalizedDisplayNames=(");
+            bool hasDisplayName = false;
+            foreach (var displayNameItem in content.ViewModel.DisplayNameItems)
+            {
+                if (!string.IsNullOrWhiteSpace(displayNameItem.DisplayName))
+                {
+                    if (hasDisplayName)
+                    {
+                        sb.Append(',');
+                    }
+                    sb.Append($"(Language=\"{displayNameItem.LanguageCode}\",Text=\"{displayNameItem.DisplayName}\")");
+                    hasDisplayName = true;
+                }
+            }
+            sb.Append(')');
+
+            // 添加本地化描述
+            sb.Append(", LocalizedDescriptions=(");
+            bool hasDescription = false;
+            foreach (var descriptionItem in content.ViewModel.DescriptionItems)
+            {
+                if (!string.IsNullOrWhiteSpace(descriptionItem.Description))
+                {
+                    if (hasDescription)
+                    {
+                        sb.Append(',');
+                    }
+                    sb.Append($"(Language=\"{descriptionItem.LanguageCode}\",Text=\"{descriptionItem.Description}\")");
+                    hasDescription = true;
+                }
+            }
+            sb.Append(')');
+
+            // 添加图标路径
+            if (!string.IsNullOrEmpty(content.ViewModel.IconFileName))
+            {
+                sb.Append($", Icon=\"Media/{content.ViewModel.IconFileName}\")");
+            }
+
+            // 添加是否为主类别
+            sb.Append($", IsMajorCategory={content.ViewModel.IsMajorCategory.ToString().ToLower()})");
+
+            return sb.ToString();
         }
     }
 }

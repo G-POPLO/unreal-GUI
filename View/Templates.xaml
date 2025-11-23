@@ -7,7 +7,7 @@
              xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
              xmlns:viewmodel="clr-namespace:unreal_GUI.ViewModel"
              mc:Ignorable="d" 
-             d:DesignHeight="2000" d:DesignWidth="800">
+             d:DesignHeight="2100" d:DesignWidth="800">
     <UserControl.DataContext>
         <viewmodel:TemplatesViewModel />
     </UserControl.DataContext>
@@ -78,7 +78,13 @@
             Margin="0,5,0,5"/>
                             <TextBlock Text="模板名称" Margin="0,0,0,5"/>
                             
-                            <TextBox Text="{Binding TemplateName}" Width="400"/>
+                        <TextBox Text="{Binding TemplateName}" Width="400"/>
+                        
+                        <!-- 允许项目创建选项 -->
+                        <CheckBox IsChecked="{Binding IsProjectSelected}" Content="允许直接创建项目" Margin="0,10,0,0"/>
+                        <TextBlock Text="启用此选项允许用户直接从此模板创建新项目；禁用则只能作为功能包引用" 
+                                   FontSize="12" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" 
+                                   Margin="0,5,0,0"/>
                             <TextBlock Text="这将显示在新建项目对话框中的模板选择区域" 
                                        FontSize="12" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" 
                                        Margin="0,5,0,0"/>
@@ -122,7 +128,7 @@
                 </Border>
 
                 <!-- 项目类别卡片 -->
-                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                <!--<Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
                         BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
                         CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
@@ -133,12 +139,12 @@
 
                         <RadioButton Content="项目 (Project)" IsChecked="{Binding IsCategoryGames}" Margin="0,0,0,10"/>
                         <RadioButton Content="功能包 (Feature Pack)" IsChecked="{Binding IsCategoryME}" Margin="0,0,0,10"/>
-                        <TextBlock Text="若此模板设置为“功能包”（Feature Pack），只能被其他模板或内容浏览器引用添加。" 
+                        <TextBlock Text="若将此模板设置为“功能包”（Feature Pack），则只能通过其他模板或内容浏览器引用的方式进行添加。" 
                                    FontSize="12" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" />
 
                        
                     </StackPanel>
-                </Border>
+                </Border>-->
 
                 <!-- 模板类别卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
@@ -158,8 +164,8 @@
 
                         <TextBlock Text="选择模板将显示在新建项目对话框中的类别" 
                                    FontSize="12" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" />
-                        
-                        <Button Command="{Binding CreateTemplateCommand}" Style="{DynamicResource AccentButtonStyle}" Margin="0,10,10,0">
+
+                        <Button Command="{Binding AddCategoryCommand}" Style="{DynamicResource AccentButtonStyle}" Margin="0,10,10,0">
                             <StackPanel Orientation="Horizontal">
                                 <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE770;" Margin="0,0,5,0"/>
                                 <TextBlock Text="创建新的分类"/>

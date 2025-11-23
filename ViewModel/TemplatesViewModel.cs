@@ -46,7 +46,7 @@ namespace unreal_GUI.ViewModel
 
         // 模板类别
         [ObservableProperty]
-        private bool isCategoryGames;
+        private bool isCategoryGames = true;
 
         [ObservableProperty]
         private bool isCategoryME;
@@ -98,6 +98,10 @@ namespace unreal_GUI.ViewModel
         // 1. 添加Id属性用于绑定
         [ObservableProperty]
         private string id;
+
+        // 控制是否允许项目创建
+        [ObservableProperty]
+        private bool isProjectSelected = true;
 
         // 构造函数
         public TemplatesViewModel()
@@ -320,69 +324,42 @@ namespace unreal_GUI.ViewModel
         }
 
         // 创建新类别命令
-        //[RelayCommand]
-        //private  async Task AddCategoryAsync()
-        //{
-        //    try
-        //    {
-        //        // 检查是否已选择引擎
-        //        if (SelectedEngine == null)
-        //        {
-        //            await ModernDialog.ShowInfoAsync("请先选择Unreal Engine版本。", "提示");
-        //            return;
-        //        }
+        [RelayCommand]
+        private async Task AddCategoryAsync()
+        {
+            try
+            {
+                // 检查是否已选择引擎
+                if (SelectedEngine == null)
+                {
+                    await ModernDialog.ShowInfoAsync("请先选择Unreal Engine版本。", "提示");
+                    return;
+                }
 
-        //        // 获取TemplateCategories.ini文件路径
-        //        string templateCategoriesPath = GetTemplateCategoriesPath();
-        //        if (string.IsNullOrEmpty(templateCategoriesPath))
-        //        {
-        //            await ModernDialog.ShowInfoAsync("无法获取模板类别配置文件路径。", "提示");
-        //            return;
-        //        }
+                // 获取TemplateCategories.ini文件路径
+                string templateCategoriesPath = GetTemplateCategoriesPath();
+                if (string.IsNullOrEmpty(templateCategoriesPath))
+                {
+                    await ModernDialog.ShowInfoAsync("无法获取模板类别配置文件路径。", "提示");
+                    return;
+                }
 
-        //        // 确保模板目录存在
-        //        string templateDir = Path.GetDirectoryName(templateCategoriesPath);
-        //        Directory.CreateDirectory(templateDir);
+                // 确保模板目录存在
+                string templateDir = Path.GetDirectoryName(templateCategoriesPath);
+                Directory.CreateDirectory(templateDir);
+                // 备份TemplateCategories.ini文件
+                await BackupTemplateCategoriesAsync();
+                // 显示添加类别对话框
+                await ModernDialog.ShowCategoriesDialogAsync();
 
-        //        // 备份TemplateCategories.ini文件
-        //        if (!BackupTemplateCategoriesAsync())
-        //        {
-        //            return;
-        //        }
+            }
+            catch (Exception ex)
+            {
+                await ModernDialog.ShowErrorAsync($"添加类别失败: {ex.Message}", "错误");
+            }
 
-        //        // 优化与ModernDialog的交互：创建一个对话框并直接与Add_Categories内容交互
-        //        var addCategoriesContent = new Add_Categories();
-
-        //        var dialog = new ContentDialog
-        //        {
-        //            Title = "添加模板类别",
-        //            PrimaryButtonText = "保存",
-        //            SecondaryButtonText = "取消",
-        //            DefaultButton = ContentDialogButton.Primary,
-        //            Content = addCategoriesContent
-        //        };
-
-        //        // 显示对话框并处理结果
-        //        ContentDialogResult result = await dialog.ShowAsync();
-
-        //        if (result == ContentDialogResult.Primary)
-        //        {
-        //            // 直接使用已经引用的addCategoriesContent实例保存类别
-        //                if (addCategoriesContent.SaveCategory(templateCategoriesPath))
-        //                {
-        //                    await ModernDialog.ShowInfoAsync("新类别创建成功！", "成功");
-        //                }
-        //                else
-        //                {
-        //                    await ModernDialog.ShowInfoAsync("创建类别失败，请检查输入信息。", "提示");
-        //                }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        await ModernDialog.ShowInfoAsync($"添加类别失败: {ex.Message}", "提示");
-        //    }
-        //}
+            
+        }
 
         // 重置命令
         [RelayCommand]
@@ -409,29 +386,11 @@ namespace unreal_GUI.ViewModel
                 await ModernDialog.ShowInfoAsync($"重置失败: {ex.Message}", "提示");
             }
 
-            // 重置表单
-            //ProjectPath = string.Empty;
-            //TemplateName = string.Empty;
-            //TemplateDescriptionEn = string.Empty;
-            //TemplateDescriptionZhHans = string.Empty;
-            //TemplateDescriptionJa = string.Empty;
-            //TemplateDescriptionKo = string.Empty;
-            //IsCategoryGames = true;
-            //IsCategoryME = false;
-            //IsCategoryAEC = false;
-            //IsCategoryMFG = false;
-            //TemplateIcon = null;
-            //TemplatePreview = null;
-            //TemplateIconPath = string.Empty;
-            //TemplatePreviewPath = string.Empty;
-
             if (AvailableEngines.Count > 0)
             {
                 SelectedEngine = AvailableEngines[0];
             }
         }
-
-
 
         // 读取项目ID
         private static async Task<string> ReadProjectIdAsync(string projectPath)
@@ -504,9 +463,10 @@ namespace unreal_GUI.ViewModel
                 else if (IsCategorySIM) category = "SIM";
 
                 // 构建TemplateDefs.ini内容
-                var iniContent = $"[/Script/GameProjectGeneration.TemplateProjectDefs]\n\n" +
+                string iniContent = $"[/Script/GameProjectGeneration.TemplateProjectDefs]\n\n" +
                                $"Categories={category}\n" +
                                $"ProjectID={Id}\n" +
+                               $"bAllowProjectCreation={(IsProjectSelected ? "true" : "false")}\n" +
                                $"LocalizedDisplayNames=(Language=\"en\", Text=\"{TemplateName}\")\n" +
                                $"LocalizedDescriptions=(Language=\"en\", Text=\"{TemplateDescriptionEn}\")\n";
 
@@ -534,13 +494,13 @@ namespace unreal_GUI.ViewModel
                             $"FilesToIgnore=\"Config/TemplateDefs.ini\"\n";
 
                 // 创建Config目录并写入文件
-                var configDir = Path.Combine(ProjectPath, "Config");
+                string configDir = Path.Combine(ProjectPath, "Config");
                 Directory.CreateDirectory(configDir);
 
-                var templateDefsPath = Path.Combine(configDir, "TemplateDefs.ini");
+                string templateDefsPath = Path.Combine(configDir, "TemplateDefs.ini");
                 File.WriteAllText(templateDefsPath, iniContent);
                 
-                await ModernDialog.ShowInfoAsync($"已创建TemplateDefs.ini文件并添加ProjectID: {Id}", "信息");
+                //await ModernDialog.ShowInfoAsync($"已创建TemplateDefs.ini文件并添加ProjectID: {Id}", "信息");
 
                 return true;
             }
@@ -644,7 +604,6 @@ namespace unreal_GUI.ViewModel
             }
         }
 
-        // 创建新Categories类别的功能（可以通过对话框调用）
 
      
     }

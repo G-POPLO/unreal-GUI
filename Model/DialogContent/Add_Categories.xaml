@@ -5,41 +5,41 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:unreal_GUI.Model.DialogContent"
              xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
-             mc:Ignorable="d" 
-            >
+             mc:Ignorable="d">
     <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10">
         <StackPanel>
-      
-            
             <!-- 基本信息区域 -->
             <StackPanel Margin="0,0,0,20">
-           
                 <!-- Key -->
                 <StackPanel Margin="0,0,0,10">
-                    <TextBlock Text="Key (必填)" ToolTip="用于从模板引用类别的名称，应简短易懂"/>
-                    <TextBox x:Name="KeyTextBox" Width="100" Margin="0,5,0,0"  HorizontalAlignment="Left" Text="User"/>
-                    <TextBlock Text="应简短易懂，用于从模板引用类别" FontSize="12" Foreground="Gray" Margin="0,5,0,0"/>
+                    <TextBlock Text="Key (必填)" FontWeight="SemiBold" ToolTip="用于从模板引用类别的名称，应简短易懂"/>
+                    <TextBox Width="200" Margin="0,5,0,0" HorizontalAlignment="Left"
+                             Text="{Binding CategoryKey}"
+                             BorderBrush="#FFCCCCCC" BorderThickness="1" Padding="5"/>
+                    <TextBlock Text="应简短易懂，用于从模板引用类别，例如'SIM'" FontSize="12" Foreground="Gray" Margin="0,5,0,0"/>
                 </StackPanel>
                 
                 <!-- IsMajorCategory -->
-                <CheckBox x:Name="IsMajorCategoryCheckBox" Content="是否为主类别 (Major Category)" Margin="0,0,0,5" IsChecked="True">
+                <CheckBox Content="是否为主类别 (Major Category)" Margin="0,0,0,10" 
+                          IsChecked="{Binding IsMajorCategory}">
                     <CheckBox.ToolTip>
                         <TextBlock>主类别显示为完整行，如"Game"类别</TextBlock>
                     </CheckBox.ToolTip>
                 </CheckBox>
-                <TextBlock Text="主类别在UI中显示为完整行，非主类别显示为子项" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
+                <TextBlock Text="主类别在UI中显示为完整行，非主类别显示为子项" FontSize="12" Foreground="Gray" Margin="0,0,0,10"/>
                 
                 <!-- 图标 -->
                 <StackPanel Margin="0,10,0,0">
-                    <TextBlock Text="类别图标"/>
+                    <TextBlock Text="类别图标" FontWeight="SemiBold"/>
                     <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                        <Border BorderBrush="Gray" BorderThickness="1" Width="300" Height="100" Margin="0,0,10,0">
-                            <Image x:Name="CategoryIconImage" Stretch="UniformToFill"/>
+                        <Border BorderBrush="#FFCCCCCC" BorderThickness="1" Width="300" Height="100" Margin="0,0,10,0"
+                                Background="#F9F9F9">
+                            <Image Source="{Binding CategoryIcon}" Stretch="UniformToFill"/>
                         </Border>
                         <StackPanel>
-                            <Button x:Name="BrowseIconButton" Content="选择图标" Margin="0,0,0,10" />
+                            <Button Command="{Binding BrowseIconCommand}" Content="选择图标" Margin="0,0,0,10" Padding="8,4"/>
                             <TextBlock Text="PNG格式，建议大小为600x200像素" FontSize="12" Foreground="Gray" TextWrapping="Wrap" Width="200"/>
-                            <TextBlock x:Name="IconPathTextBlock" Margin="0,5,0,0" FontSize="12" Foreground="Blue"/>
+                            <TextBlock Text="{Binding IconFileName}" Margin="0,5,0,0" FontSize="12" Foreground="Gray" TextWrapping="Wrap" Width="200"/>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
@@ -48,45 +48,59 @@
             <!-- 本地化显示名称 -->
             <StackPanel Margin="0,0,0,20">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="多文本语言描述" FontWeight="SemiBold" Margin="0,0,10,10"/>
-                   
+                    <TextBlock Text="本地化显示名称" FontWeight="SemiBold" Margin="0,0,10,10"/>
+                    <Button Command="{Binding AddDisplayNameCommand}" Content="添加语言" FontSize="12" Padding="5,2"/>
                 </StackPanel>
-                <TextBlock Text="为不同语言添加显示名称，默认为en" FontSize="12" Foreground="Gray" Margin="0,0,0,10"/>
+                <TextBlock Text="为不同语言添加显示名称，支持英语(en)、简体中文(zh-Hans)、日语(ja)、韩语(ko)" FontSize="12" Foreground="Gray" Margin="0,0,0,10"/>
                 
-             
-            </StackPanel>
-            
-            <!-- 本地化描述 -->
-            <StackPanel Margin="0,0,0,20">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="描述" FontWeight="SemiBold" Margin="0,0,10,10"/>
-                    
-                </StackPanel>
-                <TextBlock Text="关于该类别的描述，可以为多语言进行单独配置" FontSize="12" Foreground="Gray" Margin="0,0,0,10"/>
-                
-                <ListBox x:Name="DescriptionsListBox" MinHeight="150" Margin="0,5,0,0">
+                <ListBox ItemsSource="{Binding DisplayNameItems}" MinHeight="150" Margin="0,5,0,0" BorderBrush="#FFCCCCCC" BorderThickness="1">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Margin="5">
-                                <ComboBox Width="100" ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.AvailableLanguages}" 
-                                          SelectedValuePath="Code" DisplayMemberPath="Name" Tag="Language"/>
-                                <TextBox Width="350" Height="80" Margin="0,5,10,5" TextWrapping="Wrap" AcceptsReturn="True" 
-                                         Tag="Description"/>
-                                <Button Content="删除"  Tag="RemoveDescription" HorizontalAlignment="Left"/>
+                            <StackPanel Margin="5" Orientation="Horizontal">
+                                <ComboBox Width="100" ItemsSource="{Binding AvailableLanguages, RelativeSource={RelativeSource AncestorType={x:Type local:Add_Categories}}}" 
+                                          SelectedValuePath="Code" DisplayMemberPath="Name"
+                                          SelectedValue="{Binding LanguageCode}"/>
+                                <TextBox Width="300" Margin="10,0,10,0" Padding="5"
+                                         Text="{Binding DisplayName}"
+                                         ToolTip="输入显示名称"/>
+                                <Button Content="删除" Command="{Binding RemoveDisplayNameCommand}" CommandParameter="{Binding}" Padding="5,2" VerticalAlignment="Top"/>
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
             </StackPanel>
             
-            <!-- 操作按钮 -->
-            <!--<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
-                <Button x:Name="SaveButton" Content="保存" Margin="0,0,10,0" Click="SaveButton_Click" IsEnabled="False"/>
-                <Button x:Name="CancelButton" Content="取消" Click="CancelButton_Click"/>
-            </StackPanel>-->
+            <!-- 本地化描述 -->
+            <StackPanel Margin="0,0,0,20">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="本地化描述" FontWeight="SemiBold" Margin="0,0,10,10"/>
+                    <Button Command="{Binding AddDescriptionCommand}" Content="添加语言" FontSize="12" Padding="5,2"/>
+                </StackPanel>
+                <TextBlock Text="为不同语言添加详细描述信息" FontSize="12" Foreground="Gray" Margin="0,0,0,10"/>
+                
+                <ListBox ItemsSource="{Binding DescriptionItems}" MinHeight="200" Margin="0,5,0,0" BorderBrush="#FFCCCCCC" BorderThickness="1">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="5">
+                                <ComboBox Width="100" ItemsSource="{Binding AvailableLanguages, RelativeSource={RelativeSource AncestorType={x:Type local:Add_Categories}}}" 
+                                          SelectedValuePath="Code" DisplayMemberPath="Name"
+                                          SelectedValue="{Binding LanguageCode}"/>
+                                <TextBox Width="500" Height="100" Margin="0,5,0,5" Padding="5"
+                                         TextWrapping="Wrap" AcceptsReturn="True"
+                                         Text="{Binding Description}" ToolTip="输入描述信息"/>
+                                <Button Content="删除" Command="{Binding RemoveDescriptionCommand}" CommandParameter="{Binding}" HorizontalAlignment="Left" Padding="5,2"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
             
             <!-- 状态信息 -->
-            <TextBlock x:Name="StatusTextBlock" Margin="0,10,0,0" FontSize="12"/>
+            <TextBlock Text="{Binding ErrorMessage}" Margin="0,10,0,0" FontSize="12" Foreground="#FF3333"/>
+            
+            <!-- 保存按钮 -->
+            <Button Command="{Binding SaveCommand}" Content="保存" Margin="0,20,0,10" Padding="10,5" HorizontalAlignment="Right"/>
+            <TextBlock Text="点击保存后，新类别将添加到模板中" FontSize="12" Foreground="Gray" Margin="0,0,0,10" HorizontalAlignment="Right"/>
             
         </StackPanel>
     </ScrollViewer>

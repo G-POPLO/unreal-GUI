@@ -78,7 +78,7 @@
                         <TextBlock TextWrapping="Wrap" Margin="0,0,0,10">
     <Run FontWeight="SemiBold">自定义模板：</Run>
     <LineBreak/>
-    添加由用户自定义的模板以供项目创建时使用
+    添加由用户自定义的模板或内容包以供项目创建时使用
                         </TextBlock>
 
                     </StackPanel>
