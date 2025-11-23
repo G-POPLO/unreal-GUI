@@ -39,7 +39,7 @@ Unreal-GUI 是一款旨在简化虚幻引擎（Unreal Engine）相关操作流�
 我们欢迎任何形式的贡献！如想为项目贡献代码，请遵循以下步骤：
 
 1. Fork 本仓库
-2. 创建您的特性分支 (`git checkout -b feature/NewFeature`)
+2. 若更改较多，请创建您的特性分支 (`git checkout -b feature/NewFeature`)，否则可直接在 `develop` 分支上工作。
 3. 提交您的更改 (`git commit -m 'Add some NewFeature'`)
 4. 推送到分支 (`git push origin feature/develop`)
 5. 开启一个 Pull Request

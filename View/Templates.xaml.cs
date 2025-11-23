@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using unreal_GUI.ViewModel;
 
 namespace unreal_GUI.View
 {
@@ -23,6 +24,7 @@ namespace unreal_GUI.View
         public Templates()
         {
             InitializeComponent();
+            this.DataContext = new TemplatesViewModel();
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Windows.Controls;
+using unreal_GUI.ViewModel;
 
 namespace unreal_GUI
 {
@@ -10,6 +11,7 @@ namespace unreal_GUI
         public Settings()
         {
             InitializeComponent();
+            this.DataContext = new SettingsViewModel(); // 在这里设置
         }
 
 

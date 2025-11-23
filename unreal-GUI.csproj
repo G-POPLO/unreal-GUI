@@ -38,6 +38,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Link>App\7zxa.dll</Link>
     </Content>
+    <Content Include="Icon\icon.ico" />
     <Content Include="Update.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -80,8 +81,8 @@
     <PublishReadyToRunComposite>true</PublishReadyToRunComposite>-->
     <!--<TieredPGO>true</TieredPGO>-->
   </PropertyGroup>
-  
-  <ItemGroup>
+    <!--排除的文件-->
+    <ItemGroup>
     <Compile Remove="Unreal-GUI-Reminder\**" />
     <EmbeddedResource Remove="Unreal-GUI-Reminder\**" />
     <None Remove="Unreal-GUI-Reminder\**" />

@@ -86,9 +86,10 @@
 
 
                         <!-- 模板ID -->
-                        <TextBlock Text="Project ID（唯一）:" 
-                          FontSize="12" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" 
-                          Margin="0,5,0,15"/>
+                        <!-- Project_ID绑定到Id属性 -->
+<TextBlock x:Name="Project_ID" Text="{Binding Id, StringFormat=Project ID（唯一）: {0}}" 
+    FontSize="12" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" 
+    Margin="0,5,0,15"/>
 
 
                         <!-- 英文描述 -->
@@ -117,6 +118,25 @@
                             <TextBlock Text="韩文描述" Margin="0,0,0,5"/>
                             <TextBox Text="{Binding TemplateDescriptionKo}" Width="400" Height="60" TextWrapping="Wrap" AcceptsReturn="True"/>
                         </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- 项目类别卡片 -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                        CornerRadius="4" Margin="0,0,0,20">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74C;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="模板类别" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+
+                        <RadioButton Content="项目 (Project)" IsChecked="{Binding IsCategoryGames}" Margin="0,0,0,10"/>
+                        <RadioButton Content="功能包 (Feature Pack)" IsChecked="{Binding IsCategoryME}" Margin="0,0,0,10"/>
+                        <TextBlock Text="若此模板设置为“功能包”（Feature Pack），只能被其他模板或内容浏览器引用添加。" 
+                                   FontSize="12" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" />
+
+                       
                     </StackPanel>
                 </Border>
 
@@ -171,7 +191,7 @@
                                         <TextBlock Text="选择图标"/>
                                     </StackPanel>
                                 </Button>
-                                <TextBlock Text="PNG格式，推荐128x128像素" 
+                                <TextBlock x:Name="PictureTip"  Text="PNG格式，推荐128x128像素" 
                                            FontSize="12" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" 
                                            Margin="0,5,0,0"/>
                             </StackPanel>
@@ -188,7 +208,7 @@
                                         <TextBlock Text="选择预览图"/>
                                     </StackPanel>
                                 </Button>
-                                <TextBlock Text="PNG格式，推荐400x200像素" 
+                                <TextBlock x:Name="PictureTip_L" Text="PNG格式，推荐400x200像素" 
                                            FontSize="12" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" 
                                            Margin="0,5,0,0"/>
                             </StackPanel>

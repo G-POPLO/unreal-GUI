@@ -73,6 +73,13 @@ namespace unreal_GUI.ViewModel
 
         [ObservableProperty]
         private string templatePreviewPath;
+        
+        [ObservableProperty]
+        private string pictureTipText = string.Empty;
+        
+        [ObservableProperty]
+        private string pictureTipLText = string.Empty;
+
 
         // 可用引擎列表
         [ObservableProperty]
@@ -87,6 +94,10 @@ namespace unreal_GUI.ViewModel
             public string DisplayName { get; set; }
             public string Path { get; set; }
         }
+
+        // 1. 添加Id属性用于绑定
+        [ObservableProperty]
+        private string id;
 
         // 构造函数
         public TemplatesViewModel()
@@ -134,7 +145,7 @@ namespace unreal_GUI.ViewModel
             folderBrowser.ShowNewFolderButton = false;
 
             // 设置初始目录为常见的项目位置
-            folderBrowser.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            //folderBrowser.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
             DialogResult result = folderBrowser.ShowDialog();
 
@@ -146,6 +157,7 @@ namespace unreal_GUI.ViewModel
                 {
                     ProjectPath = folderBrowser.SelectedPath;
                     await ModernDialog.ShowInfoAsync($"已选择项目: {Path.GetFileName(folderBrowser.SelectedPath)}", "信息");
+                    Id = await ReadProjectIdAsync(ProjectPath); // 绑定ID
                 }
                 else
                 {
@@ -228,8 +240,12 @@ namespace unreal_GUI.ViewModel
                         bitmap.UriSource = new Uri(openFileDialog.FileName, UriKind.Absolute);
                         bitmap.EndInit();
                         TemplatePreview = bitmap;
+                        
+                        // 更新提示文本
+                        PictureTipText = "已选择模板预览图。";
+                        PictureTipLText = Path.GetFileName(openFileDialog.FileName);
+                        
 
-                        await ModernDialog.ShowInfoAsync("已选择模板预览图。", "信息");
                     }
                     else
                     {
@@ -293,7 +309,7 @@ namespace unreal_GUI.ViewModel
                 }
 
                 // 步骤4: 添加图标和预览图
-                CopyImagesToMediaFolder();
+                await CopyImagesToMediaFolder();
 
                 await ModernDialog.ShowInfoAsync($"模板 '{TemplateName}' 创建成功！", "成功");
             }
@@ -485,10 +501,12 @@ namespace unreal_GUI.ViewModel
                 if (IsCategoryGames) category = "Games";
                 else if (IsCategoryME) category = "ME";
                 else if (IsCategoryMFG) category = "MFG";
+                else if (IsCategorySIM) category = "SIM";
 
                 // 构建TemplateDefs.ini内容
-                var iniContent = $"[/Script/GameProjectGeneration.TemplateProjectDefs]\n" +
+                var iniContent = $"[/Script/GameProjectGeneration.TemplateProjectDefs]\n\n" +
                                $"Categories={category}\n" +
+                               $"ProjectID={Id}\n" +
                                $"LocalizedDisplayNames=(Language=\"en\", Text=\"{TemplateName}\")\n" +
                                $"LocalizedDescriptions=(Language=\"en\", Text=\"{TemplateDescriptionEn}\")\n";
 
@@ -510,6 +528,10 @@ namespace unreal_GUI.ViewModel
                     iniContent += $"LocalizedDisplayNames=(Language=\"ko\", Text=\"{TemplateName}\")\n" +
                                 $"LocalizedDescriptions=(Language=\"ko\", Text=\"{TemplateDescriptionKo}\")\n";
                 }
+                
+                // 添加忽略的文件夹和文件
+                iniContent += $"\nFoldersToIgnore=Media\n" +
+                            $"FilesToIgnore=\"Config/TemplateDefs.ini\"\n";
 
                 // 创建Config目录并写入文件
                 var configDir = Path.Combine(ProjectPath, "Config");
@@ -517,6 +539,8 @@ namespace unreal_GUI.ViewModel
 
                 var templateDefsPath = Path.Combine(configDir, "TemplateDefs.ini");
                 File.WriteAllText(templateDefsPath, iniContent);
+                
+                await ModernDialog.ShowInfoAsync($"已创建TemplateDefs.ini文件并添加ProjectID: {Id}", "信息");
 
                 return true;
             }
@@ -552,31 +576,48 @@ namespace unreal_GUI.ViewModel
             }
         }
 
-        // 复制图标和预览图到Media文件夹
-        private async void CopyImagesToMediaFolder()
+        // 复制图片到项目的Media文件夹
+        private async Task CopyImagesToMediaFolder()
         {
             try
             {
-                var mediaDir = Path.Combine(SelectedEngine.Path, "Templates", "Media");
-                Directory.CreateDirectory(mediaDir);
+                // 创建项目的Media目录
+                var projectMediaDir = Path.Combine(ProjectPath, "Media");
+                Directory.CreateDirectory(projectMediaDir);
 
-                // 复制图标
+                // 检查是否有手动选择的图标
+                bool iconCopied = false;
                 if (!string.IsNullOrEmpty(TemplateIconPath) && File.Exists(TemplateIconPath))
                 {
-                    var targetIconPath = Path.Combine(mediaDir, $"{TemplateName}.png");
-                    File.Copy(TemplateIconPath, targetIconPath, true);
+                    var iconDestPath = Path.Combine(projectMediaDir, $"{TemplateName}.png");
+                    File.Copy(TemplateIconPath, iconDestPath, true);
+                    iconCopied = true;
+                }
+                
+                // 如果没有手动选择图标，尝试使用Saved目录下的AutoScreenshot.png作为默认图标
+                if (!iconCopied)
+                {
+                    var savedScreenshotPath = Path.Combine(ProjectPath, "Saved", "AutoScreenshot.png");
+                    if (File.Exists(savedScreenshotPath))
+                    {
+                        var iconDestPath = Path.Combine(projectMediaDir, $"{TemplateName}.png");
+                        File.Copy(savedScreenshotPath, iconDestPath, true);
+                        await ModernDialog.ShowInfoAsync($"已使用项目Saved目录中的AutoScreenshot.png作为默认图标", "信息");
+                    }
                 }
 
-                // 复制预览图
+                // 复制预览图（如果有）
                 if (!string.IsNullOrEmpty(TemplatePreviewPath) && File.Exists(TemplatePreviewPath))
                 {
-                    var targetPreviewPath = Path.Combine(mediaDir, $"{TemplateName}_Preview.png");
-                    File.Copy(TemplatePreviewPath, targetPreviewPath, true);
+                    var previewDestPath = Path.Combine(projectMediaDir, $"{TemplateName}_Preview.png");
+                    File.Copy(TemplatePreviewPath, previewDestPath, true);
                 }
+
+                await Task.CompletedTask;
             }
             catch (Exception ex)
             {
-                await ModernDialog.ShowInfoAsync($"复制图片文件失败: {ex.Message}", "提示");
+                await ModernDialog.ShowErrorAsync($"复制图片失败: {ex.Message}", "错误");
             }
         }
 
