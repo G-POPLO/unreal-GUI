@@ -1,18 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.0.11217.181 d18.0
+VisualStudioVersion = 18.0.11217.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "unreal-GUI", "unreal-GUI.csproj", "{152FF494-525F-417B-849B-9B7FC54DCA17}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "unreal-GUI", "unreal-GUI\unreal-GUI.csproj", "{152FF494-525F-417B-849B-9B7FC54DCA17}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unreal-GUI-Reminder", "Unreal-GUI-Reminder\Unreal-GUI-Reminder.csproj", "{14DC1462-C0AB-4A50-8B12-014BEEBAF7F0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeTest", "CodeTest\CodeTest.csproj", "{6749A1C3-CCF3-4E16-8DF6-B23FFFB82032}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "code_test", "code_test\code_test.csproj", "{AD9C01F3-D8D1-4368-ADA6-DDD3E4F40B8C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,14 +21,10 @@ Global
 		{152FF494-525F-417B-849B-9B7FC54DCA17}.Debug|x64.ActiveCfg = Debug|x64
 		{152FF494-525F-417B-849B-9B7FC54DCA17}.Release|x64.ActiveCfg = Release|x64
 		{152FF494-525F-417B-849B-9B7FC54DCA17}.Release|x64.Build.0 = Release|x64
-		{14DC1462-C0AB-4A50-8B12-014BEEBAF7F0}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{14DC1462-C0AB-4A50-8B12-014BEEBAF7F0}.Debug|x64.Build.0 = Debug|Any CPU
-		{14DC1462-C0AB-4A50-8B12-014BEEBAF7F0}.Release|x64.ActiveCfg = Release|Any CPU
-		{14DC1462-C0AB-4A50-8B12-014BEEBAF7F0}.Release|x64.Build.0 = Release|Any CPU
-		{6749A1C3-CCF3-4E16-8DF6-B23FFFB82032}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{6749A1C3-CCF3-4E16-8DF6-B23FFFB82032}.Debug|x64.Build.0 = Debug|Any CPU
-		{6749A1C3-CCF3-4E16-8DF6-B23FFFB82032}.Release|x64.ActiveCfg = Release|Any CPU
-		{6749A1C3-CCF3-4E16-8DF6-B23FFFB82032}.Release|x64.Build.0 = Release|Any CPU
+		{AD9C01F3-D8D1-4368-ADA6-DDD3E4F40B8C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AD9C01F3-D8D1-4368-ADA6-DDD3E4F40B8C}.Debug|x64.Build.0 = Debug|Any CPU
+		{AD9C01F3-D8D1-4368-ADA6-DDD3E4F40B8C}.Release|x64.ActiveCfg = Release|Any CPU
+		{AD9C01F3-D8D1-4368-ADA6-DDD3E4F40B8C}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
