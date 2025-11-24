@@ -142,5 +142,9 @@
       <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="docs\" />
+  </ItemGroup>
 
 </Project>
