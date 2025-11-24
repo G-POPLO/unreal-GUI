@@ -82,17 +82,7 @@
     <!--<TieredPGO>true</TieredPGO>-->
   </PropertyGroup>
     <!--排除的文件-->
-    <ItemGroup>
-    <Compile Remove="Unreal-GUI-Reminder\**" />
-    <Compile Remove="Unreal-GUI-Tests\**" />
-    <EmbeddedResource Remove="Unreal-GUI-Reminder\**" />
-    <EmbeddedResource Remove="Unreal-GUI-Tests\**" />
-    <None Remove="Unreal-GUI-Reminder\**" />
-    <None Remove="Unreal-GUI-Tests\**" />
-    <Page Remove="Unreal-GUI-Reminder\**" />
-    <Page Remove="Unreal-GUI-Tests\**" />
-  </ItemGroup>
-  
+
   <ItemGroup>
     <Compile Remove="Model\Puppeteer.cs" />
   </ItemGroup>
@@ -145,6 +135,7 @@
   
   <ItemGroup>
     <Folder Include="docs\" />
+    <Folder Include="unreal-gui\" />
   </ItemGroup>
 
 </Project>
