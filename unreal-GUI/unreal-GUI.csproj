@@ -81,6 +81,13 @@
     <PublishReadyToRunComposite>true</PublishReadyToRunComposite>-->
     <!--<TieredPGO>true</TieredPGO>-->
   </PropertyGroup>
+  
+  <ItemGroup>
+    <Compile Remove="unreal-gui\**" />
+    <EmbeddedResource Remove="unreal-gui\**" />
+    <None Remove="unreal-gui\**" />
+    <Page Remove="unreal-gui\**" />
+  </ItemGroup>
     <!--排除的文件-->
 
   <ItemGroup>
@@ -135,7 +142,6 @@
   
   <ItemGroup>
     <Folder Include="docs\" />
-    <Folder Include="unreal-gui\" />
   </ItemGroup>
 
 </Project>
