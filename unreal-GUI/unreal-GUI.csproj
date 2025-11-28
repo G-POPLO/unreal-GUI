@@ -47,7 +47,8 @@
       <DestinationFolder>$(OutputPath)Sound</DestinationFolder>
     </Content>
   </ItemGroup>
-  <!--Playwright运行时驱动程序仅发布win版本-->
+    
+  <!--Playwright驱动程序仅发布win版本-->
   <PropertyGroup>
     <PlaywrightPlatform>win</PlaywrightPlatform>
   </PropertyGroup>
@@ -56,6 +57,7 @@
     <IncludeSatelliteResource>false</IncludeSatelliteResource>
     <SupportedOSPlatformVersion>10.0.18362.0</SupportedOSPlatformVersion>
   </PropertyGroup>
+    
   <!--要求不生成.deps.json文件-->  
   <PropertyGroup>
     <GenerateDependencyFile>false</GenerateDependencyFile>
@@ -82,17 +84,14 @@
     <!--<TieredPGO>true</TieredPGO>-->
   </PropertyGroup>
   
-  <ItemGroup>
+  <!--<ItemGroup>
     <Compile Remove="unreal-gui\**" />
     <EmbeddedResource Remove="unreal-gui\**" />
     <None Remove="unreal-gui\**" />
     <Page Remove="unreal-gui\**" />
-  </ItemGroup>
+  </ItemGroup>-->
     <!--排除的文件-->
 
-  <ItemGroup>
-    <Compile Remove="Model\Puppeteer.cs" />
-  </ItemGroup>
 
   <!--指定Playwright所使用的浏览器-->
   <!--<PropertyGroup>

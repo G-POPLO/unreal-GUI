@@ -31,7 +31,7 @@ namespace unreal_GUI.ViewModel
         private string displayName;
 
         // 属性变更事件
-        public event PropertyChangedEventHandler PropertyChanged;
+        public new event PropertyChangedEventHandler PropertyChanged;
 
         // 当DisplayName属性变化时触发
         partial void OnDisplayNameChanged(string? value)
@@ -101,8 +101,8 @@ namespace unreal_GUI.ViewModel
         private BitmapImage categoryIcon;
 
         // 保存命令是否可执行
-        public bool CanSave => !string.IsNullOrWhiteSpace(CategoryKey) &&
-                              DisplayNameItems.Any(item => !string.IsNullOrWhiteSpace(item.DisplayName));
+        public bool CanSave => !string.IsNullOrWhiteSpace(CategoryKey) && DisplayNameItems.Any(item => !string.IsNullOrWhiteSpace(item.DisplayName));
+
 
         // 保存命令
         [RelayCommand(CanExecute = nameof(CanSave))]

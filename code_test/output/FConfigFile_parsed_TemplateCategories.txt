@@ -1,0 +1,73 @@
+﻿解析文件: D:\PROGRAM\unreal-gui\code_test\input\TemplateCategories.ini
+找到 5 个分类
+==================================================
+Key: Games
+Icon: Media/Games_2x.png
+IsMajorCategory: True
+LocalizedDisplayNames:
+  en: Games
+  zh-Hans: 游戏
+  ja: ゲーム
+  ko: 게임
+LocalizedDescriptions:
+  en: Start your game development journey with one of our key classes, levels, and examples.
+  zh-Hans: 使用我们的关键职业、关卡和示例开始你的游戏开发之旅。
+  ja: 基本となるクラスやレベル、サンプルを一つ使ってゲーム開発をはじめましょう。
+  ko: 언리얼 엔진 주요 클래스, 레벨 및 샘플을 활용해서 게임 개발을 시작해 보세요.
+------------------------------
+Key: ME
+Icon: Media/FilmVideoLive_2x.png
+IsMajorCategory: True
+LocalizedDisplayNames:
+  en: Film / Video &\nLive Events
+  zh-Hans: 影视与现场活动
+  ja: 映画、テレビ、ライブ イベント
+  ko: 영화, TV 및 라이브 이벤트
+LocalizedDescriptions:
+  en: Choose from templates and examples for nDisplay, VR Scouting, and virtual production workflows.
+  zh-Hans: 选择适用于nDisplay、VR探查和虚拟制片工作流程的模板和示例。
+  ja: nDisplay やバーチャル スカウティング ツール、バーチャル プロダクション ワークフローのためのテンプレートおよびサンプルを選択することができます。
+  ko: nDisplay, VR 스카우팅 및 버추얼 프로덕션 워크플로를 위한 템플릿과 샘플을 선택해 보세요.
+------------------------------
+Key: AEC
+Icon: Media/AEC_2x.png
+IsMajorCategory: True
+LocalizedDisplayNames:
+  en: Architecture
+  zh-Hans: 建筑
+  ja: 建築
+  ko: 건축
+LocalizedDescriptions:
+  en: Select a starting point for multi-user design reviews, photorealistic architectural design visualizations, sunlight studies, or stylized renderings.
+  zh-Hans: 为多用户设计评审、照片级建筑设计可视化、阳光研究或风格化渲染选择一个起点。
+  ja: 複数のユーザーによるレビューや、フォトリアルな建築デザインのビジュアライゼーション、太陽光の調査、スタイライズド レンダリングのための土台を選択することができます。
+  ko: 멀티 유저 디자인 리뷰, 건축 디자인의 포토리얼한 시각화, 선라이트 스터디 또는 스타일라이즈드 렌더링을 시작해 보세요.
+------------------------------
+Key: MFG
+Icon: Media/AutomotiveProduct_2x.png
+IsMajorCategory: True
+LocalizedDisplayNames:
+  en: Automotive\nProduct Design &\nManufacturing
+  zh-Hans: 汽车、产品设计和制造
+  ja: 自動車、プロダクト デザイン、製造
+  ko: 자동차, 제품 디자인 및 제조
+LocalizedDescriptions:
+  en: Find templates for multi-user design reviews, photobooth studio environments, and product configurators.
+  zh-Hans: 为多用户设计评审、Photobooth工作室环境和产品配置器寻找适合的模板。
+  ja: 複数のユーザーによるレビューや、フォトブース スタジオの環境背景、製品コンフィギュレーターのためのテンプレートを見つけることができます。
+  ko: 멀티 유저 디자인 리뷰, 포토부스 스튜디오 환경 및 제품 컨피규레이터를 위한 템플릿을 살펴보세요.
+------------------------------
+Key: SIM
+Icon: Media/Simulation_2x.png
+IsMajorCategory: True
+LocalizedDisplayNames:
+  en: Simulation
+  zh-Hans: 模拟
+  ja: シミュレーション
+  ko: 시뮬레이션
+LocalizedDescriptions:
+  en: Find templates for Outdoor georeferenced environments, First person, Driving, Multichannels and AR/VR projects.
+  zh-Hans: 查看可用于室外地理参考场景、第一人称项目、驾驶类场景、多通道项目，以及AR/VR项目的模板。
+  ja: 屋外ジオリファレンス環境、ファーストパーソン、運転、マルチチャンネル、AR/VR プロジェクト向けのテンプレートです。
+  ko: 아웃도어 지오레퍼런스드 환경, 1인칭, 드라이빙, 멀티 채널 및 AR/VR 프로젝트를 위한 템플릿을 찾아보세요.
+------------------------------
