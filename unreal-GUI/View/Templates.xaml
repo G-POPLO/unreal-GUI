@@ -73,7 +73,7 @@
 
                         <!-- 模板名称 -->
                         <StackPanel Margin="0,0,0,15">
-                            <TextBlock Text="以下信息将填入TemplateDefs.ini" 
+                            <TextBlock Text="以下信息将填入Config\TemplateDefs.ini" 
             FontSize="12" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" 
             Margin="0,5,0,5"/>
                             <TextBlock Text="模板名称" Margin="0,0,0,5"/>

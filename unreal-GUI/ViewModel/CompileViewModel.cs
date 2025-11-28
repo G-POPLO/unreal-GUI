@@ -9,7 +9,6 @@ using System.IO;
 using System.Media;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using unreal_GUI.Model;
 namespace unreal_GUI.ViewModel
 {
     public partial class CompileViewModel : ObservableObject

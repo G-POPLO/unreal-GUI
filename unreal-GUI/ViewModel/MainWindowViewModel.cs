@@ -117,7 +117,7 @@ namespace unreal_GUI.ViewModel
 
             if (!File.Exists("settings.json"))
             {
-                bool? result = await ModernDialog.ShowConfirmAsync("未检测到引擎，请先去设置引擎目录", "提示");
+                var result = await ModernDialog.ShowConfirmAsync("未检测到引擎，请先去设置引擎目录", "提示");
 
                 if (result == true)
                 {

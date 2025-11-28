@@ -2,6 +2,8 @@ using iNKORE.UI.WPF.Modern.Controls;
 using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -272,34 +274,48 @@ namespace unreal_GUI.Model
             };
             var result = await dialog.ShowAsync();
 
-            // 关闭对话框时也刷新页面
-            //NavigationRequested?.Invoke(null, "QuickAccess");
+
 
             return result;
         }
 
-        // 查找视觉子元素的辅助方法
-        //public static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
-        //{
-        //    if (parent == null) return null;
 
-        //    for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
-        //    {
-        //        DependencyObject child = VisualTreeHelper.GetChild(parent, i);
-        //        if (child is T)
-        //        {
-        //            return (T)child;
-        //        }
 
-        //        T childOfChild = FindVisualChild<T>(child);
-        //        if (childOfChild != null)
-        //        {
-        //            return childOfChild;
-        //        }
-        //    }
+        /// <summary>
+        /// 将Category对象转换为INI格式的字符串
+        /// </summary>
+        /// <param name="category">要转换的Category对象</param>
+        /// <returns>INI格式的字符串</returns>
+        private static string ConvertCategoryToIniFormat(CategoriesParser.Category category)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine($"[{category.Key}]");
 
-        //    return null;
-        //}
+            // 添加LocalizedDisplayNames
+            if (category.LocalizedDisplayNames != null && category.LocalizedDisplayNames.Count > 0)
+            {
+                var displayNames = string.Join(";", category.LocalizedDisplayNames.Select(dn => $"(Language=\"{dn.Language}\",Text=\"{dn.Text}\")"));
+                sb.AppendLine($"LocalizedDisplayNames={displayNames}");
+            }
+
+            // 添加LocalizedDescriptions
+            if (category.LocalizedDescriptions != null && category.LocalizedDescriptions.Count > 0)
+            {
+                var descriptions = string.Join(";", category.LocalizedDescriptions.Select(d => $"(Language=\"{d.Language}\",Text=\"{d.Text}\")"));
+                sb.AppendLine($"LocalizedDescriptions={descriptions}");
+            }
+
+            // 添加Icon
+            if (!string.IsNullOrEmpty(category.Icon))
+            {
+                sb.AppendLine($"Icon={category.Icon}");
+            }
+
+            // 添加IsMajorCategory
+            sb.AppendLine($"IsMajorCategory={category.IsMajorCategory.ToString().ToLower()}");
+
+            return sb.ToString();
+        }
 
         /// <summary>
         /// 显示添加模板类别对话框
@@ -313,10 +329,10 @@ namespace unreal_GUI.Model
             {
                 Title = "添加模板类别",
                 PrimaryButtonText = "保存",
-                SecondaryButtonText = "取消",
+                CloseButtonText = "取消",
                 DefaultButton = ContentDialogButton.Primary,
                 Content = content,
-                IsPrimaryButtonEnabled = true
+                IsPrimaryButtonEnabled = false // 初始禁用保存按钮
             };
 
             // 设置对话框引用
@@ -329,11 +345,21 @@ namespace unreal_GUI.Model
             {
                 try
                 {
+                    // 获取ViewModel并转换为Category对象
+                    var viewModel = content.ViewModel;
+                    var category = viewModel.GetCategory();
 
                     // 如果提供了引擎路径，则写入TemplateCategories.ini文件
                     if (!string.IsNullOrEmpty(enginePath))
                     {
                         string templateCategoriesPath = Path.Combine(enginePath, "Templates", "TemplateCategories.ini");
+
+                        // 确保目录存在
+                        Directory.CreateDirectory(Path.GetDirectoryName(templateCategoriesPath));
+
+                        // 将Category对象转换为INI格式并追加到文件
+                        string categoryIniFormat = ConvertCategoryToIniFormat(category);
+                        await File.AppendAllTextAsync(templateCategoriesPath, Environment.NewLine + categoryIniFormat);
 
                         await ShowInfoAsync($"类别已成功添加到引擎的模板配置中", "保存成功");
                     }
@@ -346,5 +372,6 @@ namespace unreal_GUI.Model
 
             return result;
         }
+
     }
 }
