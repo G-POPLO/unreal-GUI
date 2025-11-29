@@ -331,43 +331,18 @@ namespace unreal_GUI.Model
                 PrimaryButtonText = "保存",
                 CloseButtonText = "取消",
                 DefaultButton = ContentDialogButton.Primary,
-                Content = content,
-                IsPrimaryButtonEnabled = false // 初始禁用保存按钮
+                Content = content
+
             };
 
-            // 设置对话框引用
-            content.Dialog = dialog;
+
 
             var result = await dialog.ShowAsync();
 
             // 处理保存逻辑
             if (result == ContentDialogResult.Primary)
             {
-                try
-                {
-                    // 获取ViewModel并转换为Category对象
-                    var viewModel = content.ViewModel;
-                    var category = viewModel.GetCategory();
 
-                    // 如果提供了引擎路径，则写入TemplateCategories.ini文件
-                    if (!string.IsNullOrEmpty(enginePath))
-                    {
-                        string templateCategoriesPath = Path.Combine(enginePath, "Templates", "TemplateCategories.ini");
-
-                        // 确保目录存在
-                        Directory.CreateDirectory(Path.GetDirectoryName(templateCategoriesPath));
-
-                        // 将Category对象转换为INI格式并追加到文件
-                        string categoryIniFormat = ConvertCategoryToIniFormat(category);
-                        await File.AppendAllTextAsync(templateCategoriesPath, Environment.NewLine + categoryIniFormat);
-
-                        await ShowInfoAsync($"类别已成功添加到引擎的模板配置中", "保存成功");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    await ShowErrorAsync($"保存类别失败: {ex.Message}", "错误");
-                }
             }
 
             return result;

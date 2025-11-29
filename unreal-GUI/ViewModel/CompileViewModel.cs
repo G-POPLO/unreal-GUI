@@ -9,6 +9,7 @@ using System.IO;
 using System.Media;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using unreal_GUI.Model;
 namespace unreal_GUI.ViewModel
 {
     public partial class CompileViewModel : ObservableObject
@@ -58,14 +59,9 @@ namespace unreal_GUI.ViewModel
                 string pluginEngineVersion = pluginInfo.EngineVersion;
 
                 // 获取选择的引擎版本
-                if (SelectedEngine != null)
-                {
-                    TipsText = $"即将把版本{pluginEngineVersion}的插件编译成{SelectedEngine.Version}版本的插件";
-                }
-                else
-                {
-                    TipsText = $"读取到插件版本{pluginEngineVersion}，请先选择目标引擎版本";
-                }
+                TipsText = SelectedEngine != null
+                    ? $"即将把版本{pluginEngineVersion}的插件编译成{SelectedEngine.Version}版本的插件"
+                    : $"读取到插件版本{pluginEngineVersion}，请先选择目标引擎版本";
 
             }
         }

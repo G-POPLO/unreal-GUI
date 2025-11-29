@@ -1,232 +1,245 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Win32;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO;
-using System.Linq;
+using System.Windows;
 using System.Windows.Media.Imaging;
+using unreal_GUI.Model;
+using MessageBox = iNKORE.UI.WPF.Modern.Controls.MessageBox;
 
 namespace unreal_GUI.ViewModel
 {
-    /// <summary>
-    /// 语言信息类
-    /// </summary>
-    public class LanguageInfo
-    {
-        public string Code { get; set; }
-        public string Name { get; set; }
-    }
-
-    /// <summary>
-    /// 显示名称项类
-    /// </summary>
-    public partial class DisplayNameItem : ObservableObject
-    {
-        [ObservableProperty]
-        private string languageCode;
-
-        [ObservableProperty]
-        private string displayName;
-
-        // 属性变更事件
-        public new event PropertyChangedEventHandler PropertyChanged;
-
-        // 当DisplayName属性变化时触发
-        partial void OnDisplayNameChanged(string? value)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisplayName)));
-        }
-    }
-
-    /// <summary>
-    /// 描述信息类
-    /// </summary>
-    public partial class DescriptionItem : ObservableObject
-    {
-        [ObservableProperty]
-        private string languageCode;
-
-        [ObservableProperty]
-        private string description;
-    }
-
-    /// <summary>
-    /// 添加模板类别视图模型
-    /// </summary>
     public partial class AddCategoriesViewModel : ObservableObject
     {
-        // 可用语言列表
+        // 基本信息属性
         [ObservableProperty]
-        private List<LanguageInfo> availableLanguages =
-        [
-            new LanguageInfo { Code = "en", Name = "English" },
-            new LanguageInfo { Code = "zh-Hans", Name = "简体中文" },
-            new LanguageInfo { Code = "ja", Name = "日本語" },
-            new LanguageInfo { Code = "ko", Name = "한국어" }
-        ];
-
-        // 显示名称项列表
-        [ObservableProperty]
-        private ObservableCollection<DisplayNameItem> displayNameItems = [];
-
-        // 描述项列表
-        [ObservableProperty]
-        private ObservableCollection<DescriptionItem> descriptionItems = [];
-
-        // 图标路径
-        [ObservableProperty]
-        private string iconPath;
-
-        // 图标文件名称
-        [ObservableProperty]
-        private string iconFileName;
-
-        // 类别Key
-        [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
         private string categoryKey = "User";
 
-        // 是否为主类别
         [ObservableProperty]
         private bool isMajorCategory = true;
 
-        // 错误信息
         [ObservableProperty]
-        private string errorMessage;
+        private BitmapImage? categoryIcon;
 
-        // 图标预览
         [ObservableProperty]
-        private BitmapImage categoryIcon;
+        private string iconFileName = string.Empty;
 
-        // 保存命令是否可执行
-        public bool CanSave => !string.IsNullOrWhiteSpace(CategoryKey) && DisplayNameItems.Any(item => !string.IsNullOrWhiteSpace(item.DisplayName));
+        [ObservableProperty]
+        private string iconPath = string.Empty;
 
+        // 多语言描述属性
+        [ObservableProperty]
+        private string descriptionEn = string.Empty;
 
-        // 保存命令
-        [RelayCommand(CanExecute = nameof(CanSave))]
-        private void Save()
+        [ObservableProperty]
+        private string? descriptionZh;
+
+        [ObservableProperty]
+        private string? descriptionJa;
+
+        [ObservableProperty]
+        private string? descriptionKo;
+
+        // 用于显示名称（在XAML中未直接绑定，但用于生成Categories文本）
+        [ObservableProperty]
+        private string displayName = string.Empty;
+
+        // 用于获取生成的Categories文本
+        [ObservableProperty]
+        private string generatedCategoriesText = string.Empty;
+
+        private readonly CategoriesParser _categoriesParser;
+
+        // 引擎信息类，用于解析JSON
+        private partial class EngineInfo : ObservableObject
         {
-            // 保存逻辑将由调用方处理
-            OnSaveRequested?.Invoke(this, EventArgs.Empty);
+            [ObservableProperty]
+            private string _path;
+
+            [ObservableProperty]
+            private string _version;
         }
 
-        // 保存请求事件
-        public event EventHandler OnSaveRequested;
-
-        // 添加显示名称项命令
-        [RelayCommand]
-        private void AddDisplayName()
+        private partial class SettingsData : ObservableObject
         {
-            var newItem = new DisplayNameItem
-            {
-                LanguageCode = AvailableLanguages.FirstOrDefault()?.Code ?? "en",
-                DisplayName = string.Empty
-            };
-            DisplayNameItems.Add(newItem);
+            [ObservableProperty]
+            private List<EngineInfo> _engines;
+
+            [ObservableProperty]
+            private List<CustomButton> _customButtons;
         }
 
-        // 移除显示名称项命令
-        [RelayCommand]
-        private void RemoveDisplayName(DisplayNameItem item)
+        private partial class CustomButton : ObservableObject
         {
-            if (item != null && DisplayNameItems.Contains(item))
-            {
-                DisplayNameItems.Remove(item);
-            }
+            [ObservableProperty]
+            private string _name;
+
+            [ObservableProperty]
+            private string _path;
         }
 
-        // 添加描述项命令
-        [RelayCommand]
-        private void AddDescription()
+        public AddCategoriesViewModel()
         {
-            var newItem = new DescriptionItem
-            {
-                LanguageCode = AvailableLanguages.FirstOrDefault()?.Code ?? "en",
-                Description = string.Empty
-            };
-            DescriptionItems.Add(newItem);
+            _categoriesParser = new CategoriesParser();
         }
 
-        // 移除描述项命令
-        [RelayCommand]
-        private void RemoveDescription(DescriptionItem item)
-        {
-            if (item != null && DescriptionItems.Contains(item))
-            {
-                DescriptionItems.Remove(item);
-            }
-        }
-
-        // 浏览图标命令
+        /// <summary>
+        /// 浏览图标命令
+        /// </summary>
         [RelayCommand]
         private void BrowseIcon()
         {
-            var openFileDialog = new Microsoft.Win32.OpenFileDialog
+            var openFileDialog = new OpenFileDialog
             {
-                Filter = "PNG Images|*.png|All files|*.*",
+                Filter = "PNG Images (*.png)|*.png|All files (*.*)|*.*",
                 Title = "选择类别图标"
             };
 
             if (openFileDialog.ShowDialog() == true)
             {
+                // 设置图标路径和文件名
                 IconPath = openFileDialog.FileName;
-                IconFileName = Path.GetFileName(IconPath);
+                IconFileName = Path.GetFileName(openFileDialog.FileName);
 
-                // 显示预览图片
-                try
-                {
-                    var bitmap = new BitmapImage();
-                    bitmap.BeginInit();
-                    bitmap.UriSource = new Uri(IconPath);
-                    bitmap.EndInit();
-                    CategoryIcon = bitmap;
-                    ErrorMessage = string.Empty;
-                }
-                catch (Exception ex)
-                {
-                    ErrorMessage = $"无法加载图片: {ex.Message}";
-                }
+                // 加载图标到UI
+                var bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(IconPath);
+                bitmap.EndInit();
+                CategoryIcon = bitmap;
+
+                // 复制图片到引擎Templates目录
+                CopyImageToEngineTemplates(openFileDialog.FileName);
             }
         }
 
-        // 构造函数
-        public AddCategoriesViewModel()
+        /// <summary>
+        /// 复制图片到所有引擎的Templates目录
+        /// </summary>
+        /// <param name="sourceImagePath">源图片路径</param>
+        private void CopyImageToEngineTemplates(string sourceImagePath)
         {
-            // 添加默认的显示名称项
-            AddDisplayName();
-
-            // 监听DisplayNameItems集合变化，更新CanSave状态
-            DisplayNameItems.CollectionChanged += (s, e) =>
+            try
             {
-                // 添加新项的属性变更监听
-                if (e.NewItems != null)
+                // 检查settings.json文件是否存在
+                if (!File.Exists("settings.json"))
                 {
-                    foreach (DisplayNameItem item in e.NewItems)
+                    MessageBox.Show("未找到settings.json文件，请先在设置中配置引擎路径", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+                // 读取并解析JSON文件
+                var json = File.ReadAllText("settings.json");
+                var settings = JsonConvert.DeserializeObject<SettingsData>(json);
+
+                if (settings == null || settings.Engines == null || settings.Engines.Count == 0)
+                {
+                    MessageBox.Show("未在settings.json中找到引擎配置，请先在设置中配置引擎路径", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+                // 验证CategoryKey是否已设置
+                if (string.IsNullOrWhiteSpace(CategoryKey))
+                {
+                    MessageBox.Show("请先设置Category Key再选择图标", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+                int copiedCount = 0;
+                string targetFileName = $"{CategoryKey}_2X.png";
+
+                // 复制到每个引擎的Templates目录
+                foreach (var engineInfo in settings.Engines)
+                {
+                    try
                     {
-                        item.PropertyChanged += DisplayNameItem_PropertyChanged;
+                        string templatesDir = Path.Combine(engineInfo.Path, "Templates");
+                        string targetPath = Path.Combine(templatesDir, targetFileName);
+
+                        // 确保Templates目录存在
+                        if (!Directory.Exists(templatesDir))
+                        {
+                            Directory.CreateDirectory(templatesDir);
+                        }
+
+                        // 复制文件
+                        File.Copy(sourceImagePath, targetPath, true);
+                        copiedCount++;
+                    }
+                    catch (Exception ex)
+                    {
+                        // 记录单个引擎复制失败，但继续尝试其他引擎
+                        System.Diagnostics.Debug.WriteLine($"复制到引擎 {engineInfo.Path} 失败: {ex.Message}");
                     }
                 }
-                // 移除被删除项的属性变更监听
-                if (e.OldItems != null)
+
+                if (copiedCount > 0)
                 {
-                    foreach (DisplayNameItem item in e.OldItems)
-                    {
-                        item.PropertyChanged -= DisplayNameItem_PropertyChanged;
-                    }
+                    MessageBox.Show($"成功将图标复制到 {copiedCount} 个引擎的Templates目录\n文件名: {targetFileName}", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
-                SaveCommand.NotifyCanExecuteChanged();
-            };
+                else
+                {
+                    MessageBox.Show("未能将图标复制到任何引擎目录，请检查引擎路径和权限设置", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"复制图标时发生错误: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
-        // 当DisplayNameItem的属性变化时
-        private void DisplayNameItem_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        /// <summary>
+        /// 生成Categories文本命令
+        /// </summary>
+        [RelayCommand]
+        private void GenerateCategories()
         {
-            if (e.PropertyName == nameof(DisplayNameItem.DisplayName))
+            // 验证必填字段
+            if (string.IsNullOrWhiteSpace(CategoryKey) ||
+                string.IsNullOrWhiteSpace(DescriptionEn) ||
+                string.IsNullOrWhiteSpace(IconPath))
             {
-                SaveCommand.NotifyCanExecuteChanged();
+                // 可以在这里添加错误处理逻辑
+                GeneratedCategoriesText = "请填写所有必填字段（Key、英文描述和图标）";
+                return;
             }
+
+            // 如果未设置显示名称，则使用Key作为显示名称
+            var displayNameToUse = string.IsNullOrWhiteSpace(DisplayName) ? CategoryKey : DisplayName;
+
+            // 调用CategoriesParser生成Categories文本
+            GeneratedCategoriesText = _categoriesParser.GenerateCategoriesText(
+                key: CategoryKey,
+                displayName: displayNameToUse,
+                isMajorCategory: IsMajorCategory,
+                iconPath: IconPath,
+                DescriptionEn: DescriptionEn,
+                DescriptionZh: DescriptionZh,
+                DescriptionJa: DescriptionJa,
+                DescriptionKo: DescriptionKo
+            );
+        }
+
+        /// <summary>
+        /// 重置表单命令
+        /// </summary>
+        [RelayCommand]
+        private void ResetForm()
+        {
+            CategoryKey = string.Empty;
+            IsMajorCategory = false;
+            CategoryIcon = null;
+            IconFileName = string.Empty;
+            IconPath = string.Empty;
+            DisplayName = string.Empty;
+            DescriptionEn = string.Empty;
+            DescriptionZh = null;
+            DescriptionJa = null;
+            DescriptionKo = null;
+            GeneratedCategoriesText = string.Empty;
         }
     }
 }
