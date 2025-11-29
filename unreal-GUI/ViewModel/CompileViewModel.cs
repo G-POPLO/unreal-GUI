@@ -14,10 +14,10 @@ namespace unreal_GUI.ViewModel
 {
     public partial class CompileViewModel : ObservableObject
     {
-        private List<SettingsViewModel.EngineInfo> engineList = [];
+        private List<EngineInfo> engineList = [];
 
         [ObservableProperty]
-        private SettingsViewModel.EngineInfo selectedEngine;
+        private EngineInfo selectedEngine;
 
         [ObservableProperty]
         private string inputPath;
@@ -35,7 +35,7 @@ namespace unreal_GUI.ViewModel
 
         }
 
-        public ObservableCollection<SettingsViewModel.EngineInfo> EngineVersions { get; } = [];
+        public ObservableCollection<EngineInfo> EngineVersions { get; } = [];
 
         public bool IsCompileButtonEnabled => CanCompile();
 
@@ -107,7 +107,7 @@ namespace unreal_GUI.ViewModel
             CompileCommand.NotifyCanExecuteChanged();
         }
 
-        partial void OnSelectedEngineChanged(SettingsViewModel.EngineInfo value)
+        partial void OnSelectedEngineChanged(EngineInfo value)
         {
             OnPropertyChanged(nameof(IsCompileButtonEnabled));
             CompileCommand.NotifyCanExecuteChanged();
@@ -206,9 +206,9 @@ namespace unreal_GUI.ViewModel
             if (File.Exists("settings.json"))
             {
                 var json = File.ReadAllText("settings.json");
-                var settings = JsonConvert.DeserializeObject<SettingsViewModel.SettingsData>(json);
+                var settings = JsonConvert.DeserializeObject<SettingsData>(json);
                 engineList = settings?.Engines ?? [];
-                foreach (SettingsViewModel.EngineInfo engine in engineList)
+                foreach (EngineInfo engine in engineList)
                 {
                     EngineVersions.Add(engine);
                 }

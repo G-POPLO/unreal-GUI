@@ -73,10 +73,10 @@ namespace unreal_GUI.ViewModel
 
         // 可用引擎列表
         [ObservableProperty]
-        private ObservableCollection<EngineInfo> availableEngines;
+        private ObservableCollection<EngineDisplayInfo> availableEngines;
 
         [ObservableProperty]
-        private EngineInfo selectedEngine;
+        private EngineDisplayInfo selectedEngine;
 
         // 1. 添加Id属性用于绑定
         [ObservableProperty]
@@ -86,8 +86,8 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private bool isProjectSelected = true;
 
-        //引擎信息类
-        public class EngineInfo
+        // 注意：EngineInfo类已在JsonConfig.cs中定义，这里使用自定义的显示包装类
+        public class EngineDisplayInfo
         {
             public string DisplayName { get; set; }
             public string Path { get; set; }
@@ -111,14 +111,14 @@ namespace unreal_GUI.ViewModel
                 if (File.Exists("settings.json"))
                 {
                     string jsonContent = File.ReadAllText("settings.json");
-                    // 使用与SettingsViewModel相同的数据结构
-                    var settings = JsonConvert.DeserializeObject<SettingsViewModel.SettingsData>(jsonContent);
+                    // 从jsonContent反序列化设置数据
+                var settings = JsonConvert.DeserializeObject<SettingsData>(jsonContent);
 
                     if (settings?.Engines != null)
                     {
                         foreach (var engine in settings.Engines)
                         {
-                            AvailableEngines.Add(new EngineInfo
+                            AvailableEngines.Add(new EngineDisplayInfo
                             {
                                 DisplayName = $"Unreal Engine {engine.Version}",
                                 Path = engine.Path

@@ -53,33 +53,7 @@ namespace unreal_GUI.ViewModel
 
         private readonly CategoriesParser _categoriesParser;
 
-        // 引擎信息类，用于解析JSON
-        private partial class EngineInfo : ObservableObject
-        {
-            [ObservableProperty]
-            private string _path;
-
-            [ObservableProperty]
-            private string _version;
-        }
-
-        private partial class SettingsData : ObservableObject
-        {
-            [ObservableProperty]
-            private List<EngineInfo> _engines;
-
-            [ObservableProperty]
-            private List<CustomButton> _customButtons;
-        }
-
-        private partial class CustomButton : ObservableObject
-        {
-            [ObservableProperty]
-            private string _name;
-
-            [ObservableProperty]
-            private string _path;
-        }
+        // 注意：EngineInfo、SettingsData和CustomButton类现在已移至JsonConfig.cs中
 
         public AddCategoriesViewModel()
         {
@@ -112,15 +86,15 @@ namespace unreal_GUI.ViewModel
                 CategoryIcon = bitmap;
 
                 // 复制图片到引擎Templates目录
-                CopyImageToEngineTemplates(openFileDialog.FileName);
+                //CopyImageToEngineTemplates(openFileDialog.FileName);
             }
         }
 
         /// <summary>
-        /// 复制图片到所有引擎的Templates目录
+        /// 复制图片到引擎的Templates目录
         /// </summary>
-        /// <param name="sourceImagePath">源图片路径</param>
-        private void CopyImageToEngineTemplates(string sourceImagePath)
+        /// <param name="ImagePath">源图片路径</param>
+        private void CopyImageToEngineTemplates(string ImagePath)
         {
             try
             {
@@ -166,7 +140,7 @@ namespace unreal_GUI.ViewModel
                         }
 
                         // 复制文件
-                        File.Copy(sourceImagePath, targetPath, true);
+                        File.Copy(ImagePath, targetPath, true);
                         copiedCount++;
                     }
                     catch (Exception ex)
@@ -215,7 +189,7 @@ namespace unreal_GUI.ViewModel
                 key: CategoryKey,
                 displayName: displayNameToUse,
                 isMajorCategory: IsMajorCategory,
-                iconPath: IconPath,
+
                 DescriptionEn: DescriptionEn,
                 DescriptionZh: DescriptionZh,
                 DescriptionJa: DescriptionJa,

@@ -132,7 +132,7 @@ namespace unreal_GUI.Model
             string key,
             string displayName,
             bool isMajorCategory,
-            string iconPath,
+
             string DescriptionEn,
             string? DescriptionZh,
             string? DescriptionJa,

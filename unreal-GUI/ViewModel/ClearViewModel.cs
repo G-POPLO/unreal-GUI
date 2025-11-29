@@ -13,7 +13,7 @@ namespace unreal_GUI.ViewModel
     public partial class ClearViewModel : ObservableObject
     {
         [ObservableProperty]
-        private List<SettingsViewModel.EngineInfo> _engineList = [];
+        private List<EngineInfo> _engineList = [];
 
         [ObservableProperty]
         private string _inputPath = "";
@@ -38,7 +38,7 @@ namespace unreal_GUI.ViewModel
 
 
         [ObservableProperty]
-        private SettingsViewModel.EngineInfo _selectedEngine;
+        private EngineInfo _selectedEngine;
 
         public ClearViewModel()
         {
@@ -52,7 +52,7 @@ namespace unreal_GUI.ViewModel
                 try
                 {
                     var json = File.ReadAllText("settings.json");
-                    var settings = JsonConvert.DeserializeObject<SettingsViewModel.SettingsData>(json);
+                    var settings = JsonConvert.DeserializeObject<SettingsData>(json);
                     EngineList = settings?.Engines ?? [];
                 }
                 catch

@@ -95,7 +95,7 @@ namespace unreal_GUI.ViewModel
             if (File.Exists("settings.json"))
             {
                 var json = File.ReadAllText("settings.json");
-                var settings = JsonConvert.DeserializeObject<SettingsViewModel.SettingsData>(json);
+                var settings = JsonConvert.DeserializeObject<SettingsData>(json);
                 var engineList = settings?.Engines ?? [];
                 Engines = new ObservableCollection<object>(engineList.Select(e => new { DisplayName = $"UE {e.Version}", e.Path }));
 
@@ -109,7 +109,7 @@ namespace unreal_GUI.ViewModel
             if (File.Exists("settings.json"))
             {
                 var json = File.ReadAllText("settings.json");
-                var settings = JsonConvert.DeserializeObject<SettingsViewModel.SettingsData>(json);
+                var settings = JsonConvert.DeserializeObject<SettingsData>(json);
                 var customButtonList = settings?.CustomButtons ?? [];
                 CustomButtons = new ObservableCollection<object>(customButtonList.Select(cb => new { DisplayName = cb.Name, cb.Path }));
             }

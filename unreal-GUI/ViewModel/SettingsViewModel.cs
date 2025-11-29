@@ -8,8 +8,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using unreal_GUI.Model;
 using MessageBox = iNKORE.UI.WPF.Modern.Controls.MessageBox;
-
 
 namespace unreal_GUI.ViewModel
 {
@@ -51,32 +51,7 @@ namespace unreal_GUI.ViewModel
         private bool _headlessEnabled;
 
 
-        public partial class EngineInfo : ObservableObject
-        {
-            [ObservableProperty]
-            private string _path;
-
-            [ObservableProperty]
-            private string _version;
-        }
-
-        public partial class SettingsData : ObservableObject
-        {
-            [ObservableProperty]
-            private List<EngineInfo> _engines;
-
-            [ObservableProperty]
-            private List<CustomButton> _customButtons;
-        }
-
-        public partial class CustomButton : ObservableObject
-        {
-            [ObservableProperty]
-            private string _name;
-
-            [ObservableProperty]
-            private string _path;
-        }
+        // 注意：EngineInfo、SettingsData和CustomButton类现在已移至JsonConfig.cs中
 
 
         public SettingsViewModel()

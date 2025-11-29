@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using unreal_GUI.ViewModel;
+
 
 namespace unreal_GUI.Model
 {
@@ -29,18 +29,18 @@ namespace unreal_GUI.Model
                 try
                 {
                     var json = File.ReadAllText("settings.json");
-                    var settings = JsonConvert.DeserializeObject<SettingsViewModel.SettingsData>(json);
+                    var settings = JsonConvert.DeserializeObject<SettingsData>(json);
                     ButtonsListBox.ItemsSource = settings?.CustomButtons ?? [];
                 }
                 catch (Exception)
                 {
                     // 如果JSON文件损坏或读取失败，初始化为空列表
-                    ButtonsListBox.ItemsSource = new List<SettingsViewModel.CustomButton>();
+                    ButtonsListBox.ItemsSource = new List<CustomButton>();
                 }
             }
             else
             {
-                ButtonsListBox.ItemsSource = new List<SettingsViewModel.CustomButton>();
+                ButtonsListBox.ItemsSource = new List<CustomButton>();
             }
         }
 
@@ -50,7 +50,7 @@ namespace unreal_GUI.Model
             // 从JSON文件中删除相应的条目
             if (ButtonsListBox.SelectedItem != null)
             {
-                var selectedItem = ButtonsListBox.SelectedItem as SettingsViewModel.CustomButton;
+                var selectedItem = ButtonsListBox.SelectedItem as CustomButton;
                 // 获取选中项的名称
                 var name = selectedItem?.Name;
 
@@ -58,7 +58,7 @@ namespace unreal_GUI.Model
                 if (File.Exists("settings.json"))
                 {
                     var json = File.ReadAllText("settings.json");
-                    var settings = JsonConvert.DeserializeObject<SettingsViewModel.SettingsData>(json);
+                    var settings = JsonConvert.DeserializeObject<SettingsData>(json);
 
                     // 删除选中的条目
                     if (settings.CustomButtons != null)

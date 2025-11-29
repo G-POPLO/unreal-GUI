@@ -9,7 +9,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using unreal_GUI.Model.DialogContent;
-using unreal_GUI.ViewModel;
 
 
 namespace unreal_GUI.Model
@@ -208,11 +207,11 @@ namespace unreal_GUI.Model
                 if (!string.IsNullOrWhiteSpace(buttonName) && !string.IsNullOrWhiteSpace(folderPath))
                 {
                     // 读取现有设置
-                    var settings = new SettingsViewModel.SettingsData();
+                    var settings = new SettingsData();
                     if (File.Exists("settings.json"))
                     {
                         var json = File.ReadAllText("settings.json");
-                        settings = JsonConvert.DeserializeObject<SettingsViewModel.SettingsData>(json) ?? new SettingsViewModel.SettingsData();
+                        settings = JsonConvert.DeserializeObject<SettingsData>(json) ?? new SettingsData();
                     }
 
                     // 若不存在配置，则初始化列表
@@ -220,7 +219,7 @@ namespace unreal_GUI.Model
                     {
                         settings.CustomButtons = [];
                     }
-                    settings.CustomButtons.Add(new SettingsViewModel.CustomButton { Name = buttonName, Path = folderPath });
+                    settings.CustomButtons.Add(new CustomButton { Name = buttonName, Path = folderPath });
                     // 保存更新后的设置
                     var jsonSettings = JsonConvert.SerializeObject(settings, Formatting.Indented);
                     File.WriteAllText("settings.json", jsonSettings);
@@ -250,7 +249,7 @@ namespace unreal_GUI.Model
             if (File.Exists("settings.json"))
             {
                 var json = File.ReadAllText("settings.json");
-                var settings = JsonConvert.DeserializeObject<SettingsViewModel.SettingsData>(json);
+                var settings = JsonConvert.DeserializeObject<SettingsData>(json);
 
                 if (settings?.CustomButtons != null)
                 {
@@ -321,7 +320,7 @@ namespace unreal_GUI.Model
         /// 显示添加模板类别对话框
         /// </summary>
         /// <param name="enginePath">引擎安装路径，用于定位TemplateCategories.ini文件</param>
-        public static async Task<ContentDialogResult> ShowCategoriesDialogAsync(string enginePath = null)
+        public static async Task<ContentDialogResult> ShowCategoriesDialogAsync(string enginePath)
         {
             var content = new Add_Categories();
 
