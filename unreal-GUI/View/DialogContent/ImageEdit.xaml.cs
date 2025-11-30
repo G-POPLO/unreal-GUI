@@ -2,8 +2,6 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using Microsoft.Win32;
 
 namespace unreal_GUI.View.DialogContent
 {
@@ -62,7 +60,7 @@ namespace unreal_GUI.View.DialogContent
         private void InitializeButtons()
         {
             // 初始化按钮事件
-            BrowseButton.Click += BrowseButton_Click;
+
             ResetZoomButton.Click += ResetZoomButton_Click;
             SaveCroppedButton.Click += SaveCroppedButton_Click;
         }
