@@ -27,7 +27,7 @@ namespace unreal_GUI.Model
         /// </summary>
         /// <param name="filePath">INI文件路径</param>
         /// <returns>解析出的Category列表</returns>
-        public List<Category> ParseCategories(string filePath)
+        public static List<Category> ParseCategories(string filePath)
         {
             var categories = new List<Category>();
             var lines = File.ReadAllLines(filePath);
@@ -39,7 +39,7 @@ namespace unreal_GUI.Model
                 var trimmedLine = line.Trim();
 
                 // 跳过注释和空行
-                if (string.IsNullOrEmpty(trimmedLine) || trimmedLine.StartsWith(";"))
+                if (string.IsNullOrEmpty(trimmedLine) || trimmedLine.StartsWith(';'))
                     continue;
 
                 // 查找Categories=开头的行
@@ -127,7 +127,7 @@ namespace unreal_GUI.Model
         /// <summary>
         /// 根据用户提供的参数生成Categories的格式字符串
         /// </summary>
-        public string GenerateCategoriesText
+        public static string GenerateCategoriesText
             (
             string key,
             string displayName,
@@ -158,7 +158,7 @@ namespace unreal_GUI.Model
                 sb.Append($",(Language=\"ja\",Text=\"{displayName}\")");
             if (!string.IsNullOrEmpty(DescriptionKo))
                 sb.Append($",(Language=\"ko\",Text=\"{displayName}\")");
-            sb.Append(")");
+            sb.Append(')');
 
             // 添加LocalizedDescriptions
             sb.Append(", LocalizedDescriptions=(");
@@ -171,7 +171,7 @@ namespace unreal_GUI.Model
                 sb.Append($",(Language=\"ja\",Text=\"{DescriptionJa}\")");
             if (!string.IsNullOrEmpty(DescriptionKo))
                 sb.Append($",(Language=\"ko\",Text=\"{DescriptionKo}\")");
-            sb.Append(")");
+            sb.Append(')');
 
             // 处理图标路径，转换为相对路径格式 Media/{key}_2X.png
             string iconRelativePath = $"Media/{key}_2X.png";
@@ -181,7 +181,7 @@ namespace unreal_GUI.Model
             sb.Append($", IsMajorCategory={isMajorCategory.ToString().ToLower()}");
 
             // 结束Categories条目
-            sb.Append(")");
+            sb.Append(')');
 
             return sb.ToString();
         }

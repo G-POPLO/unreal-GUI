@@ -6,8 +6,12 @@
              xmlns:local="clr-namespace:unreal_GUI.View"
              xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
              xmlns:viewmodel="clr-namespace:unreal_GUI.ViewModel"
+             xmlns:converters="clr-namespace:unreal_GUI.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="2100" d:DesignWidth="800">
+             d:DesignHeight="2000" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:EqualityConverter x:Key="EqualityConverter"/>
+    </UserControl.Resources>
     <UserControl.DataContext>
         <viewmodel:TemplatesViewModel />
     </UserControl.DataContext>
@@ -127,25 +131,6 @@
                     </StackPanel>
                 </Border>
 
-                <!-- 项目类别卡片 -->
-                <!--<Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
-                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
-                        CornerRadius="4" Margin="0,0,0,20">
-                    <StackPanel Margin="15">
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74C;" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="模板类别" FontSize="18" FontWeight="SemiBold"/>
-                        </StackPanel>
-
-                        <RadioButton Content="项目 (Project)" IsChecked="{Binding IsCategoryGames}" Margin="0,0,0,10"/>
-                        <RadioButton Content="功能包 (Feature Pack)" IsChecked="{Binding IsCategoryME}" Margin="0,0,0,10"/>
-                        <TextBlock Text="若将此模板设置为“功能包”（Feature Pack），则只能通过其他模板或内容浏览器引用的方式进行添加。" 
-                                   FontSize="12" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" />
-
-                       
-                    </StackPanel>
-                </Border>-->
-
                 <!-- 模板类别卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
                         BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
@@ -156,11 +141,22 @@
                             <TextBlock Text="模板类别" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
 
-                        <RadioButton Content="游戏 (Games)" IsChecked="{Binding IsCategoryGames}" Margin="0,0,0,10"/>
-                        <RadioButton Content="电影、电视和现场活动 (ME)" IsChecked="{Binding IsCategoryME}" Margin="0,0,0,10"/>
-                        <RadioButton Content="建筑、工程和建造 (AEC)" IsChecked="{Binding IsCategoryAEC}" Margin="0,0,0,10"/>
-                        <RadioButton Content="汽车、产品设计和生产 (MFG)" IsChecked="{Binding IsCategoryMFG}" Margin="0,0,0,10"/>
-                        <RadioButton Content="模拟、室外地理、AR/VR项目 (SIM)" IsChecked="{Binding IsCategorySIM}" Margin="0,0,0,10"/>
+                        <ItemsControl ItemsSource="{Binding TemplateCategories}" Margin="0,0,0,10">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <RadioButton Content="{Binding DisplayName}" 
+                                                 GroupName="TemplateCategory" 
+                                                 Command="{Binding DataContext.SelectCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" 
+                                                 CommandParameter="{Binding}" 
+                                                 IsChecked="{Binding IsSelected}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemContainerStyle>
+                                <Style>
+                                    <Setter Property="FrameworkElement.Margin" Value="0,0,0,10"/>
+                                </Style>
+                            </ItemsControl.ItemContainerStyle>
+                        </ItemsControl>
 
                         <TextBlock Text="选择模板将显示在新建项目对话框中的类别" 
                                    FontSize="12" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" />

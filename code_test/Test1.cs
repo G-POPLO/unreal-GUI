@@ -95,7 +95,7 @@ namespace code_test
             var parser = new unreal_GUI.Model.CategoriesParser();
 
             // 解析Categories
-            var categories = parser.ParseCategories(iniFilePath);
+            var categories = CategoriesParser.ParseCategories(iniFilePath);
 
             // 输出解析结果到文件
             string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(iniFilePath);
@@ -150,7 +150,7 @@ namespace code_test
             var parser = new CategoriesParser();
 
             // 解析Categories
-            var categories = parser.ParseCategories(iniFilePath);
+            var categories = CategoriesParser.ParseCategories(iniFilePath);
 
             // 将Category对象转换回DSL格式并保存到新文件
             string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(iniFilePath);

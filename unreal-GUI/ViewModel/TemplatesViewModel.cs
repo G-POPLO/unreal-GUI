@@ -2,8 +2,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
@@ -34,21 +36,52 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private string templateDescriptionKo;
 
-        // 模板类别
+        // 动态类别集合
         [ObservableProperty]
-        private bool isCategoryGames = true;
+        private ObservableCollection<CategoryViewModel> templateCategories = [];
 
+        // 选中的类别
         [ObservableProperty]
-        private bool isCategoryME;
+        private CategoryViewModel selectedCategory;
 
-        [ObservableProperty]
-        private bool isCategoryAEC;
+        partial void OnSelectedCategoryChanged(CategoryViewModel? oldValue, CategoryViewModel? newValue)
+        {
+            // 当选中类别变化时，更新IsSelected属性
+            if (oldValue != null)
+            {
+                oldValue.IsSelected = false;
+            }
+            if (newValue != null)
+            {
+                newValue.IsSelected = true;
+            }
+        }
 
-        [ObservableProperty]
-        private bool isCategoryMFG;
+        // 选择类别的命令
+        [RelayCommand]
+        private void SelectCategory(CategoryViewModel category)
+        {
+            SelectedCategory = category;
+        }
 
-        [ObservableProperty]
-        private bool isCategorySIM;
+        // 类别视图模型类
+        public partial class CategoryViewModel : ObservableObject
+        {
+            [ObservableProperty]
+            public string _key;
+
+            [ObservableProperty]
+            public string _displayName;
+
+            [ObservableProperty]
+            public string _description;
+
+            [ObservableProperty]
+            public bool _isMajorCategory;
+
+            [ObservableProperty]
+            private bool _isSelected;
+        }
 
         // 模板图标和预览图
         [ObservableProperty]
@@ -78,6 +111,16 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private EngineDisplayInfo selectedEngine;
 
+        partial void OnSelectedEngineChanged(EngineDisplayInfo? oldValue, EngineDisplayInfo? newValue)
+        {
+            // 当引擎选择变化时，加载对应的类别
+            if (newValue != null)
+            {
+                // 直接调用异步方法并捕获异常
+                LoadCategoriesAsync().ConfigureAwait(false);
+            }
+        }
+
         // 1. 添加Id属性用于绑定
         [ObservableProperty]
         private string id;
@@ -93,81 +136,6 @@ namespace unreal_GUI.ViewModel
             public string Path { get; set; }
         }
 
-
-
-        // 构造函数
-        public TemplatesViewModel()
-        {
-            AvailableEngines = [];
-            _ = InitializeEngineListAsync();
-        }
-
-        // 初始化引擎列表 - 使用SettingsViewModel中的数据结构获取引擎信息
-        private async Task InitializeEngineListAsync()
-        {
-            try
-            {
-                // 从settings.json文件读取引擎列表，使用与SettingsViewModel相同的结构
-                if (File.Exists("settings.json"))
-                {
-                    string jsonContent = File.ReadAllText("settings.json");
-                    // 从jsonContent反序列化设置数据
-                var settings = JsonConvert.DeserializeObject<SettingsData>(jsonContent);
-
-                    if (settings?.Engines != null)
-                    {
-                        foreach (var engine in settings.Engines)
-                        {
-                            AvailableEngines.Add(new EngineDisplayInfo
-                            {
-                                DisplayName = $"Unreal Engine {engine.Version}",
-                                Path = engine.Path
-                            });
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                await ModernDialog.ShowErrorAsync($"初始化引擎列表失败: {ex.Message}", "提示");
-            }
-        }
-
-        [RelayCommand]
-        private async Task BrowseProjectAsync()
-        {
-            using FolderBrowserDialog folderBrowser = new();
-            folderBrowser.Description = "选择Unreal Engine项目文件夹";
-            folderBrowser.ShowNewFolderButton = false;
-
-            // 设置初始目录为常见的项目位置
-            //folderBrowser.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-            DialogResult result = folderBrowser.ShowDialog();
-
-            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(folderBrowser.SelectedPath))
-            {
-                // 验证是否为有效的UE项目文件夹（检查是否存在.uproject文件）
-                string[] uprojectFiles = Directory.GetFiles(folderBrowser.SelectedPath, "*.uproject");
-                if (uprojectFiles.Length > 0)
-                {
-                    ProjectPath = folderBrowser.SelectedPath;
-                    await ModernDialog.ShowInfoAsync($"已选择项目: {Path.GetFileName(folderBrowser.SelectedPath)}", "信息");
-                    Id = await ReadProjectIdAsync(ProjectPath); // 绑定ID
-                }
-                else
-                {
-                    await ModernDialog.ShowInfoAsync("所选文件夹不是有效的Unreal Engine项目（未找到.uproject文件）", "提示");
-                }
-            }
-        }
-
-        // 获取模板路径
-        private string GetTemplateCategoriesPath()
-        {
-            if (SelectedEngine == null) return string.Empty;
-            return Path.Combine(SelectedEngine.Path, "Templates", "TemplateCategories.ini");
-        }
 
         // 浏览图标命令
         [RelayCommand]
@@ -329,7 +297,7 @@ namespace unreal_GUI.ViewModel
                 }
 
                 // 获取TemplateCategories.ini文件路径
-                string templateCategoriesPath = GetTemplateCategoriesPath();
+                string templateCategoriesPath = this.GetTemplateCategoriesPath();
                 if (string.IsNullOrEmpty(templateCategoriesPath))
                 {
                     await ModernDialog.ShowInfoAsync("无法获取模板类别配置文件路径。", "提示");
@@ -384,6 +352,201 @@ namespace unreal_GUI.ViewModel
             }
         }
 
+
+        // 构造函数
+        public TemplatesViewModel()
+        {
+            AvailableEngines = [];
+            TemplateCategories = [];
+            _ = InitializeEngineListAsync();
+        }
+
+        // 初始化引擎列表 - 使用SettingsViewModel中的数据结构获取引擎信息
+        private async Task InitializeEngineListAsync()
+        {
+            try
+            {
+                // 从settings.json文件读取引擎列表，使用与SettingsViewModel相同的结构
+                if (File.Exists("settings.json"))
+                {
+                    string jsonContent = File.ReadAllText("settings.json");
+                    // 从jsonContent反序列化设置数据
+                    var settings = JsonConvert.DeserializeObject<SettingsData>(jsonContent);
+
+                    if (settings?.Engines != null)
+                    {
+                        foreach (var engine in settings.Engines)
+                        {
+                            AvailableEngines.Add(new EngineDisplayInfo
+                            {
+                                DisplayName = $"Unreal Engine {engine.Version}",
+                                Path = engine.Path
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await ModernDialog.ShowErrorAsync($"初始化引擎列表失败: {ex.Message}", "提示");
+            }
+        }
+
+        [RelayCommand]
+        private async Task BrowseProjectAsync()
+        {
+            using FolderBrowserDialog folderBrowser = new();
+            folderBrowser.Description = "选择Unreal Engine项目文件夹";
+            folderBrowser.ShowNewFolderButton = false;
+
+            // 设置初始目录为常见的项目位置
+            //folderBrowser.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            DialogResult result = folderBrowser.ShowDialog();
+
+            if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(folderBrowser.SelectedPath))
+            {
+                // 验证是否为有效的UE项目文件夹（检查是否存在.uproject文件）
+                string[] uprojectFiles = Directory.GetFiles(folderBrowser.SelectedPath, "*.uproject");
+                if (uprojectFiles.Length > 0)
+                {
+                    ProjectPath = folderBrowser.SelectedPath;
+                    await ModernDialog.ShowInfoAsync($"已选择项目: {Path.GetFileName(folderBrowser.SelectedPath)}", "信息");
+                    Id = await ReadProjectIdAsync(ProjectPath); // 绑定ID
+                }
+                else
+                {
+                    await ModernDialog.ShowInfoAsync("所选文件夹不是有效的Unreal Engine项目（未找到.uproject文件）", "提示");
+                }
+            }
+        }
+
+        // 获取模板路径
+        private string GetTemplateCategoriesPath()
+        {
+            return SelectedEngine == null ? string.Empty : Path.Combine(SelectedEngine.Path, "Templates", "TemplateCategories.ini");
+        }
+
+        // 加载并解析类别
+        private async Task LoadCategoriesAsync()
+        {
+            try
+            {
+                // 先清除当前类别集合
+                TemplateCategories.Clear();
+                SelectedCategory = null;
+
+                // 获取类别文件路径
+                string categoriesPath = GetTemplateCategoriesPath();
+
+                // 读取文件内容
+                if (!File.Exists(categoriesPath))
+                {
+                    // 如果文件不存在，创建默认类别
+                    await Task.Run(() => AddDefaultCategories());
+                    return;
+                }
+
+                // 异步读取文件内容
+                string fileContent = await File.ReadAllTextAsync(categoriesPath);
+
+                // 解析类别
+                var categories = await Task.Run(() => CategoriesParser.ParseCategories(categoriesPath));
+
+                // 转换为视图模型
+                foreach (var category in categories)
+                {
+                    // 获取当前语言的显示名称（优先使用系统语言，默认英文）
+                    string displayName = category.LocalizedDisplayNames.FirstOrDefault(ldn =>
+                        ldn.Language.Equals("zh-Hans", StringComparison.OrdinalIgnoreCase))?.Text ??
+                        category.LocalizedDisplayNames.FirstOrDefault()?.Text ?? category.Key;
+
+                    // 获取当前语言的描述
+                    string description = category.LocalizedDescriptions.FirstOrDefault(ldn =>
+                        ldn.Language.Equals("zh-Hans", StringComparison.OrdinalIgnoreCase))?.Text ??
+                        category.LocalizedDescriptions.FirstOrDefault()?.Text ?? string.Empty;
+
+                    TemplateCategories.Add(new CategoryViewModel
+                    {
+                        Key = category.Key,
+                        DisplayName = displayName,
+                        Description = description,
+                        IsMajorCategory = category.IsMajorCategory,
+                        IsSelected = false
+                    });
+                }
+
+                // 默认选择第一个类别
+                if (TemplateCategories.Count > 0)
+                {
+                    SelectedCategory = TemplateCategories[0];
+                }
+            }
+            catch (Exception ex)
+            {
+                await ModernDialog.ShowErrorAsync($"加载类别失败: {ex.Message}", "错误");
+                // 出错时添加默认类别
+                AddDefaultCategories();
+            }
+        }
+
+        // 添加默认类别
+        private void AddDefaultCategories()
+        {
+            // 添加默认的五个类别
+            var categories = new List<CategoryViewModel>
+            {
+                new() {
+                    Key = "Games",
+                    DisplayName = "游戏 (Games)",
+                    Description = "游戏开发相关模板",
+                    IsMajorCategory = true,
+                    IsSelected = false
+                },
+                new() {
+                    Key = "ME",
+                    DisplayName = "电影、电视和现场活动 (ME)",
+                    Description = "媒体娱乐相关模板",
+                    IsMajorCategory = true,
+                    IsSelected = false
+                },
+                new() {
+                    Key = "AEC",
+                    DisplayName = "建筑、工程和建造 (AEC)",
+                    Description = "建筑设计相关模板",
+                    IsMajorCategory = true,
+                    IsSelected = false
+                },
+                new() {
+                    Key = "MFG",
+                    DisplayName = "汽车、产品设计和生产 (MFG)",
+                    Description = "制造设计相关模板",
+                    IsMajorCategory = true,
+                    IsSelected = false
+                },
+                new() {
+                    Key = "SIM",
+                    DisplayName = "模拟、室外地理、AR/VR项目 (SIM)",
+                    Description = "模拟和虚拟现实相关模板",
+                    IsMajorCategory = true,
+                    IsSelected = false
+                }
+            };
+
+            // 先添加所有类别
+            foreach (var category in categories)
+            {
+                TemplateCategories.Add(category);
+            }
+
+            // 默认选择第一个类别
+            if (TemplateCategories.Count > 0)
+            {
+                SelectedCategory = TemplateCategories[0];
+            }
+        }
+
+
         // 读取项目ID
         private static async Task<string> ReadProjectIdAsync(string projectPath)
         {
@@ -430,8 +593,8 @@ namespace unreal_GUI.ViewModel
                 File.Copy(sourcePath, backupPath, true);
 
                 // 同时创建一个没有时间戳的备份，用于重置功能
-                var resetBackupPath = Path.Combine(backupDir, "TemplateCategories_Backup.ini");
-                File.Copy(sourcePath, resetBackupPath, true);
+                //var resetBackupPath = Path.Combine(backupDir, "TemplateCategories_Backup.ini");
+                //File.Copy(sourcePath, resetBackupPath, true);
 
                 return true;
             }
@@ -448,11 +611,7 @@ namespace unreal_GUI.ViewModel
             try
             {
                 // 获取选中的类别
-                string category = "AEC"; // 默认类别
-                if (IsCategoryGames) category = "Games";
-                else if (IsCategoryME) category = "ME";
-                else if (IsCategoryMFG) category = "MFG";
-                else if (IsCategorySIM) category = "SIM";
+                string category = SelectedCategory?.Key ?? "AEC"; // 默认类别
 
                 // 构建TemplateDefs.ini内容
                 string iniContent = $"[/Script/GameProjectGeneration.TemplateProjectDefs]\n\n" +

@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -53,7 +52,7 @@ namespace unreal_GUI.ViewModel
 
         private readonly CategoriesParser _categoriesParser;
 
-        // 注意：EngineInfo、SettingsData和CustomButton类现在已移至JsonConfig.cs中
+
 
         public AddCategoriesViewModel()
         {
@@ -131,12 +130,13 @@ namespace unreal_GUI.ViewModel
                     try
                     {
                         string templatesDir = Path.Combine(engineInfo.Path, "Templates");
-                        string targetPath = Path.Combine(templatesDir, targetFileName);
+                        string mediaDir = Path.Combine(templatesDir, "Media");
+                        string targetPath = Path.Combine(mediaDir, targetFileName);
 
-                        // 确保Templates目录存在
-                        if (!Directory.Exists(templatesDir))
+                        // 确保Media目录存在
+                        if (!Directory.Exists(mediaDir))
                         {
-                            Directory.CreateDirectory(templatesDir);
+                            Directory.CreateDirectory(mediaDir);
                         }
 
                         // 复制文件
@@ -185,7 +185,7 @@ namespace unreal_GUI.ViewModel
             var displayNameToUse = string.IsNullOrWhiteSpace(DisplayName) ? CategoryKey : DisplayName;
 
             // 调用CategoriesParser生成Categories文本
-            GeneratedCategoriesText = _categoriesParser.GenerateCategoriesText(
+            GeneratedCategoriesText = CategoriesParser.GenerateCategoriesText(
                 key: CategoryKey,
                 displayName: displayNameToUse,
                 isMajorCategory: IsMajorCategory,

@@ -2,8 +2,6 @@ using iNKORE.UI.WPF.Modern.Controls;
 using Newtonsoft.Json;
 using System;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -273,53 +271,44 @@ namespace unreal_GUI.Model
             };
             var result = await dialog.ShowAsync();
 
-
-
             return result;
         }
 
-
-
-        /// <summary>
-        /// 将Category对象转换为INI格式的字符串
-        /// </summary>
-        /// <param name="category">要转换的Category对象</param>
-        /// <returns>INI格式的字符串</returns>
-        private static string ConvertCategoryToIniFormat(CategoriesParser.Category category)
-        {
-            var sb = new StringBuilder();
-            sb.AppendLine($"[{category.Key}]");
-
-            // 添加LocalizedDisplayNames
-            if (category.LocalizedDisplayNames != null && category.LocalizedDisplayNames.Count > 0)
-            {
-                var displayNames = string.Join(";", category.LocalizedDisplayNames.Select(dn => $"(Language=\"{dn.Language}\",Text=\"{dn.Text}\")"));
-                sb.AppendLine($"LocalizedDisplayNames={displayNames}");
-            }
-
-            // 添加LocalizedDescriptions
-            if (category.LocalizedDescriptions != null && category.LocalizedDescriptions.Count > 0)
-            {
-                var descriptions = string.Join(";", category.LocalizedDescriptions.Select(d => $"(Language=\"{d.Language}\",Text=\"{d.Text}\")"));
-                sb.AppendLine($"LocalizedDescriptions={descriptions}");
-            }
-
-            // 添加Icon
-            if (!string.IsNullOrEmpty(category.Icon))
-            {
-                sb.AppendLine($"Icon={category.Icon}");
-            }
-
-            // 添加IsMajorCategory
-            sb.AppendLine($"IsMajorCategory={category.IsMajorCategory.ToString().ToLower()}");
-
-            return sb.ToString();
-        }
 
         /// <summary>
         /// 显示添加模板类别对话框
         /// </summary>
         /// <param name="enginePath">引擎安装路径，用于定位TemplateCategories.ini文件</param>
+        /// <summary>
+        /// 将文本附加到指定文件
+        /// </summary>
+        /// <param name="filePath">文件路径</param>
+        /// <param name="text">要附加的文本</param>
+        /// <returns>是否成功附加</returns>
+        private static async Task<bool> AppendTextToFile(string filePath, string text)
+        {
+            try
+            {
+                // 确保目录存在
+                Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+
+                using StreamWriter writer = new(filePath, true);
+                // 添加空行分隔不同类别（如果文件已有内容）
+                if (File.Exists(filePath) && new FileInfo(filePath).Length > 0)
+                {
+                    await writer.WriteLineAsync();
+                }
+                await writer.WriteLineAsync(text);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                await ShowErrorAsync("保存类别失败：" + ex.Message, "错误");
+                return false;
+            }
+        }
+
         public static async Task<ContentDialogResult> ShowCategoriesDialogAsync(string enginePath)
         {
             var content = new Add_Categories();
@@ -331,21 +320,58 @@ namespace unreal_GUI.Model
                 CloseButtonText = "取消",
                 DefaultButton = ContentDialogButton.Primary,
                 Content = content
-
             };
-
-
 
             var result = await dialog.ShowAsync();
 
             // 处理保存逻辑
-            if (result == ContentDialogResult.Primary)
+            if (result == ContentDialogResult.Primary && content.ViewModel != null)
             {
+                try
+                {
+                    // 获取TemplateCategories.ini文件路径
+                    string categoriesFilePath = Path.Combine(enginePath, "Templates", "TemplateCategories.ini");
 
+                    // 确保Templates目录存在
+                    Directory.CreateDirectory(Path.GetDirectoryName(categoriesFilePath));
+
+                    // 获取生成的类别文本
+                    string categoriesText = content.ViewModel.GeneratedCategoriesText;
+
+                    if (!string.IsNullOrEmpty(categoriesText))
+                    {
+                        // 调用AppendTextToFile函数将文本附加到文件
+                        bool appendSuccess = await AppendTextToFile(categoriesFilePath, categoriesText);
+
+                        if (appendSuccess)
+                        {
+                            // 通知用户保存成功
+                            await ShowInfoAsync("类别已成功添加到TemplateCategories.ini文件。", "成功");
+
+                            // 如果用户已选择图标，提示用户复制图标到正确位置
+                            if (!string.IsNullOrEmpty(content.ViewModel.IconPath))
+                            {
+
+
+
+                                string targetIconPath = Path.Combine(enginePath, "Templates", "Media", content.ViewModel.CategoryKey + "_2X.png");
+                                Directory.CreateDirectory(Path.GetDirectoryName(targetIconPath));
+                                File.Copy(content.ViewModel.IconPath, targetIconPath, true);
+
+                            }
+                        }
+                        else
+                        {
+                            await ShowInfoAsync("没有生成类别文本，请先填写必要信息并点击'生成Categories文本'按钮。", "提示");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    await ShowErrorAsync("保存类别失败：" + ex.Message, "错误");
+                }
             }
-
             return result;
         }
-
     }
 }
