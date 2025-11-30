@@ -31,9 +31,6 @@ namespace unreal_GUI.Model
         {
             var categories = new List<Category>();
             var lines = File.ReadAllLines(filePath);
-
-            Category currentCategory = null;
-
             foreach (var line in lines)
             {
                 var trimmedLine = line.Trim();
@@ -45,7 +42,7 @@ namespace unreal_GUI.Model
                 // 查找Categories=开头的行
                 if (trimmedLine.StartsWith("Categories="))
                 {
-                    currentCategory = new Category();
+                    Category currentCategory = new();
 
                     // 提取括号内的内容
                     var contentMatch = Regex.Match(trimmedLine, @"Categories=\((.*)\)");
@@ -132,7 +129,6 @@ namespace unreal_GUI.Model
             string key,
             string displayName,
             bool isMajorCategory,
-
             string DescriptionEn,
             string? DescriptionZh,
             string? DescriptionJa,

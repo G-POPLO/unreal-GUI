@@ -351,9 +351,6 @@ namespace unreal_GUI.Model
                             // 如果用户已选择图标，提示用户复制图标到正确位置
                             if (!string.IsNullOrEmpty(content.ViewModel.IconPath))
                             {
-
-
-
                                 string targetIconPath = Path.Combine(enginePath, "Templates", "Media", content.ViewModel.CategoryKey + "_2X.png");
                                 Directory.CreateDirectory(Path.GetDirectoryName(targetIconPath));
                                 File.Copy(content.ViewModel.IconPath, targetIconPath, true);

@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModel="clr-namespace:unreal_GUI.ViewModel"
         mc:Ignorable="d"
-        Title="Unreal-GUI" Height="600" Width="800"
-    xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
+        Title="Unreal-GUI" Height="600" Width="850"
+        xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
         ui:WindowHelper.SystemBackdropType="Mica"
-    ui:WindowHelper.UseModernWindowStyle="True">
+        ui:WindowHelper.UseModernWindowStyle="True">
     
     <Window.DataContext>
         <viewModel:MainWindowViewModel />
