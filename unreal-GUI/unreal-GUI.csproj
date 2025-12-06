@@ -84,6 +84,13 @@
     <!--<TieredPGO>true</TieredPGO>-->
   </PropertyGroup>
   
+  <ItemGroup>
+    <Compile Remove="docs\**" />
+    <EmbeddedResource Remove="docs\**" />
+    <None Remove="docs\**" />
+    <Page Remove="docs\**" />
+  </ItemGroup>
+  
   <!--<ItemGroup>
     <Compile Remove="unreal-gui\**" />
     <EmbeddedResource Remove="unreal-gui\**" />
@@ -138,10 +145,6 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="docs\" />
   </ItemGroup>
 
 </Project>

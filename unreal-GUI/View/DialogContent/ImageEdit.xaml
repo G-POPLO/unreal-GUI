@@ -16,7 +16,7 @@
 
     <Grid>
         <!-- 标题和说明 -->
-        <StackPanel Margin="20,20,20,10">
+        <StackPanel x:Name="Title" Margin="20,20,20,10">
             <TextBlock Text="图片剪裁工具" FontSize="20" FontWeight="Bold" />
             <TextBlock Text="本工具用于将图片剪裁为3:1比例，适用于类别(Categories)图标。" 
                        Margin="0,5,0,0" 
@@ -25,7 +25,7 @@
         </StackPanel>
 
         <!-- 图片预览区域 -->
-        <Border x:Name="PreviewBorder" 
+        <Border x:Name="PicturePreview" 
                 Margin="20,80,20,140" 
                 
                 BorderThickness="1">

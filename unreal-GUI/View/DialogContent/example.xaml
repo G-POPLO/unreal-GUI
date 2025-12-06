@@ -1,0 +1,58 @@
+﻿<UserControl x:Class="unreal_GUI.View.DialogContent.example"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:unreal_GUI.View.DialogContent"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <!-- 图片展示框 -->
+        <Image Name="BackgroundImage" Stretch="Uniform" />
+
+        <!-- 选择图片按钮 -->
+        <Button Name="SelectImageButton" Content="选择图片" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="30" Margin="10,10,0,0" Panel.ZIndex="2" Click="SelectImageButton_Click" />
+
+        <!-- 遮罩层Canvas -->
+        <Canvas Name="CroppingCanvas" Background="Transparent" Panel.ZIndex="1">
+
+            <Rectangle Name="ResizableRect"
+                 Canvas.Left="{Binding RectLeft}"
+                 Canvas.Top="{Binding RectTop}"
+                 Width="{Binding RectWidth}"
+                 Height="{Binding RectHeight}"
+                 Fill="Transparent" 
+                 Stroke="Black"
+                 StrokeThickness="1" />
+            <!-- 四边热区（透明），用于拖拽调整大小 -->
+            <Rectangle Name="EdgeTop" 
+                 Canvas.Left="{Binding EdgeTopLeft}"
+                 Canvas.Top="{Binding EdgeTopTop}"
+                 Width="{Binding EdgeTopWidth}"
+                 Height="{Binding EdgeTopHeight}"
+                 Fill="Transparent" 
+                 Cursor="SizeNS" />
+            <Rectangle Name="EdgeBottom" 
+                 Canvas.Left="{Binding EdgeBottomLeft}"
+                 Canvas.Top="{Binding EdgeBottomTop}"
+                 Width="{Binding EdgeBottomWidth}"
+                 Height="{Binding EdgeBottomHeight}"
+                 Fill="Transparent" 
+                 Cursor="SizeNS" />
+            <Rectangle Name="EdgeLeft" 
+                 Canvas.Left="{Binding EdgeLeftLeft}"
+                 Canvas.Top="{Binding EdgeLeftTop}"
+                 Width="{Binding EdgeLeftWidth}"
+                 Height="{Binding EdgeLeftHeight}"
+                 Fill="Transparent" 
+                 Cursor="SizeWE" />
+            <Rectangle Name="EdgeRight" 
+                 Canvas.Left="{Binding EdgeRightLeft}"
+                 Canvas.Top="{Binding EdgeRightTop}"
+                 Width="{Binding EdgeRightWidth}"
+                 Height="{Binding EdgeRightHeight}"
+                 Fill="Transparent" 
+                 Cursor="SizeWE" />
+        </Canvas>
+    </Grid>
+</UserControl>
