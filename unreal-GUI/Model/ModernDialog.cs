@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using unreal_GUI.Model.DialogContent;
+using unreal_GUI.View.DialogContent;
 
 
 namespace unreal_GUI.Model
@@ -312,6 +313,7 @@ namespace unreal_GUI.Model
         public static async Task<ContentDialogResult> ShowCategoriesDialogAsync(string enginePath)
         {
             var content = new Add_Categories();
+            var imageEditContent = new ImageEdit();
 
             ContentDialog dialog = new()
             {
@@ -320,6 +322,30 @@ namespace unreal_GUI.Model
                 CloseButtonText = "取消",
                 DefaultButton = ContentDialogButton.Primary,
                 Content = content
+            };
+
+            // 订阅导航到图片编辑页面的事件
+            content.NavigateToImageEditRequested += (sender, imagePath) =>
+            {
+                // 设置图片编辑控件的图片源
+                imageEditContent.ImageSource = new System.Windows.Media.Imaging.BitmapImage(new System.Uri(imagePath));
+
+                // 订阅图片编辑完成事件
+                imageEditContent.ImageEditCompleted += (s, e) =>
+                {
+                    // 将编辑后的图片传递回Add_Categories控件
+                    content.ViewModel.IconPath = e.CroppedImagePath; // 使用裁剪后的图片路径
+
+                    // 切换回添加类别页面
+                    dialog.Content = content;
+                    dialog.Title = "添加模板类别";
+                    dialog.PrimaryButtonText = "保存";
+                };
+
+                // 切换对话框内容到图片编辑控件
+                dialog.Content = imageEditContent;
+                dialog.Title = "图片剪裁工具";
+                dialog.PrimaryButtonText = "完成剪裁";
             };
 
             var result = await dialog.ShowAsync();
@@ -353,7 +379,18 @@ namespace unreal_GUI.Model
                             {
                                 string targetIconPath = Path.Combine(enginePath, "Templates", "Media", content.ViewModel.CategoryKey + "_2X.png");
                                 Directory.CreateDirectory(Path.GetDirectoryName(targetIconPath));
-                                File.Copy(content.ViewModel.IconPath, targetIconPath, true);
+
+                                // 检查图标路径是否为裁剪后的临时文件
+                                if (content.ViewModel.IconPath.Contains("UnrealGUI") && content.ViewModel.IconPath.Contains("cropped_"))
+                                {
+                                    // 如果是裁剪后的临时文件，复制到目标位置
+                                    File.Copy(content.ViewModel.IconPath, targetIconPath, true);
+                                }
+                                else
+                                {
+                                    // 如果是原始文件，也复制到目标位置
+                                    File.Copy(content.ViewModel.IconPath, targetIconPath, true);
+                                }
 
                             }
                         }

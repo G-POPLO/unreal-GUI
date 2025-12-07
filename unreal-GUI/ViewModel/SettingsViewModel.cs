@@ -50,10 +50,6 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private bool _headlessEnabled;
 
-
-
-
-
         public SettingsViewModel()
         {
             // 初始化设置
