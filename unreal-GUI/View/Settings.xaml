@@ -40,6 +40,7 @@
                                 <StackPanel Orientation="Horizontal">
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74E;" Margin="0,0,5,0"/>
                                     <TextBlock Text="保存设置"/>
+                                    
                                 </StackPanel>
                             </Button>
                         </StackPanel>
@@ -61,7 +62,14 @@
                         </StackPanel>
 
                         <TextBlock Text="默认设置" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,10"/>
-
+                        <Expander Width="500" HorizontalContentAlignment="Left" Padding="0">
+                            <Expander.Header>
+                                <ToggleButton Content="This ToggleButton is centered" HorizontalAlignment="Center"/>
+                            </Expander.Header>
+                            <Expander.Content>
+                                <Button Margin="4" Content="This Button is left aligned"/>
+                            </Expander.Content>
+                        </Expander>
                         <WrapPanel x:Name="Setting_Panel" Orientation="Horizontal">
                             <ui:AppBarToggleButton x:Name="Button0" Label="任务完成后打开输出文件夹" 
                                                    IsChecked="{Binding AutoOpen}" Margin="0,0,10,0" HorizontalAlignment="Left">
@@ -135,12 +143,11 @@
 
                         <Grid Margin="0,0,0,15">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto" MinWidth="120"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="指定Playwright使用的浏览器" 
-                 VerticalAlignment="Center"/>
-                            <ListBox x:Name="listBox" d:ItemsSource="{d:SampleData ItemCount=5}"/>
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="指定Playwright使用的浏览器" Margin="0,8,0,8"/>
+                            <ComboBox x:Name="BrowerOption" Grid.Column="1" d:LayoutOverrides="Height" Margin="-32,0,0,0" VerticalAlignment="Stretch" Width="120"/>
 
                         </Grid>
 

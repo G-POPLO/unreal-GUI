@@ -26,5 +26,8 @@
     <Setting Name="HeadlessEnabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="BackdropType" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Mica</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

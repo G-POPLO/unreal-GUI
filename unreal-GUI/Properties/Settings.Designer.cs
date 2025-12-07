@@ -118,5 +118,17 @@ namespace unreal_GUI.Properties {
                 this["HeadlessEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Mica")]
+        public string BackdropType {
+            get {
+                return ((string)(this["BackdropType"]));
+            }
+            set {
+                this["BackdropType"] = value;
+            }
+        }
     }
 }

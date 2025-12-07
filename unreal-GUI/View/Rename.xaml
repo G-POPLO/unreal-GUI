@@ -63,8 +63,11 @@
                         </Button>
                         
                         <TextBlock x:Name="tip1" TextWrapping="Wrap" Margin="0,0,0,10" Text="输入重命名名称"/>
-                        <TextBlock TextWrapping="Wrap" Text="为避免潜在的崩溃，请勿使用中文来命名你的C++项目！" Margin="0,0,0,10" FontWeight="Bold"/>
-                        <TextBox x:Name="Output" Margin="0,0,0,0" Text="{Binding OutputPath, UpdateSourceTrigger=PropertyChanged}"/>
+                        <ui:InfoBar x:Name="TestInfoBar2" 
+    Title="注意" IsOpen="True"
+    Message="为避免潜在的崩溃，请勿使用中文来命名你的C++项目">
+                        </ui:InfoBar>
+                        <TextBox x:Name="Output" Margin="0,11,0,0" Text="{Binding OutputPath, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
                 </Border>
                 
