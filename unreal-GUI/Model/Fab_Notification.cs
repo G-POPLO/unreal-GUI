@@ -95,7 +95,7 @@ namespace unreal_GUI.Model
     $"新的Fab免费资产可领取，截至时间:{limitedTime}",
     "是",
     "openUrl",
-    "com.epicgames.launcher://fab", // com.epicgames.launcher://fab/limited-time-free用不了，会显示错误页面
+    "com.epicgames.launcher://fab", // com.epicgames.launcher://fab/limited-time-free无法使用，会显示错误页面
     "否",
     "dismiss");
             }
@@ -110,9 +110,6 @@ namespace unreal_GUI.Model
     "否",
     "dismiss");
             }
-
-
-
         }
     }
 }

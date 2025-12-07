@@ -237,6 +237,7 @@ namespace unreal_GUI.ViewModel
             if (string.IsNullOrEmpty(TemplateName))
             {
                 await ModernDialog.ShowInfoAsync("请输入模板名称。", "提示");
+
                 return;
             }
 

@@ -73,6 +73,14 @@ namespace unreal_GUI.ViewModel
 
             if (openFileDialog.ShowDialog() == true)
             {
+                // 检查图片比例是否符合3:1
+                if (!PhotoEdit.IsCorrectRatio(openFileDialog.FileName))
+                {
+                    // 图片不符合3:1比例，触发事件通知UI需要跳转到图片编辑页面
+                    RequestImageEdit?.Invoke(this, openFileDialog.FileName);
+                    return;
+                }
+
                 // 设置图标路径和文件名
                 IconPath = openFileDialog.FileName;
                 IconFileName = Path.GetFileName(openFileDialog.FileName);
@@ -88,6 +96,11 @@ namespace unreal_GUI.ViewModel
                 //CopyImageToEngineTemplates(openFileDialog.FileName);
             }
         }
+
+        /// <summary>
+        /// 请求跳转到图片编辑页面的事件
+        /// </summary>
+        public event EventHandler<string> RequestImageEdit;
 
         /// <summary>
         /// 复制图片到引擎的Templates目录

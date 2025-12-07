@@ -4,6 +4,7 @@
     <OutputType>WinExe</OutputType>
     <UseWindowsForms>True</UseWindowsForms>
     <TargetFramework>net10.0-windows10.0.18362.0</TargetFramework>
+    <RollForward>LatestMajor</RollForward>
     <RootNamespace>unreal_GUI</RootNamespace>
     <Nullable>disable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
@@ -84,20 +85,7 @@
     <!--<TieredPGO>true</TieredPGO>-->
   </PropertyGroup>
   
-  <ItemGroup>
-    <Compile Remove="docs\**" />
-    <EmbeddedResource Remove="docs\**" />
-    <None Remove="docs\**" />
-    <Page Remove="docs\**" />
-  </ItemGroup>
-  
-  <!--<ItemGroup>
-    <Compile Remove="unreal-gui\**" />
-    <EmbeddedResource Remove="unreal-gui\**" />
-    <None Remove="unreal-gui\**" />
-    <Page Remove="unreal-gui\**" />
-  </ItemGroup>-->
-    <!--排除的文件-->
+
 
 
   <!--指定Playwright所使用的浏览器-->
@@ -122,6 +110,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="Squid-Box.SevenZipSharp.Lite" Version="1.6.2.24" />
     <PackageReference Include="ValueConverters" Version="3.1.22" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
   </ItemGroup>
   
   <ItemGroup>

@@ -128,7 +128,7 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="使用Headless方式获取Fab信息" 
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="使用Headless方式获取Fab信息（建议关闭，开启后可能会无法爬取）" 
                                        VerticalAlignment="Center"/>
                             <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding HeadlessEnabled}"/>
                         </Grid>

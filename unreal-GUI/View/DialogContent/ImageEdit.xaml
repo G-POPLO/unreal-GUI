@@ -30,50 +30,75 @@
                 
                 BorderThickness="1">
             <Grid x:Name="PreviewGrid" >
-
-
-                <!-- 图片容器 -->
-                <Grid x:Name="ImageContainer" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <!-- 裁剪遮罩层 -->
-                    <Grid x:Name="CropOverlay" Opacity="0.5" Visibility="{Binding ShowCropGuide}">
-                        <!-- 左侧遮罩 -->
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="300" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="100" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-
-                        <!-- 填充除了3:1区域外的遮罩 -->
-                        <Rectangle Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="3" />
-                        <!-- 中间透明区域 -->
-                        <Rectangle Grid.Column="1" Grid.Row="1" Fill="Transparent" />
-
-                        <!-- 裁剪框边框 -->
-                        <Rectangle Grid.Column="1" Grid.Row="1" 
-                               
-                               StrokeThickness="2" 
-                               StrokeDashArray="5,3" />
-                    </Grid>
-
-                    <!-- 图片显示 -->
-                    <Image x:Name="PreviewImage" 
+                <!-- 图片展示框 -->
+                <Image x:Name="PreviewImage" 
                        Source="{Binding ImageSource}" 
                        Stretch="Uniform" 
                        Visibility="{Binding ImageSource, Converter={StaticResource NullToVisibilityConverter}}" />
 
-                    <!-- 无图片提示 -->
-                    <TextBlock x:Name="NoImageText" 
+                <!-- 无图片提示 -->
+                <TextBlock x:Name="NoImageText" 
                            Text="请选择一张图片" 
                            HorizontalAlignment="Center" 
                            VerticalAlignment="Center" 
                            FontSize="16"                            
                            Visibility="{Binding ImageSource, Converter={StaticResource NullToVisibilityInverterConverter}}" />
-                </Grid>
+
+                <!-- 遮罩层Canvas -->
+                <Canvas Name="CroppingCanvas" Background="Transparent" Panel.ZIndex="1" Loaded="CroppingCanvas_Loaded">
+                    <Rectangle Name="ResizableRect"
+                         Canvas.Left="{Binding RectLeft}"
+                         Canvas.Top="{Binding RectTop}"
+                         Width="{Binding RectWidth}"
+                         Height="{Binding RectHeight}"
+                         Fill="Transparent" 
+                         Stroke="Black"
+                         StrokeThickness="1" 
+                         MouseLeftButtonDown="ResizableRect_MouseLeftButtonDown"
+                         MouseMove="ResizableRect_MouseMove"
+                         MouseLeftButtonUp="ResizableRect_MouseLeftButtonUp"/>
+                    <!-- 四边热区（透明），用于拖拽调整大小 -->
+                    <Rectangle Name="EdgeTop" 
+                         Canvas.Left="{Binding EdgeTopLeft}"
+                         Canvas.Top="{Binding EdgeTopTop}"
+                         Width="{Binding EdgeTopWidth}"
+                         Height="{Binding EdgeTopHeight}"
+                         Fill="Transparent" 
+                         Cursor="SizeNS"
+                         MouseLeftButtonDown="Edge_MouseLeftButtonDown"
+                         MouseMove="Edge_MouseMove"
+                         MouseLeftButtonUp="Edge_MouseLeftButtonUp"/>
+                    <Rectangle Name="EdgeBottom" 
+                         Canvas.Left="{Binding EdgeBottomLeft}"
+                         Canvas.Top="{Binding EdgeBottomTop}"
+                         Width="{Binding EdgeBottomWidth}"
+                         Height="{Binding EdgeBottomHeight}"
+                         Fill="Transparent" 
+                         Cursor="SizeNS"
+                         MouseLeftButtonDown="Edge_MouseLeftButtonDown"
+                         MouseMove="Edge_MouseMove"
+                         MouseLeftButtonUp="Edge_MouseLeftButtonUp"/>
+                    <Rectangle Name="EdgeLeft" 
+                         Canvas.Left="{Binding EdgeLeftLeft}"
+                         Canvas.Top="{Binding EdgeLeftTop}"
+                         Width="{Binding EdgeLeftWidth}"
+                         Height="{Binding EdgeLeftHeight}"
+                         Fill="Transparent" 
+                         Cursor="SizeWE"
+                         MouseLeftButtonDown="Edge_MouseLeftButtonDown"
+                         MouseMove="Edge_MouseMove"
+                         MouseLeftButtonUp="Edge_MouseLeftButtonUp"/>
+                    <Rectangle Name="EdgeRight" 
+                         Canvas.Left="{Binding EdgeRightLeft}"
+                         Canvas.Top="{Binding EdgeRightTop}"
+                         Width="{Binding EdgeRightWidth}"
+                         Height="{Binding EdgeRightHeight}"
+                         Fill="Transparent" 
+                         Cursor="SizeWE"
+                         MouseLeftButtonDown="Edge_MouseLeftButtonDown"
+                         MouseMove="Edge_MouseMove"
+                         MouseLeftButtonUp="Edge_MouseLeftButtonUp"/>
+                </Canvas>
             </Grid>
         </Border>
 
