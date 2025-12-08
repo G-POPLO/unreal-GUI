@@ -25,7 +25,7 @@
                            Margin="0,0,0,20"/>
                 <!-- 引擎选择卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
-                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                        
                         CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
@@ -42,7 +42,7 @@
                 </Border>
                 <!-- 项目选择卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
-                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                        
                         CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
@@ -67,7 +67,7 @@
 
                 <!-- 模板信息卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
-                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                        
                         CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
@@ -133,7 +133,7 @@
 
                 <!-- 模板类别卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
-                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                        
                         CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
@@ -172,7 +172,7 @@
 
                 <!-- 图标和预览图卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
-                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                        
                         CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
@@ -183,7 +183,7 @@
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
                             <StackPanel Margin="0,0,30,0">
                                 <TextBlock Text="模板图标" Margin="0,0,0,5"/>
-                                <Border BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                                <Border 
                                         BorderThickness="1" Width="128" Height="128" HorizontalAlignment="Left">
                                     <Image Source="{Binding TemplateIcon}" Stretch="UniformToFill"/>
                                 </Border>
@@ -200,7 +200,7 @@
 
                             <StackPanel>
                                 <TextBlock Text="模板预览图" Margin="0,0,0,5"/>
-                                <Border BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                                <Border 
                                         BorderThickness="1" Width="400" Height="200" HorizontalAlignment="Left">
                                     <Image Source="{Binding TemplatePreview}" Stretch="UniformToFill"/>
                                 </Border>

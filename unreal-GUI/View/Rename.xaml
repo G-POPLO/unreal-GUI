@@ -18,7 +18,7 @@
                 
                 <!-- 类型选择卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
-                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                        
                          CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
@@ -45,7 +45,7 @@
                 
                 <!-- 路径设置卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
-                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                        
                        CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
@@ -73,7 +73,7 @@
                 
                 <!-- 重命名操作卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
-                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                        
                          CornerRadius="4">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">

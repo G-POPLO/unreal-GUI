@@ -20,7 +20,7 @@
                 
                 <!-- 目录选择卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
-                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                        
                           CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
@@ -42,7 +42,7 @@
                 
                 <!-- 文件类型选择卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
-                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                        
                           CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
@@ -69,7 +69,7 @@
                 
                 <!-- 操作按钮卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
-                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                        
                           CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
@@ -91,7 +91,7 @@
                 
                 <!-- ZenDashboard卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
-                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                        
                           CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
@@ -124,7 +124,7 @@
                 
                 <!-- 清理日志卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
-                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                        
                           CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">

@@ -121,13 +121,37 @@ namespace unreal_GUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Mica")]
-        public string BackdropType {
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public byte BackdropType {
             get {
-                return ((string)(this["BackdropType"]));
+                return ((byte)(this["BackdropType"]));
             }
             set {
                 this["BackdropType"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public byte AminateType {
+            get {
+                return ((byte)(this["AminateType"]));
+            }
+            set {
+                this["AminateType"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public byte BrowerType {
+            get {
+                return ((byte)(this["BrowerType"]));
+            }
+            set {
+                this["BrowerType"] = value;
             }
         }
     }

@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:unreal_GUI"
              xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
+             xmlns:ikw="http://schemas.inkore.net/lib/ui/wpf"
              xmlns:viewmodel="clr-namespace:unreal_GUI.ViewModel" x:Class="unreal_GUI.Settings"  
              mc:Ignorable="d" 
              >
@@ -19,7 +20,7 @@
 
                 <!-- 引擎目录设置卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
-                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                        
                       CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
@@ -40,7 +41,7 @@
                                 <StackPanel Orientation="Horizontal">
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74E;" Margin="0,0,5,0"/>
                                     <TextBlock Text="保存设置"/>
-                                    
+
                                 </StackPanel>
                             </Button>
                         </StackPanel>
@@ -53,7 +54,7 @@
 
                 <!-- 应用设置卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
-                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                        
                         CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
@@ -62,43 +63,40 @@
                         </StackPanel>
 
                         <TextBlock Text="默认设置" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,10"/>
-                        <Expander Width="500" HorizontalContentAlignment="Left" Padding="0">
-                            <Expander.Header>
-                                <ToggleButton Content="This ToggleButton is centered" HorizontalAlignment="Center"/>
-                            </Expander.Header>
-                            <Expander.Content>
-                                <Button Margin="4" Content="This Button is left aligned"/>
-                            </Expander.Content>
-                        </Expander>
+
                         <WrapPanel x:Name="Setting_Panel" Orientation="Horizontal">
                             <ui:AppBarToggleButton x:Name="Button0" Label="任务完成后打开输出文件夹" 
-                                                   IsChecked="{Binding AutoOpen}" Margin="0,0,10,0" HorizontalAlignment="Left">
+                                                   IsChecked="{Binding AutoOpen}" HorizontalAlignment="Left">
                                 <ui:AppBarToggleButton.Icon>
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;"/>
                                 </ui:AppBarToggleButton.Icon>
                             </ui:AppBarToggleButton>
-
+                            <ui:AppBarSeparator />
                             <ui:AppBarToggleButton x:Name="Button3" Label="应用程序启动时自动检查更新" 
-                        IsChecked="{Binding AutoUpdate}" Margin="0,0,10,0" HorizontalAlignment="Left">
+                        IsChecked="{Binding AutoUpdate}"  HorizontalAlignment="Left">
                                 <ui:AppBarToggleButton.Icon>
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xECC5;"/>
                                 </ui:AppBarToggleButton.Icon>
                             </ui:AppBarToggleButton>
-
+                            <ui:AppBarSeparator />
                             <ui:AppBarToggleButton x:Name="Button1" Label="使用Gitcode作为更新下载源" 
-                                                   IsChecked="{Binding Gitcode}" Margin="0,0,10,0" HorizontalAlignment="Left">
+                                                   IsChecked="{Binding Gitcode}"  HorizontalAlignment="Left">
                                 <ui:AppBarToggleButton.Icon>
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEC05;"/>
                                 </ui:AppBarToggleButton.Icon>
                             </ui:AppBarToggleButton>
 
+                            <ui:AppBarSeparator />
 
                         </WrapPanel>
                     </StackPanel>
                 </Border>
+
+
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
-                        BorderBrush="{DynamicResource SystemControlForegroundChromeHighBrush}" 
+                        
                        CornerRadius="4">
+
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
                             <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEC7A;" Margin="0,0,10,0" VerticalAlignment="Center"/>
@@ -150,19 +148,65 @@
                             <ComboBox x:Name="BrowerOption" Grid.Column="1" d:LayoutOverrides="Height" Margin="-32,0,0,0" VerticalAlignment="Stretch" Width="120"/>
 
                         </Grid>
+                        <WrapPanel x:Name="beta_Panel"  Orientation="Horizontal">
 
-                        <ui:AppBarToggleButton x:Name="beta_Button0" Label="Fab免费资产领取通知" 
-                                               IsChecked="{Binding FabNotification}" HorizontalAlignment="Left">
-                            <ui:AppBarToggleButton.Icon>
-                                <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEC24;"/>
-                            </ui:AppBarToggleButton.Icon>
-                        </ui:AppBarToggleButton>
+                            <ui:AppBarToggleButton x:Name="beta_Button0" Label="Fab免费资产领取通知" 
+                                IsChecked="{Binding FabNotification}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <ui:AppBarToggleButton.Icon>
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEC24;"/>
+                                </ui:AppBarToggleButton.Icon>
+                            </ui:AppBarToggleButton>
+                            <ui:AppBarSeparator />
+
+
+
+                        </WrapPanel>
+
+
+
 
                     </StackPanel>
+
+                </Border>
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                         Margin="0,20,0,0"
+                    CornerRadius="4">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <ui:FontIcon Icon="{x:Static ui:FluentSystemIcons.WindowSettings_20_Regular}" Glyph="&#xEE7D;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="窗口设置" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+
+
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="窗口样式" 
+                 VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" d:LayoutOverrides="Height" VerticalAlignment="Stretch" Width="120"/>
+                        </Grid>
+
+
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="窗口动画" 
+                 VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" d:LayoutOverrides="Height" VerticalAlignment="Stretch" Width="120"/>
+                        </Grid>
+
+
+                    </StackPanel>
+
                 </Border>
 
-                <!-- 实验性选项卡片 -->
+
             </StackPanel>
+
         </ScrollViewer>
     </Grid>
 </UserControl>
