@@ -1,7 +1,7 @@
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -29,7 +29,7 @@ namespace unreal_GUI.Model
                 try
                 {
                     var json = File.ReadAllText("settings.json");
-                    var settings = JsonConvert.DeserializeObject<SettingsData>(json);
+                    var settings = JsonSerializer.Deserialize<SettingsData>(json);
                     ButtonsListBox.ItemsSource = settings?.CustomButtons ?? [];
                 }
                 catch (Exception)
@@ -58,7 +58,7 @@ namespace unreal_GUI.Model
                 if (File.Exists("settings.json"))
                 {
                     var json = File.ReadAllText("settings.json");
-                    var settings = JsonConvert.DeserializeObject<SettingsData>(json);
+                    var settings = JsonSerializer.Deserialize<SettingsData>(json);
 
                     // 删除选中的条目
                     if (settings.CustomButtons != null)
@@ -66,7 +66,7 @@ namespace unreal_GUI.Model
                         settings.CustomButtons.RemoveAll(item => item.Name == name);
 
                         // 保存更新后的设置
-                        var jsonSettings = JsonConvert.SerializeObject(settings, Formatting.Indented);
+                        var jsonSettings = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
                         File.WriteAllText("settings.json", jsonSettings);
 
                         // 更新 ListBox 的数据源

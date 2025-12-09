@@ -1,10 +1,10 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using unreal_GUI.Model;
 
@@ -95,7 +95,7 @@ namespace unreal_GUI.ViewModel
             if (File.Exists("settings.json"))
             {
                 var json = File.ReadAllText("settings.json");
-                var settings = JsonConvert.DeserializeObject<SettingsData>(json);
+                var settings = JsonSerializer.Deserialize<SettingsData>(json);
                 var engineList = settings?.Engines ?? [];
                 Engines = new ObservableCollection<object>(engineList.Select(e => new { DisplayName = $"UE {e.Version}", e.Path }));
 
@@ -109,7 +109,7 @@ namespace unreal_GUI.ViewModel
             if (File.Exists("settings.json"))
             {
                 var json = File.ReadAllText("settings.json");
-                var settings = JsonConvert.DeserializeObject<SettingsData>(json);
+                var settings = JsonSerializer.Deserialize<SettingsData>(json);
                 var customButtonList = settings?.CustomButtons ?? [];
                 CustomButtons = new ObservableCollection<object>(customButtonList.Select(cb => new { DisplayName = cb.Name, cb.Path }));
             }

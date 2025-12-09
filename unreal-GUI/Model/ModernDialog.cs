@@ -1,7 +1,7 @@
 using iNKORE.UI.WPF.Modern.Controls;
-using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -210,7 +210,7 @@ namespace unreal_GUI.Model
                     if (File.Exists("settings.json"))
                     {
                         var json = File.ReadAllText("settings.json");
-                        settings = JsonConvert.DeserializeObject<SettingsData>(json) ?? new SettingsData();
+                        settings = JsonSerializer.Deserialize<SettingsData>(json) ?? new SettingsData();
                     }
 
                     // 若不存在配置，则初始化列表
@@ -220,7 +220,7 @@ namespace unreal_GUI.Model
                     }
                     settings.CustomButtons.Add(new CustomButton { Name = buttonName, Path = folderPath });
                     // 保存更新后的设置
-                    var jsonSettings = JsonConvert.SerializeObject(settings, Formatting.Indented);
+                    var jsonSettings = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
                     File.WriteAllText("settings.json", jsonSettings);
                 }
             }
@@ -248,7 +248,7 @@ namespace unreal_GUI.Model
             if (File.Exists("settings.json"))
             {
                 var json = File.ReadAllText("settings.json");
-                var settings = JsonConvert.DeserializeObject<SettingsData>(json);
+                var settings = JsonSerializer.Deserialize<SettingsData>(json);
 
                 if (settings?.CustomButtons != null)
                 {
@@ -325,28 +325,28 @@ namespace unreal_GUI.Model
             };
 
             // 订阅导航到图片编辑页面的事件
-            //content.NavigateToImageEditRequested += (sender, imagePath) =>
-            //{
-            //    // 设置图片编辑控件的图片源
-            //    imageEditContent.ImageSource = new System.Windows.Media.Imaging.BitmapImage(new System.Uri(imagePath));
+            content.NavigateToImageEditRequested += (sender, imagePath) =>
+            {
+                // 设置图片编辑控件的图片源
+                //imageEditContent.ImageSource = new System.Windows.Media.Imaging.BitmapImage(new System.Uri(imagePath));
 
-            //    // 订阅图片编辑完成事件
-            //    imageEditContent.ImageEditCompleted += (s, e) =>
-            //    {
-            //        // 将编辑后的图片传递回Add_Categories控件
-            //        content.ViewModel.IconPath = e.CroppedImagePath; // 使用裁剪后的图片路径
+                // 订阅图片编辑完成事件
+                //imageEditContent.ImageEditCompleted += (s, e) =>
+                //{
+                //    // 将编辑后的图片传递回Add_Categories控件
+                //    content.ViewModel.IconPath = e.CroppedImagePath; // 使用裁剪后的图片路径
 
-            //        // 切换回添加类别页面
-            //        dialog.Content = content;
-            //        dialog.Title = "添加模板类别";
-            //        dialog.PrimaryButtonText = "保存";
-            //    };
+                //    // 切换回添加类别页面
+                //    dialog.Content = content;
+                //    dialog.Title = "添加模板类别";
+                //    dialog.PrimaryButtonText = "保存";
+                //};
 
-            //    // 切换对话框内容到图片编辑控件
-            //    dialog.Content = imageEditContent;
-            //    dialog.Title = "图片剪裁工具";
-            //    dialog.PrimaryButtonText = "完成剪裁";
-            //};
+                // 切换对话框内容到图片编辑控件
+                dialog.Content = imageEditContent;
+                dialog.Title = "图片剪裁工具";
+                dialog.PrimaryButtonText = "完成剪裁";
+            };
 
             var result = await dialog.ShowAsync();
 

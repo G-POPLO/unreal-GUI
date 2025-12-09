@@ -1,7 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
-using Newtonsoft.Json;
+using System.Text.Json;
 using System;
 using System.IO;
 using System.Windows;
@@ -119,7 +119,7 @@ namespace unreal_GUI.ViewModel
 
                 // 读取并解析JSON文件
                 var json = File.ReadAllText("settings.json");
-                var settings = JsonConvert.DeserializeObject<SettingsData>(json);
+                var settings = JsonSerializer.Deserialize<SettingsData>(json);
 
                 if (settings == null || settings.Engines == null || settings.Engines.Count == 0)
                 {

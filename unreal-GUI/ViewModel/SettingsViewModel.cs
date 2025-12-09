@@ -1,11 +1,11 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using unreal_GUI.Model;
@@ -70,7 +70,7 @@ namespace unreal_GUI.ViewModel
                 try
                 {
                     var json = File.ReadAllText("settings.json");
-                    var settings = JsonConvert.DeserializeObject<SettingsData>(json);
+                    var settings = JsonSerializer.Deserialize<SettingsData>(json);
                     EngineInfos = settings.Engines ?? [];
                     UpdateEnginePathsDisplay();
                 }
@@ -158,7 +158,7 @@ namespace unreal_GUI.ViewModel
                 try
                 {
                     var json = File.ReadAllText("settings.json");
-                    var existingSettings = JsonConvert.DeserializeObject<SettingsData>(json);
+                    var existingSettings = JsonSerializer.Deserialize<SettingsData>(json);
                     settings.CustomButtons = existingSettings?.CustomButtons ?? [];
                 }
                 catch
@@ -169,7 +169,8 @@ namespace unreal_GUI.ViewModel
                 }
             }
 
-            File.WriteAllText("settings.json", JsonConvert.SerializeObject(settings, Formatting.Indented));
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            File.WriteAllText("settings.json", JsonSerializer.Serialize(settings, options));
 
             TipText = "设置已保存";
             return Task.CompletedTask;
@@ -195,8 +196,13 @@ namespace unreal_GUI.ViewModel
                 var versionFile = Path.Combine(enginePath, "Engine", "Build", "Build.version");
                 if (File.Exists(versionFile))
                 {
-                    dynamic versionInfo = JsonConvert.DeserializeObject(File.ReadAllText(versionFile));
-                    return $"{versionInfo.MajorVersion}.{versionInfo.MinorVersion}.{versionInfo.PatchVersion}";
+                    var versionJson = File.ReadAllText(versionFile);
+                    using var versionDoc = JsonDocument.Parse(versionJson);
+                    var root = versionDoc.RootElement;
+                    var majorVersion = root.GetProperty("MajorVersion").GetInt32();
+                    var minorVersion = root.GetProperty("MinorVersion").GetInt32();
+                    var patchVersion = root.GetProperty("PatchVersion").GetInt32();
+                    return $"{majorVersion}.{minorVersion}.{patchVersion}";
                 }
             }
             catch { }

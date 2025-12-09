@@ -1,11 +1,11 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Text.Json;
 using unreal_GUI.Model;
 
 namespace unreal_GUI.ViewModel
@@ -52,7 +52,7 @@ namespace unreal_GUI.ViewModel
                 try
                 {
                     var json = File.ReadAllText("settings.json");
-                    var settings = JsonConvert.DeserializeObject<SettingsData>(json);
+                    var settings = JsonSerializer.Deserialize<SettingsData>(json);
                     EngineList = settings?.Engines ?? [];
                 }
                 catch

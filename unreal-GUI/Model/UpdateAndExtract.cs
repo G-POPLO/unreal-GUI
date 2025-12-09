@@ -1,10 +1,10 @@
 using Microsoft.Toolkit.Uwp.Notifications;
-using Newtonsoft.Json.Linq;
 using SevenZip;
 using System;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using Windows.UI.Notifications;
@@ -13,7 +13,7 @@ namespace unreal_GUI.Model
 {
     class UpdateAndExtract
     {
-        public static JObject release_info;
+        public static JsonDocument release_info;
         public static string latestVersion;
 
         /// <summary>
@@ -45,12 +45,12 @@ namespace unreal_GUI.Model
                     ? await client.GetAsync("https://api.gitcode.com/api/v5/repos/C-Poplo/unreal-GUI/releases/latest/?access_token=4RszX_1zdryXuvgwHbV-Edr7")
                     : await client.GetAsync("https://api.github.com/repos/G-POPLO/unreal-GUI/releases/latest");
 
-                release_info = JObject.Parse(await response.Content.ReadAsStringAsync());
-                latestVersion = release_info["tag_name"]?.ToString();
+                release_info = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+                latestVersion = release_info.RootElement.GetProperty("tag_name").GetString();
 
                 if (Version.Parse(latestVersion) > Version.Parse(currentVersion))
                 {
-                    string updateBody = release_info["body"]?.ToString() ?? "无更新内容";
+                    string updateBody = release_info.RootElement.TryGetProperty("body", out JsonElement bodyElement) ? bodyElement.GetString() ?? "无更新内容" : "无更新内容";
                     bool? result = await ModernDialog.ShowMarkdownAsync($"发现新版本{latestVersion}\n\n更新内容:\n{updateBody}\n\n是否下载？", "提示");
                     if (result == true)
                     {
@@ -76,8 +76,22 @@ namespace unreal_GUI.Model
         {
             try
             {
-                string downloadUrl = release_info["assets"]
-                    ?.FirstOrDefault(a => a["name"]?.ToString().EndsWith(".7z") == true)?["browser_download_url"]?.ToString();
+                string downloadUrl = null;
+                if (release_info.RootElement.TryGetProperty("assets", out JsonElement assetsArray))
+                {
+                    foreach (var asset in assetsArray.EnumerateArray())
+                    {
+                        if (asset.TryGetProperty("name", out JsonElement nameElement))
+                        {
+                            var name = nameElement.GetString();
+                            if (name?.EndsWith(".7z") == true)
+                            {
+                                downloadUrl = asset.GetProperty("browser_download_url").GetString();
+                                break;
+                            }
+                        }
+                    }
+                }
 
                 if (!string.IsNullOrEmpty(downloadUrl))
                 {

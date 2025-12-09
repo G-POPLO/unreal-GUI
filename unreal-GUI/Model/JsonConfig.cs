@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace unreal_GUI.Model
 {
@@ -12,9 +13,11 @@ namespace unreal_GUI.Model
     public partial class EngineInfo : ObservableObject
     {
         [ObservableProperty]
+        [property: JsonPropertyName("path")]
         private string _path;
 
         [ObservableProperty]
+        [property: JsonPropertyName("version")]
         private string _version;
     }
 
@@ -24,9 +27,11 @@ namespace unreal_GUI.Model
     public partial class SettingsData : ObservableObject
     {
         [ObservableProperty]
+        [property: JsonPropertyName("engines")]
         private List<EngineInfo> _engines = [];
 
         [ObservableProperty]
+        [property: JsonPropertyName("customButtons")]
         private List<CustomButton> _customButtons = [];
     }
 
@@ -36,9 +41,11 @@ namespace unreal_GUI.Model
     public partial class CustomButton : ObservableObject
     {
         [ObservableProperty]
+        [property: JsonPropertyName("name")]
         private string _name;
 
         [ObservableProperty]
+        [property: JsonPropertyName("path")]
         private string _path;
     }
 }

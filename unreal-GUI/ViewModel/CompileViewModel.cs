@@ -1,12 +1,13 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Media;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using unreal_GUI.Model;
@@ -55,8 +56,8 @@ namespace unreal_GUI.ViewModel
 
                 // 读取.uplugin文件内容
                 string pluginContent = File.ReadAllText(InputPath);
-                dynamic pluginInfo = JsonConvert.DeserializeObject(pluginContent);
-                string pluginEngineVersion = pluginInfo.EngineVersion;
+                JsonNode pluginInfo = JsonNode.Parse(pluginContent);
+                string pluginEngineVersion = pluginInfo["EngineVersion"].ToString();
 
                 // 获取选择的引擎版本
                 TipsText = SelectedEngine != null
@@ -206,7 +207,7 @@ namespace unreal_GUI.ViewModel
             if (File.Exists("settings.json"))
             {
                 var json = File.ReadAllText("settings.json");
-                var settings = JsonConvert.DeserializeObject<SettingsData>(json);
+                var settings = JsonSerializer.Deserialize<SettingsData>(json);
                 engineList = settings?.Engines ?? [];
                 foreach (EngineInfo engine in engineList)
                 {
