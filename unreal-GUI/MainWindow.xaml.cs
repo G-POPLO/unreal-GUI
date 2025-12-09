@@ -50,6 +50,7 @@ namespace unreal_GUI
                     "Settings" => typeof(Settings),
                     "About" => typeof(About),
                     "Templates" => typeof(Templates),
+                    "Terminal" => typeof(Terminal),
                     _ => typeof(Compile)
                 };
 

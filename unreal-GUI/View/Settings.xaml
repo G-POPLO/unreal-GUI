@@ -168,6 +168,38 @@
                     </StackPanel>
 
                 </Border>
+
+                <!-- 窗口设置卡片 -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                         Margin="0,20,0,0"
+                    CornerRadius="4">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.SwitchUser}" Glyph="&#xEE7D;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="扩展功能" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+
+
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="启用高级选项" 
+                 VerticalAlignment="Center"/>
+                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding ProMode}"/>
+                        </Grid>
+
+
+
+
+                    </StackPanel>
+
+                </Border>
+
+
+                <!-- 窗口设置卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
                          Margin="0,20,0,0"
                     CornerRadius="4">

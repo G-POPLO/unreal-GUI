@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModel="clr-namespace:unreal_GUI.ViewModel"
         mc:Ignorable="d"
-        Title="Unreal-GUI" Height="600" Width="850"
+        Title="Unreal-GUI" Height="600" 
         xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
         ui:WindowHelper.SystemBackdropType="Mica"
         ui:WindowHelper.UseModernWindowStyle="True"
@@ -50,6 +50,12 @@
                 <ui:NavigationViewItem Content="自定义模板" Tag="Templates">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Edit}"/>
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+
+                <ui:NavigationViewItem Content="Terminal终端" Tag="Terminal">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:FontIcon Icon="{x:Static ui:FluentSystemIcons.BookTemplate_20_Regular}" />
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
 

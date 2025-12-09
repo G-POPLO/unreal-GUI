@@ -154,5 +154,17 @@ namespace unreal_GUI.Properties {
                 this["BrowerType"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ProMode {
+            get {
+                return ((bool)(this["ProMode"]));
+            }
+            set {
+                this["ProMode"] = value;
+            }
+        }
     }
 }

@@ -27,8 +27,8 @@
                             <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,10,0" VerticalAlignment="Center"/>
                             <TextBlock Text="目录选择" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
-                        
-                        <TextBlock TextWrapping="Wrap" Text="选择需要清理的项目目录：" Margin="0,0,0,10"/>
+
+                        <TextBlock TextWrapping="Wrap" Text="选择需要清理的项目目录：" FontWeight="Bold" Margin="0,0,0,10"/>
                         <TextBox x:Name="PathBox" Text="{Binding InputPath, Mode=TwoWay}" Margin="0,0,0,10" IsReadOnly="True"/>
                         <Button x:Name="SelectPath" Margin="0,0,0,0" Command="{Binding SelectInputPathCommand}" 
                                 Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
@@ -37,20 +37,7 @@
                                 <TextBlock Text="浏览"/>
                             </StackPanel>
                         </Button>
-                    </StackPanel>
-                </Border>
-                
-                <!-- 文件类型选择卡片 -->
-                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
-                        
-                          CornerRadius="4" Margin="0,0,0,20">
-                    <StackPanel Margin="15">
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74C;" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="文件类型选择" FontSize="18" FontWeight="SemiBold"/>
-                        </StackPanel>
-                        
-                        <TextBlock TextWrapping="Wrap" Text="选择清理过程中需要排除的目录：" Margin="0,0,0,10"/>
+                        <TextBlock TextWrapping="Wrap" Text="选择清理过程中需要排除的目录：" Margin="0,10,0,10"/>
                         <CheckBox x:Name="Saved" Margin="0,0,0,10" IsChecked="{Binding IsSaveGameChecked}">
                             <StackPanel Orientation="Horizontal">
                                 <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,5,0" FontSize="12"/>
@@ -64,30 +51,19 @@
                                 <TextBlock Text="Intermediate"/>
                             </StackPanel>
                         </CheckBox>
-                    </StackPanel>
-                </Border>
-                
-                <!-- 操作按钮卡片 -->
-                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
-                        
-                          CornerRadius="4" Margin="0,0,0,20">
-                    <StackPanel Margin="15">
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE945;" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="执行操作" FontSize="18" FontWeight="SemiBold"/>
-                        </StackPanel>
-                        
+                        <TextBlock x:Name="Result" TextWrapping="Wrap" Text="{Binding TipClearCache}" Margin="0,10,0,0" />
                         <Button x:Name="ClearButton" Margin="0,0,0,15" Command="{Binding CleanCacheCommand}" 
-                                Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
+ Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
                             <StackPanel Orientation="Horizontal">
                                 <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74D;" Margin="0,0,5,0"/>
                                 <TextBlock Text="开始清理"/>
                             </StackPanel>
                         </Button>
-                        
-                        <TextBlock x:Name="Result" TextWrapping="Wrap" Text="{Binding TipClearCache}" Margin="0,0,0,0"  />
+
                     </StackPanel>
                 </Border>
+                
+                
                 
                 <!-- ZenDashboard卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 

@@ -124,11 +124,11 @@ namespace unreal_GUI.ViewModel
                 return;
             }
 
-            var uatPath = Path.Combine(SelectedEngine.Path, "Engine", "Build", "BatchFiles", "RunUAT.bat");
+            var TerminalPath = Path.Combine(SelectedEngine.Path, "Engine", "Build", "BatchFiles", "RunTerminal.bat");
 
-            if (!File.Exists(uatPath))
+            if (!File.Exists(TerminalPath))
             {
-                TipsText = "找不到RunUAT.bat文件";
+                TipsText = "找不到RunTerminal.bat文件";
                 return;
             }
 
@@ -166,7 +166,7 @@ namespace unreal_GUI.ViewModel
             {
                 var startInfo = new ProcessStartInfo
                 {
-                    FileName = uatPath,
+                    FileName = TerminalPath,
                     Arguments = $"BuildPlugin -plugin=\"{InputPath}\" -package=\"{OutputPath}\"",
                     UseShellExecute = false,
                     RedirectStandardOutput = false,
