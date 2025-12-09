@@ -8,32 +8,35 @@ namespace unreal_GUI.Model
     { }
 
     /// <summary>
-    /// 引擎信息类
-    /// </summary>
-    public partial class EngineInfo : ObservableObject
-    {
-        [ObservableProperty]
-        [property: JsonPropertyName("path")]
-        private string _path;
-
-        [ObservableProperty]
-        [property: JsonPropertyName("version")]
-        private string _version;
-    }
-
-    /// <summary>
     /// 设置数据类
     /// </summary>
     public partial class SettingsData : ObservableObject
     {
         [ObservableProperty]
-        [property: JsonPropertyName("engines")]
+        [JsonPropertyName("engines")]
         private List<EngineInfo> _engines = [];
 
         [ObservableProperty]
-        [property: JsonPropertyName("customButtons")]
+        [JsonPropertyName("customButtons")]
         private List<CustomButton> _customButtons = [];
     }
+
+
+    /// <summary>
+    /// 引擎信息类
+    /// </summary>
+    public partial class EngineInfo : ObservableObject
+    {
+        [ObservableProperty]
+        [JsonPropertyName("path")]
+        private string _path;
+
+        [ObservableProperty]
+        [JsonPropertyName("version")]
+        private string _version;
+    }
+
+
 
     /// <summary>
     /// 自定义按钮类
@@ -41,11 +44,11 @@ namespace unreal_GUI.Model
     public partial class CustomButton : ObservableObject
     {
         [ObservableProperty]
-        [property: JsonPropertyName("name")]
+        [JsonPropertyName("name")]
         private string _name;
 
         [ObservableProperty]
-        [property: JsonPropertyName("path")]
+        [JsonPropertyName("path")]
         private string _path;
     }
 }

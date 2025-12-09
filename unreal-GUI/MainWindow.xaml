@@ -4,17 +4,22 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModel="clr-namespace:unreal_GUI.ViewModel"
+        xmlns:local="clr-namespace:unreal_GUI"
+        xmlns:converters="clr-namespace:unreal_GUI.Converters"
+        xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
+        ui:WindowHelper.UseModernWindowStyle="True"
         mc:Ignorable="d"
         Title="Unreal-GUI" Height="600" Width="900"
-        xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
-        ui:WindowHelper.SystemBackdropType="Mica"
-        ui:WindowHelper.UseModernWindowStyle="True"
         >
     
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </Window.Resources>
     <Window.DataContext>
         <viewModel:MainWindowViewModel />
     </Window.DataContext>
-    <Grid>
+    <Grid >
+        
         <ui:NavigationView x:Name="NavigationView" 
                            Tag="{Binding CurrentPageTag, Mode=TwoWay}"
                            
@@ -53,7 +58,8 @@
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
 
-                <ui:NavigationViewItem Content="终端" Tag="Terminal">
+                <ui:NavigationViewItem Content="终端" Tag="Terminal"
+                                       Visibility="{Binding AdvancedMode, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Icon="{x:Static ui:FluentSystemIcons.BookTemplate_20_Regular}" />
                     </ui:NavigationViewItem.Icon>

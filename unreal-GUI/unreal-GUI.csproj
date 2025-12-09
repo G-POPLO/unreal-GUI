@@ -56,7 +56,6 @@
   
   <PropertyGroup> 
     <IncludeSatelliteResource>false</IncludeSatelliteResource>
-    <SupportedOSPlatformVersion>10.0.18362.0</SupportedOSPlatformVersion>
   </PropertyGroup>
     
   <!--要求不生成.deps.json文件-->  

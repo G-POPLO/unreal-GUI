@@ -50,6 +50,15 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private bool _headlessEnabled;
 
+        [ObservableProperty]
+        private bool _advancedMode;
+
+        [ObservableProperty]
+        private byte _backdropType;
+
+        [ObservableProperty]
+        private byte _aminateType;
+
         public SettingsViewModel()
         {
             // 初始化设置
@@ -64,6 +73,9 @@ namespace unreal_GUI.ViewModel
             AutoStart = Properties.Settings.Default.AutoStart;
             OpenEpic = Properties.Settings.Default.OpenEpic;
             HeadlessEnabled = Properties.Settings.Default.HeadlessEnabled;
+            AdvancedMode = Properties.Settings.Default.AdvancedMode;
+            BackdropType = Properties.Settings.Default.BackdropType;
+            AminateType = Properties.Settings.Default.AminateType;
 
             if (File.Exists("settings.json"))
             {
@@ -76,9 +88,7 @@ namespace unreal_GUI.ViewModel
                 }
                 catch
                 {
-                    // 如果JSON文件损坏，初始化为空列表
-                    _ = Task.Run(() => MessageBox.Show("JSON文件已损坏，已重置为默认状态", "错误", MessageBoxButton.OK, MessageBoxImage.Hand));
-                    EngineInfos = [];
+                    MessageBox.Show("JSON文件已损坏，请删除后再重新启动应用程序", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
         }
@@ -127,12 +137,17 @@ namespace unreal_GUI.ViewModel
             }
             catch (Exception)
             {
-                _ = Task.Run(() => MessageBox.Show("未检测到引擎，请手动设置引擎目录", "提示", MessageBoxButton.OK, MessageBoxImage.Information));
+                MessageBox.Show("未检测到引擎，请手动设置引擎目录", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
-        [RelayCommand]
         private Task SaveSettings()
+        {
+            return SaveSettings(new JsonSerializerOptions { WriteIndented = true });
+        }
+
+        [RelayCommand]
+        private Task SaveSettings(JsonSerializerOptions options)
         {
             // 保存应用程序设置
             Properties.Settings.Default.AutoOpen = AutoOpen;
@@ -143,6 +158,9 @@ namespace unreal_GUI.ViewModel
             Properties.Settings.Default.AutoStart = AutoStart;
             Properties.Settings.Default.OpenEpic = OpenEpic;
             Properties.Settings.Default.HeadlessEnabled = HeadlessEnabled;
+            Properties.Settings.Default.AdvancedMode = AdvancedMode;
+            Properties.Settings.Default.BackdropType = BackdropType;
+            Properties.Settings.Default.AminateType = AminateType;
             Properties.Settings.Default.Save();
 
             // 保存JSON文件
@@ -163,13 +181,10 @@ namespace unreal_GUI.ViewModel
                 }
                 catch
                 {
-                    // 如果JSON文件损坏，初始化为空列表
-                    _ = Task.Run(() => MessageBox.Show("JSON文件已损坏，已重置为默认状态", "信息", MessageBoxButton.OK, MessageBoxImage.Information));
-                    settings.CustomButtons = [];
+                    MessageBox.Show("JSON文件已损坏，请删除后再重新启动应用程序", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
 
-            var options = new JsonSerializerOptions { WriteIndented = true };
             File.WriteAllText("settings.json", JsonSerializer.Serialize(settings, options));
 
             TipText = "设置已保存";

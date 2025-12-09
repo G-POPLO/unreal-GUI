@@ -158,12 +158,12 @@ namespace unreal_GUI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool ProMode {
+        public bool AdvancedMode {
             get {
-                return ((bool)(this["ProMode"]));
+                return ((bool)(this["AdvancedMode"]));
             }
             set {
-                this["ProMode"] = value;
+                this["AdvancedMode"] = value;
             }
         }
     }

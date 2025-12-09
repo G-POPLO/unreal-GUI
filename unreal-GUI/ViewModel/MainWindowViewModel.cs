@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
 using unreal_GUI.Model;
@@ -18,6 +19,13 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private string currentPageTag = "Compile";
 
+        // 高级模式设置
+        [ObservableProperty]
+        private bool _advancedMode;
+
+        // 窗口背景类型设置
+        [ObservableProperty]
+        private byte _backdropType;
 
         // 导航历史记录
         [ObservableProperty]
@@ -57,8 +65,24 @@ namespace unreal_GUI.ViewModel
 
         public MainWindowViewModel()
         {
-            // 初始化时添加默认页面到历史记录
-            NavigationHistory.Add("Compile");
+            AdvancedMode = Properties.Settings.Default.AdvancedMode;
+            BackdropType = Properties.Settings.Default.BackdropType;
+            
+            // 订阅设置变化事件
+            Properties.Settings.Default.PropertyChanged += OnSettingsPropertyChanged;
+        }
+
+        // 处理设置变化事件
+        private void OnSettingsPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Properties.Settings.Default.BackdropType))
+            {
+                BackdropType = Properties.Settings.Default.BackdropType;
+            }
+            else if (e.PropertyName == nameof(Properties.Settings.Default.AdvancedMode))
+            {
+                AdvancedMode = Properties.Settings.Default.AdvancedMode;
+            }
         }
 
         public static async Task AutoUpdate()
@@ -90,26 +114,26 @@ namespace unreal_GUI.ViewModel
             }
         }
 
-        // 根据页面标签获取页面类型
-        public static Type GetPageTypeByTag(string tag)
-        {
-            return tag switch
-            {
-                "Compile" => typeof(Compile),
-                "Rename" => typeof(Rename),
-                "QuickAccess" => typeof(QuickAccess),
-                "Clear" => typeof(Clear),
-                "Settings" => typeof(Settings),
-                "About" => typeof(About),
-                _ => typeof(Compile)
-            };
-        }
+        //// 根据页面标签获取页面类型
+        //public static Type GetPageTypeByTag(string tag)
+        //{
+        //    return tag switch
+        //    {
+        //        "Compile" => typeof(Compile),
+        //        "Rename" => typeof(Rename),
+        //        "QuickAccess" => typeof(QuickAccess),
+        //        "Clear" => typeof(Clear),
+        //        "Settings" => typeof(Settings),
+        //        "About" => typeof(About),
+        //        _ => typeof(Compile)
+        //    };
+        //}
 
-        // 处理来自视图的导航请求
-        public void HandleNavigationRequest(string pageTag)
-        {
-            NavigateToPage(pageTag);
-        }
+        //// 处理来自视图的导航请求
+        //public void HandleNavigationRequest(string pageTag)
+        //{
+        //    NavigateToPage(pageTag);
+        //}
 
         // 若没有发现设置JSON文件，则弹窗提示
         public async Task InitializeJson_Async()

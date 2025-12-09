@@ -1,4 +1,6 @@
 using iNKORE.UI.WPF.Modern.Controls;
+using iNKORE.UI.WPF.Modern.Controls.Helpers;
+using iNKORE.UI.WPF.Modern.Helpers.Styles;
 using System;
 using System.Windows;
 using System.Windows.Navigation;
@@ -21,17 +23,47 @@ namespace unreal_GUI
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            // 在Loaded事件中动态设置窗口背景类型
+            SetSystemBackdropType();
 
             // 订阅 ViewModel 的导航请求事件
             if (DataContext is MainWindowViewModel viewModel)
             {
                 viewModel.NavigationRequested += OnNavigationRequested;
+                // 订阅BackdropType属性变化事件
+                viewModel.PropertyChanged += ViewModel_PropertyChanged;
                 // 初始化默认导航到编译页面
                 await viewModel.InitializeJson_Async();
             }
 
             await MainWindowViewModel.AutoUpdate();
             await MainWindowViewModel.CheckFabAsset();
+        }
+
+        private void SetSystemBackdropType()
+        {
+            // 根据ViewModel的BackdropType属性设置窗口背景类型
+            byte backdropType;
+            if (DataContext is MainWindowViewModel viewModel)
+            {
+                backdropType = viewModel.BackdropType;
+            }
+            else
+            {
+                // 如果ViewModel不可用，使用默认设置
+                backdropType = Properties.Settings.Default.BackdropType;
+            }
+
+            // 转换为BackdropType枚举
+            BackdropType backdropTypeEnum = backdropType switch
+            {
+                0 => BackdropType.Mica,
+                1 => BackdropType.Acrylic,
+                _ => BackdropType.None
+            };
+
+            // 使用依赖属性设置窗口背景类型
+            SetValue(WindowHelper.SystemBackdropTypeProperty, backdropTypeEnum);
         }
 
         private void NavigationView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
@@ -104,6 +136,15 @@ namespace unreal_GUI
                     NavigationView.SelectedItem = navItem;
                     break;
                 }
+            }
+        }
+
+        // 处理ViewModel属性变化事件
+        private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(MainWindowViewModel.BackdropType))
+            {
+                SetSystemBackdropType();
             }
         }
 

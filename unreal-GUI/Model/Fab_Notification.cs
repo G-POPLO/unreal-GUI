@@ -55,7 +55,7 @@ namespace unreal_GUI.Model
                         }
 
                         TimeZoneInfo easternZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-                        int hour24 = hour % 12 + (amPm.ToUpper() == "PM" ? 12 : 0);
+                        int hour24 = hour % 12 + (amPm.Equals("PM", StringComparison.CurrentCultureIgnoreCase) ? 12 : 0);
                         DateTime easternTime = new(year, monthIndex, day, hour24, minute, 0);
                         TimeZoneInfo chinaZone = TimeZoneInfo.FindSystemTimeZoneById("China Standard Time");
                         DateTime chinaTime = TimeZoneInfo.ConvertTime(easternTime, easternZone, chinaZone);

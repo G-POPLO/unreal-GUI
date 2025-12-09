@@ -9,7 +9,7 @@ namespace unreal_GUI
     /// </summary>
     public partial class QuickAccess : System.Windows.Controls.UserControl
     {
-        private QuickAccessViewModel viewModel;
+        private readonly QuickAccessViewModel viewModel;
 
         public QuickAccess()
         {

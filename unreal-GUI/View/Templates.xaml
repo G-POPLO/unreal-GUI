@@ -82,7 +82,7 @@
             Margin="0,5,0,5"/>
                             <TextBlock Text="模板名称" Margin="0,0,0,5"/>
                             
-                        <TextBox Text="{Binding TemplateName}" Width="400" HorizontalAlignment="Left"/>
+                        <TextBox Text="{Binding TemplateName}"/>
                         
                         <!-- 允许项目创建选项 -->
                         <CheckBox IsChecked="{Binding IsProjectSelected}" Content="允许直接创建项目" Margin="0,10,0,0"/>
@@ -108,25 +108,25 @@
                                 <TextBlock Text="英文描述" Margin="0,0,0,5"/>
                                 <TextBlock Text="(必填)" FontSize="12" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" Margin="5,0,0,5"/>
                             </StackPanel>
-                            <TextBox Text="{Binding TemplateDescriptionEn}" Width="400" Height="60" TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Left"/>
+                            <TextBox Text="{Binding TemplateDescriptionEn}" Height="60" TextWrapping="Wrap" AcceptsReturn="True"/>
                         </StackPanel>
 
                         <!-- 中文描述 -->
                         <StackPanel Margin="0,0,0,15">
                             <TextBlock Text="中文描述" Margin="0,0,0,5"/>
-                            <TextBox Text="{Binding TemplateDescriptionZhHans}" Width="400" Height="60" TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Left"/>
+                            <TextBox Text="{Binding TemplateDescriptionZhHans}" Height="60" TextWrapping="Wrap" AcceptsReturn="True"/>
                         </StackPanel>
 
                         <!-- 日文描述 -->
                         <StackPanel Margin="0,0,0,15">
                             <TextBlock Text="日文描述" Margin="0,0,0,5"/>
-                            <TextBox Text="{Binding TemplateDescriptionJa}" Width="400" Height="60" TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Left"/>
+                            <TextBox Text="{Binding TemplateDescriptionJa}" Height="60" TextWrapping="Wrap" AcceptsReturn="True"/>
                         </StackPanel>
 
                         <!-- 韩文描述 -->
                         <StackPanel Margin="0,0,0,15">
                             <TextBlock Text="韩文描述" Margin="0,0,0,5"/>
-                            <TextBox Text="{Binding TemplateDescriptionKo}" Width="400" Height="60" TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Left"/>
+                            <TextBox Text="{Binding TemplateDescriptionKo}" Height="60" TextWrapping="Wrap" AcceptsReturn="True"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>

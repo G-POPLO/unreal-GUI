@@ -35,7 +35,7 @@
     <Setting Name="BrowerType" Type="System.Byte" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="ProMode" Type="System.Boolean" Scope="User">
+    <Setting Name="AdvancedMode" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
