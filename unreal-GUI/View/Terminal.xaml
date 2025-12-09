@@ -15,7 +15,7 @@
         </ui:InfoBar>
 
         <TextBlock Margin="0,50,0,0" Text="Command Line Terminal 功能正在开发中，敬请期待！ "/>
-
+        
 
     </Grid>
 </UserControl>

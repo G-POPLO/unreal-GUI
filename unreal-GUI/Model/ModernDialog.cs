@@ -325,28 +325,28 @@ namespace unreal_GUI.Model
             };
 
             // 订阅导航到图片编辑页面的事件
-            content.NavigateToImageEditRequested += (sender, imagePath) =>
-            {
-                // 设置图片编辑控件的图片源
-                imageEditContent.ImageSource = new System.Windows.Media.Imaging.BitmapImage(new System.Uri(imagePath));
+            //content.NavigateToImageEditRequested += (sender, imagePath) =>
+            //{
+            //    // 设置图片编辑控件的图片源
+            //    imageEditContent.ImageSource = new System.Windows.Media.Imaging.BitmapImage(new System.Uri(imagePath));
 
-                // 订阅图片编辑完成事件
-                imageEditContent.ImageEditCompleted += (s, e) =>
-                {
-                    // 将编辑后的图片传递回Add_Categories控件
-                    content.ViewModel.IconPath = e.CroppedImagePath; // 使用裁剪后的图片路径
+            //    // 订阅图片编辑完成事件
+            //    imageEditContent.ImageEditCompleted += (s, e) =>
+            //    {
+            //        // 将编辑后的图片传递回Add_Categories控件
+            //        content.ViewModel.IconPath = e.CroppedImagePath; // 使用裁剪后的图片路径
 
-                    // 切换回添加类别页面
-                    dialog.Content = content;
-                    dialog.Title = "添加模板类别";
-                    dialog.PrimaryButtonText = "保存";
-                };
+            //        // 切换回添加类别页面
+            //        dialog.Content = content;
+            //        dialog.Title = "添加模板类别";
+            //        dialog.PrimaryButtonText = "保存";
+            //    };
 
-                // 切换对话框内容到图片编辑控件
-                dialog.Content = imageEditContent;
-                dialog.Title = "图片剪裁工具";
-                dialog.PrimaryButtonText = "完成剪裁";
-            };
+            //    // 切换对话框内容到图片编辑控件
+            //    dialog.Content = imageEditContent;
+            //    dialog.Title = "图片剪裁工具";
+            //    dialog.PrimaryButtonText = "完成剪裁";
+            //};
 
             var result = await dialog.ShowAsync();
 

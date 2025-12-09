@@ -101,6 +101,7 @@
   </PropertyGroup>-->
   
   <ItemGroup>
+    <PackageReference Include="7-Zip.CommandLine" Version="25.1.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="iNKORE.UI.WPF.Modern" Version="0.10.2.1" />
     <PackageReference Include="Markdig" Version="0.44.0" />
