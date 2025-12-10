@@ -47,6 +47,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <DestinationFolder>$(OutputPath)Sound</DestinationFolder>
     </Content>
+  <None Include="$(NuGetPackageRoot)7-zip.commandline\25.1.0\tools\7za.exe">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <DestinationFolder>$(OutputPath)App</DestinationFolder>
+      <Visible>false</Visible>
+   </None>
   </ItemGroup>
     
   <!--Playwright驱动程序仅发布win版本-->

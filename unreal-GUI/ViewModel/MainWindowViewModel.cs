@@ -12,26 +12,21 @@ namespace unreal_GUI.ViewModel
 {
     public partial class MainWindowViewModel : ObservableObject
     {
-        // 定义页面跳转请求事件
+
         public event EventHandler<string> NavigationRequested;
 
-        // 当前选中的页面标签
         [ObservableProperty]
         private string currentPageTag = "Compile";
 
-        // 高级模式设置
         [ObservableProperty]
         private bool _advancedMode;
 
-        // 窗口背景类型设置
         [ObservableProperty]
         private byte _backdropType;
 
-        // 导航历史记录
         [ObservableProperty]
         private ObservableCollection<string> navigationHistory = [];
 
-        // 导航到指定页面的命令
         [RelayCommand]
         private void NavigateToPage(string pageTag)
         {
@@ -56,7 +51,6 @@ namespace unreal_GUI.ViewModel
             {
                 // 移除当前页面
                 NavigationHistory.RemoveAt(NavigationHistory.Count - 1);
-
                 // 获取上一个页面
                 string previousPage = NavigationHistory[^1];
                 NavigateToPage(previousPage);
@@ -67,7 +61,6 @@ namespace unreal_GUI.ViewModel
         {
             AdvancedMode = Properties.Settings.Default.AdvancedMode;
             BackdropType = Properties.Settings.Default.BackdropType;
-            
             // 订阅设置变化事件
             Properties.Settings.Default.PropertyChanged += OnSettingsPropertyChanged;
         }

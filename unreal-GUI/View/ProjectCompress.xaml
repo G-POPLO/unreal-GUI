@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="unreal_GUI.View.Compress"
+﻿<UserControl x:Class="unreal_GUI.View.ProjectCompress"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,9 +6,128 @@
              xmlns:local="clr-namespace:unreal_GUI.View"
              xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
              xmlns:ikw="http://schemas.inkore.net/lib/ui/wpf"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+             mc:Ignorable="d"
+             d:DesignHeight="800" d:DesignWidth="700">
+    <Grid Margin="20">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="10">
+                <!-- 页面标题 -->
+                <TextBlock Text="项目压缩" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+                
+                <!-- 项目信息卡片 -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                        CornerRadius="4" Margin="0,0,0,20">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="项目信息" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        
+                        <!-- 项目路径选择 -->
+                        <TextBlock Text="项目路径" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Text="{Binding ProjectPath}" Margin="0,0,10,0" Grid.Column="0"/>
+                            <Button Grid.Column="1" Command="{Binding SelectProjectCommand}"
+                                    Style="{DynamicResource AccentButtonStyle}">
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
+                                    <TextBlock Text="浏览"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                        
+                        <!-- 项目信息显示 -->
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <!-- 项目详情 -->
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="引擎项目信息" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                <TextBlock Text="{Binding EngineInfo}" Margin="0,0,0,10" TextWrapping="Wrap"/>
+                                
+                                <TextBlock Text="项目体积" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                <TextBlock Text="{Binding ProjectSize}" Margin="0,0,0,10"/>
+                            </StackPanel>
+                            
+                            <!-- 项目缩略图 -->
+                            <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                                <TextBlock Text="项目缩略图" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5" TextAlignment="Center"/>
+                                <Border BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}" BorderThickness="1" CornerRadius="4" Width="200" Height="150">
+                                    <Image Source="{Binding ProjectThumbnail}" Stretch="UniformToFill"/>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+                
+                <!-- 压缩选项卡片 -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                        CornerRadius="4" Margin="0,0,0,20">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xf259;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="压缩选项" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        
+                        <!-- 压缩效果 (-mx) -->
+                        <TextBlock Text="{Binding CompressLevel, StringFormat='压缩效果 (-mx): {0}'}" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                        <Slider Minimum="0" Maximum="9" Value="{Binding CompressLevel}" Margin="0,0,0,15"/>
+                        
+                        <!-- 压缩选项 -->
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <ui:AppBarToggleButton Label="固实压缩" IsChecked="{Binding SolidCompress}" Margin="0,0,20,0">
+                                <ui:AppBarToggleButton.Icon>
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8C9;"/>
+                                </ui:AppBarToggleButton.Icon>
+                            </ui:AppBarToggleButton>
+                            
+                            <ui:AppBarToggleButton Label="增量更新" IsChecked="{Binding IncrementalUpdate}" Margin="0,0,20,0" IsEnabled="{Binding IsIncrementalUpdateEnabled}">
+                                <ui:AppBarToggleButton.Icon>
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE774;"/>
+                                </ui:AppBarToggleButton.Icon>
+                            </ui:AppBarToggleButton>
+                            
+                            <ui:AppBarToggleButton Label="允许删除文件" IsChecked="{Binding AllowDeleteFiles}" Margin="0,0,0,0" IsEnabled="{Binding IsAllowDeleteEnabled}">
+                                <ui:AppBarToggleButton.Icon>
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74D;"/>
+                                </ui:AppBarToggleButton.Icon>
+                            </ui:AppBarToggleButton>
+                        </StackPanel>
+                        
+                        <!-- 输出路径选择 -->
+                        <TextBlock Text="输出路径" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Text="{Binding OutputPath}" Margin="0,0,10,0" Grid.Column="0"/>
+                            <Button Grid.Column="1" Command="{Binding SelectOutputCommand}"
+                                    Style="{DynamicResource AccentButtonStyle}">
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
+                                    <TextBlock Text="浏览"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                        
+                        <!-- 压缩按钮 -->
+                        <Button Command="{Binding CompressCommand}" Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xf012;" Margin="0,0,5,0"/>
+                                <TextBlock Text="开始压缩"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </UserControl>

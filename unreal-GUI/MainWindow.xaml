@@ -65,6 +65,14 @@
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
 
+
+                <ui:NavigationViewItem Content="项目压缩" Tag="ProjectCompress"
+                                       Visibility="{Binding AdvancedMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.ZipFolder}" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+
                 <ui:NavigationViewItem Content="设置" Tag="Settings">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Settings}"/>

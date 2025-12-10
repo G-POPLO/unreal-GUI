@@ -55,6 +55,7 @@
                         <TextBlock Text="默认设置" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,10"/>
 
                         <WrapPanel x:Name="Setting_Panel" Orientation="Horizontal">
+                            <ui:AppBarSeparator />
                             <ui:AppBarToggleButton x:Name="Button0" Label="任务完成后打开输出文件夹" 
                                                    IsChecked="{Binding AutoOpen}" HorizontalAlignment="Left">
                                 <ui:AppBarToggleButton.Icon>
@@ -139,7 +140,7 @@
 
                         </Grid>
                         <WrapPanel x:Name="beta_Panel"  Orientation="Horizontal">
-
+                            <ui:AppBarSeparator />
                             <ui:AppBarToggleButton x:Name="beta_Button0" Label="Fab免费资产领取通知" 
                                 IsChecked="{Binding FabNotification}" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <ui:AppBarToggleButton.Icon>
@@ -236,7 +237,7 @@
 
                 </Border>
 
-                <Button Command="{Binding SaveSettingsCommand}" Margin="0,10,0,0" HorizontalAlignment="Left" 
+                <Button Command="{Binding SaveSettingsCommand}" Margin="10,10,0,0" HorizontalAlignment="Left" 
                      Style="{DynamicResource AccentButtonStyle}">
                     <StackPanel Orientation="Horizontal">
                         <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74E;" Margin="0,0,5,0"/>

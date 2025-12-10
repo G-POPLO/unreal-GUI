@@ -30,9 +30,7 @@ namespace unreal_GUI
             if (DataContext is MainWindowViewModel viewModel)
             {
                 viewModel.NavigationRequested += OnNavigationRequested;
-                // 订阅BackdropType属性变化事件
                 viewModel.PropertyChanged += ViewModel_PropertyChanged;
-                // 初始化默认导航到编译页面
                 await viewModel.InitializeJson_Async();
             }
 
@@ -70,7 +68,7 @@ namespace unreal_GUI
         {
             if (args.SelectedItem is NavigationViewItem item)
             {
-                // 获取页面类型
+
                 string tag = item.Tag?.ToString();
 
                 Type pageType = tag switch
@@ -83,6 +81,7 @@ namespace unreal_GUI
                     "About" => typeof(About),
                     "Templates" => typeof(Templates),
                     "Terminal" => typeof(Terminal),
+                    "ProjectCompress" => typeof(ProjectCompress),
                     _ => typeof(Compile)
                 };
 
