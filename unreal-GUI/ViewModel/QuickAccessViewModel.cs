@@ -81,7 +81,7 @@ namespace unreal_GUI.ViewModel
         [RelayCommand]
         private static async Task AddCustom()
         {
-            await ModernDialog.ShowAddCustomDialogAsync();
+            await ModernDialog.ShowAddCustomDialogAsync(ModernDialog.GetOptions());
         }
 
         [RelayCommand]

@@ -1,8 +1,6 @@
 using Microsoft.Toolkit.Uwp.Notifications;
-using SevenZip;
 using System;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -60,8 +58,6 @@ namespace unreal_GUI.Model
                     {
                         return;
                     }
-
-
                 }
             }
             catch (Exception ex)
@@ -209,20 +205,18 @@ namespace unreal_GUI.Model
                     });
 
 
-                    // 设置7zxa.dll
-                    _7z.ConfigureSevenZip();
-
                     try
                     {
                         // 解压到download文件夹
                         string extractPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "download");
 
-                        // 在后台线程执行解压操作，避免阻塞UI线程
-                        await Task.Run(() =>
+                        // 使用CompressCore进行解压
+                        await Task.Run(async () =>
                         {
-                            using (var extractor = new SevenZipExtractor(downloadPath))
+                            bool success = await CompressCore.ExtractArchiveAsync(downloadPath, extractPath);
+                            if (!success)
                             {
-                                extractor.ExtractArchive(extractPath);
+                                throw new Exception("使用7za.exe解压失败");
                             }
 
                             // 解压完成后关闭通知

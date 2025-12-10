@@ -1,143 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <UseWindowsForms>True</UseWindowsForms>
-    <TargetFramework>net10.0-windows10.0.18362.0</TargetFramework>
-    <RollForward>LatestMajor</RollForward>
-    <RootNamespace>unreal_GUI</RootNamespace>
-    <Nullable>disable</Nullable>
-    <ImplicitUsings>disable</ImplicitUsings>
-    <UseWPF>true</UseWPF>
-    <Platforms>x64</Platforms>
-    <NuGetAuditLevel>moderate</NuGetAuditLevel>
-    <ApplicationIcon>Icon\icon.ico</ApplicationIcon>
-    <SignAssembly>False</SignAssembly>
-    <Authors>C-Poplo</Authors>
-    <Version>0.5.0.0</Version>
-    <Title>Unreal-GUI</Title>
-    <AssemblyName>Unreal-GUI</AssemblyName>
-    <DelaySign>True</DelaySign>
-    <PackageIcon>icon.png</PackageIcon>
-    <PackageProjectUrl>https://github.com/G-POPLO/unreal-GUI</PackageProjectUrl>
-    <Copyright>C-Poplo</Copyright>
-    <Description>一款简单的小工具，辅助用户将复杂的UE5命令转成简单的GUI操作。</Description>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <UseWindowsForms>True</UseWindowsForms>
+        <TargetFramework>net10.0-windows10.0.18362.0</TargetFramework>
+        <RollForward>LatestMajor</RollForward>
+        <RootNamespace>unreal_GUI</RootNamespace>
+        <Nullable>disable</Nullable>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <UseWPF>true</UseWPF>
+        <Platforms>x64</Platforms>
+        <NuGetAuditLevel>moderate</NuGetAuditLevel>
+        <ApplicationIcon>Icon\icon.ico</ApplicationIcon>
+        <SignAssembly>False</SignAssembly>
+        <Authors>C-Poplo</Authors>
+        <Version>0.5.0.0</Version>
+        <Title>Unreal-GUI</Title>
+        <AssemblyName>Unreal-GUI</AssemblyName>
+        <DelaySign>True</DelaySign>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageProjectUrl>https://github.com/G-POPLO/unreal-GUI</PackageProjectUrl>
+        <Copyright>C-Poplo</Copyright>
+        <Description>一款简单的小工具，辅助用户将复杂的UE5命令转成简单的GUI操作。</Description>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+        <GenerateDependencyFile>false</GenerateDependencyFile>
+        <RepositoryUrl>https://github.com/G-POPLO/unreal-GUI</RepositoryUrl>
+        <AnalysisLevel>latest</AnalysisLevel>
+    </PropertyGroup>
 
 
-  
- <!--编译时要求额外生成的文件-->
-  <ItemGroup>
-    <Content Include="$(ProjectDir)App\renom.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>App\renom.exe</Link>
-    </Content>
-    <Content Include="$(ProjectDir)App\7zxa.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Link>App\7zxa.dll</Link>
-    </Content>
-    <Content Include="Icon\icon.ico" />
-    <Content Include="Update.bat">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="$(ProjectDir)Sound\*">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <DestinationFolder>$(OutputPath)Sound</DestinationFolder>
-    </Content>
-  <None Include="$(NuGetPackageRoot)7-zip.commandline\25.1.0\tools\7za.exe">
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <DestinationFolder>$(OutputPath)App</DestinationFolder>
-      <Visible>false</Visible>
-   </None>
-  </ItemGroup>
-    
-  <!--Playwright驱动程序仅发布win版本-->
-  <PropertyGroup>
-    <PlaywrightPlatform>win</PlaywrightPlatform>
-  </PropertyGroup>
-  
-  <PropertyGroup> 
-    <IncludeSatelliteResource>false</IncludeSatelliteResource>
-  </PropertyGroup>
-    
-  <!--要求不生成.deps.json文件-->  
-  <PropertyGroup>
-    <GenerateDependencyFile>false</GenerateDependencyFile>
-    <RepositoryUrl>https://github.com/G-POPLO/unreal-GUI</RepositoryUrl>
-    <AnalysisLevel>latest</AnalysisLevel>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <DebugType>full</DebugType>
-    <WarningLevel>3</WarningLevel>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-    <!--<Optimize>True</Optimize>-->
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <DebugType>none</DebugType>
-    <WarningLevel>3</WarningLevel>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-    <Optimize>True</Optimize>
-    <!--启用发布就绪运行时编译以提升性能-->
-    <!--<PublishTrimmed>True</PublishTrimmed>
+
+    <!--编译时要求额外生成的文件-->
+    <ItemGroup>
+        <!-- App binaries -->
+        <None Include="$(ProjectDir)App\renom.exe" Link="App\renom.exe">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="$(NuGetPackageRoot)7-zip.commandline\25.1.0\tools\x64\7za.exe">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <Link>App\7za.exe</Link>
+        </None>
+
+        <!-- Icon -->
+        <!--<None Include="Icon\icon.ico">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>-->
+
+        <!-- Batch file -->
+        <None Include="Update.bat">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+
+        <!-- Sound files (with subfolder support) -->
+        <None Include="$(ProjectDir)Sound\**\*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <Link>Sound\%(RecursiveDir)%(Filename)%(Extension)</Link>
+        </None>
+    </ItemGroup>
+
+    <!--Playwright驱动程序仅发布win版本-->
+    <PropertyGroup>
+        <PlaywrightPlatform>win</PlaywrightPlatform>
+        <!--指定Playwright所使用的浏览器-->
+        <!--<Playwright>
+            <BrowserName>chromium</BrowserName>
+            <LaunchOptions>
+                <Channel>msedge</Channel>
+            </LaunchOptions>
+        </Playwright>-->
+    </PropertyGroup>
+
+
+
+    <!--要求不生成.deps.json文件-->
+    <PropertyGroup>
+        <IncludeSatelliteResource>false</IncludeSatelliteResource>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+        <DebugType>full</DebugType>
+        <WarningLevel>3</WarningLevel>
+        <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+        <!--<Optimize>True</Optimize>-->
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+        <DebugType>none</DebugType>
+        <WarningLevel>3</WarningLevel>
+        <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+        <Optimize>True</Optimize>
+        <!--启用发布就绪运行时编译以提升性能-->
+        <!--<PublishTrimmed>True</PublishTrimmed>
     <PublishReadyToRun>True</PublishReadyToRun>
     <PublishReadyToRunComposite>true</PublishReadyToRunComposite>-->
-    <!--<TieredPGO>true</TieredPGO>-->
-  </PropertyGroup>
-  
+        <!--<TieredPGO>true</TieredPGO>-->
+    </PropertyGroup>
+
+    <ItemGroup>
+      <None Remove="D:\PROGRAM\unreal-gui\unreal-GUI\App\7zxa.dll" />
+    </ItemGroup>
 
 
+    <ItemGroup>
+        <PackageReference Include="7-Zip.CommandLine" Version="25.1.0" />
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+        <PackageReference Include="iNKORE.UI.WPF.Modern" Version="0.10.2.1" />
+        <PackageReference Include="Markdig" Version="0.44.0" />
+        <PackageReference Include="Markdig.Wpf" Version="0.5.0.1" />
+        <PackageReference Include="Microsoft.Playwright" Version="1.56.0" />
+        <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
+        <PackageReference Include="ValueConverters" Version="3.1.22" />
+        <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
+    </ItemGroup>
 
-  <!--指定Playwright所使用的浏览器-->
-  <!--<PropertyGroup>
+    <ItemGroup>
+        <Compile Update="Properties\Settings.Designer.cs">
+            <DesignTimeSharedInput>True</DesignTimeSharedInput>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Settings.settings</DependentUpon>
+        </Compile>
+    </ItemGroup>
 
-    <Playwright>
-      <BrowserName>chromium</BrowserName>
-      <LaunchOptions>
-        <Channel>msedge</Channel>
-      </LaunchOptions>
-    </Playwright>
-    
-  </PropertyGroup>-->
-  
-  <ItemGroup>
-    <PackageReference Include="7-Zip.CommandLine" Version="25.1.0" />
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-    <PackageReference Include="iNKORE.UI.WPF.Modern" Version="0.10.2.1" />
-    <PackageReference Include="Markdig" Version="0.44.0" />
-    <PackageReference Include="Markdig.Wpf" Version="0.5.0.1" />
-    <PackageReference Include="Microsoft.Playwright" Version="1.56.0" />
-    <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
-    <PackageReference Include="Squid-Box.SevenZipSharp.Lite" Version="1.6.2.24" />
-    <PackageReference Include="ValueConverters" Version="3.1.22" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Compile Update="Properties\Settings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  
-  <ItemGroup>
-    <None Update="Icon\icon.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-    <None Update="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <None Update="README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
+    <ItemGroup>
+        <None Update="Icon\icon.png">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+        <None Update="Properties\Settings.settings">
+            <Generator>SettingsSingleFileGenerator</Generator>
+            <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+        </None>
+        <None Update="README.md">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+    </ItemGroup>
 
 </Project>

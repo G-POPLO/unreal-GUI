@@ -76,8 +76,9 @@
                             <TextBlock Text="压缩选项" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
                         
-                        <!-- 压缩效果 (-mx) -->
-                        <TextBlock Text="{Binding CompressLevel, StringFormat='压缩效果 (-mx): {0}'}" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                        <!-- 压缩效果(-mx) -->
+                        <TextBlock Text="{Binding CompressLevel, StringFormat='压缩效果(-mx): {0}'}" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                        <TextBlock Text="-mx值越高，压缩效果越好，但所需的压缩时间也会增长。增量更新要求-mx=&lt;5"  Margin="5"  Foreground="Gray"/>
                         <Slider Minimum="0" Maximum="9" Value="{Binding CompressLevel}" Margin="0,0,0,15"/>
                         
                         <!-- 压缩选项 -->

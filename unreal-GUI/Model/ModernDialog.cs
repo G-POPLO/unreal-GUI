@@ -179,10 +179,15 @@ namespace unreal_GUI.Model
             return await dialog.ShowAsync();
         }
 
+        public static JsonSerializerOptions GetOptions()
+        {
+            return new JsonSerializerOptions { WriteIndented = true };
+        }
+
         /// <summary>
         /// 显示"添加自定义按钮"的对话框
         /// </summary>
-        public static async Task<ContentDialogResult> ShowAddCustomDialogAsync()
+        public static async Task<ContentDialogResult> ShowAddCustomDialogAsync(JsonSerializerOptions options)
         {
             var content = new Add_DialogContent();
             var dialog = new ContentDialog
@@ -220,7 +225,7 @@ namespace unreal_GUI.Model
                     }
                     settings.CustomButtons.Add(new CustomButton { Name = buttonName, Path = folderPath });
                     // 保存更新后的设置
-                    var jsonSettings = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
+                    var jsonSettings = JsonSerializer.Serialize(settings, options);
                     File.WriteAllText("settings.json", jsonSettings);
                 }
             }
