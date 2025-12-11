@@ -49,11 +49,11 @@
                             
                             <!-- 项目详情 -->
                             <StackPanel Grid.Column="0">
-                                <TextBlock Text="引擎项目信息" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                <TextBlock Text="项目信息" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5"/>
                                 <TextBlock Text="{Binding EngineInfo}" Margin="0,0,0,10" TextWrapping="Wrap"/>
                                 
-                                <TextBlock Text="项目体积" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                                <TextBlock Text="{Binding ProjectSize}" Margin="0,0,0,10"/>
+                                <!--<TextBlock Text="项目体积" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                                <TextBlock Text="{Binding ProjectSize}" Margin="0,0,0,10"/>-->
                             </StackPanel>
                             
                             <!-- 项目缩略图 -->
@@ -119,8 +119,16 @@
                             </Button>
                         </Grid>
                         
+                        <!-- 压缩进度 -->
+                        <!--<StackPanel Margin="0,0,0,15" Visibility="{Binding IsCompressing, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <TextBlock Text="压缩进度" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <ProgressBar Value="{Binding CompressionProgress}" Maximum="100" Margin="0,0,0,5"/>
+                            <TextBlock Text="{Binding CompressionProgress, StringFormat="{0}"}" TextAlignment="Center"/>
+                        </StackPanel>-->
+                        
                         <!-- 压缩按钮 -->
-                        <Button Command="{Binding CompressCommand}" Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
+                        <Button Command="{Binding CompressCommand}" Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left"
+                              >
                             <StackPanel Orientation="Horizontal">
                                 <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xf012;" Margin="0,0,5,0"/>
                                 <TextBlock Text="开始压缩"/>

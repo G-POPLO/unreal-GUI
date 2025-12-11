@@ -1,9 +1,13 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Media;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
+using unreal_GUI.Model;
 
 namespace unreal_GUI.ViewModel
 {
@@ -35,6 +39,12 @@ namespace unreal_GUI.ViewModel
 
         [ObservableProperty]
         private string _outputPath = string.Empty;
+
+        //[ObservableProperty]
+        //private int _compressionProgress = 0;
+
+        //[ObservableProperty]
+        //private bool _isCompressing = false;
 
         // 增量更新是否可用（-mx <= 5时可用）
         public bool IsIncrementalUpdateEnabled => CompressLevel <= 5;
@@ -80,7 +90,7 @@ namespace unreal_GUI.ViewModel
             {
                 ProjectPath = dialog.FileName;
                 ParseProjectInfo();
-                CalculateProjectSize();
+                //CalculateProjectSize();
                 LoadProjectThumbnail();
             }
         }
@@ -108,52 +118,80 @@ namespace unreal_GUI.ViewModel
         }
 
         [RelayCommand]
-        private void Compress()
+        private async Task Compress()
         {
-            // 这里只是占位符，实际压缩逻辑将在后端实现
-            // 由于要求暂时不写后端代码，所以这里只做简单的验证
-            if (string.IsNullOrWhiteSpace(ProjectPath))
+            try
             {
-                MessageBox.Show("请选择项目文件", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
+                // 验证项目路径
+                if (!File.Exists(ProjectPath))
+                {
+                    await ModernDialog.ShowErrorAsync("项目文件不存在，请选择有效的项目文件", "错误");
+                    return;
+                }
 
-            if (string.IsNullOrWhiteSpace(OutputPath))
+                // 验证输出路径
+                if (string.IsNullOrEmpty(OutputPath))
+                {
+                    await ModernDialog.ShowErrorAsync("请设置输出路径", "错误");
+                    return;
+                }
+
+                // 获取项目目录
+                string projectDir = Path.GetDirectoryName(ProjectPath);
+
+                // 构建要压缩的路径列表
+                var inputPaths = new List<string>
+                {
+                    Path.Combine(projectDir, "Config"),
+                    Path.Combine(projectDir, "Content"),
+                    Path.Combine(projectDir, "Plugins"),
+                    Path.Combine(projectDir, "Source"),
+                    ProjectPath // .uproject文件
+                };
+
+                // 调用压缩对话框，传递所有必要的参数
+                bool success = await ModernDialog.ShowCompressInfoAsync(
+                    inputPaths,
+                    OutputPath,
+                    CompressLevel
+                );
+
+                if (success)
+                {
+                    var player = new SoundPlayer(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-on.wav"));
+                    player.Play();
+                }
+            }
+            catch (Exception ex)
             {
-                MessageBox.Show("请选择输出路径", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
+                await ModernDialog.ShowErrorAsync($"压缩过程中发生错误: {ex.Message}", "错误");
             }
-
-            // 显示压缩选项摘要
-            string summary = $"压缩项目: {Path.GetFileNameWithoutExtension(ProjectPath)}" +
-                           $"\n压缩级别: {CompressLevel}" +
-                           $"\n固实压缩: {SolidCompress}" +
-                           $"\n增量更新: {IncrementalUpdate}";
-
-            if (IncrementalUpdate)
-            {
-                summary += $"\n允许删除文件: {AllowDeleteFiles}";
-            }
-
-            summary += $"\n输出路径: {OutputPath}";
-
-            MessageBox.Show(summary, "压缩选项摘要", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void ParseProjectInfo()
         {
             try
             {
-                // 这里只是模拟解析.uproject文件
-                // 实际实现需要解析JSON格式的.uproject文件
                 string projectName = Path.GetFileNameWithoutExtension(ProjectPath);
                 string projectDir = Path.GetDirectoryName(ProjectPath);
-                
-                // 假设解析出的引擎信息
+
+                // 读取并解析.uproject文件
+                string jsonContent = File.ReadAllText(ProjectPath);
+                using var doc = System.Text.Json.JsonDocument.Parse(jsonContent);
+                var root = doc.RootElement;
+
+                // 获取引擎版本
+                string engineVersion = root.GetProperty("EngineAssociation").GetString() ?? "未知";
+
+                // 获取文件修改时间
+                DateTime lastWriteTime = File.GetLastWriteTime(ProjectPath);
+                string formattedTime = lastWriteTime.ToString("yyyy-MM-dd HH:mm:ss");
+
+                // 更新引擎信息
                 EngineInfo = $"项目名称: {projectName}\n" +
                             $"项目路径: {projectDir}\n" +
-                            $"引擎版本: 5.3.2\n" +
-                            $"创建日期: 2024-01-15";
+                            $"引擎版本: {engineVersion}\n" +
+                            $"修改时间: {formattedTime}";
             }
             catch (Exception ex)
             {
@@ -161,22 +199,54 @@ namespace unreal_GUI.ViewModel
             }
         }
 
-        private void CalculateProjectSize()
-        {
-            try
-            {
-                string projectDir = Path.GetDirectoryName(ProjectPath);
-                if (Directory.Exists(projectDir))
-                {
-                    long size = GetDirectorySize(projectDir);
-                    ProjectSize = FormatFileSize(size);
-                }
-            }
-            catch (Exception ex)
-            {
-                ProjectSize = "计算项目体积失败: " + ex.Message;
-            }
-        }
+        //private void CalculateProjectSize()
+        //{
+        //    try
+        //    {
+        //        string projectDir = Path.GetDirectoryName(ProjectPath);
+        //        if (Directory.Exists(projectDir))
+        //        {
+        //            long size = GetDirectorySize(projectDir);
+        //            ProjectSize = FormatFileSize(size);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ProjectSize = "计算项目体积失败: " + ex.Message;
+        //    }
+        //}
+
+        //private long GetDirectorySize(string path)
+        //{
+        //    DirectoryInfo dir = new(path);
+        //    long size = 0;
+
+        //    // 遍历所有文件
+        //    foreach (FileInfo file in dir.GetFiles("*.*", SearchOption.AllDirectories))
+        //    {
+        //        size += file.Length;
+        //    }
+
+        //    return size;
+        //}
+
+        //private string FormatFileSize(long bytes)
+        //{
+        //    string[] suffix = { "B", "KB", "MB", "GB", "TB" };
+        //    int i = 0;
+        //    double dblBytes = bytes;
+
+        //    if (bytes > 0)
+        //    {
+        //        while (dblBytes >= 1024 && i < suffix.Length - 1)
+        //        {
+        //            dblBytes /= 1024;
+        //            i++;
+        //        }
+        //    }
+
+        //    return $"{dblBytes:0.##} {suffix[i]}";
+        //}
 
         private void LoadProjectThumbnail()
         {
@@ -206,36 +276,6 @@ namespace unreal_GUI.ViewModel
             }
         }
 
-        private long GetDirectorySize(string path)
-        {
-            DirectoryInfo dir = new DirectoryInfo(path);
-            long size = 0;
 
-            // 遍历所有文件
-            foreach (FileInfo file in dir.GetFiles("*.*", SearchOption.AllDirectories))
-            {
-                size += file.Length;
-            }
-
-            return size;
-        }
-
-        private string FormatFileSize(long bytes)
-        {
-            string[] suffix = { "B", "KB", "MB", "GB", "TB" };
-            int i = 0;
-            double dblBytes = bytes;
-
-            if (bytes > 0)
-            {
-                while (dblBytes >= 1024 && i < suffix.Length - 1)
-                {
-                    dblBytes /= 1024;
-                    i++;
-                }
-            }
-
-            return $"{dblBytes:0.##} {suffix[i]}";
-        }
     }
 }

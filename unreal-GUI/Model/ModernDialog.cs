@@ -1,6 +1,8 @@
 using iNKORE.UI.WPF.Modern.Controls;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
@@ -411,6 +413,81 @@ namespace unreal_GUI.Model
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// 显示压缩信息对话框
+        /// </summary>
+        /// <param name="inputPaths">要压缩的文件或目录路径列表</param>
+        /// <param name="outputDirectory">输出目录路径</param>
+        /// <param name="compressionLevel">压缩级别（0-9，默认5）</param>
+        /// <returns>压缩是否成功</returns>
+        public static async Task<bool> ShowCompressInfoAsync(IEnumerable<string> inputPaths, string outputDirectory, int compressionLevel = 5)
+        {
+            // 构建完整的输出压缩文件路径
+            // 从输入路径中找到.uproject文件，获取项目名称
+            string projectFile = inputPaths.FirstOrDefault(p => Path.GetExtension(p) == ".uproject");
+            string projectName = "Project";
+            if (!string.IsNullOrEmpty(projectFile))
+            {
+                projectName = Path.GetFileNameWithoutExtension(projectFile);
+            }
+            string outputArchivePath = Path.Combine(outputDirectory, $"{projectName}.7z");
+
+            var dialog = new ContentDialog
+            {
+                Title = "压缩项目",
+                CloseButtonText = "关闭",
+                PrimaryButtonText = "取消",
+                DefaultButton = ContentDialogButton.Close,
+            };
+
+            // 创建压缩信息控件
+            var compressInfo = new CompressInfo();
+            dialog.Content = compressInfo;
+
+            // 设置Dialog属性
+            compressInfo.Dialog = dialog;
+
+            bool isCanceled = false;
+            bool success = false;
+
+            // 处理取消按钮
+            dialog.PrimaryButtonClick += (sender, args) =>
+            {
+                args.Cancel = true; // 取消关闭对话框
+                isCanceled = true;
+                compressInfo.UpdateCompressInfo("正在取消压缩...");
+            };
+
+            // 异步执行压缩任务
+            var compressTask = Task.Run(async () =>
+            {
+                try
+                {
+                    // 调用CompressCore.CompressFilesAsync进行压缩
+                    success = await CompressCore.CompressFilesAsync(
+                        inputPaths,
+                        outputArchivePath,
+                        onProgressChanged: progress => compressInfo.UpdateProgress(progress),
+                        onMessageReceived: message => compressInfo.UpdateCompressInfo(message),
+                        onOperationChanged: operation => compressInfo.UpdateCurrentOperation(operation),
+                        compressionLevel: compressionLevel
+                    );
+                } catch (Exception ex) {
+                    success = false;
+                    compressInfo.UpdateCompressInfo($"压缩失败: {ex.Message}");
+                    compressInfo.UpdateCurrentOperation($"错误: {ex.Message}");
+                }
+            });
+
+            // 显示对话框
+            await dialog.ShowAsync();
+
+            // 等待压缩任务完成
+            await compressTask;
+
+            return success && !isCanceled;
         }
     }
 }
