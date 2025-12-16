@@ -4,6 +4,7 @@ using iNKORE.UI.WPF.Modern.Helpers.Styles;
 using System;
 using System.Windows;
 using System.Windows.Navigation;
+using unreal_GUI.Model;
 using unreal_GUI.View;
 using unreal_GUI.ViewModel;
 
@@ -12,6 +13,7 @@ namespace unreal_GUI
 {
     public partial class MainWindow : Window
     {
+        [Obsolete]
         public MainWindow()
         {
             InitializeComponent();
@@ -21,10 +23,12 @@ namespace unreal_GUI
             Loaded += MainWindow_Loaded;
         }
 
+        [Obsolete]
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             // 在Loaded事件中动态设置窗口背景类型
             SetSystemBackdropType();
+            new SoundFX().PlaySound(0);
             //try
             //{
             //string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav");
