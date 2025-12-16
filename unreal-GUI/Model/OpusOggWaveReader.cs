@@ -22,11 +22,6 @@ namespace unreal_GUI.Model
         [Obsolete]
         private OpusOggWaveReader(string oggFile)
         {
-            // 验证文件是否存在
-
-            if (!File.Exists(oggFile))
-                throw new FileNotFoundException($"找不到指定的声音文件: {oggFile}", oggFile);
-
             try
             {
                 using (FileStream fileStream = new(oggFile, FileMode.Open, FileAccess.Read))
@@ -90,7 +85,9 @@ namespace unreal_GUI.Model
 
         public override long Position { get; set; }
 
+#pragma warning disable CA1041 // 提供 ObsoleteAttribute 消息
         [Obsolete]
+#pragma warning restore CA1041 // 提供 ObsoleteAttribute 消息
         public override int Read(byte[] buffer, int offset, int count)
         {
             try
@@ -132,7 +129,9 @@ namespace unreal_GUI.Model
         /// </summary>
         /// <param name="filePath">声音文件路径</param>
         /// <returns>文件是否有效</returns>
+#pragma warning disable CA1041 // 提供 ObsoleteAttribute 消息
         [Obsolete]
+#pragma warning restore CA1041 // 提供 ObsoleteAttribute 消息
         public static bool IsValidSoundFile(string filePath)
         {
             if (string.IsNullOrEmpty(filePath))
@@ -159,7 +158,9 @@ namespace unreal_GUI.Model
         /// 播放OPUS音频文件
         /// </summary>
         /// <param name="opusFilePath">OPUS文件路径</param>
+#pragma warning disable CA1041 // 提供 ObsoleteAttribute 消息
         [Obsolete]
+#pragma warning restore CA1041 // 提供 ObsoleteAttribute 消息
         public static void PlayOpusFile(string opusFilePath)
         {
             if (!File.Exists(opusFilePath))
@@ -188,12 +189,11 @@ namespace unreal_GUI.Model
         /// <param name="opusFilePath">OPUS文件路径</param>
 
         /// <returns>异步任务</returns>
+#pragma warning disable CA1041 // 提供 ObsoleteAttribute 消息
         [Obsolete]
+#pragma warning restore CA1041 // 提供 ObsoleteAttribute 消息
         public static async Task PlayOpusFileAsync(string opusFilePath)
         {
-            // 验证文件路径
-            if (string.IsNullOrEmpty(opusFilePath))
-                throw new ArgumentException("文件路径不能为空", nameof(opusFilePath));
 
             if (!File.Exists(opusFilePath))
                 throw new FileNotFoundException($"找不到指定的声音文件: {opusFilePath}", opusFilePath);

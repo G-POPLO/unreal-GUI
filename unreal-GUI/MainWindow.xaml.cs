@@ -13,7 +13,6 @@ namespace unreal_GUI
 {
     public partial class MainWindow : Window
     {
-        [Obsolete]
         public MainWindow()
         {
             InitializeComponent();
@@ -23,7 +22,6 @@ namespace unreal_GUI
             Loaded += MainWindow_Loaded;
         }
 
-        [Obsolete]
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             // 在Loaded事件中动态设置窗口背景类型
