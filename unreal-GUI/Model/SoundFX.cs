@@ -7,7 +7,7 @@ namespace unreal_GUI.Model
     class SoundFX
     {
 
-        [Obsolete]
+
         public void PlaySound(byte type)
         {
             string soundFile = type switch
@@ -28,7 +28,9 @@ namespace unreal_GUI.Model
             {
                 try
                 {
+#pragma warning disable CS0612 // 类型或成员已过时
                     OpusOggWaveReader.PlayOpusFile(soundPath);
+#pragma warning restore CS0612 // 类型或成员已过时
                 }
                 catch (Exception ex)
                 {

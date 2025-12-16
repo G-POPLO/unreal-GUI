@@ -90,7 +90,9 @@ namespace unreal_GUI.Model
 
         public override long Position { get; set; }
 
+#pragma warning disable CA1041 // 提供 ObsoleteAttribute 消息
         [Obsolete]
+#pragma warning restore CA1041 // 提供 ObsoleteAttribute 消息
         public override int Read(byte[] buffer, int offset, int count)
         {
             try
@@ -132,7 +134,9 @@ namespace unreal_GUI.Model
         /// </summary>
         /// <param name="filePath">声音文件路径</param>
         /// <returns>文件是否有效</returns>
+#pragma warning disable CA1041 // 提供 ObsoleteAttribute 消息
         [Obsolete]
+#pragma warning restore CA1041 // 提供 ObsoleteAttribute 消息
         public static bool IsValidSoundFile(string filePath)
         {
             if (string.IsNullOrEmpty(filePath))
@@ -159,7 +163,9 @@ namespace unreal_GUI.Model
         /// 播放OPUS音频文件
         /// </summary>
         /// <param name="opusFilePath">OPUS文件路径</param>
+#pragma warning disable CA1041 // 提供 ObsoleteAttribute 消息
         [Obsolete]
+#pragma warning restore CA1041 // 提供 ObsoleteAttribute 消息
         public static void PlayOpusFile(string opusFilePath)
         {
             if (!File.Exists(opusFilePath))
@@ -188,7 +194,9 @@ namespace unreal_GUI.Model
         /// <param name="opusFilePath">OPUS文件路径</param>
 
         /// <returns>异步任务</returns>
+#pragma warning disable CA1041 // 提供 ObsoleteAttribute 消息
         [Obsolete]
+#pragma warning restore CA1041 // 提供 ObsoleteAttribute 消息
         public static async Task PlayOpusFileAsync(string opusFilePath)
         {
             // 验证文件路径
