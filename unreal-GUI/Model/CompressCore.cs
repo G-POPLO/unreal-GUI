@@ -149,7 +149,7 @@ namespace unreal_GUI.Model
                 // -mx 表示压缩级别
                 // -y 表示所有确认都回答是
                 var argumentsBuilder = new StringBuilder();
-                argumentsBuilder.Append($"a -t{compressionFormat} -mx{compressionLevel} -y ");
+                argumentsBuilder.Append($"a -t{compressionFormat} -mx{compressionLevel} -y -bsp1 -bb0 -mmt=on ");
 
                 // 添加包含和排除参数
                 if (!string.IsNullOrEmpty(projectRoot))
@@ -196,7 +196,7 @@ namespace unreal_GUI.Model
                     {
                         // 将输出消息传递给回调
                         onMessageReceived?.Invoke(line);
-                        
+
                         // 尝试解析进度信息
                         // 7za.exe的输出格式可能类似："Compressing  filename" 或包含百分比
                         if (line.Contains('%') && int.TryParse(line.Split('%')[0].Trim(), out int progress))
@@ -213,7 +213,7 @@ namespace unreal_GUI.Model
                                 int fileNameIndex = operation.IndexOf("  ");
                                 if (fileNameIndex > 0)
                                 {
-                                    string fileName = operation.Substring(fileNameIndex + 2);
+                                    string fileName = operation[(fileNameIndex + 2)..];
                                     onOperationChanged?.Invoke($"正在处理: {fileName}");
                                 }
                             }
@@ -228,7 +228,7 @@ namespace unreal_GUI.Model
                             onProgressChanged?.Invoke(100);
                         }
                     }
-                    
+
                     // 读取错误输出
                     string errorLine;
                     while ((errorLine = process.StandardError.ReadLine()) != null)

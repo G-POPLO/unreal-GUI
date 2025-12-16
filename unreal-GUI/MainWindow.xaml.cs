@@ -25,6 +25,20 @@ namespace unreal_GUI
         {
             // 在Loaded事件中动态设置窗口背景类型
             SetSystemBackdropType();
+            //try
+            //{
+            //string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav");
+            //AudioPlayer.Source = new Uri(path);
+            //AudioPlayer.Play();
+            //AudioPlayer.MediaFailed += (s, e) =>
+            //{
+            //    iNKORE.UI.WPF.Modern.Controls.MessageBox.Show($"播放失败: {e.ErrorException?.Message}");
+            //};
+            //}
+            //catch (Exception ex)
+            //{
+            //    iNKORE.UI.WPF.Modern.Controls.MessageBox.Show("播放失败: " + ex.Message);
+            //}
 
             // 订阅 ViewModel 的导航请求事件
             if (DataContext is MainWindowViewModel viewModel)

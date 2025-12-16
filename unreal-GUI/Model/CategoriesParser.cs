@@ -137,7 +137,7 @@ namespace unreal_GUI.Model
         {
             var sb = new StringBuilder();
 
-            // 开始Categories条目
+            // 添加Categories条目
             sb.Append("Categories=(");
 
             // 添加Key

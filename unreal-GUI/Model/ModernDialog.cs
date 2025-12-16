@@ -474,7 +474,9 @@ namespace unreal_GUI.Model
                         onOperationChanged: operation => compressInfo.UpdateCurrentOperation(operation),
                         compressionLevel: compressionLevel
                     );
-                } catch (Exception ex) {
+                }
+                catch (Exception ex)
+                {
                     success = false;
                     compressInfo.UpdateCompressInfo($"压缩失败: {ex.Message}");
                     compressInfo.UpdateCurrentOperation($"错误: {ex.Message}");

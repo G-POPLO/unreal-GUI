@@ -15,15 +15,12 @@ namespace unreal_GUI.ViewModel
 {
     public partial class TemplatesViewModel : ObservableObject
     {
-        // 项目路径
         [ObservableProperty]
         private string projectPath;
 
-        // 模板名称
         [ObservableProperty]
         private string templateName;
 
-        // 模板描述（多语言）
         [ObservableProperty]
         private string templateDescriptionEn;
 
@@ -40,7 +37,6 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private ObservableCollection<CategoryViewModel> templateCategories = [];
 
-        // 选中的类别
         [ObservableProperty]
         private CategoryViewModel selectedCategory;
 
@@ -102,7 +98,6 @@ namespace unreal_GUI.ViewModel
 
         [ObservableProperty]
         private string pictureTipLText = string.Empty;
-
 
         // 可用引擎列表
         [ObservableProperty]
@@ -367,7 +362,6 @@ namespace unreal_GUI.ViewModel
         {
             try
             {
-                // 从settings.json文件读取引擎列表，使用与SettingsViewModel相同的结构
                 if (File.Exists("settings.json"))
                 {
                     string jsonContent = File.ReadAllText("settings.json");
@@ -399,10 +393,6 @@ namespace unreal_GUI.ViewModel
             using FolderBrowserDialog folderBrowser = new();
             folderBrowser.Description = "选择Unreal Engine项目文件夹";
             folderBrowser.ShowNewFolderButton = false;
-
-            // 设置初始目录为常见的项目位置
-            //folderBrowser.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
             DialogResult result = folderBrowser.ShowDialog();
 
             if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(folderBrowser.SelectedPath))
@@ -755,10 +745,5 @@ namespace unreal_GUI.ViewModel
                 CopyDirectory(dir, destDir);
             }
         }
-
-
-
     }
-
-
 }
