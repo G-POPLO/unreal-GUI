@@ -60,5 +60,6 @@ Unreal-GUI 是一款旨在简化虚幻引擎（Unreal Engine）相关操作流�
 - [MVVM Toolkit](https://github.com/CommunityToolkit/dotnet)
 - [Microsoft.Toolkit.Uwp.Notifications](https://learn.microsoft.com/zh-cn/windows/apps/develop/notifications/app-notifications/send-local-toast?tabs=desktop-msix)
 - [7-Zip.CommandLine](https://www.7-zip.org/)
+- [Concentus.Oggfile](https://github.com/lostromb/concentus.oggfile)&[NAudio.Wasapi](https://github.com/naudio/NAudio)
 ## 相关文档
 - [Unreal Engine 自定义模板创建](https://dev.epicgames.com/documentation/zh-cn/unreal-engine/converting-a-project-to-an-unreal-engine-template)

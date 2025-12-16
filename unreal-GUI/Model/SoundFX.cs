@@ -8,7 +8,7 @@ namespace unreal_GUI.Model
     {
 
 
-        public void PlaySound(byte type)
+        public static void PlaySound(byte type)
         {
             string soundFile = type switch
             {
@@ -33,7 +33,8 @@ namespace unreal_GUI.Model
                     // 记录异常但不抛出，避免影响主程序流程
                     System.Diagnostics.Debug.WriteLine($"播放声音时发生错误: {ex.Message}");
                 }
-            });
+            }
+            );
         }
     }
 }
