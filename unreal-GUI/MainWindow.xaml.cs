@@ -28,6 +28,7 @@ namespace unreal_GUI
             SetSystemBackdropType();
             SoundFX.PlaySound(0);
 
+
             // 订阅 ViewModel 的导航请求事件
             if (DataContext is MainWindowViewModel viewModel)
             {

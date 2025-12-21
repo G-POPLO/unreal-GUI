@@ -124,35 +124,6 @@ namespace unreal_GUI.Model
             base.Dispose(disposing);
         }
 
-        /// <summary>
-        /// 验证声音文件的有效性(Test Only)
-        /// </summary>
-        /// <param name="filePath">声音文件路径</param>
-        /// <returns>文件是否有效</returns>
-#pragma warning disable CA1041 // 提供 ObsoleteAttribute 消息
-        [Obsolete]
-#pragma warning restore CA1041 // 提供 ObsoleteAttribute 消息
-        public static bool IsValidSoundFile(string filePath)
-        {
-            if (string.IsNullOrEmpty(filePath))
-                return false;
-
-            if (!File.Exists(filePath))
-                return false;
-
-            try
-            {
-                // 尝试创建一个临时的阅读器来验证文件
-                using var tempReader = new OpusOggWaveReader(filePath);
-                // 如果能成功创建且没有抛出异常，则认为文件有效
-                return true;
-            }
-            catch
-            {
-                // 任何异常都表示文件无效
-                return false;
-            }
-        }
 
         /// <summary>
         /// 播放OPUS音频文件
@@ -187,7 +158,6 @@ namespace unreal_GUI.Model
         /// 异步播放OPUS音频文件
         /// </summary>
         /// <param name="opusFilePath">OPUS文件路径</param>
-
         /// <returns>异步任务</returns>
 #pragma warning disable CA1041 // 提供 ObsoleteAttribute 消息
         [Obsolete]
