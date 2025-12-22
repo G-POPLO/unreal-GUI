@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-using System.Media;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
@@ -157,8 +156,8 @@ namespace unreal_GUI.ViewModel
                 if (confirmResult != true)
                 {
                     TipsText = "编译操作已取消";
-                    var player = new SoundPlayer(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav"));
-                    player.Play();
+                    SoundFX.PlaySound(1);
+
                     return;
                 }
             }
@@ -191,14 +190,14 @@ namespace unreal_GUI.ViewModel
                     }
                 }
 
-                var player = new SoundPlayer(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-on.wav"));
-                player.Play();
+                SoundFX.PlaySound(0);
+
             }
             catch (Exception ex)
             {
                 TipsText = $"编译错误：{ex.Message}";
-                var player = new SoundPlayer(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav"));
-                player.Play();
+                SoundFX.PlaySound(1);
+
             }
         }
 

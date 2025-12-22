@@ -86,7 +86,7 @@ namespace unreal_GUI.ViewModel
                     InputPath = newPath;
                     Message = "重命名成功！";
                     System.Media.SoundPlayer player = new(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-on.wav"));
-                    player.Play();
+                    
                     MessageVisibility = Visibility.Visible;
                     Process.Start(new ProcessStartInfo
                     {
@@ -101,7 +101,7 @@ namespace unreal_GUI.ViewModel
                 Message = $"重命名失败：{ex.Message}";
                 MessageVisibility = Visibility.Visible;
                 var player = new System.Media.SoundPlayer(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav"));
-                player.Play();
+                
             }
         }
 

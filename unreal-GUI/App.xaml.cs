@@ -57,7 +57,6 @@ namespace unreal_GUI
         {
             // 处理异常
             MessageBox.Show("An unhandled exception just occurred: " + e.Exception.Message, "Exception Caught", MessageBoxButton.OK, MessageBoxImage.Error);
-
             // 设置为已处理以防止应用程序退出
             e.Handled = true;
         }

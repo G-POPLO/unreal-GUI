@@ -145,7 +145,7 @@ namespace unreal_GUI.Model
             player.Init(reader);
 
             // 播放音频
-            player.Play();
+            
 
             // 等待播放完成
             while (player.PlaybackState == PlaybackState.Playing)
@@ -180,7 +180,7 @@ namespace unreal_GUI.Model
                 player.Init(reader);
 
                 // 播放音频
-                player.Play();
+                
 
                 // 等待播放完成
                 while (player.PlaybackState == PlaybackState.Playing)

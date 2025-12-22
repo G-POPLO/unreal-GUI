@@ -26,8 +26,7 @@
                            Tag="{Binding CurrentPageTag, Mode=TwoWay}"
                            
                            SelectionChanged="NavigationView_SelectionChanged"
-                           BackRequested="NavigationView_BackRequested"
-                           
+                           BackRequested="NavigationView_BackRequested"                        
                            IsPaneOpen="False"
                            PaneDisplayMode="Top"
                            IsBackButtonVisible="Auto">

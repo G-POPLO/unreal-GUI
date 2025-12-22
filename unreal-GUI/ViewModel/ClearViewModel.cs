@@ -123,7 +123,7 @@ namespace unreal_GUI.ViewModel
 
                 TipClearCache = "清理完毕";
                 System.Media.SoundPlayer player = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-on.wav"));
-                player.Play();
+                
                 if (Properties.Settings.Default.AutoOpen)
                 {
                     Process.Start("explorer.exe", Path.Combine(InputPath));
@@ -134,7 +134,7 @@ namespace unreal_GUI.ViewModel
 
                 TipClearCache = "清理失败: " + ex.Message;
                 System.Media.SoundPlayer player = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav"));
-                player.Play();
+                
             }
         }
 
@@ -264,13 +264,13 @@ namespace unreal_GUI.ViewModel
 
                 TipClearLog = "Log清理完毕";
                 System.Media.SoundPlayer player = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-on.wav"));
-                player.Play();
+                
             }
             catch (Exception ex)
             {
                 TipClearLog = "Log清理失败: " + ex.Message;
                 System.Media.SoundPlayer player = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav"));
-                player.Play();
+                
             }
         }
 

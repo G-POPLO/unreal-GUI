@@ -24,11 +24,9 @@ namespace unreal_GUI
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            // 在Loaded事件中动态设置窗口背景类型
-            SetSystemBackdropType();
+
+            SetSystemBackdropType(); // 在Loaded事件中动态设置窗口背景类型
             SoundFX.PlaySound(0);
-
-
             // 订阅 ViewModel 的导航请求事件
             if (DataContext is MainWindowViewModel viewModel)
             {
@@ -39,6 +37,7 @@ namespace unreal_GUI
 
             await MainWindowViewModel.AutoUpdate();
             await MainWindowViewModel.CheckFabAsset();
+
         }
 
         private void SetSystemBackdropType()

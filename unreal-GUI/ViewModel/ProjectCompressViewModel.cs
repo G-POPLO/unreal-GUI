@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Media;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
@@ -158,8 +157,8 @@ namespace unreal_GUI.ViewModel
 
                 if (success)
                 {
-                    var player = new SoundPlayer(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-on.wav"));
-                    player.Play();
+                    SoundFX.PlaySound(0);
+
                 }
             }
             catch (Exception ex)

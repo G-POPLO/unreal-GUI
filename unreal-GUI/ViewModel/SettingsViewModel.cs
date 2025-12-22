@@ -64,12 +64,9 @@ namespace unreal_GUI.ViewModel
             // 初始化设置
             AutoOpen = Properties.Settings.Default.AutoOpen;
             Gitcode = Properties.Settings.Default.Gitcode;
-
             AutoUpdate = Properties.Settings.Default.AutoUpdate;
-
             FabNotification = Properties.Settings.Default.FabNotificationEnabled;
             LimitedTime = Properties.Settings.Default.LimitedTime;
-
             AutoStart = Properties.Settings.Default.AutoStart;
             OpenEpic = Properties.Settings.Default.OpenEpic;
             HeadlessEnabled = Properties.Settings.Default.HeadlessEnabled;
@@ -169,6 +166,8 @@ namespace unreal_GUI.ViewModel
                 Engines = EngineInfos,
                 CustomButtons = []
             };
+            // 保存ini文件
+            new IniConfig().WriteConfig();
 
             // 读取现有的自定义按钮数据
             if (File.Exists("settings.json"))
@@ -223,8 +222,5 @@ namespace unreal_GUI.ViewModel
             catch { }
             return "未知版本";
         }
-
-
-
     }
 }

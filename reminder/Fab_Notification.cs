@@ -59,8 +59,8 @@ namespace reminder
                         DateTime chinaTime = TimeZoneInfo.ConvertTime(easternTime, easternZone, chinaZone);
 
                         // 保存到配置文件
-                        var configWriter = new reminder.WriteConfig();
-                        configWriter.WriteDateTime("LimitedTime", chinaTime);
+                        // var configWriter = new reminder.WriteConfig();
+                        // configWriter.WriteDateTime("LimitedTime", chinaTime);
 
                         // 发送通知
                         SendFabNotification(chinaTime);

@@ -234,12 +234,12 @@
                             <TextBlock Text="重置"/>
                         </StackPanel>
                     </Button>
-                    <Button Command="{Binding OpenBackupCommand}">
+                    <!--<Button Command="{Binding OpenBackupCommand}">
                         <StackPanel Orientation="Horizontal">
                             <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xf000;" Margin="0,0,5,0"/>
                             <TextBlock Text="查看配置文件备份"/>
                         </StackPanel>
-                    </Button>
+                    </Button>-->
                 </StackPanel>
 
                 <!-- 状态信息 -->
