@@ -1,12 +1,9 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 namespace reminder
 {
     internal class Fab_Notification
     {
-        [RequiresUnreferencedCode("Calls reminder.Playwright.GetH2ElementTextAsync(String, params String[])")]
-        [RequiresDynamicCode("Calls reminder.Playwright.GetH2ElementTextAsync(String, params String[])")]
         public static async Task<DateTime?> GetLimitedTimeFreeEndDate()
         {
             try

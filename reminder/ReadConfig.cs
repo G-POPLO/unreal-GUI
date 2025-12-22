@@ -1,17 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using SoftCircuits.IniFileParser;
 
 namespace reminder
 {
-    internal class ReadConfig
+    public class ReadConfig
     {
         private readonly string _configPath;
+        private readonly IniFile _iniFile;
 
         public ReadConfig(string configPath = "ShareSettings.ini")
         {
             _configPath = configPath;
+            _iniFile = new IniFile();
+            
+            if (System.IO.File.Exists(_configPath))
+            {
+                _iniFile.Load(_configPath);
+            }
         }
 
         /// <summary>
@@ -22,29 +27,7 @@ namespace reminder
         /// <returns>配置值</returns>
         public bool ReadBool(string key, bool defaultValue = false)
         {
-            try
-            {
-                if (!File.Exists(_configPath))
-                    return defaultValue;
-
-                var lines = File.ReadAllLines(_configPath);
-                foreach (var line in lines)
-                {
-                    var trimmedLine = line.Trim();
-                    if (trimmedLine.StartsWith(key + "="))
-                    {
-                        var value = trimmedLine.Substring(key.Length + 1);
-                        return value.Equals("T", StringComparison.OrdinalIgnoreCase) || 
-                               value.Equals("true", StringComparison.OrdinalIgnoreCase) ||
-                               value.Equals("1", StringComparison.OrdinalIgnoreCase);
-                    }
-                }
-                return defaultValue;
-            }
-            catch
-            {
-                return defaultValue;
-            }
+            return _iniFile.GetSetting(IniFile.DefaultSectionName, key, defaultValue);
         }
 
         /// <summary>
@@ -55,29 +38,8 @@ namespace reminder
         /// <returns>配置值</returns>
         public DateTime ReadDateTime(string key, DateTime defaultValue)
         {
-            try
-            {
-                if (!File.Exists(_configPath))
-                    return defaultValue;
-
-                var lines = File.ReadAllLines(_configPath);
-                foreach (var line in lines)
-                {
-                    var trimmedLine = line.Trim();
-                    if (trimmedLine.StartsWith(key + "="))
-                    {
-                        var value = trimmedLine.Substring(key.Length + 1);
-                        if (DateTime.TryParse(value, out DateTime result))
-                            return result;
-                        return defaultValue;
-                    }
-                }
-                return defaultValue;
-            }
-            catch
-            {
-                return defaultValue;
-            }
+            string value = _iniFile.GetSetting(IniFile.DefaultSectionName, key, string.Empty);
+            return DateTime.TryParse(value, out DateTime result) ? result : defaultValue;
         }
 
         /// <summary>
@@ -88,29 +50,7 @@ namespace reminder
         /// <returns>配置值</returns>
         public int ReadInt(string key, int defaultValue = 0)
         {
-            try
-            {
-                if (!File.Exists(_configPath))
-                    return defaultValue;
-
-                var lines = File.ReadAllLines(_configPath);
-                foreach (var line in lines)
-                {
-                    var trimmedLine = line.Trim();
-                    if (trimmedLine.StartsWith(key + "="))
-                    {
-                        var value = trimmedLine.Substring(key.Length + 1);
-                        if (int.TryParse(value, out int result))
-                            return result;
-                        return defaultValue;
-                    }
-                }
-                return defaultValue;
-            }
-            catch
-            {
-                return defaultValue;
-            }
+            return _iniFile.GetSetting(IniFile.DefaultSectionName, key, defaultValue);
         }
     }
 }

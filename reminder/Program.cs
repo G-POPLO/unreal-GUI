@@ -1,12 +1,19 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.Toolkit.Uwp.Notifications;
+using System.Diagnostics;
 
 namespace reminder
 {
     internal class Program
     {
+
+
         static async Task Main(string[] args)
         {
+            // 注册通知激活事件处理程序
+            ToastNotificationManagerCompat.OnActivated += ToastNotificationManagerCompat_OnActivated;
+
             Console.WriteLine("Fab免费资产提醒程序启动...");
 
             // 检查Fab限时免费资产
@@ -49,6 +56,37 @@ namespace reminder
             catch (Exception ex)
             {
                 Console.WriteLine($"检查Fab免费资产时发生错误: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// 通知激活事件处理程序
+        /// </summary>
+        private static void ToastNotificationManagerCompat_OnActivated(ToastNotificationActivatedEventArgsCompat e)
+        {
+            // 获取通知参数
+            var args = ToastArguments.Parse(e.Argument);
+
+            // 根据参数执行相应操作
+            if (args.Contains("action"))
+            {
+                string action = args["action"];
+
+                switch (action)
+                {
+                    case "openUrl":
+                        // 从参数中获取URL，如果不存在则使用默认URL
+                        string url = args.Contains("url") ? args["url"] : "https://www.fab.com/limited-time-free";
+                        // 打开网站
+                        Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+                        break;
+                    case "dismiss":
+                        // 忽略通知，什么都不做
+                        break;
+                    default:
+                        // 未来可以添加更多操作类型
+                        break;
+                }
             }
         }
     }

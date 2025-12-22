@@ -15,7 +15,7 @@ Unreal-GUI 是一款旨在简化虚幻引擎（Unreal Engine）相关操作流�
 - [贡献指南](#贡献指南)
 - [许可证](#许可证)
 - [第三方库引用](#第三方库引用)
-- [#相关文档](#相关文档)
+- [相关文档](#相关文档)
 
 ## 功能特性
 
@@ -27,8 +27,9 @@ Unreal-GUI 是一款旨在简化虚幻引擎（Unreal Engine）相关操作流�
 6. **自定义模板创建**:  用户可以向引擎添加自定义的模板或内容包以供项目创建时使用。
 
 ## 安装说明
-应用程序需安装[.NET 9 Runtime](https://dotnet.microsoft.com/zh-cn/download/dotnet/9.0/runtime)，否则会提示缺少依赖项。
+应用程序需安装[.NET 10 Runtime](https://dotnet.microsoft.com/zh-cn/download/dotnet/10.0/runtime)，否则会提示缺少依赖项。
 由于应用程序使用了[Windows App SDK](https://learn.microsoft.com/windows/apps/windows-app-sdk/)，因此仅提供Windows 10(1903或内部版本10.0.18362.0)及以上的运行版本。应用程序使用了`Segoe Fluent Icons`且该字体默认不包括在Windows 10上，请安装[Segoe Fluent Icons](https://learn.microsoft.com/zh-cn/windows/apps/design/style/segoe-fluent-icons-font#how-do-i-get-this-font)以显示正确的图标。
+
 #### 注意：从版本[v0.3.1.0](https://github.com/G-POPLO/unreal-GUI/releases/tag/0.3.1.0)开始，应用体积极度膨胀，主要是因为集成了Playwright的浏览器引擎和微软的Windows.SDK，如果你对应用程序体积敏感且不需要新功能所需的特性，请选择[v0.3.0.0](https://github.com/G-POPLO/unreal-GUI/releases/tag/0.3.0.0)。
 
 1. 从 [Releases](https://github.com/G-POPLO/unreal-GUI/releases) 页面下载最新版本的 Unreal-GUI。
@@ -57,9 +58,7 @@ Unreal-GUI 是一款旨在简化虚幻引擎（Unreal Engine）相关操作流�
 - [Playwright](https://github.com/microsoft/playwright-dotnet)
 - [renom](https://github.com/UnrealisticDev/Renom)
 - [iNKORE.UI.WPF.Modern](https://github.com/iNKORE-NET/UI.WPF.Modern)
-- [SevenZipSharp](https://github.com/squid-box/SevenZipSharp)
 - [MVVM Toolkit](https://github.com/CommunityToolkit/dotnet)
-- [Newtonsoft.Json](https://www.newtonsoft.com/json)
 - [Microsoft.Toolkit.Uwp.Notifications](https://learn.microsoft.com/zh-cn/windows/apps/develop/notifications/app-notifications/send-local-toast?tabs=desktop-msix)
 
 ## 相关文档

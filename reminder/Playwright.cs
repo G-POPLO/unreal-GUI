@@ -14,7 +14,7 @@ namespace reminder
             using var playwright = await Microsoft.Playwright.Playwright.CreateAsync();
             await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
             {
-                Headless = false,
+                Headless = true,
                 Channel = "msedge",
                 Args =
                 [
@@ -70,7 +70,7 @@ namespace reminder
             using var playwright = await Microsoft.Playwright.Playwright.CreateAsync();
             await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
             {
-                Headless = true, // 默认使用无头模式
+                Headless = false, // 默认使用无头模式
                 Channel = "msedge",
                 Args =
                 [
@@ -133,22 +133,6 @@ namespace reminder
                 //testelement = element.ToString();
                 // 这里我们不显示错误对话框，而是简单地返回空字符串
                 return element != null ? await element.InnerTextAsync() : string.Empty;
-
-            }
-            finally
-            {
-                //// 截图保存到本地
-                //string screenshotPath = "screenshot.png";
-                //await page.ScreenshotAsync(new PageScreenshotOptions()
-                //{
-                //    Path = screenshotPath,
-                //    FullPage = true // 截取完整网页
-                //});
-
-                //// 复制到桌面
-                //string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-                //string destPath = Path.Combine(desktopPath, "screenshot.png");
-                //File.Copy(screenshotPath, destPath, true);
 
             }
         }
