@@ -38,8 +38,8 @@ namespace reminder
                 
                 if (!fabReminderEnabled)
                 {
-                    Console.WriteLine("Fab提醒功能已禁用");
-                    return;
+                    Console.WriteLine("Fab提醒功能已禁用，程序将退出");
+                    Environment.Exit(0);
                 }
                 
                 DateTime? endDate = await Fab_Notification.GetLimitedTimeFreeEndDate();

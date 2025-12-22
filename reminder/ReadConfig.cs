@@ -1,22 +1,27 @@
-﻿using System;
-using SoftCircuits.IniFileParser;
+﻿using SoftCircuits.IniFileParser;
 
 namespace reminder
 {
     public class ReadConfig
     {
-        private readonly string _configPath;
-        private readonly IniFile _iniFile;
+        private readonly string ConfigPath;
+        private readonly IniFile SharedConfig;
 
         public ReadConfig(string configPath = "ShareSettings.ini")
         {
-            _configPath = configPath;
-            _iniFile = new IniFile();
-            
-            if (System.IO.File.Exists(_configPath))
+            ConfigPath = configPath;
+            SharedConfig = new IniFile();
+
+            // 检查文件是否存在
+            if (!System.IO.File.Exists(ConfigPath))
             {
-                _iniFile.Load(_configPath);
+                // 配置文件不存在，直接退出程序
+                Console.WriteLine("配置文件不存在，程序将退出");
+                Environment.Exit(0);
             }
+
+            // 文件存在，加载配置
+            SharedConfig.Load(ConfigPath);
         }
 
         /// <summary>
@@ -27,7 +32,7 @@ namespace reminder
         /// <returns>配置值</returns>
         public bool ReadBool(string key, bool defaultValue = false)
         {
-            return _iniFile.GetSetting(IniFile.DefaultSectionName, key, defaultValue);
+            return SharedConfig.GetSetting(IniFile.DefaultSectionName, key, defaultValue);
         }
 
         /// <summary>
@@ -38,7 +43,7 @@ namespace reminder
         /// <returns>配置值</returns>
         public DateTime ReadDateTime(string key, DateTime defaultValue)
         {
-            string value = _iniFile.GetSetting(IniFile.DefaultSectionName, key, string.Empty);
+            string value = SharedConfig.GetSetting(IniFile.DefaultSectionName, key, string.Empty);
             return DateTime.TryParse(value, out DateTime result) ? result : defaultValue;
         }
 
@@ -50,7 +55,7 @@ namespace reminder
         /// <returns>配置值</returns>
         public int ReadInt(string key, int defaultValue = 0)
         {
-            return _iniFile.GetSetting(IniFile.DefaultSectionName, key, defaultValue);
+            return SharedConfig.GetSetting(IniFile.DefaultSectionName, key, defaultValue);
         }
     }
 }
