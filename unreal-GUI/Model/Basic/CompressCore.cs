@@ -17,7 +17,7 @@ namespace unreal_GUI.Model.Basic
         /// <param name="extractPath">解压目标路径</param>
         /// <param name="onProgressChanged">进度变化回调（可选）</param>
         /// <returns>解压是否成功</returns>
-        public static async Task<bool> ExtractArchiveAsync(string archivePath, string extractPath, Action<int> onProgressChanged = null)
+        public static async Task<bool> ExtractArchiveAsync(string archivePath, string extractPath)
         {
             try
             {
@@ -50,26 +50,39 @@ namespace unreal_GUI.Model.Basic
                 using var process = new Process { StartInfo = processStartInfo };
                 process.Start();
 
-                // 异步读取输出，以便跟踪进度
-                await Task.Run(() =>
-                {
-                    string line;
-                    while ((line = process.StandardOutput.ReadLine()) != null)
-                    {
-                        // 尝试解析进度信息
-                        // 7za.exe的输出格式可能类似："Extracting  filename" 或包含百分比
-                        // 这里简化处理，实际应用中可能需要更复杂的解析
-                        if (line.Contains('%') && int.TryParse(line.Split('%')[0].Trim(), out int progress))
-                        {
-                            onProgressChanged?.Invoke(progress);
-                        }
-                    }
-                });
+
 
                 // 等待进程完成
                 await process.WaitForExitAsync();
 
-                // 检查进程退出代码
+                // 检查进程退出代码并处理错误
+                if (process.ExitCode != 0)
+                {
+                    // 读取可能的错误信息
+                    await Task.Run(async () =>
+                    {
+                        string errorLine;
+                        while ((errorLine = process.StandardError.ReadLine()) != null)
+                        {
+                            Console.Error.WriteLine($"错误: {errorLine}");
+                        }
+                    });
+                    
+                    // 根据退出代码返回相应的错误信息
+                    string errorMessage = process.ExitCode switch
+                    {
+                        1 => "警告：一些文件可能没有被压缩或损坏",
+                        2 => "严重错误",
+                        7 => "命令行语法错误",
+                        8 => "内存不足",
+                        255 => "用户停止操作",
+                        _ => $"未知错误，退出代码: {process.ExitCode}"
+                    };
+                    
+                    await ModernDialog.ShowErrorAsync($"压缩失败：{errorMessage}", "错误");
+                    return false;
+                }
+
                 return process.ExitCode == 0;
             }
             catch (Exception ex)
@@ -85,13 +98,9 @@ namespace unreal_GUI.Model.Basic
         /// </summary>
         /// <param name="inputPaths">要压缩的文件或目录路径列表</param>
         /// <param name="outputArchivePath">输出压缩文件路径</param>
-        /// <param name="onProgressChanged">进度变化回调（可选）</param>
-        /// <param name="onMessageReceived">消息接收回调（可选）</param>
-        /// <param name="onOperationChanged">操作变化回调（可选）</param>
         /// <param name="compressionLevel">压缩级别（0-9，默认5）</param>
-        /// <param name="compressionFormat">压缩格式（默认7z）</param>
         /// <returns>压缩是否成功</returns>
-        public static async Task<bool> CompressFilesAsync(IEnumerable<string> inputPaths, string outputArchivePath, Action<int> onProgressChanged = null, Action<string> onMessageReceived = null, Action<string> onOperationChanged = null, int compressionLevel = 5, string compressionFormat = "7z")
+        public static async Task<bool> CompressFilesAsync(IEnumerable<string> inputPaths, string outputArchivePath, int compressionLevel = 5, bool soildcompress = true)
         {
             try
             {
@@ -149,7 +158,8 @@ namespace unreal_GUI.Model.Basic
                 // -mx 表示压缩级别
                 // -y 表示所有确认都回答是
                 var argumentsBuilder = new StringBuilder();
-                argumentsBuilder.Append($"a -t{compressionFormat} -mx{compressionLevel} -y -bsp1 -bb0 -mmt=on ");
+                string compressionFormat = "7z";
+                argumentsBuilder.Append($"a -t{compressionFormat} -mx{compressionLevel} -y -bsp1 -bb0 -ms={(soildcompress ? "on" : "off")} ");
 
                 // 添加包含和排除参数
                 if (!string.IsNullOrEmpty(projectRoot))
@@ -163,7 +173,6 @@ namespace unreal_GUI.Model.Basic
                     argumentsBuilder.Append(@"-ir!Plugins\* ");
                     argumentsBuilder.Append(@"-ir!Source\* ");
                     argumentsBuilder.Append(@"-ir!*.uproject ");
-
                     // 排除的目录
                     argumentsBuilder.Append(@"-xr!Plugins\*\Intermediate\* ");
                     argumentsBuilder.Append(@"-xr!Plugins\*\Binaries\* ");
@@ -179,8 +188,8 @@ namespace unreal_GUI.Model.Basic
                     Arguments = argumentsBuilder.ToString(),
                     WorkingDirectory = projectRoot ?? appFolderPath,
                     UseShellExecute = false,
-                    CreateNoWindow = true,
-                    RedirectStandardOutput = true,
+                    CreateNoWindow = false,
+                    RedirectStandardOutput = false, // 直接显示原始输出，不重定向
                     RedirectStandardError = true
                 };
 
@@ -188,53 +197,14 @@ namespace unreal_GUI.Model.Basic
                 using var process = new Process { StartInfo = processStartInfo };
                 process.Start();
 
-                // 异步读取输出，以便跟踪进度和显示信息
-                await Task.Run(() =>
+                // 不需要异步读取输出，因为输出会直接显示在终端窗口中
+                // 只读取错误输出，以便在出错时能够捕获并处理它们
+                Task.Run(() =>
                 {
-                    string line;
-                    while ((line = process.StandardOutput.ReadLine()) != null)
-                    {
-                        // 将输出消息传递给回调
-                        onMessageReceived?.Invoke(line);
-
-                        // 尝试解析进度信息
-                        // 7za.exe的输出格式可能类似："Compressing  filename" 或包含百分比
-                        if (line.Contains('%') && int.TryParse(line.Split('%')[0].Trim(), out int progress))
-                        {
-                            onProgressChanged?.Invoke(progress);
-                        }
-                        // 尝试解析当前操作
-                        else if (line.StartsWith("Creating archive") || line.StartsWith("Compressing") || line.StartsWith("Updating archive") || line.StartsWith("Adding"))
-                        {
-                            // 提取文件名
-                            string operation = line;
-                            if (operation.StartsWith("Compressing") || operation.StartsWith("Adding"))
-                            {
-                                int fileNameIndex = operation.IndexOf("  ");
-                                if (fileNameIndex > 0)
-                                {
-                                    string fileName = operation[(fileNameIndex + 2)..];
-                                    onOperationChanged?.Invoke($"正在处理: {fileName}");
-                                }
-                            }
-                            else
-                            {
-                                onOperationChanged?.Invoke(operation);
-                            }
-                        }
-                        else if (line == "Everything is Ok")
-                        {
-                            onOperationChanged?.Invoke("压缩完成");
-                            onProgressChanged?.Invoke(100);
-                        }
-                    }
-
-                    // 读取错误输出
                     string errorLine;
                     while ((errorLine = process.StandardError.ReadLine()) != null)
                     {
-                        onMessageReceived?.Invoke($"错误: {errorLine}");
-                        onOperationChanged?.Invoke($"错误: {errorLine}");
+                        Console.Error.WriteLine($"错误: {errorLine}");
                     }
                 });
 
@@ -246,9 +216,6 @@ namespace unreal_GUI.Model.Basic
             }
             catch (Exception ex)
             {
-                // 记录错误
-                onMessageReceived?.Invoke($"压缩失败：{ex.Message}");
-                onOperationChanged?.Invoke($"压缩失败：{ex.Message}");
                 await ModernDialog.ShowErrorAsync($"压缩失败：{ex.Message}", "错误");
                 return false;
             }
@@ -259,15 +226,11 @@ namespace unreal_GUI.Model.Basic
         /// </summary>
         /// <param name="inputPath">要压缩的文件或目录路径</param>
         /// <param name="outputArchivePath">输出压缩文件路径</param>
-        /// <param name="onProgressChanged">进度变化回调（可选）</param>
-        /// <param name="onMessageReceived">消息接收回调（可选）</param>
-        /// <param name="onOperationChanged">操作变化回调（可选）</param>
         /// <param name="compressionLevel">压缩级别（0-9，默认5）</param>
-        /// <param name="compressionFormat">压缩格式（默认7z）</param>
         /// <returns>压缩是否成功</returns>
-        public static async Task<bool> CompressFileAsync(string inputPath, string outputArchivePath, Action<int> onProgressChanged = null, Action<string> onMessageReceived = null, Action<string> onOperationChanged = null, int compressionLevel = 5, string compressionFormat = "7z")
+        public static async Task<bool> CompressFileAsync(string inputPath, string outputArchivePath, int compressionLevel = 5, bool SoildCompress = true)
         {
-            return await CompressFilesAsync([inputPath], outputArchivePath, onProgressChanged, onMessageReceived, onOperationChanged, compressionLevel, compressionFormat);
+            return await CompressFilesAsync([inputPath], outputArchivePath, compressionLevel, SoildCompress);
         }
     }
 }

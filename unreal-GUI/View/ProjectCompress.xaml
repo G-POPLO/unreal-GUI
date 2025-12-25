@@ -76,16 +76,21 @@
                         <!-- 压缩效果(-mx) -->
 
                         <TextBlock Text="-mx值越高，压缩效果越好，但所需的压缩时间也会增长。增量更新要求-mx=&lt;5"  Margin="5"  Foreground="Gray"/>
-                        <Grid Height="32" Width="610">
+                        <Grid Height="32" >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <Slider Minimum="0" Maximum="9" Value="{Binding CompressLevel}" Grid.Column="0" />
-                            <TextBlock Text="{Binding CompressLevel, StringFormat=压缩效果(-mx): \{0\}}" Grid.Column="1" FontWeight="SemiBold"   />
+                            <Slider Minimum="0" Maximum="9" Value="{Binding CompressLevel}" Grid.Column="0"/>
+                            <TextBlock Text="{Binding CompressLevel, StringFormat=压缩效果(-mx): \{0\}}" Grid.Column="1" FontWeight="SemiBold" Margin="20,0,0,0"  VerticalAlignment="Center"  />
                         </Grid>
                         <!-- 压缩选项 -->
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <ui:AppBarToggleButton Label="启用过滤器" IsChecked="{Binding Filter}" Margin="0,0,20,0">
+                                <ui:AppBarToggleButton.Icon>
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xe71c;"/>
+                                </ui:AppBarToggleButton.Icon>
+                            </ui:AppBarToggleButton>
                             <ui:AppBarToggleButton Label="固实压缩" IsChecked="{Binding SolidCompress}" Margin="0,0,20,0">
                                 <ui:AppBarToggleButton.Icon>
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8C9;"/>

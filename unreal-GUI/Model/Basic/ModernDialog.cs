@@ -422,7 +422,7 @@ namespace unreal_GUI.Model.Basic
         /// <param name="outputDirectory">输出目录路径</param>
         /// <param name="compressionLevel">压缩级别（0-9，默认5）</param>
         /// <returns>压缩是否成功</returns>
-        public static async Task<bool> ShowCompressInfoAsync(IEnumerable<string> inputPaths, string outputDirectory, int compressionLevel = 5)
+        public static async Task<bool> ShowCompressInfoAsync(IEnumerable<string> inputPaths, string outputDirectory, int compressionLevel = 5, bool solidCompress = true)
         {
             // 构建完整的输出压缩文件路径
             // 从输入路径中找到.uproject文件，获取项目名称
@@ -469,10 +469,8 @@ namespace unreal_GUI.Model.Basic
                     success = await CompressCore.CompressFilesAsync(
                         inputPaths,
                         outputArchivePath,
-                        onProgressChanged: progress => compressInfo.UpdateProgress(progress),
-                        onMessageReceived: message => compressInfo.UpdateCompressInfo(message),
-                        onOperationChanged: operation => compressInfo.UpdateCurrentOperation(operation),
-                        compressionLevel: compressionLevel
+                        compressionLevel: compressionLevel,
+                        soildcompress: solidCompress
                     );
                 }
                 catch (Exception ex)

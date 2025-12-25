@@ -13,16 +13,13 @@ namespace unreal_GUI.ViewModel
     public partial class ProjectCompressViewModel : ObservableObject
     {
         [ObservableProperty]
-        private string _projectPath = string.Empty;
+        private string _projectPath;
 
         [ObservableProperty]
-        private string _engineInfo = "未选择项目";
+        private string _engineInfo;
 
         [ObservableProperty]
-        private string _projectSize = "0 B";
-
-        [ObservableProperty]
-        private BitmapImage _projectThumbnail = null;
+        private BitmapImage _projectThumbnail;
 
         [ObservableProperty]
         private int _compressLevel = 5;
@@ -37,13 +34,8 @@ namespace unreal_GUI.ViewModel
         private bool _allowDeleteFiles = false;
 
         [ObservableProperty]
-        private string _outputPath = string.Empty;
+        private string _outputPath;
 
-        //[ObservableProperty]
-        //private int _compressionProgress = 0;
-
-        //[ObservableProperty]
-        //private bool _isCompressing = false;
 
         // 增量更新是否可用（-mx <= 5时可用）
         public bool IsIncrementalUpdateEnabled => CompressLevel <= 5;
@@ -148,18 +140,24 @@ namespace unreal_GUI.ViewModel
                     ProjectPath // .uproject文件
                 };
 
-                // 调用压缩对话框，传递所有必要的参数
-                bool success = await ModernDialog.ShowCompressInfoAsync(
-                    inputPaths,
-                    OutputPath,
-                    CompressLevel
-                );
+                // 构建完整的输出压缩文件路径
+                string projectName = Path.GetFileNameWithoutExtension(ProjectPath);
+                string outputArchivePath = Path.Combine(OutputPath, $"{projectName}.7z");
+
+                // 直接调用压缩核心方法
+                bool success = await CompressCore.CompressFilesAsync(
+                     inputPaths,
+                     outputArchivePath,
+                     compressionLevel: CompressLevel,
+                     soildcompress: SolidCompress
+                 );
 
                 if (success)
                 {
                     SoundFX.PlaySound(0);
-
+                    await ModernDialog.ShowInfoAsync("压缩完成", "成功");
                 }
+
             }
             catch (Exception ex)
             {
@@ -198,54 +196,6 @@ namespace unreal_GUI.ViewModel
             }
         }
 
-        //private void CalculateProjectSize()
-        //{
-        //    try
-        //    {
-        //        string projectDir = Path.GetDirectoryName(ProjectPath);
-        //        if (Directory.Exists(projectDir))
-        //        {
-        //            long size = GetDirectorySize(projectDir);
-        //            ProjectSize = FormatFileSize(size);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ProjectSize = "计算项目体积失败: " + ex.Message;
-        //    }
-        //}
-
-        //private long GetDirectorySize(string path)
-        //{
-        //    DirectoryInfo dir = new(path);
-        //    long size = 0;
-
-        //    // 遍历所有文件
-        //    foreach (FileInfo file in dir.GetFiles("*.*", SearchOption.AllDirectories))
-        //    {
-        //        size += file.Length;
-        //    }
-
-        //    return size;
-        //}
-
-        //private string FormatFileSize(long bytes)
-        //{
-        //    string[] suffix = { "B", "KB", "MB", "GB", "TB" };
-        //    int i = 0;
-        //    double dblBytes = bytes;
-
-        //    if (bytes > 0)
-        //    {
-        //        while (dblBytes >= 1024 && i < suffix.Length - 1)
-        //        {
-        //            dblBytes /= 1024;
-        //            i++;
-        //        }
-        //    }
-
-        //    return $"{dblBytes:0.##} {suffix[i]}";
-        //}
 
         private void LoadProjectThumbnail()
         {
