@@ -139,10 +139,6 @@ namespace unreal_GUI.ViewModel
             }
         }
 
-        //private Task SaveSettings()
-        //{
-        //    return SaveSettings(new JsonSerializerOptions { WriteIndented = true });
-        //}
 
         [RelayCommand]
         private Task SaveSettings(JsonSerializerOptions options)
@@ -159,7 +155,14 @@ namespace unreal_GUI.ViewModel
             Properties.Settings.Default.AdvancedMode = AdvancedMode;
             Properties.Settings.Default.BackdropType = BackdropType;
             Properties.Settings.Default.AminateType = AminateType;
+            Properties.Settings.Default.AutoStart = AutoStart;
             Properties.Settings.Default.Save();
+
+            if (Properties.Settings.Default.AutoStart)
+            {
+                // 设置开机自启
+                unreal_GUI.Model.Features.AutoStart.SetAutoStart(AutoStart);
+            }
 
             // 保存JSON文件
             SettingsData settings = new()

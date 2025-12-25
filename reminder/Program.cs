@@ -40,15 +40,28 @@ namespace reminder
                     Environment.Exit(0);
                 }
 
-                DateTime? endDate = await Fab_Notification.GetLimitedTimeFreeEndDate();
+                // 读取LimitedTime配置
+                DateTime limitedTime = configReader.ReadDateTime("LimitedTime", new DateTime(1990, 1, 1));
+                DateTime system_time = DateTime.Now;
 
-                if (endDate.HasValue)
+                // 只有当本机时间大于LimitedTime时才运行检查
+                if (system_time <= limitedTime)
                 {
-                    Console.WriteLine($"发现新的Fab免费资产，截止时间: {endDate.Value}");
+                    Console.WriteLine($"本机时间 {system_time} 未大于截至时间 {limitedTime}，程序将退出");
+                    Environment.Exit(0);
                 }
                 else
                 {
-                    Console.WriteLine("未找到Fab免费资产信息或获取失败");
+                    DateTime? endDate = await Fab_Notification.GetLimitedTimeFreeEndDate();
+
+                    if (endDate.HasValue)
+                    {
+                        Console.WriteLine($"发现新的Fab免费资产，截止时间: {endDate.Value}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("未找到Fab免费资产信息或获取失败");
+                    }
                 }
             }
             catch (Exception ex)

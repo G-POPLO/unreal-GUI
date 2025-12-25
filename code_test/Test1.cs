@@ -92,7 +92,7 @@ namespace code_test
             Console.WriteLine($"正在处理文件: {iniFilePath}");
 
             // 创建CategoriesParser实例
-            var parser = new unreal_GUI.Model.CategoriesParser();
+            var parser = new unreal_GUI.Model.Basic.CategoriesParser();
 
             // 解析Categories
             var categories = CategoriesParser.ParseCategories(iniFilePath);

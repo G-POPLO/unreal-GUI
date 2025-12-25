@@ -57,18 +57,16 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <Link>Sound\%(RecursiveDir)%(Filename)%(Extension)</Link>
         </None>
+
+        <None Include="$(ProjectDir)Image\**\*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <Link>Image\%(RecursiveDir)%(Filename)%(Extension)</Link>
+        </None>
     </ItemGroup>
 
     <!--Playwright驱动程序仅发布win版本-->
     <PropertyGroup>
         <PlaywrightPlatform>win</PlaywrightPlatform>
-        <!--指定Playwright所使用的浏览器-->
-        <!--<Playwright>
-            <BrowserName>chromium</BrowserName>
-            <LaunchOptions>
-                <Channel>msedge</Channel>
-            </LaunchOptions>
-        </Playwright>-->
     </PropertyGroup>
 
 
@@ -90,7 +88,7 @@
         <WarningLevel>3</WarningLevel>
         <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
         <Optimize>True</Optimize>
-        <!--启用发布就绪运行时编译以提升性能-->
+        <!--WPF无法启用AOT,故禁用-->
         <!--<PublishTrimmed>True</PublishTrimmed>
     <PublishReadyToRun>True</PublishReadyToRun>
     <PublishReadyToRunComposite>true</PublishReadyToRunComposite>-->
@@ -144,9 +142,4 @@
             <PackagePath>\</PackagePath>
         </None>
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Image\" />
-    </ItemGroup>
-
 </Project>

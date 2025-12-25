@@ -96,53 +96,10 @@
 
                         <TextBlock Text="开启实验性选项后会启用一些尚未完成开发的实验性功能，这些功能可能会不适应未来版本" 
                                    TextWrapping="Wrap" Margin="0,0,0,15"/>
-
-                        <TextBlock x:Name="LimitedTime" Text="{Binding LimitedTime, StringFormat=Fab免费资产获取截至时间：\{0:yyyy-MM-dd HH:mm:ss\}}" 
-                                   TextWrapping="Wrap" Margin="0,0,0,15" FontWeight="SemiBold"/>
-
-                        <Grid Margin="0,0,0,15">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="开机启动Fab资产检查" 
-                                       VerticalAlignment="Center"/>
-                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding AutoStart}"/>
-                        </Grid>
-
-                        <Grid Margin="0,0,0,15">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="使用EpicGames Launcher来打开Fab网站" 
-                                       VerticalAlignment="Center"/>
-                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding OpenEpic}"/>
-                        </Grid>
-
-                        <Grid Margin="0,0,0,15">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="使用Headless方式获取Fab信息（建议关闭，开启后可能会无法爬取）" 
-                                       VerticalAlignment="Center"/>
-                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding HeadlessEnabled}"/>
-                        </Grid>
-
-                        <Grid Margin="0,0,0,15">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="Auto" MinWidth="120"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="指定Playwright使用的浏览器" Margin="0,8,0,8"/>
-                            <ComboBox x:Name="BrowerOption" Grid.Column="1" d:LayoutOverrides="Height" Margin="-32,0,0,0" VerticalAlignment="Stretch" Width="120"/>
-
-                        </Grid>
                         <WrapPanel x:Name="beta_Panel"  Orientation="Horizontal">
                             <ui:AppBarSeparator />
                             <ui:AppBarToggleButton x:Name="beta_Button0" Label="Fab免费资产领取通知" 
-                                IsChecked="{Binding FabNotification}" HorizontalAlignment="Center" VerticalAlignment="Center">
+          IsChecked="{Binding FabNotification}" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <ui:AppBarToggleButton.Icon>
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEC24;"/>
                                 </ui:AppBarToggleButton.Icon>
@@ -152,6 +109,49 @@
 
 
                         </WrapPanel>
+                        <!--<TextBlock x:Name="LimitedTime" Text="{Binding LimitedTime, StringFormat=Fab免费资产获取截至时间：\{0:yyyy-MM-dd HH:mm:ss\}}" 
+                                   TextWrapping="Wrap" Margin="0,0,0,15" FontWeight="SemiBold"/>-->
+
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="开机启动Fab资产检查" 
+                                       VerticalAlignment="Center" IsEnabled="{Binding FabNotification}"/>
+                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding AutoStart}" IsEnabled="{Binding FabNotification}"/>
+                        </Grid>
+
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="使用EpicGames Launcher来打开Fab网站" 
+                                       VerticalAlignment="Center" IsEnabled="{Binding FabNotification}"/>
+                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding OpenEpic}" IsEnabled="{Binding FabNotification}"/>
+                        </Grid>
+
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="使用Headless方式获取Fab信息（建议关闭，开启后可能会无法爬取）" 
+                                       VerticalAlignment="Center" IsEnabled="{Binding FabNotification}"/>
+                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding HeadlessEnabled}" IsEnabled="{Binding FabNotification}"/>
+                        </Grid>
+
+                        <!--<Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto" MinWidth="120"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="指定Playwright使用的浏览器" Margin="0,8,0,8"/>
+                            <ComboBox x:Name="BrowerOption" Grid.Column="1" d:LayoutOverrides="Height" Margin="-32,0,0,0" VerticalAlignment="Stretch" Width="120"/>
+
+                        </Grid>-->
+                      
 
 
 
