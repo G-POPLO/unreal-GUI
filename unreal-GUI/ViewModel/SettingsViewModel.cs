@@ -67,7 +67,9 @@ namespace unreal_GUI.ViewModel
             Gitcode = Properties.Settings.Default.Gitcode;
             AutoUpdate = Properties.Settings.Default.AutoUpdate;
             FabNotification = Properties.Settings.Default.FabNotificationEnabled;
-            LimitedTime = Properties.Settings.Default.LimitedTime;
+            // 从INI文件读取LimitedTime
+            IniConfig iniConfig = new();
+            LimitedTime = iniConfig.ReadDateTime("LimitedTime", Properties.Settings.Default.LimitedTime);
             AutoStart = Properties.Settings.Default.AutoStart;
             OpenEpic = Properties.Settings.Default.OpenEpic;
             HeadlessEnabled = Properties.Settings.Default.HeadlessEnabled;
@@ -171,7 +173,7 @@ namespace unreal_GUI.ViewModel
                 CustomButtons = []
             };
             // 保存ini文件
-            new IniConfig().WriteConfig();
+            new IniConfig().CreateConfig();
 
             // 读取现有的自定义按钮数据
             if (File.Exists("settings.json"))

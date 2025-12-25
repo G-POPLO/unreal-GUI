@@ -36,7 +36,7 @@ namespace unreal_GUI
             }
 
             await MainWindowViewModel.AutoUpdate();
-            await MainWindowViewModel.CheckFabAsset();
+            //await MainWindowViewModel.CheckFabAsset();
 
         }
 

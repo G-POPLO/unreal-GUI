@@ -84,7 +84,7 @@ namespace reminder
         private static void SendFabNotification(DateTime limitedTime)
         {
             // 读取配置确定是否使用Epic启动器
-            var configReader = new reminder.ReadConfig();
+            var configReader = new reminder.IniConfig();
             bool openEpic = configReader.ReadBool("OpenEpic", false);
 
             if (openEpic)

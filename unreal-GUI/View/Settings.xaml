@@ -109,8 +109,8 @@
 
 
                         </WrapPanel>
-                        <!--<TextBlock x:Name="LimitedTime" Text="{Binding LimitedTime, StringFormat=Fab免费资产获取截至时间：\{0:yyyy-MM-dd HH:mm:ss\}}" 
-                                   TextWrapping="Wrap" Margin="0,0,0,15" FontWeight="SemiBold"/>-->
+                        <TextBlock x:Name="LimitedTime" Text="{Binding LimitedTime, StringFormat=Fab免费资产获取截至时间：\{0:yyyy-MM-dd HH:mm:ss\}}" 
+                                   TextWrapping="Wrap" Margin="0,5,0,10" FontWeight="SemiBold"/>
 
                         <Grid Margin="0,0,0,15">
                             <Grid.ColumnDefinitions>
@@ -237,7 +237,7 @@
 
                 </Border>
 
-                <Button Command="{Binding SaveSettingsCommand}" Margin="10,10,0,0" HorizontalAlignment="Left" 
+                <Button Command="{Binding SaveSettingsCommand}" Margin="5,10,0,0" HorizontalAlignment="Left" 
                      Style="{DynamicResource AccentButtonStyle}">
                     <StackPanel Orientation="Horizontal">
                         <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74E;" Margin="0,0,5,0"/>

@@ -31,7 +31,7 @@ namespace reminder
                 Console.WriteLine("正在检查Fab限时免费资产...");
 
                 // 读取配置确定是否启用Fab提醒功能
-                var configReader = new ReadConfig();
+                var configReader = new IniConfig();
                 bool fabReminderEnabled = configReader.ReadBool("FabReminderEnabled", true);
 
                 if (!fabReminderEnabled)

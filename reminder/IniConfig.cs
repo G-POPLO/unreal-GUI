@@ -2,12 +2,12 @@
 
 namespace reminder
 {
-    public class ReadConfig
+    public class IniConfig
     {
         private readonly string ConfigPath;
         private readonly IniFile SharedConfig;
 
-        public ReadConfig(string configPath = "ShareSettings.ini")
+        public IniConfig(string configPath = "ShareSettings.ini")
         {
             ConfigPath = configPath;
             SharedConfig = new IniFile();

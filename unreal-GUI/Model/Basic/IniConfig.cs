@@ -9,7 +9,7 @@ namespace unreal_GUI.Model.Basic
         private string ConfigPath;
         private IniFile SharedConfig;
 
-        public void WriteConfig()
+        public void CreateConfig()
         {
             ConfigPath = Path.Combine(AppContext.BaseDirectory, "ShareSettings.ini");
 
@@ -19,7 +19,7 @@ namespace unreal_GUI.Model.Basic
             if (File.Exists(ConfigPath))
             {
                 SharedConfig.Load(ConfigPath);
-                ReadConfig();
+                OverWriteConfig();
             }
             // 如果文件不存在，创建文件并写入默认值
             else
@@ -34,13 +34,13 @@ namespace unreal_GUI.Model.Basic
 
 
 
-        private void ReadConfig()
+        private void OverWriteConfig()
         {
             // 读取配置文件中的值
             bool fabNotificationEnabled = SharedConfig.GetSetting(IniFile.DefaultSectionName, "FabNotificationEnabled", Properties.Settings.Default.FabNotificationEnabled);
             bool headlessEnabled = SharedConfig.GetSetting(IniFile.DefaultSectionName, "HeadlessEnabled", Properties.Settings.Default.HeadlessEnabled);
             byte browerType = (byte)SharedConfig.GetSetting(IniFile.DefaultSectionName, "BrowerType", Properties.Settings.Default.BrowerType);
-            DateTime limitedTime = DateTime.TryParse(SharedConfig.GetSetting(IniFile.DefaultSectionName, "LimitedTime", string.Empty), out DateTime result) ? result : Properties.Settings.Default.LimitedTime;
+            //DateTime limitedTime = DateTime.TryParse(SharedConfig.GetSetting(IniFile.DefaultSectionName, "LimitedTime", string.Empty), out DateTime result) ? result : Properties.Settings.Default.LimitedTime;
 
             // 比较并更新不一致的值
             if (fabNotificationEnabled != Properties.Settings.Default.FabNotificationEnabled)
@@ -55,10 +55,10 @@ namespace unreal_GUI.Model.Basic
             {
                 SharedConfig.SetSetting(IniFile.DefaultSectionName, "BrowerType", Properties.Settings.Default.BrowerType);
             }
-            if (limitedTime != Properties.Settings.Default.LimitedTime)
-            {
-                SharedConfig.SetSetting(IniFile.DefaultSectionName, "LimitedTime", Properties.Settings.Default.LimitedTime.ToString("yyyy-MM-dd HH:mm:ss"));
-            }
+            //if (limitedTime != Properties.Settings.Default.LimitedTime)
+            //{
+            //    SharedConfig.SetSetting(IniFile.DefaultSectionName, "LimitedTime", Properties.Settings.Default.LimitedTime.ToString("yyyy-MM-dd HH:mm:ss"));
+            //}
             Save();
         }
 
@@ -70,5 +70,53 @@ namespace unreal_GUI.Model.Basic
             SharedConfig.Save(ConfigPath);
         }
 
+        /// <summary>
+        /// 读取布尔值配置
+        /// </summary>
+        public bool ReadBool(string key, bool defaultValue = false)
+        {
+            if (SharedConfig == null)
+            {
+                CreateConfig();
+            }
+            return SharedConfig.GetSetting(IniFile.DefaultSectionName, key, defaultValue);
+        }
+
+        /// <summary>
+        /// 读取日期时间配置
+        /// </summary>
+        public DateTime ReadDateTime(string key, DateTime defaultValue)
+        {
+            if (SharedConfig == null)
+            {
+                CreateConfig();
+            }
+            string value = SharedConfig.GetSetting(IniFile.DefaultSectionName, key, string.Empty);
+            return DateTime.TryParse(value, out DateTime result) ? result : defaultValue;
+        }
+
+        /// <summary>
+        /// 读取字节值配置
+        /// </summary>
+        public byte ReadByte(string key, byte defaultValue)
+        {
+            if (SharedConfig == null)
+            {
+                CreateConfig();
+            }
+            return (byte)SharedConfig.GetSetting(IniFile.DefaultSectionName, key, defaultValue);
+        }
+
+        /// <summary>
+        /// 读取字符串配置
+        /// </summary>
+        public string ReadString(string key, string defaultValue = null)
+        {
+            if (SharedConfig == null)
+            {
+                CreateConfig();
+            }
+            return SharedConfig.GetSetting(IniFile.DefaultSectionName, key, defaultValue);
+        }
     }
 }
