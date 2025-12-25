@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 
-namespace unreal_GUI.Model
+namespace unreal_GUI.Model.Achieve
 {
     /// <summary>
     /// 页面跳转动画，在引入新的UI框架后已废弃

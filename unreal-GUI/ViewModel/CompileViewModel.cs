@@ -10,6 +10,7 @@ using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using unreal_GUI.Model;
+using unreal_GUI.Model.Basic;
 namespace unreal_GUI.ViewModel
 {
     public partial class CompileViewModel : ObservableObject

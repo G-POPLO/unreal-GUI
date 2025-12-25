@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Windows.UI.Notifications;
 
-namespace unreal_GUI.Model
+namespace unreal_GUI.Model.Basic
 {
     class UpdateAndExtract
     {

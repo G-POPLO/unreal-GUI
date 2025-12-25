@@ -5,7 +5,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
-using unreal_GUI.Model;
+using unreal_GUI.Model.Basic;
+using unreal_GUI.Model.Features;
 
 
 namespace unreal_GUI.ViewModel

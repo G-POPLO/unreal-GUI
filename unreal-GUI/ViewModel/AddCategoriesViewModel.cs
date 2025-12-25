@@ -8,6 +8,8 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using unreal_GUI.Model;
 using MessageBox = iNKORE.UI.WPF.Modern.Controls.MessageBox;
+using unreal_GUI.Model.Basic;
+using unreal_GUI.Model.Features;
 
 namespace unreal_GUI.ViewModel
 {

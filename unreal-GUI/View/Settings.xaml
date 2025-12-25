@@ -105,7 +105,7 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="开机启动Fab提醒（检查完毕后应用程序会自动退出）(TBD)" 
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="开机启动Fab资产检查" 
                                        VerticalAlignment="Center"/>
                             <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding AutoStart}"/>
                         </Grid>
@@ -217,7 +217,7 @@
                         </Grid>
 
 
-                        <Grid Margin="0,0,0,15">
+                        <!--<Grid Margin="0,0,0,15">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
@@ -230,7 +230,7 @@
                                 <ComboBoxItem Content="DrillIn" Tag="1"/>
                                 <ComboBoxItem Content="Suppress" Tag="2"/>
                             </ComboBox>
-                        </Grid>
+                        </Grid>-->
 
 
                     </StackPanel>

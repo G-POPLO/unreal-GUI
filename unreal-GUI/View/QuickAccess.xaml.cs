@@ -1,5 +1,5 @@
 using System.Windows;
-using unreal_GUI.Model;
+using unreal_GUI.Model.Basic;
 using unreal_GUI.ViewModel;
 
 namespace unreal_GUI

@@ -12,7 +12,7 @@ using unreal_GUI.Model.DialogContent;
 using unreal_GUI.View.DialogContent;
 
 
-namespace unreal_GUI.Model
+namespace unreal_GUI.Model.Basic
 {
     public static class ModernDialog
     {

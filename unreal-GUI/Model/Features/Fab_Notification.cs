@@ -1,8 +1,9 @@
 using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using unreal_GUI.Model.Basic;
 
-namespace unreal_GUI.Model
+namespace unreal_GUI.Model.Features
 {
     internal class Fab_Notification
     {

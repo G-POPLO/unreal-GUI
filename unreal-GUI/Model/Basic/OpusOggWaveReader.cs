@@ -5,7 +5,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace unreal_GUI.Model
+namespace unreal_GUI.Model.Basic
 {
 
     /// <summary>

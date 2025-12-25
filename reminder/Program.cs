@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.Toolkit.Uwp.Notifications;
 using System.Diagnostics;
 
@@ -31,19 +29,19 @@ namespace reminder
             try
             {
                 Console.WriteLine("正在检查Fab限时免费资产...");
-                
+
                 // 读取配置确定是否启用Fab提醒功能
-                var configReader = new reminder.ReadConfig();
+                var configReader = new ReadConfig();
                 bool fabReminderEnabled = configReader.ReadBool("FabReminderEnabled", true);
-                
+
                 if (!fabReminderEnabled)
                 {
                     Console.WriteLine("Fab提醒功能已禁用，程序将退出");
                     Environment.Exit(0);
                 }
-                
+
                 DateTime? endDate = await Fab_Notification.GetLimitedTimeFreeEndDate();
-                
+
                 if (endDate.HasValue)
                 {
                     Console.WriteLine($"发现新的Fab免费资产，截止时间: {endDate.Value}");

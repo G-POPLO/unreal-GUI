@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using unreal_GUI.Model;
+using unreal_GUI.Model.Basic;
 
 namespace unreal_GUI.ViewModel
 {

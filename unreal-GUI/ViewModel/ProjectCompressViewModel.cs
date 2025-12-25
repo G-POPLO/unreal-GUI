@@ -6,7 +6,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
-using unreal_GUI.Model;
+using unreal_GUI.Model.Basic;
 
 namespace unreal_GUI.ViewModel
 {

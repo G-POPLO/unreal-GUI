@@ -4,7 +4,7 @@ using iNKORE.UI.WPF.Modern.Helpers.Styles;
 using System;
 using System.Windows;
 using System.Windows.Navigation;
-using unreal_GUI.Model;
+using unreal_GUI.Model.Basic;
 using unreal_GUI.View;
 using unreal_GUI.ViewModel;
 

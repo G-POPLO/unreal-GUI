@@ -5,7 +5,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.Processing;
 
-namespace unreal_GUI.Model
+namespace unreal_GUI.Model.Features
 {
     public class PhotoEdit
     {

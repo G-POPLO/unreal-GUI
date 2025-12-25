@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using unreal_GUI.Model;
+using unreal_GUI.Model.Basic;
 using MessageBox = iNKORE.UI.WPF.Modern.Controls.MessageBox;
 
 namespace unreal_GUI.ViewModel
@@ -138,10 +139,10 @@ namespace unreal_GUI.ViewModel
             }
         }
 
-        private Task SaveSettings()
-        {
-            return SaveSettings(new JsonSerializerOptions { WriteIndented = true });
-        }
+        //private Task SaveSettings()
+        //{
+        //    return SaveSettings(new JsonSerializerOptions { WriteIndented = true });
+        //}
 
         [RelayCommand]
         private Task SaveSettings(JsonSerializerOptions options)

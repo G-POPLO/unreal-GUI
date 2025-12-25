@@ -2,7 +2,7 @@ using SoftCircuits.IniFileParser;
 using System;
 using System.IO;
 
-namespace unreal_GUI.Model
+namespace unreal_GUI.Model.Basic
 {
     public class IniConfig
     {

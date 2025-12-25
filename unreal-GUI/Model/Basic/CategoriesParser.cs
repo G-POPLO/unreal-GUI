@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace unreal_GUI.Model
+namespace unreal_GUI.Model.Basic
 {
     public class CategoriesParser
     {

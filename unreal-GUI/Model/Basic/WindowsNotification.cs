@@ -2,7 +2,7 @@
 using System;
 using Windows.UI.Notifications;
 
-namespace unreal_GUI.Model
+namespace unreal_GUI.Model.Basic
 {
     internal class WindowsNotification
     {

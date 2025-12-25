@@ -2,8 +2,9 @@ using Microsoft.Playwright;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using unreal_GUI.Model.Basic;
 
-namespace unreal_GUI.Model
+namespace unreal_GUI.Model.Features
 {
     internal class Playwright
     {

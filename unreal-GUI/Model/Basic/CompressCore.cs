@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace unreal_GUI.Model
+namespace unreal_GUI.Model.Basic
 {
     public class CompressCore
     {
