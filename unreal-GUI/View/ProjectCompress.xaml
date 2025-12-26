@@ -7,7 +7,7 @@
              xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
              xmlns:ikw="http://schemas.inkore.net/lib/ui/wpf"
              mc:Ignorable="d"
-             d:DesignHeight="800" d:DesignWidth="700">
+             d:DesignWidth="700">
     <Grid Margin="20">
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel Margin="10">
@@ -109,6 +109,27 @@
                                 </ui:AppBarToggleButton.Icon>
                             </ui:AppBarToggleButton>
                         </StackPanel>
+                        <!-- 输入路径选择 -->
+                        <StackPanel x:Name="_7zUpdate" Orientation="Vertical" Margin="0,0,0,5" Visibility="{Binding Is7zUpdateVisible}">
+                            <TextBlock Text="输出路径" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox Text="{Binding OutputPath}" Margin="0,0,10,0" Grid.Column="0"/>
+                                <Button Grid.Column="1" Command="{Binding SelectOutputCommand}"
+                                    Style="{DynamicResource AccentButtonStyle}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
+                                        <TextBlock Text="浏览"/>
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
+
+                        </StackPanel>
+
+                     
 
                         <!-- 输出路径选择 -->
                         <TextBlock Text="输出路径" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5"/>

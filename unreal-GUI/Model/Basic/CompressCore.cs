@@ -67,7 +67,7 @@ namespace unreal_GUI.Model.Basic
                             Console.Error.WriteLine($"错误: {errorLine}");
                         }
                     });
-                    
+
                     // 根据退出代码返回相应的错误信息
                     string errorMessage = process.ExitCode switch
                     {
@@ -78,7 +78,7 @@ namespace unreal_GUI.Model.Basic
                         255 => "用户停止操作",
                         _ => $"未知错误，退出代码: {process.ExitCode}"
                     };
-                    
+
                     await ModernDialog.ShowErrorAsync($"压缩失败：{errorMessage}", "错误");
                     return false;
                 }
@@ -189,7 +189,7 @@ namespace unreal_GUI.Model.Basic
                     WorkingDirectory = projectRoot ?? appFolderPath,
                     UseShellExecute = false,
                     CreateNoWindow = false,
-                    RedirectStandardOutput = false, // 直接显示原始输出，不重定向
+                    RedirectStandardOutput = false,
                     RedirectStandardError = true
                 };
 
@@ -199,14 +199,14 @@ namespace unreal_GUI.Model.Basic
 
                 // 不需要异步读取输出，因为输出会直接显示在终端窗口中
                 // 只读取错误输出，以便在出错时能够捕获并处理它们
-                Task.Run(() =>
-                {
-                    string errorLine;
-                    while ((errorLine = process.StandardError.ReadLine()) != null)
-                    {
-                        Console.Error.WriteLine($"错误: {errorLine}");
-                    }
-                });
+                _ = Task.Run(() =>
+               {
+                   string errorLine;
+                   while ((errorLine = process.StandardError.ReadLine()) != null)
+                   {
+                       Console.Error.WriteLine($"错误: {errorLine}");
+                   }
+               });
 
                 // 等待进程完成
                 await process.WaitForExitAsync();

@@ -34,7 +34,13 @@ namespace unreal_GUI.ViewModel
         private bool _allowDeleteFiles = false;
 
         [ObservableProperty]
+        private bool _filter = true;
+
+        [ObservableProperty]
         private string _outputPath;
+
+        [ObservableProperty]
+        private System.Windows.Visibility _is7zUpdateVisible = System.Windows.Visibility.Collapsed;
 
 
         // 增量更新是否可用（-mx <= 5时可用）
@@ -55,9 +61,12 @@ namespace unreal_GUI.ViewModel
             OnPropertyChanged(nameof(IsIncrementalUpdateEnabled));
         }
 
-        // 增量更新变化时更新允许删除文件的可用性
+        // 增量更新变化时更新允许删除文件的可用性和_7zUpdate可见性
         partial void OnIncrementalUpdateChanged(bool value)
         {
+            // 控制_7zUpdate可见性
+            Is7zUpdateVisible = value ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+
             // 如果关闭增量更新，自动关闭允许删除文件
             if (!value && AllowDeleteFiles)
             {
@@ -81,7 +90,6 @@ namespace unreal_GUI.ViewModel
             {
                 ProjectPath = dialog.FileName;
                 ParseProjectInfo();
-                //CalculateProjectSize();
                 LoadProjectThumbnail();
             }
         }
@@ -186,9 +194,9 @@ namespace unreal_GUI.ViewModel
 
                 // 更新引擎信息
                 EngineInfo = $"项目名称: {projectName}\n" +
-                            $"项目路径: {projectDir}\n" +
-                            $"引擎版本: {engineVersion}\n" +
-                            $"修改时间: {formattedTime}";
+                             $"项目路径: {projectDir}\n" +
+                             $"引擎版本: {engineVersion}\n" +
+                             $"修改时间: {formattedTime}";
             }
             catch (Exception ex)
             {
