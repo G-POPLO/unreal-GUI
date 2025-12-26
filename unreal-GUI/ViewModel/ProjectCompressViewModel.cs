@@ -40,7 +40,13 @@ namespace unreal_GUI.ViewModel
         private string _outputPath;
 
         [ObservableProperty]
+        private string _inputPath;
+
+        [ObservableProperty]
         private System.Windows.Visibility _is7zUpdateVisible = System.Windows.Visibility.Collapsed;
+
+        [ObservableProperty]
+        private System.Windows.Visibility _is7zOutputVisible = System.Windows.Visibility.Visible;
 
 
         // 增量更新是否可用（-mx <= 5时可用）
@@ -66,6 +72,16 @@ namespace unreal_GUI.ViewModel
         {
             // 控制_7zUpdate可见性
             Is7zUpdateVisible = value ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+
+            // 控制_7zOutput可见性（与_7zUpdate相反）
+            Is7zOutputVisible = value ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
+
+            // 如果启用增量更新，自动关闭过滤器和固实压缩
+            if (value)
+            {
+                Filter = false;
+                SolidCompress = false;
+            }
 
             // 如果关闭增量更新，自动关闭允许删除文件
             if (!value && AllowDeleteFiles)
@@ -113,6 +129,22 @@ namespace unreal_GUI.ViewModel
             if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.SelectedPath))
             {
                 OutputPath = dialog.SelectedPath;
+            }
+        }
+
+        [RelayCommand]
+        private void Select7z()
+        {
+            var dialog = new OpenFileDialog
+            {
+                Filter = "7z Archive Files (*.7z)|*.7z"
+            };
+
+            var result = dialog.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                InputPath = dialog.FileName;
             }
         }
 

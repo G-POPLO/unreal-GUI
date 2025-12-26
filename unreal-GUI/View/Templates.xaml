@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="unreal_GUI.View.Templates"
+<UserControl x:Class="unreal_GUI.View.Templates"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -9,9 +9,7 @@
              xmlns:converters="clr-namespace:unreal_GUI.Converters"
              mc:Ignorable="d" 
              d:DesignWidth="600">
-    <UserControl.Resources>
-        <converters:EqualityConverter x:Key="EqualityConverter"/>
-    </UserControl.Resources>
+
     <UserControl.DataContext>
         <viewmodel:TemplatesViewModel />
     </UserControl.DataContext>

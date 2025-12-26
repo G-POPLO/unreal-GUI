@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:unreal_GUI"
              xmlns:converters="clr-namespace:unreal_GUI.Converters"
+             xmlns:conv="clr-namespace:ValueConverters;assembly=ValueConverters"
              StartupUri="MainWindow.xaml"
              xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern">
     <Application.Resources>
@@ -11,9 +12,17 @@
                 <ui:ThemeResources />
                 <ui:XamlControlsResources />
             </ResourceDictionary.MergedDictionaries>
-            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+            <!-- ===================== 项目自定义转换器 ===================== -->
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <converters:BooleanToInverseBooleanConverter x:Key="BooleanToInverseBooleanConverter" />
+            <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+            <converters:NullToVisibilityInverterConverter x:Key="NullToVisibilityInverterConverter" />
+            <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+            <converters:EqualityConverter x:Key="EqualityConverter" />
+            <converters:ImageCoordinateConverter x:Key="ImageCoordinateConverter" />
+            
+            <!-- ===================== ValueConverters库转换器 ===================== -->
+            <conv:EnumWrapperConverter x:Key="EnumWrapperConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

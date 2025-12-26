@@ -4,12 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:unreal_GUI" xmlns:converters="clr-namespace:unreal_GUI.Converters"
-            xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern" xmlns:viewmodel="clr-namespace:unreal_GUI.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:RenameViewModel}"
+             xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern" 
+             xmlns:viewmodel="clr-namespace:unreal_GUI.ViewModel"
+             d:DataContext="{d:DesignInstance Type=viewmodel:RenameViewModel}"
              mc:Ignorable="d" 
              d:DesignWidth="800">
-    <UserControl.Resources>
-        <converters:BooleanToInverseBooleanConverter x:Key="InverseBooleanConverter"/>
-    </UserControl.Resources>
+
     <Grid Margin="20">
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel Margin="10">
@@ -33,7 +33,7 @@
                                     <TextBlock Text="项目"/>
                                 </StackPanel>
                             </RadioButton>
-                            <RadioButton x:Name="rbPlugin" IsChecked="{Binding IsProjectSelected, Converter={StaticResource InverseBooleanConverter}}">
+                            <RadioButton x:Name="rbPlugin" IsChecked="{Binding IsProjectSelected, Converter={StaticResource BooleanToInverseBooleanConverter}}">
                                 <StackPanel Orientation="Horizontal">
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74C;" Margin="0,0,5,0" FontSize="12"/>
                                     <TextBlock Text="插件"/>

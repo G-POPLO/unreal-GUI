@@ -6,8 +6,11 @@
              xmlns:local="clr-namespace:unreal_GUI.View"
              xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
              xmlns:ikw="http://schemas.inkore.net/lib/ui/wpf"
+             xmlns:converters="clr-namespace:unreal_GUI.Converters"
+             xmlns:conv="clr-namespace:ValueConverters;assembly=ValueConverters"
              mc:Ignorable="d"
              d:DesignWidth="700">
+
     <Grid Margin="20">
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel Margin="10">
@@ -86,12 +89,12 @@
                         </Grid>
                         <!-- 压缩选项 -->
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                            <ui:AppBarToggleButton Label="启用过滤器" IsChecked="{Binding Filter}" Margin="0,0,20,0">
+                            <ui:AppBarToggleButton Label="启用过滤器" IsChecked="{Binding Filter}" Margin="0,0,20,0" IsEnabled="{Binding IncrementalUpdate, Converter={StaticResource BooleanToInverseBooleanConverter}}">
                                 <ui:AppBarToggleButton.Icon>
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xe71c;"/>
                                 </ui:AppBarToggleButton.Icon>
                             </ui:AppBarToggleButton>
-                            <ui:AppBarToggleButton Label="固实压缩" IsChecked="{Binding SolidCompress}" Margin="0,0,20,0">
+                            <ui:AppBarToggleButton Label="固实压缩" IsChecked="{Binding SolidCompress}" Margin="0,0,20,0" IsEnabled="{Binding IncrementalUpdate, Converter={StaticResource BooleanToInverseBooleanConverter}}">
                                 <ui:AppBarToggleButton.Icon>
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8C9;"/>
                                 </ui:AppBarToggleButton.Icon>
@@ -118,7 +121,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBox Text="{Binding InputPath}" Margin="0,0,10,0" Grid.Column="0"/>
-                                <Button Grid.Column="1" Command="{Binding SelectInputCommand}"
+                                <Button Grid.Column="1" Command="{Binding Select7zCommand}"
                                     Style="{DynamicResource AccentButtonStyle}">
                                     <StackPanel Orientation="Horizontal">
                                         <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
@@ -129,31 +132,30 @@
 
                         </StackPanel>
 
-                     
-
-                        <!-- 输出路径选择 -->
-                        <TextBlock Text="输出路径" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                        <Grid Margin="0,0,0,15">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBox Text="{Binding OutputPath}" Margin="0,0,10,0" Grid.Column="0"/>
-                            <Button Grid.Column="1" Command="{Binding SelectOutputCommand}"
+                          <!-- 输出路径选择 -->
+                        <StackPanel x:Name="_7zOutput" Orientation="Vertical" Margin="0,0,0,5" Visibility="{Binding Is7zOutputVisible}">
+                            <TextBlock Text="输出路径" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox Text="{Binding OutputPath}" Margin="0,0,10,0" Grid.Column="0"/>
+                                <Button Grid.Column="1" Command="{Binding SelectOutputCommand}"
                                     Style="{DynamicResource AccentButtonStyle}">
-                                <StackPanel Orientation="Horizontal">
-                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
-                                    <TextBlock Text="浏览"/>
-                                </StackPanel>
-                            </Button>
-                        </Grid>
+                                    <StackPanel Orientation="Horizontal">
+                                        <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
+                                        <TextBlock Text="浏览"/>
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
 
-                        <!-- 压缩进度 -->
-                        <!--<StackPanel Margin="0,0,0,15" Visibility="{Binding IsCompressing, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <TextBlock Text="压缩进度" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                            <ProgressBar Value="{Binding CompressionProgress}" Maximum="100" Margin="0,0,0,5"/>
-                            <TextBlock Text="{Binding CompressionProgress, StringFormat="{0}"}" TextAlignment="Center"/>
-                        </StackPanel>-->
+                        </StackPanel>
+
+
+
+                      
+
 
                         <!-- 压缩按钮 -->
                         <Button Command="{Binding CompressCommand}" Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left"

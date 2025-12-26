@@ -12,9 +12,7 @@
         Title="Unreal-GUI" Height="600" Width="900"
         >
     
-    <Window.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-    </Window.Resources>
+
     <Window.DataContext>
         <viewModel:MainWindowViewModel />
     </Window.DataContext>

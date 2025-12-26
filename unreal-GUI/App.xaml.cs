@@ -11,16 +11,12 @@ namespace unreal_GUI
     {
         public App()
         {
-
-
             this.DispatcherUnhandledException += App_DispatcherUnhandledException;
             AppDomain currentDomain = AppDomain.CurrentDomain;
             currentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
             // 注册通知激活事件处理程序
             ToastNotificationManagerCompat.OnActivated += ToastNotificationManagerCompat_OnActivated;
-
-
         }
         // 通知激活事件处理程序
         private void ToastNotificationManagerCompat_OnActivated(ToastNotificationActivatedEventArgsCompat e)
