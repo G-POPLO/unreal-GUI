@@ -111,14 +111,14 @@
                         </StackPanel>
                         <!-- 输入路径选择 -->
                         <StackPanel x:Name="_7zUpdate" Orientation="Vertical" Margin="0,0,0,5" Visibility="{Binding Is7zUpdateVisible}">
-                            <TextBlock Text="输出路径" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <TextBlock Text="输入路径" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5"/>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBox Text="{Binding OutputPath}" Margin="0,0,10,0" Grid.Column="0"/>
-                                <Button Grid.Column="1" Command="{Binding SelectOutputCommand}"
+                                <TextBox Text="{Binding InputPath}" Margin="0,0,10,0" Grid.Column="0"/>
+                                <Button Grid.Column="1" Command="{Binding SelectInputCommand}"
                                     Style="{DynamicResource AccentButtonStyle}">
                                     <StackPanel Orientation="Horizontal">
                                         <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,5,0"/>

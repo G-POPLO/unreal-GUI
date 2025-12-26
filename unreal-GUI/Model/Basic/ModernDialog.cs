@@ -418,19 +418,33 @@ namespace unreal_GUI.Model.Basic
         /// <summary>
         /// 显示压缩信息对话框
         /// </summary>
-        /// <param name="inputPaths">要压缩的文件或目录路径列表</param>
+        /// <param name="inputPath">要压缩的文件或目录路径</param>
         /// <param name="outputDirectory">输出目录路径</param>
         /// <param name="compressionLevel">压缩级别（0-9，默认5）</param>
         /// <returns>压缩是否成功</returns>
-        public static async Task<bool> ShowCompressInfoAsync(IEnumerable<string> inputPaths, string outputDirectory, int compressionLevel = 5, bool solidCompress = true)
+        public static async Task<bool> ShowCompressInfoAsync(string inputPath, string outputDirectory, int compressionLevel = 5, bool solidCompress = true)
         {
             // 构建完整的输出压缩文件路径
-            // 从输入路径中找到.uproject文件，获取项目名称
-            string projectFile = inputPaths.FirstOrDefault(p => Path.GetExtension(p) == ".uproject");
+            // 检查输入路径是否为.uproject文件
             string projectName = "Project";
-            if (!string.IsNullOrEmpty(projectFile))
+            if (!string.IsNullOrEmpty(inputPath))
             {
-                projectName = Path.GetFileNameWithoutExtension(projectFile);
+                if (Path.GetExtension(inputPath) == ".uproject")
+                {
+                    projectName = Path.GetFileNameWithoutExtension(inputPath);
+                }
+                else
+                {
+                    // 如果是目录，查找其中的.uproject文件
+                    if (Directory.Exists(inputPath))
+                    {
+                        var uprpojectFiles = Directory.GetFiles(inputPath, "*.uproject");
+                        if (uprpojectFiles.Length > 0)
+                        {
+                            projectName = Path.GetFileNameWithoutExtension(uprpojectFiles[0]);
+                        }
+                    }
+                }
             }
             string outputArchivePath = Path.Combine(outputDirectory, $"{projectName}.7z");
 
@@ -467,7 +481,7 @@ namespace unreal_GUI.Model.Basic
                 {
                     // 调用CompressCore.CompressFilesAsync进行压缩
                     success = await CompressCore.CompressFilesAsync(
-                        inputPaths,
+                        inputPath,
                         outputArchivePath,
                         compressionLevel: compressionLevel,
                         soildcompress: solidCompress

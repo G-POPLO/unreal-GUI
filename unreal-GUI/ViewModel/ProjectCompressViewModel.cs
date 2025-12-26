@@ -138,23 +138,13 @@ namespace unreal_GUI.ViewModel
                 // 获取项目目录
                 string projectDir = Path.GetDirectoryName(ProjectPath);
 
-                // 构建要压缩的路径列表
-                var inputPaths = new List<string>
-                {
-                    Path.Combine(projectDir, "Config"),
-                    Path.Combine(projectDir, "Content"),
-                    Path.Combine(projectDir, "Plugins"),
-                    Path.Combine(projectDir, "Source"),
-                    ProjectPath // .uproject文件
-                };
-
                 // 构建完整的输出压缩文件路径
                 string projectName = Path.GetFileNameWithoutExtension(ProjectPath);
                 string outputArchivePath = Path.Combine(OutputPath, $"{projectName}.7z");
 
-                // 直接调用压缩核心方法
+                // 直接调用压缩核心方法，传递项目根目录
                 bool success = await CompressCore.CompressFilesAsync(
-                     inputPaths,
+                     projectDir,
                      outputArchivePath,
                      compressionLevel: CompressLevel,
                      soildcompress: SolidCompress
