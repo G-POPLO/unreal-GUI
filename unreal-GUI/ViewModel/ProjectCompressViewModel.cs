@@ -1,7 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -30,8 +29,8 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private bool _incrementalUpdate = false;
 
-        [ObservableProperty]
-        private bool _allowDeleteFiles = false;
+        //[ObservableProperty]
+        //private bool _allowDeleteFiles = false;
 
         [ObservableProperty]
         private bool _filter = true;
@@ -56,7 +55,7 @@ namespace unreal_GUI.ViewModel
         public bool IsIncrementalUpdateEnabled => CompressLevel <= 5;
 
         // 允许删除文件是否可用（增量更新启用时可用）
-        public bool IsAllowDeleteEnabled => IncrementalUpdate;
+        //public bool IsAllowDeleteEnabled => IncrementalUpdate;
 
         // 压缩级别变化时更新增量更新的可用性
         partial void OnCompressLevelChanged(int value)
@@ -82,20 +81,20 @@ namespace unreal_GUI.ViewModel
             // 更新按钮文本
             CompressButtonText = value ? "开始增量更新" : "开始压缩";
 
-            // 如果启用增量更新，自动关闭过滤器和固实压缩
+            // 如果启用增量更新，自动关闭固实压缩（过滤器保持用户选择）
             if (value)
             {
-                Filter = false;
                 SolidCompress = false;
+                // 注意：不再自动关闭过滤器，让用户可以控制增量更新时是否使用过滤
             }
 
             // 如果关闭增量更新，自动关闭允许删除文件
-            if (!value && AllowDeleteFiles)
-            {
-                AllowDeleteFiles = false;
-            }
+            //if (!value && AllowDeleteFiles)
+            //{
+            //    AllowDeleteFiles = false;
+            //}
             // 通知UI IsAllowDeleteEnabled 属性已变化
-            OnPropertyChanged(nameof(IsAllowDeleteEnabled));
+            //OnPropertyChanged(nameof(IsAllowDeleteEnabled));
         }
 
         [RelayCommand]
@@ -208,7 +207,8 @@ namespace unreal_GUI.ViewModel
                     success = await CompressCore.UpdateArchiveAsync(
                         projectDir,
                         outputArchivePath,
-                        compressionLevel: CompressLevel
+                        compressionLevel: CompressLevel,
+                        filter: Filter
                     );
                 }
                 else
@@ -228,7 +228,8 @@ namespace unreal_GUI.ViewModel
                          projectDir,
                          outputArchivePath,
                          compressionLevel: CompressLevel,
-                         soildcompress: SolidCompress
+                         soildcompress: SolidCompress,
+                         filter: Filter
                      );
                 }
 

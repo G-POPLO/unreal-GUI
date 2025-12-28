@@ -97,7 +97,7 @@ namespace unreal_GUI.Model.Basic
         /// <param name="outputArchivePath">输出压缩文件路径</param>
         /// <param name="compressionLevel">压缩级别（0-9，默认5）</param>
         /// <returns>压缩是否成功</returns>
-        public static async Task<bool> CompressFilesAsync(string projectPath, string outputArchivePath, int compressionLevel = 5, bool soildcompress = true)
+        public static async Task<bool> CompressFilesAsync(string projectPath, string outputArchivePath, int compressionLevel = 5, bool soildcompress = true, bool filter = true)
         {
             try
             {
@@ -119,22 +119,8 @@ namespace unreal_GUI.Model.Basic
                     Directory.CreateDirectory(outputDirectory);
                 }
 
-                // 获取项目根目录
-                string projectRoot = string.Empty;
-                if (Directory.Exists(projectPath))
-                {
-                    // 检查输入路径是否包含.uproject文件，或者本身就是项目根目录
-                    var uprpojectFiles = Directory.GetFiles(projectPath, "*.uproject");
-                    if (uprpojectFiles.Length > 0)
-                    {
-                        // 如果输入路径包含.uproject文件，这就是项目根目录
-                        projectRoot = projectPath;
-                    }
-                }
-                else if (File.Exists(projectPath) && Path.GetExtension(projectPath) == ".uproject")
-                {
-                    projectRoot = Path.GetDirectoryName(projectPath);
-                }
+                // 获取项目根目录（假设传入的路径就是项目根目录）
+                //string projectRoot = projectPath;
 
                 // 构建7za.exe的命令行参数
                 // a 表示添加到压缩文件
@@ -145,36 +131,24 @@ namespace unreal_GUI.Model.Basic
                 string compressionFormat = "7z";
                 argumentsBuilder.Append($"a -t{compressionFormat} -mx{compressionLevel} -y -bsp1 -bb0 -ms={(soildcompress ? "on" : "off")} ");
 
-                // 根据输入路径类型构建不同的压缩策略
-                if (!string.IsNullOrEmpty(projectRoot))
+                // 根据过滤设置添加包含和排除规则
+                if (filter)
                 {
-                    // 切换到项目根目录，这样可以使用相对路径进行包括和排除
-                    argumentsBuilder.Append($"-w\"{projectRoot}\" ");
-
-                    // 如果输入路径是项目根目录下的子目录（如Config、Content等）
-                    if (projectPath != projectRoot)
-                    {
-                        // 直接压缩指定的子目录或文件
-                        string relativePath = Path.GetRelativePath(projectRoot, projectPath);
-                        argumentsBuilder.Append($"\"{relativePath}\" ");
-                    }
-                    else
-                    {
-                        // 如果输入路径就是项目根目录，使用包含和排除规则
-                        argumentsBuilder.Append(@"-ir!Config\* ");
-                        argumentsBuilder.Append(@"-ir!Content\* ");
-                        argumentsBuilder.Append(@"-ir!Plugins\* ");
-                        argumentsBuilder.Append(@"-ir!Source\* ");
-                        argumentsBuilder.Append(@"-ir!*.uproject ");
-                        // 排除的目录
-                        argumentsBuilder.Append(@"-xr!Plugins\*\Intermediate\* ");
-                        argumentsBuilder.Append(@"-xr!Plugins\*\Binaries\* ");
-                    }
+                    // 使用包含和排除规则压缩项目
+                    argumentsBuilder.Append($"-w\"{projectPath}\" ");
+                    argumentsBuilder.Append(@"-ir!Config\* ");
+                    argumentsBuilder.Append(@"-ir!Content\* ");
+                    argumentsBuilder.Append(@"-ir!Plugins\* ");
+                    argumentsBuilder.Append(@"-ir!Source\* ");
+                    argumentsBuilder.Append(@"-ir!*.uproject ");
+                    // 排除的目录
+                    argumentsBuilder.Append(@"-xr!Plugins\*\Intermediate\* ");
+                    argumentsBuilder.Append(@"-xr!Plugins\*\Binaries\* ");
                 }
                 else
                 {
-                    // 直接压缩输入的文件或目录
-                    argumentsBuilder.Append($"\"{projectPath}\" ");
+                    // 不使用过滤器，压缩整个项目目录
+                    argumentsBuilder.Append($"\"{projectPath}\\*\" ");
                 }
 
                 // 指定输出路径
@@ -185,7 +159,7 @@ namespace unreal_GUI.Model.Basic
                 {
                     FileName = sevenZipExePath,
                     Arguments = argumentsBuilder.ToString(),
-                    WorkingDirectory = projectRoot ?? appFolderPath,
+                    WorkingDirectory = projectPath,
                     UseShellExecute = false,
                     CreateNoWindow = false,
                     RedirectStandardOutput = false,
@@ -263,7 +237,6 @@ namespace unreal_GUI.Model.Basic
                 }
 
                 // 在输出中查找固实压缩标识
-                // 7za的列表输出中，固实压缩会在某些地方显示相关信息
                 return output.Contains("Solid = +");
             }
             catch (Exception)
@@ -275,25 +248,25 @@ namespace unreal_GUI.Model.Basic
         /// <summary>
         /// 使用7za.exe更新压缩包（增量更新）
         /// </summary>
-        /// <param name="projectDir">要压缩的项目目录路径</param>
+        /// <param name="projectPath">要压缩的项目目录路径</param>
         /// <param name="targetArchivePath">要更新的压缩包路径</param>
         /// <param name="compressionLevel">压缩级别（0-9，默认5）</param>
         /// <returns>更新是否成功</returns>
-        public static async Task<bool> UpdateArchiveAsync(string projectDir, string targetArchivePath, int compressionLevel = 5)
+        public static async Task<bool> UpdateArchiveAsync(string projectPath, string targetArchivePath, int compressionLevel = 5, bool filter = true)
         {
             try
             {
                 // 验证项目目录
-                if (string.IsNullOrWhiteSpace(projectDir))
+                if (string.IsNullOrWhiteSpace(projectPath))
                 {
                     await ModernDialog.ShowErrorAsync("没有要压缩的项目目录", "错误");
                     return false;
                 }
 
                 // 验证项目目录存在
-                if (!Directory.Exists(projectDir))
+                if (!Directory.Exists(projectPath))
                 {
-                    await ModernDialog.ShowErrorAsync($"项目目录不存在: {projectDir}", "错误");
+                    await ModernDialog.ShowErrorAsync($"项目目录不存在: {projectPath}", "错误");
                     return false;
                 }
 
@@ -315,19 +288,15 @@ namespace unreal_GUI.Model.Basic
                 string appFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App");
                 string sevenZipExePath = Path.Combine(appFolderPath, "7za.exe");
 
-                // 构建7za.exe的命令行参数
-                // u 表示更新压缩包
+                // 构建7za.exe的命令行参数            
                 var argumentsBuilder = new StringBuilder();
-                argumentsBuilder.Append($"u -mx{compressionLevel} -y -bsp1 -bb0 ");
+                argumentsBuilder.Append($"u \"{targetArchivePath}\" -up0 -mx{compressionLevel} -y -ms=off ");
 
-                // 检查项目目录是否包含.uproject文件
-                var uprpojectFiles = Directory.GetFiles(projectDir, "*.uproject");
-                if (uprpojectFiles.Length > 0)
+                // 根据过滤设置添加包含和排除规则
+                if (filter)
                 {
-                    // 如果项目目录包含.uproject文件，这就是Unreal项目根目录
-                    argumentsBuilder.Append($"-w\"{projectDir}\" ");
-
-                    // 使用包含和排除规则压缩Unreal项目
+                    // 使用包含和排除规则压缩项目
+                    argumentsBuilder.Append($"-w\"{projectPath}\" ");
                     argumentsBuilder.Append(@"-ir!Config\* ");
                     argumentsBuilder.Append(@"-ir!Content\* ");
                     argumentsBuilder.Append(@"-ir!Plugins\* ");
@@ -339,14 +308,11 @@ namespace unreal_GUI.Model.Basic
                 }
                 else
                 {
-                    // 如果不是Unreal项目，直接压缩整个目录
-                    argumentsBuilder.Append($"\"{projectDir}\" ");
+                    // 不使用过滤器，更新整个项目目录
+                    argumentsBuilder.Append($"\"{projectPath}\\*\" ");
                 }
 
-                // 指定目标压缩包路径
-                argumentsBuilder.Append($"\"{targetArchivePath}\"");
-
-                // 创建进程信息
+                // 创建进程信息（工作目录设置为项目目录）
                 var processStartInfo = new ProcessStartInfo
                 {
                     FileName = sevenZipExePath,
@@ -363,14 +329,14 @@ namespace unreal_GUI.Model.Basic
                 process.Start();
 
                 // 只读取错误输出
-                _ = Task.Run(() =>
-                {
-                    string errorLine;
-                    while ((errorLine = process.StandardError.ReadLine()) != null)
-                    {
-                        Console.Error.WriteLine($"错误: {errorLine}");
-                    }
-                });
+                //_ = Task.Run(() =>
+                //{
+                //    string errorLine;
+                //    while ((errorLine = process.StandardError.ReadLine()) != null)
+                //    {
+                //        Console.Error.WriteLine($"错误: {errorLine}");
+                //    }
+                //});
 
                 // 等待进程完成
                 await process.WaitForExitAsync();
