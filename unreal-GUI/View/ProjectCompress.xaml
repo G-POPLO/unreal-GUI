@@ -88,7 +88,7 @@
                         </Grid>
                         <!-- 压缩选项 -->
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                            <ui:AppBarToggleButton Label="启用过滤器" IsChecked="{Binding Filter}" Margin="0,0,20,0" IsEnabled="{Binding IncrementalUpdate, Converter={StaticResource BoolToInverseBoolConverter}}">
+                            <ui:AppBarToggleButton Label="启用过滤器" IsChecked="{Binding Filter}" Margin="0,0,20,0" IsEnabled="True">
                                 <ui:AppBarToggleButton.Icon>
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xe71c;"/>
                                 </ui:AppBarToggleButton.Icon>
@@ -105,11 +105,11 @@
                                 </ui:AppBarToggleButton.Icon>
                             </ui:AppBarToggleButton>
 
-                            <ui:AppBarToggleButton Label="允许增量更新删除文件" IsChecked="{Binding AllowDeleteFiles}" Margin="0,0,0,0" IsEnabled="{Binding IsAllowDeleteEnabled}">
+                            <!--<ui:AppBarToggleButton Label="允许增量更新删除文件" IsChecked="{Binding AllowDeleteFiles}" Margin="0,0,0,0" IsEnabled="{Binding IsAllowDeleteEnabled}">
                                 <ui:AppBarToggleButton.Icon>
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74D;"/>
                                 </ui:AppBarToggleButton.Icon>
-                            </ui:AppBarToggleButton>
+                            </ui:AppBarToggleButton>-->
                         </StackPanel>
                         <!-- 输入路径选择 -->
                         <StackPanel x:Name="_7zUpdate" Orientation="Vertical" Margin="0,0,0,5" Visibility="{Binding Is7zUpdateVisible}">
@@ -148,13 +148,8 @@
                                     </StackPanel>
                                 </Button>
                             </Grid>
-
                         </StackPanel>
-
-
-
-                      
-
+                     
 
                         <!-- 压缩按钮 -->
                         <Button Command="{Binding CompressCommand}" Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
