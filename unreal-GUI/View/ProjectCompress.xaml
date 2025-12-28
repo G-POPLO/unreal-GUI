@@ -6,8 +6,7 @@
              xmlns:local="clr-namespace:unreal_GUI.View"
              xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
              xmlns:ikw="http://schemas.inkore.net/lib/ui/wpf"
-             xmlns:converters="clr-namespace:unreal_GUI.Converters"
-             xmlns:conv="clr-namespace:ValueConverters;assembly=ValueConverters"
+             xmlns:converters="clr-namespace:unreal_GUI.Converters"      
              mc:Ignorable="d"
              d:DesignWidth="700">
 
@@ -89,12 +88,12 @@
                         </Grid>
                         <!-- 压缩选项 -->
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                            <ui:AppBarToggleButton Label="启用过滤器" IsChecked="{Binding Filter}" Margin="0,0,20,0" IsEnabled="{Binding IncrementalUpdate, Converter={StaticResource BooleanToInverseBooleanConverter}}">
+                            <ui:AppBarToggleButton Label="启用过滤器" IsChecked="{Binding Filter}" Margin="0,0,20,0" IsEnabled="{Binding IncrementalUpdate, Converter={StaticResource BoolToInverseBoolConverter}}">
                                 <ui:AppBarToggleButton.Icon>
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xe71c;"/>
                                 </ui:AppBarToggleButton.Icon>
                             </ui:AppBarToggleButton>
-                            <ui:AppBarToggleButton Label="固实压缩" IsChecked="{Binding SolidCompress}" Margin="0,0,20,0" IsEnabled="{Binding IncrementalUpdate, Converter={StaticResource BooleanToInverseBooleanConverter}}">
+                            <ui:AppBarToggleButton Label="固实压缩" IsChecked="{Binding SolidCompress}" Margin="0,0,20,0" IsEnabled="{Binding IncrementalUpdate, Converter={StaticResource BoolToInverseBoolConverter}}">
                                 <ui:AppBarToggleButton.Icon>
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8C9;"/>
                                 </ui:AppBarToggleButton.Icon>
@@ -114,7 +113,7 @@
                         </StackPanel>
                         <!-- 输入路径选择 -->
                         <StackPanel x:Name="_7zUpdate" Orientation="Vertical" Margin="0,0,0,5" Visibility="{Binding Is7zUpdateVisible}">
-                            <TextBlock Text="输入路径" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <TextBlock Text="要更新的压缩包" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5"/>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -158,11 +157,10 @@
 
 
                         <!-- 压缩按钮 -->
-                        <Button Command="{Binding CompressCommand}" Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left"
-                              >
+                        <Button Command="{Binding CompressCommand}" Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
                             <StackPanel Orientation="Horizontal">
                                 <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xf012;" Margin="0,0,5,0"/>
-                                <TextBlock Text="开始压缩"/>
+                                <TextBlock x:Name="CompressButtonText" Text="{Binding CompressButtonText}"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>
@@ -171,3 +169,9 @@
         </ScrollViewer>
     </Grid>
 </UserControl>
+
+
+
+
+
+

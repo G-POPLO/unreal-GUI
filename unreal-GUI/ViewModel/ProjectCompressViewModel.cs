@@ -48,6 +48,9 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private System.Windows.Visibility _is7zOutputVisible = System.Windows.Visibility.Visible;
 
+        [ObservableProperty]
+        private string _compressButtonText = "开始压缩";
+
 
         // 增量更新是否可用（-mx <= 5时可用）
         public bool IsIncrementalUpdateEnabled => CompressLevel <= 5;
@@ -75,6 +78,9 @@ namespace unreal_GUI.ViewModel
 
             // 控制_7zOutput可见性（与_7zUpdate相反）
             Is7zOutputVisible = value ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
+
+            // 更新按钮文本
+            CompressButtonText = value ? "开始增量更新" : "开始压缩";
 
             // 如果启用增量更新，自动关闭过滤器和固实压缩
             if (value)
@@ -160,38 +166,84 @@ namespace unreal_GUI.ViewModel
                     return;
                 }
 
-                // 验证输出路径
-                if (string.IsNullOrEmpty(OutputPath))
-                {
-                    await ModernDialog.ShowErrorAsync("请设置输出路径", "错误");
-                    return;
-                }
-
                 // 获取项目目录
                 string projectDir = Path.GetDirectoryName(ProjectPath);
-
-                // 构建完整的输出压缩文件路径
                 string projectName = Path.GetFileNameWithoutExtension(ProjectPath);
-                string outputArchivePath = Path.Combine(OutputPath, $"{projectName}.7z");
 
-                // 直接调用压缩核心方法，传递项目根目录
-                bool success = await CompressCore.CompressFilesAsync(
-                     projectDir,
-                     outputArchivePath,
-                     compressionLevel: CompressLevel,
-                     soildcompress: SolidCompress
-                 );
+                bool success = false;
+
+                if (IncrementalUpdate)
+                {
+                    // 增量更新模式
+                    if (string.IsNullOrEmpty(InputPath))
+                    {
+                        await ModernDialog.ShowErrorAsync("增量更新模式下，请选择要更新的7z文件", "错误");
+                        return;
+                    }
+
+                    if (!File.Exists(InputPath))
+                    {
+                        await ModernDialog.ShowErrorAsync("要更新的7z文件不存在", "错误");
+                        return;
+                    }
+
+                    if (Path.GetExtension(InputPath) != ".7z")
+                    {
+                        await ModernDialog.ShowErrorAsync("增量更新只能使用7z格式的压缩包", "错误");
+                        return;
+                    }
+
+                    // 获取现有压缩包的路径作为输出路径
+                    string outputArchivePath = InputPath;
+
+                    // 检查压缩包是否为固实压缩
+                    bool isSolid = await CompressCore.IsSolidArchiveAsync(outputArchivePath);
+                    if (isSolid)
+                    {
+                        await ModernDialog.ShowErrorAsync("无法更新固实压缩的压缩包，请重新创建压缩包或取消固实压缩", "错误");
+                        return;
+                    }
+
+                    // 调用增量更新方法
+                    success = await CompressCore.UpdateArchiveAsync(
+                        projectDir,
+                        outputArchivePath,
+                        compressionLevel: CompressLevel
+                    );
+                }
+                else
+                {
+                    // 正常压缩模式
+                    if (string.IsNullOrEmpty(OutputPath))
+                    {
+                        await ModernDialog.ShowErrorAsync("请设置输出路径", "错误");
+                        return;
+                    }
+
+                    // 构建完整的输出压缩文件路径
+                    string outputArchivePath = Path.Combine(OutputPath, $"{projectName}.7z");
+
+                    // 调用压缩方法
+                    success = await CompressCore.CompressFilesAsync(
+                         projectDir,
+                         outputArchivePath,
+                         compressionLevel: CompressLevel,
+                         soildcompress: SolidCompress
+                     );
+                }
 
                 if (success)
                 {
                     SoundFX.PlaySound(0);
-                    await ModernDialog.ShowInfoAsync("压缩完成", "成功");
+                    string successMessage = IncrementalUpdate ? "增量更新完成" : "压缩完成";
+                    await ModernDialog.ShowInfoAsync(successMessage, "成功");
                 }
 
             }
             catch (Exception ex)
             {
-                await ModernDialog.ShowErrorAsync($"压缩过程中发生错误: {ex.Message}", "错误");
+                string errorMessage = IncrementalUpdate ? $"增量更新过程中发生错误: {ex.Message}" : $"压缩过程中发生错误: {ex.Message}";
+                await ModernDialog.ShowErrorAsync(errorMessage, "错误");
             }
         }
 

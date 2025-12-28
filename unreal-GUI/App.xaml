@@ -12,17 +12,17 @@
                 <ui:ThemeResources />
                 <ui:XamlControlsResources />
             </ResourceDictionary.MergedDictionaries>
-            <!-- ===================== 项目自定义转换器 ===================== -->
-            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <converters:BooleanToInverseBooleanConverter x:Key="BooleanToInverseBooleanConverter" />
+            <!-- ===================== ValueConverters库转换器 ===================== -->
+            <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+                              
+            <!-- ===================== 自定义转换器 ===================== -->
+            <converters:EqualityConverter x:Key="EqualityConverter" />
+            <converters:BoolToInverseBoolConverter x:Key="BoolToInverseBoolConverter" />
             <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
             <converters:NullToVisibilityInverterConverter x:Key="NullToVisibilityInverterConverter" />
             <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
-            <converters:EqualityConverter x:Key="EqualityConverter" />
             <converters:ImageCoordinateConverter x:Key="ImageCoordinateConverter" />
             
-            <!-- ===================== ValueConverters库转换器 ===================== -->
-            <conv:EnumWrapperConverter x:Key="EnumWrapperConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

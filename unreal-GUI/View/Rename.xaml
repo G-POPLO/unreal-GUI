@@ -33,7 +33,7 @@
                                     <TextBlock Text="项目"/>
                                 </StackPanel>
                             </RadioButton>
-                            <RadioButton x:Name="rbPlugin" IsChecked="{Binding IsProjectSelected, Converter={StaticResource BooleanToInverseBooleanConverter}}">
+                            <RadioButton x:Name="rbPlugin" IsChecked="{Binding IsProjectSelected, Converter={StaticResource BoolToInverseBoolConverter}}">
                                 <StackPanel Orientation="Horizontal">
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74C;" Margin="0,0,5,0" FontSize="12"/>
                                     <TextBlock Text="插件"/>
@@ -96,3 +96,5 @@
         </ScrollViewer>
     </Grid>
 </UserControl>
+
+
