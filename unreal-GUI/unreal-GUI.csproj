@@ -95,9 +95,6 @@
         <!--<TieredPGO>true</TieredPGO>-->
     </PropertyGroup>
 
-    <ItemGroup>
-      <None Remove="D:\PROGRAM\unreal-gui\unreal-GUI\App\7zxa.dll" />
-    </ItemGroup>
 
 
     <ItemGroup>

@@ -329,16 +329,6 @@ namespace unreal_GUI.Model.Basic
                 using var process = new Process { StartInfo = processStartInfo };
                 process.Start();
 
-                // 只读取错误输出
-                //_ = Task.Run(() =>
-                //{
-                //    string errorLine;
-                //    while ((errorLine = process.StandardError.ReadLine()) != null)
-                //    {
-                //        Console.Error.WriteLine($"错误: {errorLine}");
-                //    }
-                //});
-
                 // 等待进程完成
                 await process.WaitForExitAsync();
 
