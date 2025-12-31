@@ -335,19 +335,24 @@ namespace unreal_GUI.Model.Basic
             content.NavigateToImageEditRequested += (sender, imagePath) =>
             {
                 // 设置图片编辑控件的图片源
-                //imageEditContent.ImageSource = new System.Windows.Media.Imaging.BitmapImage(new System.Uri(imagePath));
+                imageEditContent.SetImage(imagePath);
 
                 // 订阅图片编辑完成事件
-                //imageEditContent.ImageEditCompleted += (s, e) =>
-                //{
-                //    // 将编辑后的图片传递回Add_Categories控件
-                //    content.ViewModel.IconPath = e.CroppedImagePath; // 使用裁剪后的图片路径
+                imageEditContent.ImageEditCompleted += (s, croppedImagePath) =>
+                {
+                    // 将编辑后的图片传递回Add_Categories控件
+                    content.ViewModel.IconPath = croppedImagePath; // 使用裁剪后的图片路径
+                    content.ViewModel.IconFileName = System.IO.Path.GetFileName(croppedImagePath);
 
-                //    // 切换回添加类别页面
-                //    dialog.Content = content;
-                //    dialog.Title = "添加模板类别";
-                //    dialog.PrimaryButtonText = "保存";
-                //};
+                    // 更新类别图标显示
+                    var bitmap = new System.Windows.Media.Imaging.BitmapImage(new Uri(croppedImagePath));
+                    content.ViewModel.CategoryIcon = bitmap;
+
+                    // 切换回添加类别页面
+                    dialog.Content = content;
+                    dialog.Title = "添加模板类别";
+                    dialog.PrimaryButtonText = "保存";
+                };
 
                 // 切换对话框内容到图片编辑控件
                 dialog.Content = imageEditContent;

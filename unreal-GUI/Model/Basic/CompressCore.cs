@@ -56,14 +56,14 @@ namespace unreal_GUI.Model.Basic
                 if (process.ExitCode != 0)
                 {
                     // 读取可能的错误信息
-                    await Task.Run(async () =>
-                    {
-                        string errorLine;
-                        while ((errorLine = process.StandardError.ReadLine()) != null)
-                        {
-                            Console.Error.WriteLine($"错误: {errorLine}");
-                        }
-                    });
+                    //await Task.Run(async () =>
+                    //{
+                    //    string errorLine;
+                    //    while ((errorLine = process.StandardError.ReadLine()) != null)
+                    //    {
+                    //        Console.Error.WriteLine($"错误: {errorLine}");
+                    //    }
+                    //});
 
                     // 根据退出代码返回相应的错误信息
                     string errorMessage = process.ExitCode switch

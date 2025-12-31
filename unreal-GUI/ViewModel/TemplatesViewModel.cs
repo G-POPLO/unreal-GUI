@@ -687,7 +687,7 @@ namespace unreal_GUI.ViewModel
             {
                 // 创建项目的Media目录
                 var projectMediaDir = Path.Combine(ProjectPath, "Media");
-                Directory.CreateDirectory(projectMediaDir);
+                //Directory.CreateDirectory(projectMediaDir);
 
                 // 检查是否有手动选择的图标
                 bool iconCopied = false;

@@ -1,4 +1,4 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,16 +10,16 @@ using unreal_GUI.ViewModel;
 namespace unreal_GUI.View.DialogContent
 {
     /// <summary>
-    /// example.xaml 的交互逻辑
+    /// UserControl1.xaml 的交互逻辑
     /// </summary>
-    public partial class example : UserControl
+    public partial class UserControl1 : UserControl
     {
-        private readonly TestViewModel viewModel;
-
-        public example()
+        private readonly UserControlViewModel viewModel;
+        public UserControl1()
         {
             InitializeComponent();
-            viewModel = new TestViewModel();
+
+            viewModel = new UserControlViewModel();
             DataContext = viewModel;
 
             Loaded += MainWindow_Loaded;
@@ -46,8 +46,10 @@ namespace unreal_GUI.View.DialogContent
 
         private void SelectImageButton_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new();
-            openFileDialog.Filter = "Image files (*.png;*.jpeg;*.jpg;*.bmp)|*.png;*.jpeg;*.jpg;*.bmp|All files (*.*)|*.*";
+            OpenFileDialog openFileDialog = new()
+            {
+                Filter = "Image files (*.png;*.jpeg;*.jpg;*.bmp)|*.png;*.jpeg;*.jpg;*.bmp|All files (*.*)|*.*"
+            };
 
             if (openFileDialog.ShowDialog() == true)
             {
@@ -73,20 +75,26 @@ namespace unreal_GUI.View.DialogContent
         private void Edge_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             string edge = "";
-            if (sender == EdgeTop) edge = "Top";
-            else if (sender == EdgeBottom) edge = "Bottom";
-            else if (sender == EdgeLeft) edge = "Left";
-            else if (sender == EdgeRight) edge = "Right";
+            if (sender == EdgeTop) edge = "EdgeTop";
+            else if (sender == EdgeBottom) edge = "EdgeBottom";
+            else if (sender == EdgeLeft) edge = "EdgeLeft";
+            else if (sender == EdgeRight) edge = "EdgeRight";
 
             Point position = e.GetPosition(CroppingCanvas);
-            viewModel.StartEdgeDrag(edge, position.X, position.Y);
+            viewModel.StartEdgeDrag(position.X, position.Y, edge);
             ((Rectangle)sender).CaptureMouse();
         }
 
         private void Edge_MouseMove(object sender, MouseEventArgs e)
         {
+            string edge = "";
+            if (sender == EdgeTop) edge = "EdgeTop";
+            else if (sender == EdgeBottom) edge = "EdgeBottom";
+            else if (sender == EdgeLeft) edge = "EdgeLeft";
+            else if (sender == EdgeRight) edge = "EdgeRight";
+
             Point position = e.GetPosition(CroppingCanvas);
-            viewModel.ResizeEdge(position.X, position.Y);
+            viewModel.ResizeEdge(position.X, position.Y, edge);
         }
 
         private void Edge_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -112,7 +120,6 @@ namespace unreal_GUI.View.DialogContent
         private void ResizableRect_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             viewModel.EndDrag();
-
             ResizableRect.ReleaseMouseCapture();
         }
     }

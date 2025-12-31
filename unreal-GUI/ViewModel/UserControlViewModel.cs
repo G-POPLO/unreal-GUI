@@ -1,10 +1,8 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace unreal_GUI.ViewModel
 {
-
-
-    public partial class TestViewModel : ObservableObject
+    public partial class UserControlViewModel : ObservableObject
     {
         // 矩形的位置和尺寸属性
         [ObservableProperty]
@@ -85,7 +83,7 @@ namespace unreal_GUI.ViewModel
         private double canvasWidth;
         private double canvasHeight;
 
-        public TestViewModel()
+        public UserControlViewModel()
         {
             // 初始化时居中显示矩形
             InitializeRectPosition();
@@ -138,16 +136,16 @@ namespace unreal_GUI.ViewModel
         }
 
         // 开始拖拽边缘
-        public void StartEdgeDrag(string edge, double posX, double posY)
+        public void StartEdgeDrag(double posX, double posY, string edgeName)
         {
             IsDragging = true;
-            DragEdge = edge;
+            DragEdge = edgeName;
             ClickPositionX = posX;
             ClickPositionY = posY;
         }
 
         // 拖拽边缘调整大小
-        public void ResizeEdge(double posX, double posY)
+        public void ResizeEdge(double posX, double posY, string edgeName)
         {
             if (!IsDragging || string.IsNullOrEmpty(DragEdge))
                 return;
@@ -155,18 +153,19 @@ namespace unreal_GUI.ViewModel
             double deltaX = posX - ClickPositionX;
             double deltaY = posY - ClickPositionY;
 
-            switch (DragEdge)
+            // 根据边缘名称决定调整方向
+            switch (edgeName)
             {
-                case "Top":
+                case "EdgeTop":
                     ResizeFromTop(deltaY);
                     break;
-                case "Bottom":
+                case "EdgeBottom":
                     ResizeFromBottom(deltaY);
                     break;
-                case "Left":
+                case "EdgeLeft":
                     ResizeFromLeft(deltaX);
                     break;
-                case "Right":
+                case "EdgeRight":
                     ResizeFromRight(deltaX);
                     break;
             }
@@ -182,7 +181,11 @@ namespace unreal_GUI.ViewModel
             double newTop = RectTop + (RectHeight - newHeight);
             double newLeft = RectLeft + (RectWidth - newWidth) / 2;
 
-            if (newHeight > 0 && newWidth > 0)
+            // 边界检查
+            if (newHeight > 0 && newWidth > 0 && 
+                newTop >= 0 && newLeft >= 0 && 
+                newTop + newHeight <= canvasHeight && 
+                newLeft + newWidth <= canvasWidth)
             {
                 RectTop = newTop;
                 RectLeft = newLeft;
@@ -198,7 +201,11 @@ namespace unreal_GUI.ViewModel
             double newWidth = newHeight * 3.0;
             double newLeft = RectLeft + (RectWidth - newWidth) / 2;
 
-            if (newHeight > 0 && newWidth > 0)
+            // 边界检查
+            if (newHeight > 0 && newWidth > 0 && 
+                RectTop >= 0 && newLeft >= 0 && 
+                RectTop + newHeight <= canvasHeight && 
+                newLeft + newWidth <= canvasWidth)
             {
                 RectHeight = newHeight;
                 RectWidth = newWidth;
@@ -214,7 +221,11 @@ namespace unreal_GUI.ViewModel
             double newLeft = RectLeft + (RectWidth - newWidth);
             double newTop = RectTop + (RectHeight - newHeight) / 2;
 
-            if (newWidth > 0 && newHeight > 0)
+            // 边界检查
+            if (newWidth > 0 && newHeight > 0 && 
+                newTop >= 0 && newLeft >= 0 && 
+                newTop + newHeight <= canvasHeight && 
+                newLeft + newWidth <= canvasWidth)
             {
                 RectLeft = newLeft;
                 RectTop = newTop;
@@ -230,7 +241,11 @@ namespace unreal_GUI.ViewModel
             double newHeight = newWidth / 3.0;
             double newTop = RectTop + (RectHeight - newHeight) / 2;
 
-            if (newWidth > 0 && newHeight > 0)
+            // 边界检查
+            if (newWidth > 0 && newHeight > 0 && 
+                newTop >= 0 && RectLeft >= 0 && 
+                newTop + newHeight <= canvasHeight && 
+                RectLeft + newWidth <= canvasWidth)
             {
                 RectWidth = newWidth;
                 RectHeight = newHeight;
@@ -263,13 +278,21 @@ namespace unreal_GUI.ViewModel
                 double offsetX = posX - ClickPositionX;
                 double offsetY = posY - ClickPositionY;
 
-                RectLeft += offsetX;
-                RectTop += offsetY;
+                double newLeft = RectLeft + offsetX;
+                double newTop = RectTop + offsetY;
 
-                UpdateEdgeRects();
+                // 边界检查
+                if (newLeft >= 0 && newTop >= 0 && 
+                    newLeft + RectWidth <= canvasWidth && 
+                    newTop + RectHeight <= canvasHeight)
+                {
+                    RectLeft = newLeft;
+                    RectTop = newTop;
+                    UpdateEdgeRects();
 
-                ClickPositionX = posX;
-                ClickPositionY = posY;
+                    ClickPositionX = posX;
+                    ClickPositionY = posY;
+                }
             }
         }
     }
