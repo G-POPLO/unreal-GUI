@@ -167,7 +167,7 @@
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
                             <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.OtherUser}" Glyph="&#xE7EE;" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="扩展功能" FontSize="18" FontWeight="SemiBold"/>
+                            <TextBlock Text="高级选项" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
 
 
@@ -177,7 +177,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="启用高级选项" 
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="启用扩展功能" 
                  VerticalAlignment="Center"/>
                             <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding AdvancedMode}"/>
                         </Grid>

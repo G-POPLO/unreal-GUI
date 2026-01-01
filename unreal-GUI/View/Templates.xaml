@@ -225,24 +225,25 @@
                             <TextBlock Text="创建模板"/>
                         </StackPanel>
                     </Button>
-                    <Button Command="{Binding ResetCommand}" Margin="0,0,10,0">
+                    <Button Command="{Binding RecoveryCommand}" Margin="0,0,10,0">
                         <StackPanel Orientation="Horizontal">
                             <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE72C;" Margin="0,0,5,0"/>
-                            <TextBlock Text="重置"/>
+                            <TextBlock Text="恢复备份配置文件"/>
                         </StackPanel>
                     </Button>
-                    <!--<Button Command="{Binding OpenBackupCommand}">
+                    <Button Command="{Binding OpenBackupCommand}" Margin="0,0,10,0">
                         <StackPanel Orientation="Horizontal">
-                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xf000;" Margin="0,0,5,0"/>
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
                             <TextBlock Text="查看配置文件备份"/>
                         </StackPanel>
-                    </Button>-->
+                    </Button>
+                    <Button Command="{Binding ResetCommand}" Margin="0,0,10,0">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xe74d;" Margin="0,0,5,0"/>
+                            <TextBlock Text="重置表单"/>
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
-
-                <!-- 状态信息 -->
-                <!--<TextBlock x:Name="StatusText" Text="{Binding StatusMessage}" 
-                           TextWrapping="Wrap" Margin="0,0,0,20" 
-                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>-->
             </StackPanel>
         </ScrollViewer>
     </Grid>

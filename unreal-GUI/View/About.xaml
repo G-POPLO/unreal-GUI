@@ -100,6 +100,11 @@
     添加由用户自定义的模板或内容包以供项目创建时使用
                         </TextBlock>
 
+                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,10">
+<Run FontWeight="SemiBold">项目压缩：</Run>
+<LineBreak/>
+使用压缩率更高的7z对项目文件夹进行压缩打包，方便传输和备份
+                        </TextBlock>
                     </StackPanel>
                 </Border>
             </StackPanel>
