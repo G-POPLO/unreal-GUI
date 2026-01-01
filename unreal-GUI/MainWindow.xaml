@@ -16,10 +16,8 @@
     <Window.DataContext>
         <viewModel:MainWindowViewModel />
     </Window.DataContext>
-    <Grid >
-        <!--<MediaElement x:Name="AudioPlayer" 
-                      LoadedBehavior="Manual" 
-                      Visibility="Collapsed" />-->
+    <Grid>
+      
         <ui:NavigationView x:Name="NavigationView" 
                            Tag="{Binding CurrentPageTag, Mode=TwoWay}"
                            

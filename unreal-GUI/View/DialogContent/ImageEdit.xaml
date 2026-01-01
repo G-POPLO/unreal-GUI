@@ -22,7 +22,7 @@
             <TextBlock Text="本工具用于将图片剪裁为3:1比例，适用于类别(Categories)图标。" 
                        Margin="0,5,0,0" 
                        FontSize="14" 
-                       Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
         </StackPanel>
 
         <!-- 第二行：图片展示区域 -->
@@ -139,7 +139,7 @@
                        Text="剪裁比例: 3:1" 
                        FontSize="14" 
                        VerticalAlignment="Center"
-                       Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
         </Grid>
 
         <!-- 第四行：底部按钮 -->
@@ -160,16 +160,16 @@
             <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="20,0,0,0">
                 <CheckBox x:Name="PNGCompressCheckBox" 
                        Content="启用压缩" 
-                      
+                      IsChecked="True"
                        Margin="0,0,10,0" HorizontalAlignment="Left"/>
             </StackPanel>
 
-            <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="10,0,0,0">
+            <!--<StackPanel Grid.Column="1" Orientation="Horizontal" Margin="10,0,0,0">
                 <Button x:Name="FinishCropButton" 
                        Content="完成剪裁" 
-                    
+                    Style="{DynamicResource AccentButtonStyle}"
                        Click="FinishCropButton_Click" HorizontalAlignment="Right" Margin="0,0,20,0"/>
-            </StackPanel>
+            </StackPanel>-->
 
         </Grid>
     </Grid>

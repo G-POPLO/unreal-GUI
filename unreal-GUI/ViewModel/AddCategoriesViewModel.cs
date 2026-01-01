@@ -1,15 +1,15 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
-using System.Text.Json;
 using System;
 using System.IO;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using unreal_GUI.Model;
-using MessageBox = iNKORE.UI.WPF.Modern.Controls.MessageBox;
 using unreal_GUI.Model.Basic;
 using unreal_GUI.Model.Features;
+using MessageBox = iNKORE.UI.WPF.Modern.Controls.MessageBox;
 
 namespace unreal_GUI.ViewModel
 {
@@ -21,6 +21,9 @@ namespace unreal_GUI.ViewModel
 
         [ObservableProperty]
         private bool isMajorCategory = true;
+
+        [ObservableProperty]
+        private bool enableMultiLanguageConfig = false;
 
         [ObservableProperty]
         private BitmapImage? categoryIcon;
@@ -75,17 +78,45 @@ namespace unreal_GUI.ViewModel
 
             if (openFileDialog.ShowDialog() == true)
             {
+                string selectedImagePath = openFileDialog.FileName;
+
                 // 检查图片比例是否符合3:1
-                if (!PhotoEdit.IsCorrectRatio(openFileDialog.FileName))
+                if (!PhotoEdit.IsCorrectRatio(selectedImagePath))
                 {
-                    // 图片不符合3:1比例，触发事件通知UI需要跳转到图片编辑页面
-                    RequestImageEdit?.Invoke(this, openFileDialog.FileName);
-                    return;
+                    // 图片不符合3:1比例，自动从中心裁剪
+                    try
+                    {
+                        // 创建临时裁剪后的图片文件
+                        string tempDirectory = Path.Combine(Path.GetTempPath(), "UnrealGUI");
+                        if (!Directory.Exists(tempDirectory))
+                        {
+                            Directory.CreateDirectory(tempDirectory);
+                        }
+
+                        string croppedImageName = $"cropped_{DateTime.Now:yyyyMMdd_HHmmss}_{Guid.NewGuid():N}.png";
+                        string croppedImagePath = Path.Combine(tempDirectory, croppedImageName);
+
+                        // 自动裁剪图片为3:1比例
+                        bool cropSuccess = PhotoEdit.AutoCropTo3to1Ratio(selectedImagePath, croppedImagePath);
+
+                        if (cropSuccess)
+                        {
+                            selectedImagePath = croppedImagePath;
+                        }
+                        else
+                        {
+                            MessageBox.Show("图片裁剪失败，将使用原图", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"图片裁剪时发生错误：{ex.Message}，将使用原图", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
                 }
 
                 // 设置图标路径和文件名
-                IconPath = openFileDialog.FileName;
-                IconFileName = Path.GetFileName(openFileDialog.FileName);
+                IconPath = selectedImagePath;
+                IconFileName = Path.GetFileName(selectedImagePath);
 
                 // 加载图标到UI
                 var bitmap = new BitmapImage();
@@ -102,7 +133,7 @@ namespace unreal_GUI.ViewModel
         /// <summary>
         /// 请求跳转到图片编辑页面的事件
         /// </summary>
-        public event EventHandler<string> RequestImageEdit;
+        //public event EventHandler<string> RequestImageEdit;
 
         /// <summary>
         /// 复制图片到引擎的Templates目录
@@ -219,15 +250,16 @@ namespace unreal_GUI.ViewModel
         private void ResetForm()
         {
             CategoryKey = string.Empty;
-            IsMajorCategory = false;
+            IsMajorCategory = true;
+            EnableMultiLanguageConfig = false;
             CategoryIcon = null;
             IconFileName = string.Empty;
             IconPath = string.Empty;
             DisplayName = string.Empty;
             DescriptionEn = string.Empty;
-            DescriptionZh = null;
-            DescriptionJa = null;
-            DescriptionKo = null;
+            DescriptionZh = string.Empty;
+            DescriptionJa = string.Empty;
+            DescriptionKo = string.Empty;
             GeneratedCategoriesText = string.Empty;
         }
     }

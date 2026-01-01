@@ -125,6 +125,9 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private bool isProjectSelected = true;
 
+        [ObservableProperty]
+        private bool enableMultiLanguageConfig = false;
+
         // 注意：EngineInfo类已在JsonConfig.cs中定义，这里使用自定义的显示包装类
         public class EngineDisplayInfo
         {
@@ -662,10 +665,10 @@ namespace unreal_GUI.ViewModel
                 var targetDir = Path.Combine(SelectedEngine.Path, "Templates", TemplateName);
 
                 // 如果目标目录已存在，删除它
-                if (Directory.Exists(targetDir))
-                {
-                    Directory.Delete(targetDir, true);
-                }
+                //if (Directory.Exists(targetDir))
+                //{
+                //    Directory.Delete(targetDir, true);
+                //}
 
                 // 复制整个项目目录
                 CopyDirectory(ProjectPath, targetDir);
