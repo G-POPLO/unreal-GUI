@@ -93,7 +93,7 @@ namespace unreal_GUI.ViewModel
                             Directory.CreateDirectory(tempDirectory);
                         }
 
-                        string croppedImageName = $"cropped_{DateTime.Now:yyyyMMdd_HHmmss}_{Guid.NewGuid():N}.png";
+                        string croppedImageName = $"{CategoryKey}_2X.png";
                         string croppedImagePath = Path.Combine(tempDirectory, croppedImageName);
 
                         // 自动裁剪图片为3:1比例

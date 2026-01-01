@@ -1,8 +1,6 @@
 using iNKORE.UI.WPF.Modern.Controls;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
@@ -28,7 +26,8 @@ namespace unreal_GUI.Model.Basic
                 Title = title,
                 Content = message,
                 PrimaryButtonText = "是",
-                CloseButtonText = "否"
+                CloseButtonText = "否",
+                DefaultButton = ContentDialogButton.Primary
             };
 
             var result = await dialog.ShowAsync();
@@ -45,15 +44,15 @@ namespace unreal_GUI.Model.Basic
                 Markdown = message
             };
             markdownViewer.Document.FontFamily = new FontFamily("Microsoft YaHei UI");
-            markdownViewer.Document.Foreground = (Brush)Application.Current.Resources["TextFillColorPrimaryBrush"];
+            //markdownViewer.Document.Foreground = (Brush)Application.Current.Resources["TextFillColorPrimaryBrush"];
             var dialog = new ContentDialog
             {
                 Title = title,
                 Content = markdownViewer,
                 PrimaryButtonText = "是",
-                CloseButtonText = "否"
+                CloseButtonText = "否",
+                DefaultButton = ContentDialogButton.Primary
             };
-
             var result = await dialog.ShowAsync();
             return result == ContentDialogResult.Primary;
         }
@@ -176,7 +175,8 @@ namespace unreal_GUI.Model.Basic
                 Content = message,
                 PrimaryButtonText = primaryButton,
                 SecondaryButtonText = secondaryButton,
-                CloseButtonText = closeButton
+                CloseButtonText = closeButton,
+                DefaultButton = ContentDialogButton.Primary
             };
 
             return await dialog.ShowAsync();
