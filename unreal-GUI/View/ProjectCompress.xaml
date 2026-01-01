@@ -58,7 +58,7 @@
                             <!-- 项目缩略图 -->
                             <StackPanel Grid.Column="1" HorizontalAlignment="Center">
                                 <TextBlock Text="项目缩略图" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5" TextAlignment="Center"/>
-                                <Border BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}" BorderThickness="1" CornerRadius="4" Width="200" Height="150">
+                                <Border BorderBrush="{DynamicResource TextFillColorSecondaryBrush}" BorderThickness="1" CornerRadius="4" Width="200" Height="150">
                                     <Image Source="{Binding ProjectThumbnail}" Stretch="UniformToFill"/>
                                 </Border>
                             </StackPanel>
@@ -77,7 +77,7 @@
 
                         <!-- 压缩效果(-mx) -->
 
-                        <TextBlock Text="-mx值越高，压缩效果越好，但所需的压缩时间也会增长。增量更新要求-mx=&lt;5"  Margin="5"  Foreground="Gray"/>
+                        <TextBlock Text="-mx值越高，压缩效果越好，但所需的压缩时间也会增长。增量更新要求-mx=&lt;5"  Margin="5"  Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
                         <Grid Height="32" >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>

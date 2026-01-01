@@ -1,9 +1,10 @@
-﻿using System;
+﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Png;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+using System;
 using System.IO;
 using System.Windows.Media.Imaging;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Png;
-using SixLabors.ImageSharp.Processing;
 
 namespace unreal_GUI.Model.Features
 {
@@ -41,6 +42,79 @@ namespace unreal_GUI.Model.Features
         }
 
         /// <summary>
+        /// 自动从图片中心裁剪为3:1比例
+        /// </summary>
+        /// <param name="inputPath">输入图片路径</param>
+        /// <param name="outputPath">输出图片路径</param>
+        /// <returns>是否裁剪成功</returns>
+        public static bool AutoCropTo3to1Ratio(string inputPath, string outputPath)
+        {
+            try
+            {
+                // 确保输出目录存在
+                string outputDirectory = Path.GetDirectoryName(outputPath);
+                if (!string.IsNullOrEmpty(outputDirectory))
+                {
+                    Directory.CreateDirectory(outputDirectory);
+                }
+
+                // 使用ImageSharp加载图片
+                using var image = Image.Load<Rgba32>(inputPath);
+
+                int originalWidth = image.Width;
+                int originalHeight = image.Height;
+                double originalRatio = (double)originalWidth / originalHeight;
+                double targetRatio = 3.0;
+
+                int cropX, cropY, cropWidth, cropHeight;
+
+                if (originalRatio > targetRatio)
+                {
+                    // 图片太宽，需要裁剪宽度
+                    cropWidth = (int)Math.Round(originalHeight * targetRatio);
+                    cropHeight = originalHeight;
+                    cropX = (originalWidth - cropWidth) / 2;
+                    cropY = 0;
+                }
+                else
+                {
+                    // 图片太高，需要裁剪高度
+                    cropWidth = originalWidth;
+                    cropHeight = (int)Math.Round(originalWidth / targetRatio);
+                    cropX = 0;
+                    cropY = (originalHeight - cropHeight) / 2;
+                }
+
+                // 确保裁剪区域不超出图片边界
+                if (cropX < 0) cropX = 0;
+                if (cropY < 0) cropY = 0;
+                if (cropX + cropWidth > originalWidth) cropWidth = originalWidth - cropX;
+                if (cropY + cropHeight > originalHeight) cropHeight = originalHeight - cropY;
+
+                // 从中心裁剪图片
+                var croppedImage = image.Clone(ctx => ctx.Crop(new Rectangle(cropX, cropY, cropWidth, cropHeight)));
+
+                // 配置PNG编码器
+                var pngEncoder = new PngEncoder
+                {
+                    CompressionLevel = PngCompressionLevel.BestCompression,
+                    ColorType = PngColorType.RgbWithAlpha
+                };
+
+                // 保存裁剪后的图片
+                croppedImage.Save(outputPath, pngEncoder);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // 记录错误
+                Console.WriteLine($"自动裁剪失败：{ex.Message}");
+                return false;
+            }
+        }
+
+        /// <summary>
         /// 使用ImageSharp压缩PNG图片
         /// </summary>
         /// <param name="inputPath">输入图片路径</param>
@@ -66,7 +140,7 @@ namespace unreal_GUI.Model.Features
 
                 // 使用ImageSharp加载、处理并保存图片
                 using var image = Image.Load(inputPath);
-                
+
                 // 配置PNG编码器
                 var pngEncoder = new PngEncoder
                 {

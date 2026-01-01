@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using unreal_GUI.ViewModel;
+using MessageBox = iNKORE.UI.WPF.Modern.Controls.MessageBox;
 
 namespace unreal_GUI.View.DialogContent
 {
@@ -375,7 +376,7 @@ namespace unreal_GUI.View.DialogContent
             {
                 // 保存剪裁后的图片
                 SaveCroppedImage(tempFilePath);
-                
+
                 // 设置剪裁后的图片路径
                 CroppedImagePath = tempFilePath;
 
