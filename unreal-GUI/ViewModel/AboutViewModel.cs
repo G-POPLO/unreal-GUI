@@ -24,5 +24,25 @@ namespace unreal_GUI.ViewModel
                 UseShellExecute = true
             });
         }
+
+        [RelayCommand]
+        private static void OpenFeedbackUrl()
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://github.com/G-POPLO/unreal-GUI/issues",
+                UseShellExecute = true
+            });
+        }
+
+        [RelayCommand]
+        private static void OpenProjectProgressUrl()
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://github.com/users/G-POPLO/projects/2/views/2",
+                UseShellExecute = true
+            });
+        }
     }
 }

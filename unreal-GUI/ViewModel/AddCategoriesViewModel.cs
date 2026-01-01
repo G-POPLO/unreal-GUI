@@ -62,6 +62,39 @@ namespace unreal_GUI.ViewModel
         public AddCategoriesViewModel()
         {
             _categoriesParser = new CategoriesParser();
+            // 设置默认图标
+            SetDefaultIcon();
+        }
+
+        /// <summary>
+        /// 设置默认图标
+        /// </summary>
+        private void SetDefaultIcon()
+        {
+            try
+            {
+                // 获取默认图标路径（应用程序根目录的Image文件夹）
+                string appRoot = AppDomain.CurrentDomain.BaseDirectory;
+                string defaultIconPath = Path.Combine(appRoot, "Image", "Blank_2x.png");
+                
+                if (File.Exists(defaultIconPath))
+                {
+                    // 加载默认图标
+                    var bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.UriSource = new Uri(defaultIconPath);
+                    bitmap.EndInit();
+                    CategoryIcon = bitmap;
+                    
+                    // 设置默认图标信息
+                    IconPath = defaultIconPath;
+                    IconFileName = "Blank_2x.png";
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"加载默认图标失败: {ex.Message}");
+            }
         }
 
         /// <summary>
@@ -217,13 +250,12 @@ namespace unreal_GUI.ViewModel
         [RelayCommand]
         private void GenerateCategories()
         {
-            // 验证必填字段
+            // 验证必填字段（现在图标总是有默认的，所以只需要验证Key和英文描述）
             if (string.IsNullOrWhiteSpace(CategoryKey) ||
-                string.IsNullOrWhiteSpace(DescriptionEn) ||
-                string.IsNullOrWhiteSpace(IconPath))
+                string.IsNullOrWhiteSpace(DescriptionEn))
             {
                 // 可以在这里添加错误处理逻辑
-                GeneratedCategoriesText = "请填写所有必填字段（Key、英文描述和图标）";
+                GeneratedCategoriesText = "请填写所有必填字段（Key和英文描述）";
                 return;
             }
 
@@ -252,15 +284,15 @@ namespace unreal_GUI.ViewModel
             CategoryKey = string.Empty;
             IsMajorCategory = true;
             EnableMultiLanguageConfig = false;
-            CategoryIcon = null;
-            IconFileName = string.Empty;
-            IconPath = string.Empty;
             DisplayName = string.Empty;
             DescriptionEn = string.Empty;
             DescriptionZh = string.Empty;
             DescriptionJa = string.Empty;
             DescriptionKo = string.Empty;
             GeneratedCategoriesText = string.Empty;
+            
+            // 重新设置默认图标
+            SetDefaultIcon();
         }
     }
 }

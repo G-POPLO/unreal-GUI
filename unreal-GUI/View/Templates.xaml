@@ -68,16 +68,16 @@
                         
                         CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                             <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xe9d5;" Margin="0,0,10,0" VerticalAlignment="Center"/>
                             <TextBlock Text="模板信息" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
 
                         <!-- 模板名称 -->
-                        <StackPanel Margin="0,0,0,15">
+                        <StackPanel Margin="0,0,0,10">
                             <TextBlock Text="以下信息将填入Config\TemplateDefs.ini" 
             FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" 
-            Margin="0,5,0,5"/>
+            Margin="0,0,0,5"/>
                             <TextBlock Text="模板名称" Margin="0,0,0,5"/>
                             
                         <TextBox Text="{Binding TemplateName}"/>
@@ -97,7 +97,7 @@
                         <!-- Project_ID绑定到Id属性 -->
                         <TextBlock x:Name="Project_ID" Text="{Binding Id, StringFormat=Project ID（唯一）: {0}}" 
     FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-    Margin="0,5,0,5"/>
+    Margin="0,0,0,5"/>
                         <CheckBox IsChecked="{Binding EnableMultiLanguageConfig}" Content="启用多语言配置" Margin="0,0,0,5"/>
                         <!-- 英文描述 -->
                         <StackPanel Margin="0,0,0,15">
