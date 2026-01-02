@@ -6,3 +6,19 @@ renom rename-project --project <PROJECT> --new-name <NEW_NAME>
 
 renom rename-plugin --project <PROJECT> --plugin <PLUGIN> --new-name <NEW_NAME>
 
+重命名C++项目模块（当选择C++项目类型时需要额外执行）：
+
+renom rename-module --project <PROJECT> --module <MODULE_NAME> --new-name <NEW_MODULE_NAME>
+
+重命名C++项目Target（当选择C++项目类型时需要额外执行）：
+
+renom rename-target --project <PROJECT> --target <TARGET_NAME> --new-name <NEW_TARGET_NAME>
+
+TARGET_NAME 一般有两种形式：
+- <TARGET_NAME>
+- <TARGET_NAME>Editor
+
+对于C++项目，重命名流程包括：
+1. 重命名项目
+2. 重命名模块（模块名称通常与原项目名称相同）
+3. 重命名Target（包括基础Target和Editor Target）。

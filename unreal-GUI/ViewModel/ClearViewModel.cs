@@ -65,11 +65,6 @@ namespace unreal_GUI.ViewModel
             }
         }
 
-        //private void UpdatePanelVisibility()
-        //{
-        //    IsOldDDCPanelVisible = !Properties.Settings.Default.ZenDashborad;
-        //    IsZenPanelVisible = Properties.Settings.Default.ZenDashborad;
-        //}
 
         [RelayCommand]
         private void SelectInputPath()
@@ -122,8 +117,8 @@ namespace unreal_GUI.ViewModel
                     File.Delete(file);
 
                 TipClearCache = "清理完毕";
-                System.Media.SoundPlayer player = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-on.wav"));
-                
+                SoundFX.PlaySound(0);
+
                 if (Properties.Settings.Default.AutoOpen)
                 {
                     Process.Start("explorer.exe", Path.Combine(InputPath));
@@ -133,64 +128,11 @@ namespace unreal_GUI.ViewModel
             {
 
                 TipClearCache = "清理失败: " + ex.Message;
-                System.Media.SoundPlayer player = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav"));
-                
+                SoundFX.PlaySound(1);
+
             }
         }
 
-        //[RelayCommand]
-        //private void FindDDCPaths()
-        //{
-        //    try
-        //    {
-        //        using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\\Epic Games\\GlobalDataCachePath");
-        //        var localPath = key?.GetValue("UE-LocalDataCachePath")?.ToString();
-        //        var sharedPath = key?.GetValue("UE-SharedDataCachePath")?.ToString();
-
-        //        if (!string.IsNullOrEmpty(localPath))
-        //        {
-        //            DDCPath = $"DDC全局缓存路径：{localPath}";
-        //            Properties.Settings.Default.DDC = localPath;
-        //        }
-
-        //        if (!string.IsNullOrEmpty(sharedPath))
-        //        {
-        //            DDCSharePath = $"DDC共享缓存路径：{sharedPath}";
-        //            Properties.Settings.Default.DDCShare = sharedPath;
-        //        }
-
-        //        Properties.Settings.Default.Save();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _ = ModernDialog.ShowConfirmAsync($"找不到DDC缓存路径：" + ex.Message, "提示");
-        //    }
-        //}
-
-        //[RelayCommand]
-        //private async Task CalculateTotalSize()
-        //{
-        //    try
-        //    {
-        //        var ddcPath = Properties.Settings.Default.DDC;
-        //        var sharePath = Properties.Settings.Default.DDCShare;
-
-        //        if (string.IsNullOrEmpty(ddcPath) || string.IsNullOrEmpty(sharePath))
-        //        {
-        //            throw new Exception("请先获取DDC缓存路径");
-        //        }
-
-        //        float totalSize = await Task.Run(() => CalculateDirectorySize(ddcPath) + CalculateDirectorySize(sharePath));
-        //        Properties.Settings.Default.DDCTotal = totalSize;
-        //        TotalSize = $"总计大小：{totalSize:0.00} GB";
-        //        Properties.Settings.Default.Save();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        await ModernDialog.ShowInfoAsync("计算失败: " + ex.Message, "错误提示");
-        //        TotalSize = $"总计大小：{Properties.Settings.Default.DDCTotal:0.00} GB";
-        //    }
-        //}
 
         [RelayCommand]
         private void OpenZenDashboard()
@@ -258,25 +200,19 @@ namespace unreal_GUI.ViewModel
                     {
                         File.Delete(file);
                     }
-
-
                 }
 
                 TipClearLog = "Log清理完毕";
-                System.Media.SoundPlayer player = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-on.wav"));
-                
+                SoundFX.PlaySound(0);
+
             }
             catch (Exception ex)
             {
                 TipClearLog = "Log清理失败: " + ex.Message;
-                System.Media.SoundPlayer player = new(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav"));
-                
+                SoundFX.PlaySound(1);
+
             }
         }
 
-        //partial void OnInputPathChanged(string value)
-        //{
-        //    IsCleanButtonEnabled = !string.IsNullOrWhiteSpace(value);
-        //}
     }
 }

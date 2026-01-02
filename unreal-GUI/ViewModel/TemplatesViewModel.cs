@@ -926,7 +926,9 @@ namespace unreal_GUI.ViewModel
         }
 
         // 带进度的递归目录复制
+#pragma warning disable CA1822 // 将成员标记为 static
         private async Task CopyDirectoryWithProgressAsync(string sourceDir, string destinationDir, ProgressState state, byte[] buffer)
+#pragma warning restore CA1822 // 将成员标记为 static
         {
             // 创建目标目录
             Directory.CreateDirectory(destinationDir);

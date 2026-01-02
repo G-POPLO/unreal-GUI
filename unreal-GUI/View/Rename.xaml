@@ -26,7 +26,7 @@
                             <TextBlock Text="类型选择" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
                         
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                             <RadioButton x:Name="rbProject" IsChecked="{Binding IsProjectSelected}" Margin="0,0,20,0">
                                 <StackPanel Orientation="Horizontal">
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B9;" Margin="0,0,5,0" FontSize="12"/>
@@ -37,6 +37,20 @@
                                 <StackPanel Orientation="Horizontal">
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74C;" Margin="0,0,5,0" FontSize="12"/>
                                     <TextBlock Text="插件"/>
+                                </StackPanel>
+                            </RadioButton>
+                        </StackPanel>
+                        <StackPanel x:Name="ProjectTypePanel" Orientation="Horizontal" Visibility="{Binding ProjectTypePanelVisibility}">
+                            <RadioButton x:Name="rbBP" IsChecked="{Binding IsBPSelected}" Margin="0,0,20,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B9;" Margin="0,0,5,0" FontSize="12"/>
+                                    <TextBlock Text="蓝图"/>
+                                </StackPanel>
+                            </RadioButton>
+                            <RadioButton x:Name="rbCplus" IsChecked="{Binding IsBPSelected, Converter={StaticResource BoolToInverseBoolConverter}}">
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74C;" Margin="0,0,5,0" FontSize="12"/>
+                                    <TextBlock Text="C++"/>
                                 </StackPanel>
                             </RadioButton>
                         </StackPanel>
@@ -63,15 +77,14 @@
                         </Button>
                         
                       
-                        <!--<StackPanel x:Name="PluginNamePanel" Margin="0,0,0,15" Visibility="{Binding IsProjectSelected, Converter={StaticResource BoolToInverseBoolConverter}, ConverterParameter=True}">
-                            <TextBlock x:Name="tip2" TextWrapping="Wrap" Margin="0,0,0,10" Text="插件名称"/>
-                            <TextBox x:Name="PluginName" Margin="0,0,0,0" Text="{Binding PluginName, UpdateSourceTrigger=PropertyChanged}"/>
-                        </StackPanel>-->
+        
                         
                         <TextBlock  TextWrapping="Wrap" Margin="0,0,0,10" Text="输入重命名名称"/>
-                        <ui:InfoBar x:Name="TestInfoBar2" 
-    Title="注意" IsOpen="True"
-    Message="为避免潜在的崩溃，请勿使用中文来命名你的C++项目">
+                        <ui:InfoBar x:Name="InfoBar" 
+                                    Title="注意" 
+                                    IsOpen="True"
+                                    Visibility="{Binding InfoBarVisibility}"                                 
+                                    Message="为避免潜在的崩溃，请勿使用中文来命名你的C++项目">
                         </ui:InfoBar>
                         <TextBox x:Name="Output" Margin="0,11,0,0" Text="{Binding OutputPath, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
@@ -95,7 +108,7 @@
                             </StackPanel>
                         </Button>
                         
-                        <TextBlock x:Name="msg" TextWrapping="Wrap" Text="{Binding Message}" Margin="0,0,0,0" Visibility="{Binding MessageVisibility}"/>
+                        <TextBlock x:Name="msg" TextWrapping="Wrap" Text="{Binding Message}" Margin="0,0,0,0"/>
                     </StackPanel>
                 </Border>
             </StackPanel>
