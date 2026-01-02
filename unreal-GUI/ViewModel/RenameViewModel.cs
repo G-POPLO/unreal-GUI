@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using unreal_GUI.Model.Basic;
 
 namespace unreal_GUI.ViewModel
 {
@@ -24,13 +25,7 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private Visibility _messageVisibility = Visibility.Hidden;
 
-        [ObservableProperty]
-        private bool _isRenameButtonEnabled = false;
 
-        public RenameViewModel()
-        {
-
-        }
 
         [RelayCommand]
         private void SelectFolder()
@@ -51,57 +46,88 @@ namespace unreal_GUI.ViewModel
         {
             string projectPath = InputPath;
             string newName = OutputPath;
-            string command;
+            string arguments;
 
             if (IsProjectSelected)
             {
-                command = $"renom rename-project --project {projectPath} --new-name {newName}";
+                // 重命名项目：rename-project --project <PROJECT> --new-name <NEW_NAME>
+                arguments = $"rename-project --project \"{projectPath}\" --new-name \"{newName}\"";
             }
             else
             {
-                command = $"renom rename-plugin --project {projectPath} --plugin {projectPath} --new-name {newName}";
+                // 重命名插件：rename-plugin --project <PROJECT> --plugin <PLUGIN> --new-name <NEW_NAME>             
+                string pluginName = Path.GetFileName(projectPath);
+                arguments = $"rename-plugin --project \"{projectPath}\" --plugin \"{pluginName}\" --new-name \"{newName}\"";
             }
 
             try
             {
-                string exePath = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "App", "renom.exe");
+                string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App", "renom.exe");
+
+                // 检查renom.exe是否存在
+                if (!File.Exists(exePath))
+                {
+                    Message = $"错误：找不到renom.exe工具文件";
+                    MessageVisibility = Visibility.Visible;
+                    return;
+                }
+
                 var processInfo = new ProcessStartInfo
                 {
                     FileName = exePath,
-                    Arguments = command.Replace("renom ", ""),
+                    Arguments = arguments,
                     UseShellExecute = true,
-                    CreateNoWindow = false
+                    CreateNoWindow = false,
+                    WorkingDirectory = Path.GetDirectoryName(projectPath)
                 };
-                var process = Process.Start(processInfo);
-                process.WaitForExit(); // 等待重命名进程完成
 
-                Message = "重命名成功！";
+                Message = "正在执行重命名操作...";
                 MessageVisibility = Visibility.Visible;
 
-                // 检查AutoOpen设置来决定是否打开文件夹
-                if (Properties.Settings.Default.AutoOpen)
+                var process = Process.Start(processInfo);
+                if (process != null)
                 {
-                    // 更新输入框为新的路径
-                    string newPath = Path.Combine(System.IO.Path.GetDirectoryName(projectPath), newName);
-                    InputPath = newPath;
-                    Message = "重命名成功！";
-                    System.Media.SoundPlayer player = new(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-on.wav"));
-                    
-                    MessageVisibility = Visibility.Visible;
-                    Process.Start(new ProcessStartInfo
+                    process.WaitForExit(); // 等待重命名进程完成
+
+                    if (process.ExitCode == 0)
                     {
-                        FileName = "explorer.exe",
-                        Arguments = newPath,
-                        UseShellExecute = true
-                    });
+                        Message = "重命名成功！";
+
+                        // 检查AutoOpen设置来决定是否打开文件夹
+                        if (Properties.Settings.Default.AutoOpen)
+                        {
+                            // 更新输入框为新的路径
+                            string newPath = Path.Combine(Path.GetDirectoryName(projectPath), newName);
+                            InputPath = newPath;
+
+                            SoundFX.PlaySound(1);
+
+
+                            Process.Start(new ProcessStartInfo
+                            {
+                                FileName = "explorer.exe",
+                                Arguments = newPath,
+                                UseShellExecute = true
+                            });
+                        }
+                    }
+                    else
+                    {
+                        Message = $"重命名失败：程序返回错误代码 {process.ExitCode}";
+                    }
                 }
+                else
+                {
+                    Message = "重命名失败：无法启动重命名进程";
+                }
+
+                MessageVisibility = Visibility.Visible;
             }
             catch (Exception ex)
             {
                 Message = $"重命名失败：{ex.Message}";
                 MessageVisibility = Visibility.Visible;
-                var player = new System.Media.SoundPlayer(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Sound", "ui-sound-off.wav"));
-                
+                SoundFX.PlaySound(1);
             }
         }
 
@@ -112,13 +138,13 @@ namespace unreal_GUI.ViewModel
 
         partial void OnInputPathChanged(string value)
         {
-            IsRenameButtonEnabled = CanRename();
+
             RenameCommand.NotifyCanExecuteChanged();
         }
 
         partial void OnOutputPathChanged(string value)
         {
-            IsRenameButtonEnabled = CanRename();
+
             RenameCommand.NotifyCanExecuteChanged();
         }
     }

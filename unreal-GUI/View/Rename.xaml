@@ -62,7 +62,13 @@
                             </StackPanel>
                         </Button>
                         
-                        <TextBlock x:Name="tip1" TextWrapping="Wrap" Margin="0,0,0,10" Text="输入重命名名称"/>
+                      
+                        <!--<StackPanel x:Name="PluginNamePanel" Margin="0,0,0,15" Visibility="{Binding IsProjectSelected, Converter={StaticResource BoolToInverseBoolConverter}, ConverterParameter=True}">
+                            <TextBlock x:Name="tip2" TextWrapping="Wrap" Margin="0,0,0,10" Text="插件名称"/>
+                            <TextBox x:Name="PluginName" Margin="0,0,0,0" Text="{Binding PluginName, UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>-->
+                        
+                        <TextBlock  TextWrapping="Wrap" Margin="0,0,0,10" Text="输入重命名名称"/>
                         <ui:InfoBar x:Name="TestInfoBar2" 
     Title="注意" IsOpen="True"
     Message="为避免潜在的崩溃，请勿使用中文来命名你的C++项目">
@@ -96,5 +102,3 @@
         </ScrollViewer>
     </Grid>
 </UserControl>
-
-

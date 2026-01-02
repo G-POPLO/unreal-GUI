@@ -270,14 +270,14 @@ namespace unreal_GUI.ViewModel
                     return;
                 }
 
-                // 步骤3: 复制项目到引擎Templates目录
+                // 步骤3: 创建Media文件夹并复制图片（项目复制之前）
+                await CreateMediaFolderAndCopyImagesAsync();
+
+                // 步骤4: 复制项目到引擎Templates目录
                 if (!await CopyProjectToTemplatesAsync())
                 {
                     return;
                 }
-
-                // 步骤4: 添加图标和预览图
-                await CopyImagesToMediaFolder();
 
                 await ModernDialog.ShowInfoAsync($"模板 '{TemplateName}' 创建成功！", "成功");
             }
@@ -1006,13 +1006,55 @@ namespace unreal_GUI.ViewModel
         }
 
         // 复制图片到项目的Media文件夹
+        private async Task CreateMediaFolderAndCopyImagesAsync()
+        {
+            try
+            {
+                // 创建项目的Media目录
+                var projectMediaDir = Path.Combine(ProjectPath, "Media");
+                Directory.CreateDirectory(projectMediaDir);
+
+                // 复制模板图标
+                if (!string.IsNullOrEmpty(TemplateIconPath) && File.Exists(TemplateIconPath))
+                {
+                    var iconDestPath = Path.Combine(projectMediaDir, $"{TemplateName}.png");
+                    File.Copy(TemplateIconPath, iconDestPath, true);
+                }
+                else
+                {
+                    // 如果没有手动选择图标，尝试使用Saved目录下的AutoScreenshot.png作为默认图标
+                    var savedScreenshotPath = Path.Combine(ProjectPath, "Saved", "AutoScreenshot.png");
+                    if (File.Exists(savedScreenshotPath))
+                    {
+                        var iconDestPath = Path.Combine(projectMediaDir, $"{TemplateName}.png");
+                        File.Copy(savedScreenshotPath, iconDestPath, true);
+                        await ModernDialog.ShowInfoAsync($"已使用项目Saved目录中的AutoScreenshot.png作为默认图标", "信息");
+                    }
+                }
+
+                // 复制模板预览图
+                if (!string.IsNullOrEmpty(TemplatePreviewPath) && File.Exists(TemplatePreviewPath))
+                {
+                    var previewDestPath = Path.Combine(projectMediaDir, $"{TemplateName}_Preview.png");
+                    File.Copy(TemplatePreviewPath, previewDestPath, true);
+                }
+
+                await Task.CompletedTask;
+            }
+            catch (Exception ex)
+            {
+                await ModernDialog.ShowErrorAsync($"创建Media文件夹并复制图片失败: {ex.Message}", "错误");
+            }
+        }
+
+        // 复制图片到项目的Media文件夹
         private async Task CopyImagesToMediaFolder()
         {
             try
             {
                 // 创建项目的Media目录
                 var projectMediaDir = Path.Combine(ProjectPath, "Media");
-                //Directory.CreateDirectory(projectMediaDir);
+                Directory.CreateDirectory(projectMediaDir);
 
                 // 检查是否有手动选择的图标
                 bool iconCopied = false;

@@ -6,7 +6,7 @@ using unreal_GUI.Model.Basic;
 
 namespace unreal_GUI.Model.Features
 {
-    internal class Playwright
+    internal class PlaywrightCore
     {
         /// <summary>
         /// 启动浏览器并导航到指定URL并截图获取结果(Debug Only)

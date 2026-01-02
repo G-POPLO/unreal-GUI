@@ -1,11 +1,11 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
+using System.Windows.Forms;
 using unreal_GUI.Model;
 using unreal_GUI.Model.Basic;
 
@@ -74,17 +74,16 @@ namespace unreal_GUI.ViewModel
         [RelayCommand]
         private void SelectInputPath()
         {
-            var dialog = new OpenFileDialog
+            var dialog = new FolderBrowserDialog
             {
-                ValidateNames = false,
-                CheckFileExists = false,
-                CheckPathExists = true,
+                Description = "选择需要清理的项目目录",
+                UseDescriptionForTitle = true
             };
 
-            if (dialog.ShowDialog() == true)
+            if (dialog.ShowDialog() == DialogResult.OK)
             {
                 // 获取选择的文件夹路径
-                InputPath = Path.GetDirectoryName(dialog.FileName);
+                InputPath = dialog.SelectedPath;
                 TipClearCache = "工程路径已设置: " + InputPath;
                 IsCleanButtonEnabled = !string.IsNullOrWhiteSpace(InputPath);
             }

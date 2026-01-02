@@ -13,7 +13,7 @@ namespace unreal_GUI.Model.Features
             {
                 // 使用Playwright直接查找具有指定class的h2元素
                 // fabkit-Typography-root fabkit-Typography--align-start fabkit-Typography--intent-primary fabkit-Heading--xl ArhVH7Um
-                string dateString = await Playwright.GetH2ElementTextAsync(
+                string dateString = await PlaywrightCore.GetH2ElementTextAsync(
                     "https://www.fab.com/limited-time-free",
                     "fabkit-Typography-root",
                     "fabkit-Typography--align-start",

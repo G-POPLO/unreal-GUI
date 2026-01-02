@@ -114,7 +114,7 @@ namespace unreal_GUI.ViewModel
                 string selectedImagePath = openFileDialog.FileName;
 
                 // 检查图片比例是否符合3:1
-                if (!PhotoEdit.IsCorrectRatio(selectedImagePath))
+                if (!PhotoEditCore.IsCorrectRatio(selectedImagePath))
                 {
                     // 图片不符合3:1比例，自动从中心裁剪
                     try
@@ -130,7 +130,7 @@ namespace unreal_GUI.ViewModel
                         string croppedImagePath = Path.Combine(tempDirectory, croppedImageName);
 
                         // 自动裁剪图片为3:1比例
-                        bool cropSuccess = PhotoEdit.AutoCropTo3to1Ratio(selectedImagePath, croppedImagePath);
+                        bool cropSuccess = PhotoEditCore.AutoCropTo3to1Ratio(selectedImagePath, croppedImagePath);
 
                         if (cropSuccess)
                         {

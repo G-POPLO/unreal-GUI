@@ -32,8 +32,6 @@ namespace unreal_GUI.ViewModel
         public CompileViewModel()
         {
             LoadEngineList();
-
-
         }
 
         public ObservableCollection<EngineInfo> EngineVersions { get; } = [];
@@ -158,7 +156,6 @@ namespace unreal_GUI.ViewModel
                 {
                     TipsText = "编译操作已取消";
                     SoundFX.PlaySound(1);
-
                     return;
                 }
             }

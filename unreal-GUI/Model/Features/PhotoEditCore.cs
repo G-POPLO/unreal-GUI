@@ -8,7 +8,7 @@ using System.Windows.Media.Imaging;
 
 namespace unreal_GUI.Model.Features
 {
-    public class PhotoEdit
+    public class PhotoEditCore
     {
         /// <summary>
         /// 检查图片是否符合3:1比例
