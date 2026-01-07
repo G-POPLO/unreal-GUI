@@ -94,7 +94,7 @@
                                 </StackPanel>
                             </Button>
                         </WrapPanel>
-                        <TextBlock x:Name="ZenRusult" TextWrapping="Wrap" Text="{Binding TipZen}" Margin="0,0,0,0" />
+                        <TextBlock x:Name="ZenRusult" TextWrapping="Wrap" Text="{Binding TipZen}" Margin="0,10,0,0" />
                     </StackPanel>
                 </Border>
                 

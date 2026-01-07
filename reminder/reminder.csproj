@@ -8,6 +8,8 @@
     <!--<PublishAot>true</PublishAot>-->
     <RollForward>LatestMajor</RollForward>
     <InvariantGlobalization>true</InvariantGlobalization>
+      <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+      <GenerateDependencyFile>False</GenerateDependencyFile>
     <Platforms>x64</Platforms>
     <SupportedOSPlatformVersion>10.0.18362.0</SupportedOSPlatformVersion>
   </PropertyGroup>
@@ -18,13 +20,16 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Optimize>True</Optimize>
-      <DebugType>disable</DebugType>
+     
       <!--Playwright不支持AOT，以下选项已被禁用-->
       <!--<PublishTrimmed>True</PublishTrimmed>-->
     <!--<PublishReadyToRun>True</PublishReadyToRun>-->
     <!--<PublishReadyToRunComposite>true</PublishReadyToRunComposite>-->
   </PropertyGroup>
-
+    <!--要求不生成.deps.json文件-->
+    <PropertyGroup>
+        <IncludeSatelliteResource>false</IncludeSatelliteResource>
+    </PropertyGroup>
         
        <PropertyGroup>
           <PlaywrightPlatform>win</PlaywrightPlatform>

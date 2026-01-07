@@ -4,7 +4,6 @@ using iNKORE.UI.WPF.Modern.Helpers.Styles;
 using System;
 using System.Windows;
 using System.Windows.Navigation;
-using unreal_GUI.Model.Basic;
 using unreal_GUI.View;
 using unreal_GUI.ViewModel;
 
@@ -25,9 +24,8 @@ namespace unreal_GUI
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
 
-            SetSystemBackdropType(); // 在Loaded事件中动态设置窗口背景类型
-            SoundFX.PlaySound(0);
-            // 订阅 ViewModel 的导航请求事件
+            SetSystemBackdropType();
+
             if (DataContext is MainWindowViewModel viewModel)
             {
                 viewModel.NavigationRequested += OnNavigationRequested;
@@ -62,7 +60,7 @@ namespace unreal_GUI
                 _ => BackdropType.None
             };
 
-            // 使用依赖属性设置窗口背景类型
+
             SetValue(WindowHelper.SystemBackdropTypeProperty, backdropTypeEnum);
         }
 

@@ -131,7 +131,7 @@ publish/
 **/[Pp]ackages/
 
 # Ignore .trae rules directory
-/.trae/rules/
+/.trae/
 # except build/, which is used as an MSBuild target.
 !**/[Pp]ackages/build/
 # Uncomment if necessary however generally it will be regenerated when needed
@@ -182,9 +182,6 @@ orleans.codegen.cs
 # MSBuild Binary and Structured Log
 *.binlog
 
-# NVidia Nsight GPU debugger configuration file
-*.nvuser
-
 # MFractors (Xamarin productivity tool) working folder
 .mfractor/
 
@@ -195,5 +192,6 @@ orleans.codegen.cs
 MigrationBackup/
 
 # Inno Setup installation scripts
-Inno Setup/
-
+Inno Setup/setupv2.iss
+# documentation
+doc/
