@@ -48,14 +48,23 @@
                                     <TextBlock Text="提出反馈"/>
                                 </StackPanel>
                             </Button>
+                            <Button x:Name="Wiki" Command="{Binding OpenWikiUrlCommand}" 
+          Style="{DynamicResource DefaultButtonStyle}" Margin="0,0,5,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xf7bb;" Margin="0,0,5,0"/>
+                                    <TextBlock Text="Wiki"/>
+                                </StackPanel>
+                            </Button>
 
                             <Button x:Name="ProjectProgress" Command="{Binding OpenProjectProgressUrlCommand}" 
-                                    Style="{DynamicResource DefaultButtonStyle}">
+                                    Style="{DynamicResource DefaultButtonStyle}" Margin="0,0,5,0">
                                 <StackPanel Orientation="Horizontal">
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE81E;" Margin="0,0,5,0"/>
                                     <TextBlock Text="项目进展"/>
                                 </StackPanel>
                             </Button>
+
+
                         </StackPanel>
                     </StackPanel>
                 </Border>

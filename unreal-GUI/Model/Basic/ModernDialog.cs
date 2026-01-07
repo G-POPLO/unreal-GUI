@@ -141,6 +141,7 @@ namespace unreal_GUI.Model.Basic
                 Title = title,
                 Content = stackPanel,
                 PrimaryButtonText = "复制信息到剪切板",
+                DefaultButton = ContentDialogButton.Close,
                 CloseButtonText = "确认",
                 // 启用自适应大小
                 HorizontalAlignment = HorizontalAlignment.Stretch,

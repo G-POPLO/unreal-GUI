@@ -1,7 +1,4 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Windows.UI.Notifications;
 
 namespace reminder
@@ -24,54 +21,6 @@ namespace reminder
             ToastNotificationManagerCompat.CreateToastNotifier().Show(toast);
         }
 
-        /// <summary>
-        /// 显示带进度条的通知
-        /// </summary>
-        /// <param name="title">通知标题</param>
-        /// <param name="message">进度描述</param>
-        /// <param name="progressValue">进度值 (0.0 - 1.0)</param>
-        /// <param name="tag">通知标签</param>
-        /// <param name="group">通知组</param>
-        public static void ShowProgressNotification(string title, string message, double progressValue, string tag, string group)
-        {
-            var toastContent = new ToastContentBuilder()
-                .AddText(title)
-                .AddVisualChild(new AdaptiveProgressBar()
-                {
-                    Title = message,
-                    Value = new BindableProgressBarValue("progressValue"),
-                    ValueStringOverride = new BindableString("progressText")
-                })
-                .GetToastContent();
-
-            var toast = new ToastNotification(toastContent.GetXml())
-            {
-                Tag = tag,
-                Group = group
-            };
-
-            // 设置进度数据
-            var data = new NotificationData();
-            data.Values["progressValue"] = progressValue.ToString("F2");
-            data.Values["progressText"] = $"{progressValue:P0}";
-            toast.Data = data;
-
-            ToastNotificationManagerCompat.CreateToastNotifier().Show(toast);
-        }
-
-        /// <summary>
-        /// 更新进度通知
-        /// </summary>
-        /// <param name="progressValue">新的进度值 (0.0 - 1.0)</param>
-        /// <param name="tag">通知标签</param>
-        /// <param name="group">通知组</param>
-        public static void UpdateProgressNotification(int progressValue, string tag, string group)
-        {
-            var data = new NotificationData();
-            data.Values["progressValue"] = progressValue.ToString("F2");
-            data.Values["progressText"] = $"{progressValue:P0}";
-            ToastNotificationManagerCompat.CreateToastNotifier().Update(data, tag, group);
-        }
 
         /// <summary>
         /// 显示带操作按钮的通知

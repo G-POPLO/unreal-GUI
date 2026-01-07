@@ -197,3 +197,5 @@ MigrationBackup/
 # Inno Setup installation scripts
 Inno Setup/
 
+# Ignore doc directory (GitHub Wiki documentation)
+doc/
