@@ -54,22 +54,20 @@
                         <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Edit}"/>
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
-
-                <!--<ui:NavigationViewItem Content="终端" Tag="Terminal"
-                                       Visibility="{Binding AdvancedMode, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <ui:NavigationViewItem.Icon>
-                        <ui:FontIcon Icon="{x:Static ui:FluentSystemIcons.BookTemplate_20_Regular}" />
-                    </ui:NavigationViewItem.Icon>
-                </ui:NavigationViewItem>-->
-
-
-                <ui:NavigationViewItem Content="项目压缩" Tag="ProjectCompress"
-                                       Visibility="{Binding AdvancedMode, Converter={StaticResource BoolToVisibilityConverter}}">
+                
+                <ui:NavigationViewItem Content="项目压缩" Tag="ProjectCompress">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.ZipFolder}" />
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
-
+                
+                <ui:NavigationViewItem Content="终端" Tag="Terminal"
+                          Visibility="{Binding AdvancedMode, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:FontIcon Icon="{x:Static ui:FluentSystemIcons.BookTemplate_20_Regular}" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                
                 <ui:NavigationViewItem Content="设置" Tag="Settings">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Settings}"/>

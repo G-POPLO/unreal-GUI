@@ -32,7 +32,7 @@ namespace reminder
 
                 // 读取配置确定是否启用Fab提醒功能
                 var configReader = new IniConfig();
-                bool fabReminderEnabled = configReader.ReadBool("FabReminderEnabled", true);
+                bool fabReminderEnabled = configReader.ReadBool("FabNotificationEnabled", true);
 
                 if (!fabReminderEnabled)
                 {
