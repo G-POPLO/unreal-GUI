@@ -73,7 +73,7 @@ namespace unreal_GUI.Model.Basic
             {
                 Glyph = "\uF167", // InfoSolid图标
                 FontFamily = new FontFamily("Segoe Fluent Icons"),
-                FontSize = 18,
+                FontSize = 20,
                 Margin = new Thickness(0, 0, 10, 0),
                 VerticalAlignment = VerticalAlignment.Center
             };
@@ -119,7 +119,7 @@ namespace unreal_GUI.Model.Basic
             {
                 Glyph = "\uEA39", // ErrorBadge图标
                 FontFamily = new FontFamily("Segoe Fluent Icons"),
-                FontSize = 18,
+                FontSize = 20,
                 Margin = new Thickness(0, 0, 10, 0),
                 VerticalAlignment = VerticalAlignment.Center
             };
@@ -141,6 +141,7 @@ namespace unreal_GUI.Model.Basic
                 Title = title,
                 Content = stackPanel,
                 PrimaryButtonText = "复制信息到剪切板",
+                DefaultButton = ContentDialogButton.Close,
                 CloseButtonText = "确认",
                 // 启用自适应大小
                 HorizontalAlignment = HorizontalAlignment.Stretch,

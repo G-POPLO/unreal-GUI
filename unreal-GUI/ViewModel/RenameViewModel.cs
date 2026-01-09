@@ -3,6 +3,8 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using unreal_GUI.Model.Basic;
 
@@ -51,7 +53,7 @@ namespace unreal_GUI.ViewModel
 
 
         [RelayCommand]
-        private void SelectFolder()
+        private async Task SelectFolder()
         {
             using var dialog = new System.Windows.Forms.FolderBrowserDialog
             {
@@ -60,12 +62,31 @@ namespace unreal_GUI.ViewModel
             var result = dialog.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.SelectedPath))
             {
-                InputPath = dialog.SelectedPath;
+                if (ValidatePath(dialog.SelectedPath, IsProjectSelected))
+                {
+                    InputPath = dialog.SelectedPath;
+                }
+                else
+                {
+                    string extension = IsProjectSelected ? ".uproject" : ".uplugin";
+                    await ModernDialog.ShowErrorAsync($"所选路径根目录不存在{extension}文件", "路径无效");
+                    InputPath = string.Empty;
+                }
             }
         }
 
+        [RelayCommand]
+        private static void OpenWebLink()
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://github.com/UnrealisticDev/Renom/issues/18",
+                UseShellExecute = true
+            });
+        }
+
         [RelayCommand(CanExecute = nameof(CanRename))]
-        private void Rename()
+        private async Task Rename()
         {
             string projectPath = InputPath;
             string newName = OutputPath;
@@ -103,6 +124,12 @@ namespace unreal_GUI.ViewModel
                     CreateNoWindow = false,
                     WorkingDirectory = Path.GetDirectoryName(projectPath)
                 };
+
+                // 对于C++项目，在执行重命名前提示用户备份
+                if (IsProjectSelected && !IsBPSelected)
+                {
+                    await ModernDialog.ShowInfoAsync("在进行C++项目重命名前，请务必备份您的项目文件以防止数据丢失。", "备份提醒");
+                }
 
                 Message = "正在执行重命名操作...";
 
@@ -208,6 +235,7 @@ namespace unreal_GUI.ViewModel
                         else
                         {
                             Message = "重命名成功！";
+                            SoundFX.PlaySound(0);
                         }
 
                         // 检查AutoOpen设置来决定是否打开文件夹
@@ -263,10 +291,35 @@ namespace unreal_GUI.ViewModel
             return !string.IsNullOrEmpty(InputPath) && !string.IsNullOrEmpty(OutputPath);
         }
 
+        private static bool ValidatePath(string path, bool isProject)
+        {
+            if (string.IsNullOrEmpty(path) || !Directory.Exists(path))
+            {
+                return false;
+            }
+
+            string extension = isProject ? "*.uproject" : "*.uplugin";
+            return Directory.EnumerateFiles(path, extension,SearchOption.TopDirectoryOnly).Any();
+        }
+
         partial void OnInputPathChanged(string value)
         {
-
             RenameCommand.NotifyCanExecuteChanged();
+
+            if (!string.IsNullOrEmpty(value) && Directory.Exists(value))
+            {
+                _ = ValidateInputPathAsync(value);
+            }
+        }
+
+        private async Task ValidateInputPathAsync(string path)
+        {
+            if (!ValidatePath(path, IsProjectSelected))
+            {
+                string extension = IsProjectSelected ? ".uproject" : ".uplugin";
+                await ModernDialog.ShowErrorAsync($"所选路径根目录不存在{extension}文件", "路径无效");
+                InputPath = string.Empty;
+            }
         }
 
         partial void OnOutputPathChanged(string value)

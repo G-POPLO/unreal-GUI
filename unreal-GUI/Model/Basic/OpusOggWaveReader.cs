@@ -88,7 +88,9 @@ namespace unreal_GUI.Model.Basic
 #pragma warning disable CA1041 // 提供 ObsoleteAttribute 消息
         [Obsolete]
 #pragma warning restore CA1041 // 提供 ObsoleteAttribute 消息
+#pragma warning disable CS0809 // 过时成员重写未过时成员
         public override int Read(byte[] buffer, int offset, int count)
+#pragma warning restore CS0809 // 过时成员重写未过时成员
         {
             try
             {
@@ -145,7 +147,7 @@ namespace unreal_GUI.Model.Basic
             player.Init(reader);
 
             // 播放音频
-            
+
 
             // 等待播放完成
             while (player.PlaybackState == PlaybackState.Playing)
@@ -180,7 +182,7 @@ namespace unreal_GUI.Model.Basic
                 player.Init(reader);
 
                 // 播放音频
-                
+
 
                 // 等待播放完成
                 while (player.PlaybackState == PlaybackState.Playing)
