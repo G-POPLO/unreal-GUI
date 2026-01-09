@@ -50,6 +50,8 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private string _compressButtonText = "开始压缩";
 
+        [ObservableProperty]
+        private System.Windows.Visibility _isProjectCardVisible = System.Windows.Visibility.Visible;
 
         // 增量更新是否可用（-mx <= 5时可用）
         public bool IsIncrementalUpdateEnabled => CompressLevel <= 5;
@@ -77,6 +79,9 @@ namespace unreal_GUI.ViewModel
 
             // 控制_7zOutput可见性（与_7zUpdate相反）
             Is7zOutputVisible = value ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
+
+            // 控制ProjectCard可见性（增量更新启用时隐藏）
+            IsProjectCardVisible = value ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
 
             // 更新按钮文本
             CompressButtonText = value ? "开始增量更新" : "开始压缩";

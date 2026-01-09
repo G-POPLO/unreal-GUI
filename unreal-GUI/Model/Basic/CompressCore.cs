@@ -55,21 +55,12 @@ namespace unreal_GUI.Model.Basic
                 // 检查进程退出代码并处理错误
                 if (process.ExitCode != 0)
                 {
-                    // 读取可能的错误信息
-                    //await Task.Run(async () =>
-                    //{
-                    //    string errorLine;
-                    //    while ((errorLine = process.StandardError.ReadLine()) != null)
-                    //    {
-                    //        Console.Error.WriteLine($"错误: {errorLine}");
-                    //    }
-                    //});
 
                     // 根据退出代码返回相应的错误信息
                     string errorMessage = process.ExitCode switch
                     {
                         1 => "警告：一些文件可能没有被压缩或损坏",
-                        2 => "严重错误",
+                        2 => "出现错误，请检查压缩文件是否被程序占用，请关闭所有的占用程序后再进行压缩",
                         7 => "命令行语法错误",
                         8 => "内存不足",
                         255 => "用户停止操作",
@@ -172,14 +163,14 @@ namespace unreal_GUI.Model.Basic
 
                 // 不需要异步读取输出，因为输出会直接显示在终端窗口中
                 // 只读取错误输出，以便在出错时能够捕获并处理它们
-                _ = Task.Run(() =>
-               {
-                   string errorLine;
-                   while ((errorLine = process.StandardError.ReadLine()) != null)
-                   {
-                       Console.Error.WriteLine($"错误: {errorLine}");
-                   }
-               });
+                // _ = Task.Run(() =>
+                //{
+                //    string errorLine;
+                //    while ((errorLine = process.StandardError.ReadLine()) != null)
+                //    {
+                //        Console.Error.WriteLine($"错误: {errorLine}");
+                //    }
+                //});
 
                 // 等待进程完成
                 await process.WaitForExitAsync();
@@ -339,7 +330,7 @@ namespace unreal_GUI.Model.Basic
                     string errorMessage = process.ExitCode switch
                     {
                         1 => "警告：一些文件可能没有被更新或损坏",
-                        2 => "严重错误",
+                        2 => "出现错误，请检查压缩文件是否被程序占用，请关闭所有的占用程序后再进行压缩",
                         7 => "命令行语法错误",
                         8 => "内存不足",
                         255 => "用户停止操作",

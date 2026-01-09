@@ -32,7 +32,7 @@ namespace unreal_GUI.ViewModel
         private bool _isCleanButtonEnabled = false;
 
         [ObservableProperty]
-        private bool _isSaveGameChecked = false;
+        private bool _isSaveChecked = false;
 
         [ObservableProperty]
         private bool _isDerivedDataCacheChecked = false;
@@ -97,14 +97,14 @@ namespace unreal_GUI.ViewModel
 
                 try
                 {
-                    if (!IsDerivedDataCacheChecked)
+                    if (IsDerivedDataCacheChecked)
                         DeleteDirectoryIfExists(Path.Combine(InputPath, "DerivedDataCache"));
                 }
                 catch { }
 
                 try
                 {
-                    if (!IsSaveGameChecked)
+                    if (IsSaveChecked)
                         DeleteDirectoryIfExists(Path.Combine(InputPath, "Saved", "SaveGames"));
                 }
                 catch { }
@@ -112,10 +112,11 @@ namespace unreal_GUI.ViewModel
                 DeleteDirectoryIfExists(Path.Combine(InputPath, "Binaries"));
                 DeleteDirectoryIfExists(Path.Combine(InputPath, "Build"));
                 DeleteDirectoryIfExists(Path.Combine(InputPath, "Intermediate"));
+                DeleteDirectoryIfExists(Path.Combine(InputPath, ".vs"));
 
                 foreach (var file in Directory.GetFiles(InputPath, "*.sln", SearchOption.TopDirectoryOnly))
                     File.Delete(file);
-
+                File.Delete(Path.Combine(InputPath, ".vsconfig"));
                 TipClearCache = "清理完毕";
                 SoundFX.PlaySound(0);
 
@@ -126,10 +127,8 @@ namespace unreal_GUI.ViewModel
             }
             catch (Exception ex)
             {
-
                 TipClearCache = "清理失败: " + ex.Message;
                 SoundFX.PlaySound(1);
-
             }
         }
 
@@ -145,7 +144,7 @@ namespace unreal_GUI.ViewModel
                     return;
                 }
 
-                var zenPath = Path.Combine(SelectedEngine.Path, "Engine\\Binaries\\Win64\\ZenDashboard.exe");
+                string zenPath = Path.Combine(SelectedEngine.Path, "Engine\\Binaries\\Win64\\ZenDashboard.exe");
                 if (File.Exists(zenPath))
                 {
                     Process.Start(zenPath);

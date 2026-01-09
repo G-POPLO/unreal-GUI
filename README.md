@@ -67,4 +67,5 @@ Unreal-GUI 是一款旨在简化虚幻引擎（Unreal Engine）相关操作流�
 
 ## 相关文档
 - [Unreal Engine 自定义模板创建](https://dev.epicgames.com/documentation/zh-cn/unreal-engine/converting-a-project-to-an-unreal-engine-template)
+- [Unreal Engine 项目结构](https://dev.epicgames.com/documentation/unreal-engine/unreal-engine-directory-structure)
 - [Segoe Fluent 图标字体](https://learn.microsoft.com/zh-cn/windows/apps/design/style/segoe-fluent-icons-font)
