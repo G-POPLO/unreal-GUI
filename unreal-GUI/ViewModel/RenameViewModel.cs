@@ -88,40 +88,47 @@ namespace unreal_GUI.ViewModel
         [RelayCommand(CanExecute = nameof(CanRename))]
         private async Task Rename()
         {
-            string projectPath = InputPath;
-            string newName = OutputPath;
-            string arguments;
+            try
+            {
+                string logFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "renom_debug.log");
+                string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                string logEntry = $"[{timestamp}] {logMessage}{Environment.NewLine}";
 
-            if (IsProjectSelected)
-            {
-                // 重命名项目：rename-project --project <PROJECT> --new-name <NEW_NAME>
-                arguments = $"rename-project --project \"{projectPath}\" --new-name \"{newName}\"";
+                File.AppendAllText(logFilePath, logEntry);
             }
-            else
+            catch
             {
-                // 重命名插件：rename-plugin --project <PROJECT> --plugin <PLUGIN> --new-name <NEW_NAME>             
-                string pluginName = Path.GetFileName(projectPath);
-                arguments = $"rename-plugin --project \"{projectPath}\" --plugin \"{pluginName}\" --new-name \"{newName}\"";
+                // 静默处理日志写入失败，避免影响主要功能
             }
+        }
+
+        private async Task<string> ExecuteRenomCommand(string arguments, string stepDescription, string projectPath)
+        {
+            WriteLog($"=== 开始执行: {stepDescription} ===");
+            WriteLog($"命令参数: {arguments}");
+
+            string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App", "renom.exe");
+
+            if (!File.Exists(exePath))
+            {
+                string error = $"错误：找不到renom.exe工具文件";
+                WriteLog(error);
+                return error;
+            }
+
+            var outputBuilder = new StringBuilder();
+            var errorBuilder = new StringBuilder();
 
             try
             {
-                string exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App", "renom.exe");
-
-                // 检查renom.exe是否存在
-                if (!File.Exists(exePath))
-                {
-                    Message = $"错误：找不到renom.exe工具文件";
-
-                    return;
-                }
-
                 var processInfo = new ProcessStartInfo
                 {
                     FileName = exePath,
                     Arguments = arguments,
-                    UseShellExecute = true,
+                    UseShellExecute = false,
                     CreateNoWindow = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
                     WorkingDirectory = Path.GetDirectoryName(projectPath)
                 };
 
@@ -133,13 +140,10 @@ namespace unreal_GUI.ViewModel
 
                 Message = "正在执行重命名操作...";
 
-
-                var process = Process.Start(processInfo);
-                if (process != null)
+                using var process = new Process { StartInfo = processInfo, EnableRaisingEvents = true };
+                process.OutputDataReceived += (sender, e) =>
                 {
-                    process.WaitForExit(); // 等待重命名进程完成
-
-                    if (process.ExitCode == 0)
+                    if (!string.IsNullOrEmpty(e.Data))
                     {
                         // 如果是C++项目，需要额外重命名模块
                         if (IsProjectSelected && !IsBPSelected)
@@ -172,6 +176,10 @@ namespace unreal_GUI.ViewModel
                             //            // 2. 重命名target
                             //            Message = "正在重命名target...";
 
+                WriteLog("启动进程...");
+                process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
 
                             //            // 重命名第一个target (<TARGET_NAME>)
                             //            string target1Arguments = $"rename-target --project \"{projectPath}\" --target \"{originalProjectName}\" --new-name \"{newName}\"";
@@ -238,50 +246,47 @@ namespace unreal_GUI.ViewModel
                             //    SoundFX.PlaySound(0);
                         }
 
-                        // 检查AutoOpen设置来决定是否打开文件夹
-                        if (Properties.Settings.Default.AutoOpen)
-                        {
-                            // 对于C++项目，使用更新后的路径
-                            // 对于非C++项目，需要重新计算新路径
-                            string finalPath;
-                            if (IsProjectSelected && !IsBPSelected)
-                            {
-                                // C++项目：路径已经在上面的处理中更新过了
-                                finalPath = projectPath;
-                            }
-                            else
-                            {
-                                // 非C++项目或非项目类型：需要重新计算路径
-                                finalPath = Path.Combine(Path.GetDirectoryName(projectPath), newName);
-                                InputPath = finalPath;
-                            }
+                // 4. 检查AutoOpen设置来决定是否打开文件夹
+                if (Properties.Settings.Default.AutoOpen)
+                {
+                    WriteLog("AutoOpen功能已启用，准备打开文件夹");
 
-                            SoundFX.PlaySound(1);
-
-                            Process.Start(new ProcessStartInfo
-                            {
-                                FileName = "explorer.exe",
-                                Arguments = finalPath,
-                                UseShellExecute = true
-                            });
-                        }
+                    // 对于C++项目，使用更新后的路径
+                    // 对于非C++项目，需要重新计算新路径
+                    string finalPath;
+                    if (IsProjectSelected && !IsBPSelected)
+                    {
+                        // C++项目：路径已经在上面的处理中更新过了
+                        finalPath = projectPath;
+                        WriteLog($"C++项目使用更新后的路径: {finalPath}");
                     }
                     else
                     {
-                        Message = $"重命名失败：程序返回错误代码 {process.ExitCode}";
+                        // 非C++项目或非项目类型：需要重新计算路径
+                        finalPath = Path.Combine(Path.GetDirectoryName(projectPath), newName);
+                        InputPath = finalPath;
+                        WriteLog($"非C++项目重新计算的路径: {finalPath}");
                     }
-                }
-                else
-                {
-                    Message = "重命名失败：无法启动重命名进程";
-                }
 
+                    SoundFX.PlaySound(1);
 
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = "explorer.exe",
+                        Arguments = finalPath,
+                        UseShellExecute = true
+                    });
+
+                    WriteLog($"已打开文件夹: {finalPath}");
+                }
             }
             catch (Exception ex)
             {
-                Message = $"重命名失败：{ex.Message}";
-
+                string errorMessage = $"重命名失败：{ex.Message}";
+                Message = errorMessage;
+                MessageVisibility = Visibility.Visible;
+                WriteLog($"异常错误: {errorMessage}");
+                WriteLog($"异常详情: {ex}");
                 SoundFX.PlaySound(1);
             }
         }
@@ -324,7 +329,6 @@ namespace unreal_GUI.ViewModel
 
         partial void OnOutputPathChanged(string value)
         {
-
             RenameCommand.NotifyCanExecuteChanged();
         }
     }

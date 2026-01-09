@@ -34,7 +34,6 @@ namespace unreal_GUI
                     case "openUrl":
                         // 从参数中获取URL，如果不存在则使用默认URL
                         string url = args.Contains("url") ? args["url"] : "https://www.fab.com/limited-time-free";
-                        // 打开网站
                         Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
                         break;
                     case "dismiss":

@@ -62,6 +62,17 @@ namespace unreal_GUI.ViewModel
                 FileName = "https://github.com/users/G-POPLO/projects/2/views/2",
                 UseShellExecute = true
             });
+
+        }
+        [RelayCommand]
+        private static void OpenWikiUrl()
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://github.com/G-POPLO/unreal-GUI/wiki",
+                UseShellExecute = true
+            });
+
         }
     }
 }
