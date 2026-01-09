@@ -53,7 +53,7 @@ namespace unreal_GUI.ViewModel
 
 
         [RelayCommand]
-        private async Task SelectFolder()
+        private void SelectFolder()
         {
             using var dialog = new System.Windows.Forms.FolderBrowserDialog
             {
@@ -62,16 +62,7 @@ namespace unreal_GUI.ViewModel
             var result = dialog.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.SelectedPath))
             {
-                if (ValidatePath(dialog.SelectedPath, IsProjectSelected))
-                {
-                    InputPath = dialog.SelectedPath;
-                }
-                else
-                {
-                    string extension = IsProjectSelected ? ".uproject" : ".uplugin";
-                    await ModernDialog.ShowErrorAsync($"所选路径根目录不存在{extension}文件", "路径无效");
-                    InputPath = string.Empty;
-                }
+                InputPath = dialog.SelectedPath;
             }
         }
 
@@ -125,12 +116,6 @@ namespace unreal_GUI.ViewModel
                     WorkingDirectory = Path.GetDirectoryName(projectPath)
                 };
 
-                // 对于C++项目，在执行重命名前提示用户备份
-                if (IsProjectSelected && !IsBPSelected)
-                {
-                    await ModernDialog.ShowInfoAsync("在进行C++项目重命名前，请务必备份您的项目文件以防止数据丢失。", "备份提醒");
-                }
-
                 Message = "正在执行重命名操作...";
 
 
@@ -148,94 +133,93 @@ namespace unreal_GUI.ViewModel
                             projectPath = Path.Combine(Path.GetDirectoryName(projectPath), newName);
                             string originalProjectName = Path.GetFileName(projectPath);
 
-                            //    // 1. 重命名模块
-                            //    string moduleArguments = $"rename-module --project \"{projectPath}\" --module \"{originalProjectName}\" --new-name \"{newName}\"";
+                            // 1. 重命名模块
+                            string moduleArguments = $"rename-module --project \"{projectPath}\" --module \"{originalProjectName}\" --new-name \"{newName}\"";
 
-                            //    var moduleProcessInfo = new ProcessStartInfo
-                            //    {
-                            //        FileName = exePath,
-                            //        Arguments = moduleArguments,
-                            //        UseShellExecute = true,
-                            //        CreateNoWindow = false,
-                            //        WorkingDirectory = Path.GetDirectoryName(projectPath)
-                            //    };
+                            var moduleProcessInfo = new ProcessStartInfo
+                            {
+                                FileName = exePath,
+                                Arguments = moduleArguments,
+                                UseShellExecute = true,
+                                CreateNoWindow = false,
+                                WorkingDirectory = Path.GetDirectoryName(projectPath)
+                            };
 
-                            //    Message = "正在重命名模块...";
-
-
-                            //    var moduleProcess = Process.Start(moduleProcessInfo);
-                            //    if (moduleProcess != null)
-                            //    {
-                            //        moduleProcess.WaitForExit();
-                            //        if (moduleProcess.ExitCode == 0)
-                            //        {
-                            //            // 2. 重命名target
-                            //            Message = "正在重命名target...";
+                            Message = "正在重命名模块...";
 
 
-                            //            // 重命名第一个target (<TARGET_NAME>)
-                            //            string target1Arguments = $"rename-target --project \"{projectPath}\" --target \"{originalProjectName}\" --new-name \"{newName}\"";
-                            //            var target1ProcessInfo = new ProcessStartInfo
-                            //            {
-                            //                FileName = exePath,
-                            //                Arguments = target1Arguments,
-                            //                UseShellExecute = true,
-                            //                CreateNoWindow = false,
-                            //                WorkingDirectory = Path.GetDirectoryName(projectPath)
-                            //            };
+                            var moduleProcess = Process.Start(moduleProcessInfo);
+                            if (moduleProcess != null)
+                            {
+                                moduleProcess.WaitForExit();
+                                if (moduleProcess.ExitCode == 0)
+                                {
+                                    // 2. 重命名target
+                                    Message = "正在重命名target...";
 
-                            //            var target1Process = Process.Start(target1ProcessInfo);
-                            //            if (target1Process != null)
-                            //            {
-                            //                target1Process.WaitForExit();
-                            //                if (target1Process.ExitCode == 0)
-                            //                {
-                            //                    // 重命名第二个target (<TARGET_NAME>Editor)
-                            //                    string target2Arguments = $"rename-target --project \"{projectPath}\" --target \"{originalProjectName}Editor\" --new-name \"{newName}Editor\"";
-                            //                    var target2ProcessInfo = new ProcessStartInfo
-                            //                    {
-                            //                        FileName = exePath,
-                            //                        Arguments = target2Arguments,
-                            //                        UseShellExecute = true,
-                            //                        CreateNoWindow = false,
-                            //                        WorkingDirectory = Path.GetDirectoryName(projectPath)
-                            //                    };
 
-                            //                    var target2Process = Process.Start(target2ProcessInfo);
-                            //                    if (target2Process != null)
-                            //                    {
-                            //                        target2Process.WaitForExit();
-                            //                        Message = target2Process.ExitCode == 0 ? "重命名成功！" : $"Editor target重命名失败：程序返回错误代码 {target2Process.ExitCode}";
-                            //                    }
-                            //                    else
-                            //                    {
-                            //                        Message = "Editor target重命名失败：无法启动Editor target重命名进程";
-                            //                    }
-                            //                }
-                            //                else
-                            //                {
-                            //                    Message = $"target重命名失败：程序返回错误代码 {target1Process.ExitCode}";
-                            //                }
-                            //            }
-                            //            else
-                            //            {
-                            //                Message = "target重命名失败：无法启动target重命名进程";
-                            //            }
-                            //        }
-                            //        else
-                            //        {
-                            //            Message = $"模块重命名失败：程序返回错误代码 {moduleProcess.ExitCode}";
-                            //        }
-                            //    }
-                            //    else
-                            //    {
-                            //        Message = "模块重命名失败：无法启动模块重命名进程";
-                            //    }
-                            //}
-                            //else
-                            //{
-                            //    Message = "重命名成功！";
-                            //    SoundFX.PlaySound(0);
+                                    // 重命名第一个target (<TARGET_NAME>)
+                                    string target1Arguments = $"rename-target --project \"{projectPath}\" --target \"{originalProjectName}\" --new-name \"{newName}\"";
+                                    var target1ProcessInfo = new ProcessStartInfo
+                                    {
+                                        FileName = exePath,
+                                        Arguments = target1Arguments,
+                                        UseShellExecute = true,
+                                        CreateNoWindow = false,
+                                        WorkingDirectory = Path.GetDirectoryName(projectPath)
+                                    };
+
+                                    var target1Process = Process.Start(target1ProcessInfo);
+                                    if (target1Process != null)
+                                    {
+                                        target1Process.WaitForExit();
+                                        if (target1Process.ExitCode == 0)
+                                        {
+                                            // 重命名第二个target (<TARGET_NAME>Editor)
+                                            string target2Arguments = $"rename-target --project \"{projectPath}\" --target \"{originalProjectName}Editor\" --new-name \"{newName}Editor\"";
+                                            var target2ProcessInfo = new ProcessStartInfo
+                                            {
+                                                FileName = exePath,
+                                                Arguments = target2Arguments,
+                                                UseShellExecute = true,
+                                                CreateNoWindow = false,
+                                                WorkingDirectory = Path.GetDirectoryName(projectPath)
+                                            };
+
+                                            var target2Process = Process.Start(target2ProcessInfo);
+                                            if (target2Process != null)
+                                            {
+                                                target2Process.WaitForExit();
+                                                Message = target2Process.ExitCode == 0 ? "重命名成功！" : $"Editor target重命名失败：程序返回错误代码 {target2Process.ExitCode}";
+                                            }
+                                            else
+                                            {
+                                                Message = "Editor target重命名失败：无法启动Editor target重命名进程";
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Message = $"target重命名失败：程序返回错误代码 {target1Process.ExitCode}";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Message = "target重命名失败：无法启动target重命名进程";
+                                    }
+                                }
+                                else
+                                {
+                                    Message = $"模块重命名失败：程序返回错误代码 {moduleProcess.ExitCode}";
+                                }
+                            }
+                            else
+                            {
+                                Message = "模块重命名失败：无法启动模块重命名进程";
+                            }
+                        }
+                        else
+                        {
+                            Message = "重命名成功！";
                         }
 
                         // 检查AutoOpen设置来决定是否打开文件夹
@@ -324,7 +308,6 @@ namespace unreal_GUI.ViewModel
 
         partial void OnOutputPathChanged(string value)
         {
-
             RenameCommand.NotifyCanExecuteChanged();
         }
     }
