@@ -25,6 +25,7 @@ Unreal-GUI 是一款旨在简化虚幻引擎（Unreal Engine）相关操作流�
 4. **缓存清理**: 清理项目文件的缓存，包括编译生成的中间文件和临时文件。同时可以查看DDC的缓存情况等。
 5. **Fab资产通知提醒（测试）**:该功能允许用户在Fab资产有更新时收到通知提醒，确保用户及时了解最新的资产动态。 
 6. **自定义模板创建**:  用户可以向引擎添加自定义的模板或内容包以供项目创建时使用。
+7. **项目压缩**: 用户可以将项目文件夹压缩为7z文件，方便分享或备份。
 
 ## 安装说明
 应用程序需安装[.NET 10 Runtime](https://dotnet.microsoft.com/zh-cn/download/dotnet/10.0/runtime)，否则会提示缺少依赖项。
@@ -47,7 +48,7 @@ Unreal-GUI 是一款旨在简化虚幻引擎（Unreal Engine）相关操作流�
 
 ## 许可证
 
-本项目采用 MIT 许可证。详情请见 [LICENSE](LICENSE.txt) 文件。
+本项目采用 Apache 2.0 许可证。详情请见 [LICENSE](LICENSE) 文件。
 
 ## 第三方库引用
 
@@ -55,9 +56,14 @@ Unreal-GUI 是一款旨在简化虚幻引擎（Unreal Engine）相关操作流�
 
 - [Playwright](https://github.com/microsoft/playwright-dotnet)
 - [renom](https://github.com/UnrealisticDev/Renom)
+- [SoftCircuits.IniFileParser](https://www.nuget.org/packages/SoftCircuits.IniFileParser)
+- [7-Zip.CommandLine](https://www.nuget.org/packages/7-Zip.CommandLine)
+- [SixLabors.ImageSharp](https://www.nuget.org/packages/SixLabors.ImageSharp)
+- [NAudio.Wasapi](https://www.nuget.org/packages/NAudio.Wasapi)&[Concentus.Oggfile](https://www.nuget.org/packages/Concentus.Oggfile)
+- [Markdig.Wpf](https://www.nuget.org/packages/Markdig.Wpf)
 - [iNKORE.UI.WPF.Modern](https://github.com/iNKORE-NET/UI.WPF.Modern)
-- [MVVM Toolkit](https://github.com/CommunityToolkit/dotnet)
-- [Microsoft.Toolkit.Uwp.Notifications](https://learn.microsoft.com/zh-cn/windows/apps/develop/notifications/app-notifications/send-local-toast?tabs=desktop-msix)
+- [MVVM Toolkit](https://github.com/CommunityToolkit/dotnet)& [ValueConverters](https://www.nuget.org/packages/ValueConverters)&[Microsoft.Toolkit.Uwp.Notifications](https://learn.microsoft.com/zh-cn/windows/apps/develop/notifications/app-notifications/send-local-toast?tabs=desktop-msix)
+
 
 ## 相关文档
 - [Unreal Engine 自定义模板创建](https://dev.epicgames.com/documentation/zh-cn/unreal-engine/converting-a-project-to-an-unreal-engine-template)

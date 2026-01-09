@@ -14,7 +14,7 @@
                Message="可通过传递参数 -list 获取所有命令">
         </ui:InfoBar>
 
-        <TextBlock Margin="0,50,0,0" Text="Command Line Terminal 功能正在开发中，敬请期待！ "/>
+        <TextBlock Margin="0,50,0,0" Text="Command Line Terminal 功能正在开发中，敬请期待！ " VerticalAlignment="Top"/>
         
 
     </Grid>

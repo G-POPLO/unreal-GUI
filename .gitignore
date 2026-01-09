@@ -192,6 +192,6 @@ orleans.codegen.cs
 MigrationBackup/
 
 # Inno Setup installation scripts
-Inno Setup/
-# doc
+Inno Setup/setupv2.iss
+# documentation
 doc/
