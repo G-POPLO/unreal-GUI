@@ -58,6 +58,8 @@ namespace unreal_GUI.ViewModel
             }
         }
 
+
+
         // 选择类别的命令
         [RelayCommand]
         private void SelectCategory(CategoryViewModel category)
@@ -259,10 +261,10 @@ namespace unreal_GUI.ViewModel
             try
             {
                 // 步骤1: 备份TemplateCategories.ini文件
-                if (!await BackupTemplateCategoriesAsync())
-                {
-                    return;
-                }
+                //if (!await BackupTemplateCategoriesAsync())
+                //{
+                //    return;
+                //}
 
                 // 步骤2: 创建TemplateDefs.ini文件
                 if (!await CreateTemplateDefsIniAsync())
@@ -782,11 +784,27 @@ namespace unreal_GUI.ViewModel
 
                 // 添加忽略的文件夹和文件
                 iniContent += $"\nFoldersToIgnore=Media\n" +
-                            $"FilesToIgnore=\"Config/TemplateDefs.ini\"\n";
+                            $"FilesToIgnore=\"Config/TemplateDefs.ini\"\n" +
+                            $"\n; Ignore template-specific files\n" +
+                            $"FilesToIgnore=\"%TEMPLATENAME%.uproject\"\n" +
+                            $"FilesToIgnore=\"%TEMPLATENAME%.png\"\n" +
+                            $"FilesToIgnore=\"Config/TemplateDefs.ini\"\n" +
+                            $"FilesToIgnore=\"Manifest.json\"\n" +
+                            $"\n; Rename the source code directory\n" +
+                            $"FolderRenames=(From=\"Source/%TEMPLATENAME%\", To=\"Source/%PROJECTNAME%\")\n" +
+                            $"FolderRenames=(From=\"Source/%TEMPLATENAME%Editor\", To=\"Source/%PROJECTNAME%Editor\")\n" +
+                            $"\n; Filename replacement rules (Case sensitivity of string matching when bCaseSensitive=true)\n" +
+                            $"FilenameReplacements=(Extensions=(\"cpp\",\"h\",\"ini\",\"cs\"), From=\"%TEMPLATENAME_UPPERCASE%\", To=\"%PROJECTNAME_UPPERCASE%\", bCaseSensitive=true)\n" +
+                            $"FilenameReplacements=(Extensions=(\"cpp\",\"h\",\"ini\",\"cs\"), From=\"%TEMPLATENAME_LOWERCASE%\", To=\"%PROJECTNAME_LOWERCASE%\", bCaseSensitive=true)\n" +
+                            $"FilenameReplacements=(Extensions=(\"cpp\",\"h\",\"ini\",\"cs\"), From=\"%TEMPLATENAME%\", To=\"%PROJECTNAME%\", bCaseSensitive=false)\n" +
+                            $"\n; 文件内容替换（关键！）\n" +
+                            $"ReplacementsInFiles=(Extensions=(\"cpp\",\"h\",\"ini\",\"cs\",\"uplugin\"), From=\"%TEMPLATENAME%\", To=\"%PROJECTNAME%\", bCaseSensitive=false)\n" +
+                            $"ReplacementsInFiles=(Extensions=(\"cpp\",\"h\",\"ini\",\"cs\",\"uplugin\"), From=\"%TEMPLATENAME_UPPERCASE%\", To=\"%PROJECTNAME_UPPERCASE%\", bCaseSensitive=true)\n" +
+                            $"ReplacementsInFiles=(Extensions=(\"cpp\",\"h\",\"ini\",\"cs\",\"uplugin\"), From=\"%TEMPLATENAME_LOWERCASE%\", To=\"%PROJECTNAME_LOWERCASE%\", bCaseSensitive=true)\n";
 
                 // 创建Config目录并写入文件
                 string configDir = Path.Combine(ProjectPath, "Config");
-                //Directory.CreateDirectory(configDir);
+
 
                 string templateDefsPath = Path.Combine(configDir, "TemplateDefs.ini");
                 File.WriteAllText(templateDefsPath, iniContent);
@@ -1046,6 +1064,39 @@ namespace unreal_GUI.ViewModel
             catch (Exception ex)
             {
                 await ModernDialog.ShowErrorAsync($"创建Media文件夹并复制图片失败: {ex.Message}", "错误");
+            }
+        }
+
+        [RelayCommand]
+        private async Task OpenTemplateAsync()
+        {
+            try
+            {
+                if (SelectedEngine == null)
+
+                {
+                    await ModernDialog.ShowInfoAsync("请先选择引擎版本。", "提示");
+                    return;
+                }
+
+                string templateFolderPath = Path.Combine(SelectedEngine.Path, "Templates");
+
+                // 如果模板文件夹不存在，显示提示
+                if (!Directory.Exists(templateFolderPath))
+                {
+                    await ModernDialog.ShowInfoAsync("模板文件夹不存在。", "提示");
+                    return;
+                }
+
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = templateFolderPath,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                await ModernDialog.ShowErrorAsync($"打开模板文件夹失败: {ex.Message}", "错误");
             }
         }
 

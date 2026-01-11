@@ -244,7 +244,6 @@ namespace unreal_GUI.ViewModel
 
                             Process.Start(new ProcessStartInfo
                             {
-                                FileName = "explorer.exe",
                                 Arguments = finalPath,
                                 UseShellExecute = true
                             });

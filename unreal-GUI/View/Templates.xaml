@@ -133,12 +133,12 @@
                         
                         CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,15,0">
                             <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE72D;" Margin="0,0,10,0" VerticalAlignment="Center"/>
                             <TextBlock Text="模板类别" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
 
-                        <ItemsControl ItemsSource="{Binding TemplateCategories}" Margin="0,0,0,10">
+                        <ItemsControl ItemsSource="{Binding TemplateCategories}" Margin="0,10,0,10">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <RadioButton Content="{Binding DisplayName}" 
@@ -225,6 +225,12 @@
                             <TextBlock Text="创建模板"/>
                         </StackPanel>
                     </Button>
+                    <Button Command="{Binding OpenTemplateCommand}" Style="{DynamicResource AccentButtonStyle}" Margin="0,0,10,0">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
+                            <TextBlock Text="打开引擎模板文件夹"/>
+                        </StackPanel>
+                    </Button>
                     <Button Command="{Binding RecoveryCommand}" Margin="0,0,10,0">
                         <StackPanel Orientation="Horizontal">
                             <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE72C;" Margin="0,0,5,0"/>
@@ -235,12 +241,6 @@
                         <StackPanel Orientation="Horizontal">
                             <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
                             <TextBlock Text="查看配置文件备份"/>
-                        </StackPanel>
-                    </Button>
-                    <Button Command="{Binding ResetCommand}" Margin="0,0,10,0">
-                        <StackPanel Orientation="Horizontal">
-                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xe74d;" Margin="0,0,5,0"/>
-                            <TextBlock Text="重置表单"/>
                         </StackPanel>
                     </Button>
                 </StackPanel>

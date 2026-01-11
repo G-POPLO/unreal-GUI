@@ -122,7 +122,7 @@ namespace unreal_GUI.ViewModel
 
                 if (Properties.Settings.Default.AutoOpen)
                 {
-                    Process.Start("explorer.exe", Path.Combine(InputPath));
+                    Process.Start(Path.Combine(InputPath));
                 }
             }
             catch (Exception ex)
