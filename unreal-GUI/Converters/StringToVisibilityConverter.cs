@@ -9,11 +9,7 @@ namespace unreal_GUI.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is string text)
-            {
-                return string.IsNullOrEmpty(text) ? Visibility.Collapsed : Visibility.Visible;
-            }
-            return Visibility.Collapsed;
+            return value is string text ? string.IsNullOrEmpty(text) ? Visibility.Collapsed : Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

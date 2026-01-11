@@ -1,15 +1,12 @@
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp.Formats.Png;
-using SixLabors.ImageSharp.Formats.Jpeg;
 using System;
 using System.IO;
+using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace unreal_GUI.ViewModel
 {
@@ -98,7 +95,7 @@ namespace unreal_GUI.ViewModel
         private System.Windows.Rect cropRect;
         private bool isDragging = false;
         private string? currentImagePath;
-        
+
         // 画布尺寸
         private double canvasWidth;
         private double canvasHeight;
@@ -107,7 +104,7 @@ namespace unreal_GUI.ViewModel
         {
             // 设置默认画布大小（如果需要的话）
             SetCanvasSize(800, 600);
-            
+
             // 初始化默认剪裁区域（3:1比例，居中显示）
             InitializeRectPosition();
         }
@@ -131,12 +128,12 @@ namespace unreal_GUI.ViewModel
                 // 设置默认的300x100矩形，居中显示
                 double rectWidth = 300;
                 double rectHeight = 100;
-                
+
                 RectLeft = (canvasWidth - rectWidth) / 2;
                 RectTop = (canvasHeight - rectHeight) / 2;
                 RectWidth = rectWidth;
                 RectHeight = rectHeight;
-                
+
                 UpdateEdgeHotspots();
             }
         }
@@ -150,17 +147,17 @@ namespace unreal_GUI.ViewModel
             {
                 double imageWidth = originalImage.Width;
                 double imageHeight = originalImage.Height;
-                
+
                 // 计算3:1比例的剪裁区域
                 double cropWidth = Math.Min(imageWidth, imageHeight * 3);
                 double cropHeight = cropWidth / 3;
-                
+
                 // 居中显示 - 使用生成的属性
                 RectLeft = (imageWidth - cropWidth) / 2;
                 RectTop = (imageHeight - cropHeight) / 2;
                 RectWidth = cropWidth;
                 RectHeight = cropHeight;
-                
+
                 UpdateEdgeHotspots();
             }
         }
@@ -268,19 +265,19 @@ namespace unreal_GUI.ViewModel
         private void LoadImage(string imagePath)
         {
             currentImagePath = imagePath;
-            
+
             // 使用 ImageSharp 加载图片
             using var image = Image.Load(imagePath);
-            
+
             // 转换为 BitmapSource
             var bitmapSource = ConvertImageToBitmapSource(image);
             ImageSource = bitmapSource;
             originalImage = bitmapSource;
-            
+
             // 更新图片尺寸
             ImageWidth = image.Width;
             ImageHeight = image.Height;
-            
+
             // 初始化剪裁区域
             InitializeDefaultCropRect();
         }
@@ -295,13 +292,13 @@ namespace unreal_GUI.ViewModel
             using var memoryStream = new MemoryStream();
             image.SaveAsPng(memoryStream);
             memoryStream.Position = 0;
-            
+
             var bitmapImage = new BitmapImage();
             bitmapImage.BeginInit();
             bitmapImage.StreamSource = memoryStream;
             bitmapImage.EndInit();
             bitmapImage.Freeze();
-            
+
             return bitmapImage;
         }
 
@@ -312,27 +309,27 @@ namespace unreal_GUI.ViewModel
         public void UpdateCropRect(System.Windows.Rect newRect)
         {
             if (originalImage == null) return;
-            
+
             // 保持3:1比例
             double aspectRatio = 3.0;
             double width = newRect.Width;
             double height = width / aspectRatio;
-            
+
             // 调整位置以确保不超出图片边界
             double left = Math.Max(0, Math.Min(newRect.Left, originalImage.Width - width));
             double top = Math.Max(0, Math.Min(newRect.Top, originalImage.Height - height));
-            
+
             // 确保高度不超出边界
             if (top + height > originalImage.Height)
             {
                 top = originalImage.Height - height;
             }
-            
+
             RectLeft = left;
             RectTop = top;
             RectWidth = width;
             RectHeight = height;
-            
+
             UpdateEdgeHotspots();
         }
 
@@ -344,18 +341,18 @@ namespace unreal_GUI.ViewModel
         {
             if (originalImage == null || string.IsNullOrEmpty(currentImagePath))
                 return;
-                
+
             using var originalImageSharp = Image.Load(currentImagePath);
-            
+
             // 创建剪裁后的图片
             var cropRectangle = new Rectangle(
-                (int)RectLeft, 
-                (int)RectTop, 
-                (int)RectWidth, 
+                (int)RectLeft,
+                (int)RectTop,
+                (int)RectWidth,
                 (int)RectHeight);
-            
+
             using var croppedImage = originalImageSharp.Clone(ctx => ctx.Crop(cropRectangle));
-            
+
             // 保存图片
             var extension = Path.GetExtension(outputPath).ToLower();
             switch (extension)
@@ -394,14 +391,14 @@ namespace unreal_GUI.ViewModel
             {
                 double newLeft = mousePosition.X - cropRect.Width / 2;
                 double newTop = mousePosition.Y - cropRect.Height / 2;
-                
+
                 // 边界检查
                 newLeft = Math.Max(0, Math.Min(newLeft, originalImage.Width - RectWidth));
                 newTop = Math.Max(0, Math.Min(newTop, originalImage.Height - RectHeight));
-                
+
                 RectLeft = newLeft;
                 RectTop = newTop;
-                
+
                 UpdateEdgeHotspots();
             }
         }
@@ -413,7 +410,7 @@ namespace unreal_GUI.ViewModel
         {
             isDragging = false;
         }
-        
+
         // 拖拽相关属性
         [ObservableProperty]
         private bool isDraggingRect = false;
@@ -558,8 +555,8 @@ namespace unreal_GUI.ViewModel
                 double newTop = RectTop + offsetY;
 
                 // 边界检查
-                if (newLeft >= 0 && newTop >= 0 && 
-                    newLeft + RectWidth <= canvasWidth && 
+                if (newLeft >= 0 && newTop >= 0 &&
+                    newLeft + RectWidth <= canvasWidth &&
                     newTop + RectHeight <= canvasHeight)
                 {
                     RectLeft = newLeft;

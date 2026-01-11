@@ -16,9 +16,9 @@ namespace unreal_GUI.Converters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values.Length != 3 || 
-                !(values[0] is double originalValue) || 
-                !(values[1] is double originalDimension) || 
+            if (values.Length != 3 ||
+                !(values[0] is double originalValue) ||
+                !(values[1] is double originalDimension) ||
                 !(values[2] is double displayDimension))
             {
                 return 0.0;
@@ -26,7 +26,7 @@ namespace unreal_GUI.Converters
 
             // 计算缩放比例
             double scale = displayDimension / originalDimension;
-            
+
             // 返回转换后的值
             return originalValue * scale;
         }

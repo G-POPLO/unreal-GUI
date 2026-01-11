@@ -17,11 +17,11 @@ namespace unreal_GUI.Converters
             // 如果都是null，则相等
             if (value == null && parameter == null)
                 return true;
-            
+
             // 如果其中一个为null，则不相等
             if (value == null || parameter == null)
                 return false;
-            
+
             // 进行相等性比较
             return value.Equals(parameter);
         }
@@ -31,12 +31,7 @@ namespace unreal_GUI.Converters
         /// </summary>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is bool isEqual && isEqual)
-            {
-                return parameter;
-            }
-            
-            return Binding.DoNothing;
+            return value is bool isEqual && isEqual ? parameter : Binding.DoNothing;
         }
     }
 }

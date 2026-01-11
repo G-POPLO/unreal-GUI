@@ -76,7 +76,7 @@ namespace unreal_GUI.ViewModel
                 // 获取默认图标路径（应用程序根目录的Image文件夹）
                 string appRoot = AppDomain.CurrentDomain.BaseDirectory;
                 string defaultIconPath = Path.Combine(appRoot, "Image", "Blank_2x.png");
-                
+
                 if (File.Exists(defaultIconPath))
                 {
                     // 加载默认图标
@@ -85,7 +85,7 @@ namespace unreal_GUI.ViewModel
                     bitmap.UriSource = new Uri(defaultIconPath);
                     bitmap.EndInit();
                     CategoryIcon = bitmap;
-                    
+
                     // 设置默认图标信息
                     IconPath = defaultIconPath;
                     IconFileName = "Blank_2x.png";
@@ -290,7 +290,7 @@ namespace unreal_GUI.ViewModel
             DescriptionJa = string.Empty;
             DescriptionKo = string.Empty;
             GeneratedCategoriesText = string.Empty;
-            
+
             // 重新设置默认图标
             SetDefaultIcon();
         }
