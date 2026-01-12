@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using unreal_GUI.Model;
 using unreal_GUI.Model.Basic;
+using unreal_GUI.Model.Features;
 using Windows.UI.Notifications;
 
 
@@ -20,6 +21,9 @@ namespace unreal_GUI.ViewModel
 {
     public partial class TemplatesViewModel : ObservableObject
     {
+        // FeatureCore实例，用于创建功能包
+        private readonly FeatureCore _featureCore = new();
+
         [ObservableProperty]
         private string projectPath;
 
@@ -228,7 +232,7 @@ namespace unreal_GUI.ViewModel
             }
         }
 
-        // 创建模板命令
+        // 创建模板或功能包命令
         [RelayCommand]
         private async Task CreateTemplateAsync()
         {
@@ -242,7 +246,6 @@ namespace unreal_GUI.ViewModel
             if (string.IsNullOrEmpty(TemplateName))
             {
                 await ModernDialog.ShowInfoAsync("请输入模板名称。", "提示");
-
                 return;
             }
 
@@ -260,26 +263,65 @@ namespace unreal_GUI.ViewModel
 
             try
             {
-                // 创建TemplateDefs.ini文件
-                if (!await CreateTemplateDefsIniAsync())
+                // 根据IsProjectSelected的值决定创建模板还是功能包
+                if (IsProjectSelected)
                 {
-                    return;
+                    // 创建模板项目
+                    // 创建TemplateDefs.ini文件
+                    if (!await CreateTemplateDefsIniAsync())
+                    {
+                        return;
+                    }
+
+                    // 创建Media文件夹并复制图片（项目复制之前）
+                    await CreateMediaFolderAndCopyImagesAsync();
+
+                    // 复制项目到引擎Templates目录
+                    if (!await CopyProjectToTemplatesAsync())
+                    {
+                        return;
+                    }
+
+                    await ModernDialog.ShowInfoAsync($"模板 '{TemplateName}' 创建成功！", "成功");
                 }
-
-                // 创建Media文件夹并复制图片（项目复制之前）
-                await CreateMediaFolderAndCopyImagesAsync();
-
-                // 复制项目到引擎Templates目录
-                if (!await CopyProjectToTemplatesAsync())
+                else
                 {
-                    return;
-                }
+                    // 创建功能包
+                    // 检查UnrealPak是否可用
+                    if (!FeatureCore.IsUnrealPakAvailable(SelectedEngine.Path))
+                    {
+                        await ModernDialog.ShowErrorAsync("UnrealPak.exe不存在，请检查引擎路径是否正确。", "错误");
+                        return;
+                    }
 
-                await ModernDialog.ShowInfoAsync($"模板 '{TemplateName}' 创建成功！", "成功");
+                    // 使用英文描述作为功能包描述
+                    string description = TemplateDescriptionEn;
+                    // 使用模板名称作为搜索标签（暂时这样处理，后续可以根据需要扩展为多个标签）
+                    string searchTags = TemplateName;
+
+                    // 生成功能包
+                    bool success = await _featureCore.GenerateContentPackAsync(
+                        SelectedEngine.Path,
+                        TemplateName,
+                        description,
+                        searchTags,
+                        ProjectPath,
+                        true); // 自动安装到引擎目录
+
+                    if (success)
+                    {
+                        await ModernDialog.ShowInfoAsync($"功能包 '{TemplateName}' 创建成功！", "成功");
+                    }
+                    else
+                    {
+                        await ModernDialog.ShowErrorAsync($"创建功能包失败。", "错误");
+                    }
+                }
             }
             catch (Exception ex)
             {
-                await ModernDialog.ShowErrorAsync($"创建模板失败: {ex.Message}", "错误");
+                string operationName = IsProjectSelected ? "模板" : "功能包";
+                await ModernDialog.ShowErrorAsync($"创建{operationName}失败: {ex.Message}", "错误");
             }
         }
 

@@ -53,7 +53,7 @@ namespace unreal_GUI.Model.Features
         /// <param name="autoPlaceCreatedPack">是否自动安装到引擎目录</param>
         /// <returns>是否生成成功</returns>
         public async Task<bool> GenerateContentPackAsync(string enginePath, string contentPackName, string description, string searchTags,
-                                                      string selectedFolderPath, bool autoPlaceCreatedPack)
+                                                      string selectedFolderPath, bool autoPlaceCreatedPack = true)
         {
             try
             {
