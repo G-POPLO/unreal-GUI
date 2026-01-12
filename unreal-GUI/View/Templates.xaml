@@ -83,7 +83,7 @@
                         <TextBox Text="{Binding TemplateName}"/>
                         
                         <!-- 允许项目创建选项 -->
-                        <CheckBox IsChecked="{Binding IsProjectSelected}" Content="允许直接创建项目" Margin="0,10,0,0"/>
+                        <CheckBox IsChecked="{Binding IsProjectSelected}" Content="创建模板项目" Margin="0,10,0,0"/>
                             <TextBlock Text="启用此选项允许用户直接从此模板创建新项目,这将显示在新建项目对话框中的模板选择区域" 
                                    FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" 
                                    Margin="0,5,0,0"/>
