@@ -260,22 +260,16 @@ namespace unreal_GUI.ViewModel
 
             try
             {
-                // 步骤1: 备份TemplateCategories.ini文件
-                //if (!await BackupTemplateCategoriesAsync())
-                //{
-                //    return;
-                //}
-
-                // 步骤2: 创建TemplateDefs.ini文件
+                // 创建TemplateDefs.ini文件
                 if (!await CreateTemplateDefsIniAsync())
                 {
                     return;
                 }
 
-                // 步骤3: 创建Media文件夹并复制图片（项目复制之前）
+                // 创建Media文件夹并复制图片（项目复制之前）
                 await CreateMediaFolderAndCopyImagesAsync();
 
-                // 步骤4: 复制项目到引擎Templates目录
+                // 复制项目到引擎Templates目录
                 if (!await CopyProjectToTemplatesAsync())
                 {
                     return;
