@@ -17,7 +17,7 @@ namespace unreal_GUI.Model.Features
         public string Message { get; set; } = string.Empty;
     }
 
-    internal class FeatureCore
+    public class FeatureCore
     {
         // 存储资产路径映射，用于复制和安装
         private readonly Dictionary<string, string> AssetPathsMap = [];
@@ -55,12 +55,15 @@ namespace unreal_GUI.Model.Features
         public async Task<bool> GenerateContentPackAsync(string enginePath, string contentPackName, string description, string searchTags,
                                                       string selectedFolderPath, bool autoPlaceCreatedPack = true)
         {
+            string contentPackDir = string.Empty;
+            bool result = false;
+
             try
             {
                 OnProgressReported("初始化文件夹结构...");
 
                 // 初始化文件夹结构
-                InitBasicFolderStructure(out string contentPackDir, out string contentSettingsDir, out string featurePackDir, out string samplesDir);
+                InitBasicFolderStructure(out contentPackDir, out string contentSettingsDir, out string featurePackDir, out string samplesDir);
 
                 // 移除空格的内容包名称
                 string contentPackNameNoSpace = contentPackName.Replace(" ", string.Empty);
@@ -113,11 +116,13 @@ namespace unreal_GUI.Model.Features
                         OnProgressReported("内容包生成成功，但安装到引擎目录失败");
                     }
 
-                    return placementResult;
+                    result = placementResult;
                 }
-
-                OnProgressReported("内容包生成成功！");
-                return true;
+                else
+                {
+                    OnProgressReported("内容包生成成功！");
+                    result = true;
+                }
             }
             catch (Exception ex)
             {
@@ -125,8 +130,26 @@ namespace unreal_GUI.Model.Features
                 string errorMessage = $"生成内容包失败: {ex.Message}";
                 Console.WriteLine(errorMessage);
                 OnProgressReported(errorMessage);
-                return false;
+                result = false;
             }
+            finally
+            {
+                // 清理临时生成的内容包目录
+                if (!string.IsNullOrEmpty(contentPackDir) && Directory.Exists(contentPackDir))
+                {
+                    try
+                    {
+                        Directory.Delete(contentPackDir, true);
+                        Console.WriteLine($"已清理临时目录: {contentPackDir}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"清理临时目录失败: {ex.Message}");
+                    }
+                }
+            }
+
+            return result;
         }
 
         /// <summary>

@@ -833,7 +833,7 @@ namespace unreal_GUI.ViewModel
                             $"FilenameReplacements=(Extensions=(\"cpp\",\"h\",\"ini\",\"cs\"), From=\"%TEMPLATENAME_UPPERCASE%\", To=\"%PROJECTNAME_UPPERCASE%\", bCaseSensitive=true)\n" +
                             $"FilenameReplacements=(Extensions=(\"cpp\",\"h\",\"ini\",\"cs\"), From=\"%TEMPLATENAME_LOWERCASE%\", To=\"%PROJECTNAME_LOWERCASE%\", bCaseSensitive=true)\n" +
                             $"FilenameReplacements=(Extensions=(\"cpp\",\"h\",\"ini\",\"cs\"), From=\"%TEMPLATENAME%\", To=\"%PROJECTNAME%\", bCaseSensitive=false)\n" +
-                            $"\n; 文件内容替换（关键！）\n" +
+                            $"\n; File content replacement \n" +
                             $"ReplacementsInFiles=(Extensions=(\"cpp\",\"h\",\"ini\",\"cs\",\"uplugin\"), From=\"%TEMPLATENAME%\", To=\"%PROJECTNAME%\", bCaseSensitive=false)\n" +
                             $"ReplacementsInFiles=(Extensions=(\"cpp\",\"h\",\"ini\",\"cs\",\"uplugin\"), From=\"%TEMPLATENAME_UPPERCASE%\", To=\"%PROJECTNAME_UPPERCASE%\", bCaseSensitive=true)\n" +
                             $"ReplacementsInFiles=(Extensions=(\"cpp\",\"h\",\"ini\",\"cs\",\"uplugin\"), From=\"%TEMPLATENAME_LOWERCASE%\", To=\"%PROJECTNAME_LOWERCASE%\", bCaseSensitive=true)\n";

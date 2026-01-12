@@ -195,3 +195,6 @@ MigrationBackup/
 Inno Setup/setupv2.iss
 # documentation
 doc/
+# code_test相关
+code_test/output
+code_test/input

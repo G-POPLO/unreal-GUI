@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using unreal_GUI.Model.DialogContent;
-using unreal_GUI.View.DialogContent;
 
 
 namespace unreal_GUI.Model.Basic
@@ -389,86 +388,86 @@ namespace unreal_GUI.Model.Basic
         /// <param name="outputDirectory">输出目录路径</param>
         /// <param name="compressionLevel">压缩级别（0-9，默认5）</param>
         /// <returns>压缩是否成功</returns>
-        public static async Task<bool> ShowCompressInfoAsync(string inputPath, string outputDirectory, int compressionLevel = 5, bool solidCompress = true)
-        {
-            // 构建完整的输出压缩文件路径
-            // 检查输入路径是否为.uproject文件
-            string projectName = "Project";
-            if (!string.IsNullOrEmpty(inputPath))
-            {
-                if (Path.GetExtension(inputPath) == ".uproject")
-                {
-                    projectName = Path.GetFileNameWithoutExtension(inputPath);
-                }
-                else
-                {
-                    // 如果是目录，查找其中的.uproject文件
-                    if (Directory.Exists(inputPath))
-                    {
-                        var uprpojectFiles = Directory.GetFiles(inputPath, "*.uproject");
-                        if (uprpojectFiles.Length > 0)
-                        {
-                            projectName = Path.GetFileNameWithoutExtension(uprpojectFiles[0]);
-                        }
-                    }
-                }
-            }
-            string outputArchivePath = Path.Combine(outputDirectory, $"{projectName}.7z");
+        //public static async Task<bool> ShowCompressInfoAsync(string inputPath, string outputDirectory, int compressionLevel = 5, bool solidCompress = true)
+        //{
+        //    // 构建完整的输出压缩文件路径
+        //    // 检查输入路径是否为.uproject文件
+        //    string projectName = "Project";
+        //    if (!string.IsNullOrEmpty(inputPath))
+        //    {
+        //        if (Path.GetExtension(inputPath) == ".uproject")
+        //        {
+        //            projectName = Path.GetFileNameWithoutExtension(inputPath);
+        //        }
+        //        else
+        //        {
+        //            // 如果是目录，查找其中的.uproject文件
+        //            if (Directory.Exists(inputPath))
+        //            {
+        //                var uprpojectFiles = Directory.GetFiles(inputPath, "*.uproject");
+        //                if (uprpojectFiles.Length > 0)
+        //                {
+        //                    projectName = Path.GetFileNameWithoutExtension(uprpojectFiles[0]);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    string outputArchivePath = Path.Combine(outputDirectory, $"{projectName}.7z");
 
-            var dialog = new ContentDialog
-            {
-                Title = "压缩项目",
-                CloseButtonText = "关闭",
-                PrimaryButtonText = "取消",
-                DefaultButton = ContentDialogButton.Close,
-            };
+        //    var dialog = new ContentDialog
+        //    {
+        //        Title = "压缩项目",
+        //        CloseButtonText = "关闭",
+        //        PrimaryButtonText = "取消",
+        //        DefaultButton = ContentDialogButton.Close,
+        //    };
 
-            // 创建压缩信息控件
-            var compressInfo = new CompressInfo();
-            dialog.Content = compressInfo;
+        //    // 创建压缩信息控件
+        //    var compressInfo = new CompressInfo();
+        //    dialog.Content = compressInfo;
 
-            // 设置Dialog属性
-            compressInfo.Dialog = dialog;
+        //    // 设置Dialog属性
+        //    compressInfo.Dialog = dialog;
 
-            bool isCanceled = false;
-            bool success = false;
+        //    bool isCanceled = false;
+        //    bool success = false;
 
-            // 处理取消按钮
-            dialog.PrimaryButtonClick += (sender, args) =>
-            {
-                args.Cancel = true; // 取消关闭对话框
-                isCanceled = true;
-                compressInfo.UpdateCompressInfo("正在取消压缩...");
-            };
+        //    // 处理取消按钮
+        //    dialog.PrimaryButtonClick += (sender, args) =>
+        //    {
+        //        args.Cancel = true; // 取消关闭对话框
+        //        isCanceled = true;
+        //        compressInfo.UpdateCompressInfo("正在取消压缩...");
+        //    };
 
-            // 异步执行压缩任务
-            var compressTask = Task.Run(async () =>
-            {
-                try
-                {
-                    // 调用CompressCore.CompressFilesAsync进行压缩
-                    success = await CompressCore.CompressFilesAsync(
-                        inputPath,
-                        outputArchivePath,
-                        compressionLevel: compressionLevel,
-                        soildcompress: solidCompress
-                    );
-                }
-                catch (Exception ex)
-                {
-                    success = false;
-                    compressInfo.UpdateCompressInfo($"压缩失败: {ex.Message}");
-                    compressInfo.UpdateCurrentOperation($"错误: {ex.Message}");
-                }
-            });
+        //    // 异步执行压缩任务
+        //    var compressTask = Task.Run(async () =>
+        //    {
+        //        try
+        //        {
+        //            // 调用CompressCore.CompressFilesAsync进行压缩
+        //            success = await CompressCore.CompressFilesAsync(
+        //                inputPath,
+        //                outputArchivePath,
+        //                compressionLevel: compressionLevel,
+        //                soildcompress: solidCompress
+        //            );
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            success = false;
+        //            compressInfo.UpdateCompressInfo($"压缩失败: {ex.Message}");
+        //            compressInfo.UpdateCurrentOperation($"错误: {ex.Message}");
+        //        }
+        //    });
 
-            // 显示对话框
-            await dialog.ShowAsync();
+        //    // 显示对话框
+        //    await dialog.ShowAsync();
 
-            // 等待压缩任务完成
-            await compressTask;
+        //    // 等待压缩任务完成
+        //    await compressTask;
 
-            return success && !isCanceled;
-        }
+        //    return success && !isCanceled;
+        //}
     }
 }

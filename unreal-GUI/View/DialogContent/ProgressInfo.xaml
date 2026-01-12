@@ -8,21 +8,24 @@
              d:DesignWidth="600">
     <StackPanel Margin="10">
         <!-- 压缩进度 -->
-        <TextBlock Text="压缩进度" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+        <TextBlock Text="进度" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
         <Grid Height="15" Width="580">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <ProgressBar x:Name="ProgressBar" Grid.Column="0"  VerticalAlignment="Stretch"/>
-            <TextBlock x:Name="ProgressText" Grid.Column="1" Text="0%"/>
+            <TextBlock x:Name="ProgressPercentText" Grid.Column="1" Text="0%" Margin="10,0,0,0"/>
         </Grid>
+        <!-- 文件来源信息展示 -->
+        <TextBlock x:Name="SourceText" Text="" TextWrapping="Wrap" Margin="0,0,0,10"/>
+        <TextBlock x:Name="TargetText" Text="" TextWrapping="Wrap" Margin="0,0,0,10"/>
         <!-- 当前操作 -->
         <TextBlock x:Name="CurrentOperationText" Text="" TextWrapping="Wrap" Margin="0,0,0,10"/>
-        <!-- 压缩信息 -->
-        <TextBlock Text="压缩信息" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+        <!-- 展示信息 -->
+        <TextBlock Text="信息" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
         <ScrollViewer Height="200" VerticalScrollBarVisibility="Auto">
-            <TextBox x:Name="CompressText" TextWrapping="Wrap" IsReadOnly="True" AcceptsReturn="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Opacity="0.8"/>
+            <TextBox x:Name="ProgressText" TextWrapping="Wrap" IsReadOnly="True" AcceptsReturn="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Opacity="0.8"/>
         </ScrollViewer>
     </StackPanel>
 </UserControl>
