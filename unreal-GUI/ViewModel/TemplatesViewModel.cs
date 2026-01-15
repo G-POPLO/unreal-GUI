@@ -299,22 +299,33 @@ namespace unreal_GUI.ViewModel
                     // 使用模板名称作为搜索标签（暂时这样处理，后续可以根据需要扩展为多个标签）
                     string searchTags = TemplateName;
 
-                    // 生成功能包
-                    bool success = await _featureCore.GenerateContentPackAsync(
-                        SelectedEngine.Path,
-                        TemplateName,
-                        description,
-                        searchTags,
-                        ProjectPath,
-                        true); // 自动安装到引擎目录
+                    // 订阅资产复制进度事件
+                    _featureCore.AssetCopyProgressReported += OnAssetCopyProgressReported;
 
-                    if (success)
+                    try
                     {
-                        await ModernDialog.ShowInfoAsync($"功能包 '{TemplateName}' 创建成功！", "成功");
+                        // 生成功能包
+                        bool success = await _featureCore.GenerateContentPackAsync(
+                            SelectedEngine.Path,
+                            TemplateName,
+                            description,
+                            searchTags,
+                            ProjectPath,
+                            true); // 自动安装到引擎目录
+
+                        if (success)
+                        {
+                            await ModernDialog.ShowInfoAsync($"功能包 '{TemplateName}' 创建成功！", "成功");
+                        }
+                        else
+                        {
+                            await ModernDialog.ShowErrorAsync($"创建功能包失败。", "错误");
+                        }
                     }
-                    else
+                    finally
                     {
-                        await ModernDialog.ShowErrorAsync($"创建功能包失败。", "错误");
+                        // 取消订阅资产复制进度事件
+                        _featureCore.AssetCopyProgressReported -= OnAssetCopyProgressReported;
                     }
                 }
             }
@@ -1038,7 +1049,7 @@ namespace unreal_GUI.ViewModel
             }
         }
 
-        // 原始的简单复制方法（保留备用）
+        // 复制路径
         private static void CopyDirectory(string sourceDir, string destinationDir)
         {
             // 创建目标目录
@@ -1179,6 +1190,80 @@ namespace unreal_GUI.ViewModel
             {
                 await ModernDialog.ShowErrorAsync($"复制图片失败: {ex.Message}", "错误");
             }
+        }
+
+        // 处理资产复制进度事件
+        private void OnAssetCopyProgressReported(object sender, AssetCopyProgressEventArgs e)
+        {
+            // Toast 通知初始化（带进度条）
+            string toastTag = "asset-copy-progress";
+            string toastGroup = "asset-copy-group";
+            
+            // 仅在主线程上执行UI更新
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {
+                // 如果是第一次显示进度，则显示初始通知
+                if (e.FilesCopied == 1)
+                {
+                    var toastContent = new ToastContentBuilder()
+                        .AddText($"正在复制内容包资产")
+                        .AddText($"文件总数: {e.TotalFiles}")
+                        .AddVisualChild(new AdaptiveProgressBar()
+                        {
+                            Title = "资产复制进度",
+                            Value = new BindableProgressBarValue("progressValue"),
+                            ValueStringOverride = new BindableString("progressText"),
+                            Status = new BindableString("currentFile")
+                        })
+                        .GetToastContent();
+
+                    // 创建通知并设置初始数据
+                    var toast = new ToastNotification(toastContent.GetXml())
+                    {
+                        Tag = toastTag,
+                        Group = toastGroup,
+                        Data = new NotificationData()
+                        {
+                            Values =
+                            {
+                                ["progressValue"] = "0.00",
+                                ["progressText"] = "0%",
+                                ["currentFile"] = "准备中..."
+                            },
+                            SequenceNumber = 1
+                        }
+                    };
+
+                    ToastNotificationManagerCompat.CreateToastNotifier().Show(toast);
+                }
+
+                // 更新进度
+                double progress = e.FilesCopied / (double)e.TotalFiles;
+                int percent = (int)(progress * 100);
+
+                var data = new NotificationData
+                {
+                    SequenceNumber = (uint)e.FilesCopied  // 使用文件计数作为序列号
+                };
+                data.Values["progressValue"] = progress.ToString("F2");
+                data.Values["progressText"] = $"{percent}%";
+                data.Values["currentFile"] = $"正在复制: {e.CurrentFile}";
+
+                ToastNotificationManagerCompat.CreateToastNotifier().Update(data, toastTag, toastGroup);
+
+                // 如果复制完成，延迟移除通知
+                if (e.FilesCopied == e.TotalFiles)
+                {
+                    // 延迟2秒后移除通知
+                    Task.Delay(2000).ContinueWith(_ =>
+                    {
+                        System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            ToastNotificationManagerCompat.History.Remove(toastTag, toastGroup);
+                        });
+                    });
+                }
+            });
         }
     }
 }

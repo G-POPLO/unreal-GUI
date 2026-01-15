@@ -109,7 +109,7 @@
         <PackageReference Include="SoftCircuits.IniFileParser" Version="2.7.0" />
         <PackageReference Include="ValueConverters" Version="3.1.22" />
         <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
-        <PackageReference Include="Vanara.PInvoke.Kernel32" Version="4.2.1" />
+        
     </ItemGroup>
 
     <ItemGroup>

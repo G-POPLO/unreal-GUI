@@ -17,6 +17,32 @@ namespace unreal_GUI.Model.Features
         public string Message { get; set; } = string.Empty;
     }
 
+    /// <summary>
+    /// 资产复制进度报告事件参数
+    /// </summary>
+    public class AssetCopyProgressEventArgs : EventArgs
+    {
+        /// <summary>
+        /// 已复制的文件数
+        /// </summary>
+        public int FilesCopied { get; set; }
+
+        /// <summary>
+        /// 总文件数
+        /// </summary>
+        public int TotalFiles { get; set; }
+
+        /// <summary>
+        /// 当前正在复制的文件名
+        /// </summary>
+        public string CurrentFile { get; set; } = string.Empty;
+
+        /// <summary>
+        /// 进度百分比
+        /// </summary>
+        public double ProgressPercentage => TotalFiles > 0 ? (double)FilesCopied / TotalFiles * 100 : 0;
+    }
+
     public class FeatureCore
     {
         // 存储资产路径映射，用于复制和安装
@@ -34,12 +60,26 @@ namespace unreal_GUI.Model.Features
         public event EventHandler<ProgressReportedEventArgs>? ProgressReported;
 
         /// <summary>
+        /// 资产复制进度报告事件
+        /// </summary>
+        public event EventHandler<AssetCopyProgressEventArgs>? AssetCopyProgressReported;
+
+        /// <summary>
         /// 触发进度报告事件
         /// </summary>
         /// <param name="message">进度消息</param>
         private void OnProgressReported(string message)
         {
             ProgressReported?.Invoke(this, new ProgressReportedEventArgs { Message = message });
+        }
+
+        /// <summary>
+        /// 触发资产复制进度报告事件
+        /// </summary>
+        /// <param name="args">资产复制进度事件参数</param>
+        private void OnAssetCopyProgressReported(AssetCopyProgressEventArgs args)
+        {
+            AssetCopyProgressReported?.Invoke(this, args);
         }
 
         /// <summary>
@@ -397,8 +437,15 @@ namespace unreal_GUI.Model.Features
                 // 创建目标目录
                 Directory.CreateDirectory(targetDir);
 
-                // 复制文件夹
-                await CopyDirectoryAsync(fullSelectedFolderPath, targetDir);
+                // 计算要复制的文件总数
+                var allFiles = Directory.GetFiles(fullSelectedFolderPath, "*", SearchOption.AllDirectories);
+                int totalFiles = allFiles.Length;
+
+                // 创建进度跟踪对象
+                var progressTracker = new AssetCopyProgressTracker(totalFiles, this);
+
+                // 复制文件夹（带进度）
+                await CopyDirectoryWithProgressAsync(fullSelectedFolderPath, targetDir, progressTracker);
 
                 // 检查是否有文件被复制
                 string[] files = Directory.GetFiles(targetDir, "*", SearchOption.AllDirectories);
@@ -462,6 +509,28 @@ namespace unreal_GUI.Model.Features
         }
 
         /// <summary>
+        /// 资产复制进度跟踪器
+        /// </summary>
+        private class AssetCopyProgressTracker(int totalFiles, FeatureCore owner)
+        {
+            public int TotalFiles { get; } = totalFiles;
+            public int FilesCopied { get; private set; } = 0;
+            private readonly FeatureCore _owner = owner;
+
+            public void IncrementProgress(string currentFile)
+            {
+                FilesCopied++;
+                var args = new AssetCopyProgressEventArgs
+                {
+                    FilesCopied = FilesCopied,
+                    TotalFiles = TotalFiles,
+                    CurrentFile = Path.GetFileName(currentFile)
+                };
+                _owner.OnAssetCopyProgressReported(args);
+            }
+        }
+
+        /// <summary>
         /// 异步复制文件
         /// </summary>
         /// <param name="sourceFile">源文件</param>
@@ -471,6 +540,55 @@ namespace unreal_GUI.Model.Features
             using FileStream sourceStream = File.Open(sourceFile, FileMode.Open, FileAccess.Read, FileShare.Read);
             using FileStream destinationStream = File.Create(destinationFile);
             await sourceStream.CopyToAsync(destinationStream);
+        }
+
+        /// <summary>
+        /// 带进度的异步复制文件
+        /// </summary>
+        /// <param name="sourceFile">源文件</param>
+        /// <param name="destinationFile">目标文件</param>
+        /// <param name="progressTracker">进度跟踪器</param>
+        private static async Task CopyFileWithProgressAsync(string sourceFile, string destinationFile, AssetCopyProgressTracker progressTracker)
+        {
+            using FileStream sourceStream = File.Open(sourceFile, FileMode.Open, FileAccess.Read, FileShare.Read);
+            using FileStream destinationStream = File.Create(destinationFile);
+            await sourceStream.CopyToAsync(destinationStream);
+
+            // 更新进度
+            progressTracker.IncrementProgress(sourceFile);
+        }
+
+        /// <summary>
+        /// 带进度的异步复制目录
+        /// </summary>
+        /// <param name="sourceDir">源目录</param>
+        /// <param name="destinationDir">目标目录</param>
+        /// <param name="progressTracker">进度跟踪器</param>
+        private static async Task CopyDirectoryWithProgressAsync(string sourceDir, string destinationDir, AssetCopyProgressTracker progressTracker)
+        {
+            // 获取源目录下的所有文件和子目录
+            string[] files = Directory.GetFiles(sourceDir);
+            string[] subDirs = Directory.GetDirectories(sourceDir);
+
+            // 创建目标目录（如果不存在）
+            if (!Directory.Exists(destinationDir))
+            {
+                Directory.CreateDirectory(destinationDir);
+            }
+
+            // 复制所有文件
+            foreach (string file in files)
+            {
+                string destFile = Path.Combine(destinationDir, Path.GetFileName(file));
+                await CopyFileWithProgressAsync(file, destFile, progressTracker);
+            }
+
+            // 递归复制所有子目录
+            foreach (string subDir in subDirs)
+            {
+                string destSubDir = Path.Combine(destinationDir, Path.GetFileName(subDir));
+                await CopyDirectoryWithProgressAsync(subDir, destSubDir, progressTracker);
+            }
         }
 
         /// <summary>
