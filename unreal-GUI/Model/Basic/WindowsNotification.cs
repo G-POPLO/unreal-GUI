@@ -1,5 +1,6 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
 using System;
+using System.Diagnostics;
 using Windows.UI.Notifications;
 
 namespace unreal_GUI.Model.Basic
@@ -26,7 +27,7 @@ namespace unreal_GUI.Model.Basic
             catch (Exception ex)
             {
                 // 记录错误或进行其他处理
-                Console.WriteLine($"显示通知时发生错误: {ex.Message}");
+                Debug.WriteLine($"显示通知时发生错误: {ex.Message}");
             }
         }
 
@@ -63,7 +64,7 @@ namespace unreal_GUI.Model.Basic
             catch (Exception ex)
             {
                 // 记录错误或进行其他处理
-                Console.WriteLine($"显示带按钮通知时发生错误: {ex.Message}");
+                Debug.WriteLine($"显示带按钮通知时发生错误: {ex.Message}");
             }
         }
 
@@ -81,7 +82,7 @@ namespace unreal_GUI.Model.Basic
             catch (Exception ex)
             {
                 // 记录错误或进行其他处理
-                Console.WriteLine($"关闭通知时发生错误: {ex.Message}");
+                Debug.WriteLine($"关闭通知时发生错误: {ex.Message}");
             }
         }
 

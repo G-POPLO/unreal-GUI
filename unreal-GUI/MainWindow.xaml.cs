@@ -26,6 +26,7 @@ namespace unreal_GUI
 
             SetSystemBackdropType();
 
+
             if (DataContext is MainWindowViewModel viewModel)
             {
                 viewModel.NavigationRequested += OnNavigationRequested;

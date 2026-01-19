@@ -3,6 +3,7 @@ using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Media.Imaging;
 
@@ -109,7 +110,7 @@ namespace unreal_GUI.Model.Features
             catch (Exception ex)
             {
                 // 记录错误
-                Console.WriteLine($"自动裁剪失败：{ex.Message}");
+                Debug.WriteLine($"自动裁剪失败：{ex.Message}");
                 return false;
             }
         }
@@ -156,7 +157,7 @@ namespace unreal_GUI.Model.Features
             catch (Exception ex)
             {
                 // 记录错误
-                Console.WriteLine($"PNG压缩失败：{ex.Message}");
+                Debug.WriteLine($"PNG压缩失败：{ex.Message}");
                 return false;
             }
         }
@@ -228,7 +229,7 @@ namespace unreal_GUI.Model.Features
             catch (Exception ex)
             {
                 // 记录错误
-                Console.WriteLine($"PNG压缩和调整尺寸失败：{ex.Message}");
+                Debug.WriteLine($"PNG压缩和调整尺寸失败：{ex.Message}");
                 return false;
             }
         }

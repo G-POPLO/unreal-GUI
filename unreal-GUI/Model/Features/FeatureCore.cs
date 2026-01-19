@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -57,7 +58,7 @@ namespace unreal_GUI.Model.Features
         /// <summary>
         /// 进度报告事件
         /// </summary>
-        public event EventHandler<ProgressReportedEventArgs>? ProgressReported;
+        //public event EventHandler<ProgressReportedEventArgs>? ProgressReported;
 
         /// <summary>
         /// 资产复制进度报告事件
@@ -68,9 +69,13 @@ namespace unreal_GUI.Model.Features
         /// 触发进度报告事件
         /// </summary>
         /// <param name="message">进度消息</param>
-        private void OnProgressReported(string message)
+        private static void OnProgressReported(string message)
         {
-            ProgressReported?.Invoke(this, new ProgressReportedEventArgs { Message = message });
+            // 输出到控制台
+            Debug.WriteLine(message);
+
+            // 触发事件
+            //ProgressReported?.Invoke(this, new ProgressReportedEventArgs { Message = message });
         }
 
         /// <summary>
@@ -102,8 +107,11 @@ namespace unreal_GUI.Model.Features
             {
                 OnProgressReported("初始化文件夹结构...");
 
+                // 使用选中的文件夹路径作为基础目录
+                string baseDir = selectedFolderPath;
+
                 // 初始化文件夹结构
-                InitBasicFolderStructure(out contentPackDir, out string contentSettingsDir, out string featurePackDir, out string samplesDir);
+                InitBasicFolderStructure(baseDir, out contentPackDir, out string contentSettingsDir, out string featurePackDir, out string samplesDir);
 
                 // 移除空格的内容包名称
                 string contentPackNameNoSpace = contentPackName.Replace(" ", string.Empty);
@@ -168,7 +176,7 @@ namespace unreal_GUI.Model.Features
             {
                 // 处理异常
                 string errorMessage = $"生成内容包失败: {ex.Message}";
-                Console.WriteLine(errorMessage);
+                Debug.WriteLine(errorMessage);
                 OnProgressReported(errorMessage);
                 result = false;
             }
@@ -180,11 +188,11 @@ namespace unreal_GUI.Model.Features
                     try
                     {
                         Directory.Delete(contentPackDir, true);
-                        Console.WriteLine($"已清理临时目录: {contentPackDir}");
+                        Debug.WriteLine($"已清理临时目录: {contentPackDir}");
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"清理临时目录失败: {ex.Message}");
+                        Debug.WriteLine($"清理临时目录失败: {ex.Message}");
                     }
                 }
             }
@@ -218,11 +226,12 @@ namespace unreal_GUI.Model.Features
         /// <summary>
         /// 创建基本文件夹结构
         /// </summary>
-        private static void InitBasicFolderStructure(out string contentPackDir, out string contentSettingsDir,
+        private void InitBasicFolderStructure(string baseDir, out string contentPackDir, out string contentSettingsDir,
                                              out string featurePackDir, out string samplesDir)
         {
-            // 获取当前项目目录
-            string projectDir = Directory.GetCurrentDirectory();
+            // 使用指定的基础目录
+            string projectDir = baseDir;
+            OnProgressReported(baseDir);
 
             // 主内容包目录
             contentPackDir = Path.Combine(projectDir, "GeneratedContentPack");
@@ -270,7 +279,7 @@ namespace unreal_GUI.Model.Features
                 string upackFilePath = Path.Combine(engineFeaturePacksDir, $"{contentPackNameNoSpace}.upack");
                 if (File.Exists(upackFilePath))
                 {
-                    Console.WriteLine($"错误：已存在同名内容包文件 {upackFilePath}");
+                    Debug.WriteLine($"错误：已存在同名内容包文件 {upackFilePath}");
                     return true;
                 }
 
@@ -278,7 +287,7 @@ namespace unreal_GUI.Model.Features
                 string samplesFolderPath = Path.Combine(engineSamplesDir, contentPackNameNoSpace);
                 if (Directory.Exists(samplesFolderPath))
                 {
-                    Console.WriteLine($"错误：已存在同名样本文件夹 {samplesFolderPath}");
+                    Debug.WriteLine($"错误：已存在同名样本文件夹 {samplesFolderPath}");
                     return true;
                 }
 
@@ -286,7 +295,7 @@ namespace unreal_GUI.Model.Features
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"检查同名内容包失败：{ex.Message}");
+                Debug.WriteLine($"检查同名内容包失败：{ex.Message}");
                 return false;
             }
         }
@@ -311,16 +320,16 @@ namespace unreal_GUI.Model.Features
                 // 移除空格的内容包名称
                 string contentPackNameNoSpace = contentPackName.Replace(" ", string.Empty);
 
-                // 配置文件内容
-                string configContent = $"[AdditionalFilesToAdd]\n+Files=Samples/{contentPackNameNoSpace}/Content/*.*";
+                // 配置文件内容 - 将Samples目录下的内容映射到包的Content目录
+                string configContent = $"[AdditionalFilesToAdd]\n+Files=Samples/{contentPackNameNoSpace}/*.*";
 
                 // 写入配置文件
                 File.WriteAllText(configFilePath, configContent);
-                Console.WriteLine($"成功生成配置文件：{configFilePath}");
+                Debug.WriteLine($"成功生成配置文件：{configFilePath}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"生成配置文件失败：{ex.Message}");
+                Debug.WriteLine($"生成配置文件失败：{ex.Message}");
             }
         }
 
@@ -328,7 +337,7 @@ namespace unreal_GUI.Model.Features
         /// 生成JSON配置文件
         /// </summary>
         private static void InitJsonFile(string contentPackSettingsDir, string contentPackName,
-                                 string description, string searchTags)
+                                 string description, string? searchTags)
         {
             try
             {
@@ -354,7 +363,7 @@ namespace unreal_GUI.Model.Features
                     AssetTypes = Array.Empty<object>(),
                     SearchTags = new[]
                     {
-                        new { Language = "en", Text = searchTags }
+                        new { Language = "en", Text = "Custom" }
                     },
                     ClassTypes = string.Empty,
                     Category = "Content",
@@ -368,11 +377,11 @@ namespace unreal_GUI.Model.Features
                 // 写入文件
                 string manifestFilePath = Path.Combine(contentPackSettingsDir, "manifest.json");
                 File.WriteAllText(manifestFilePath, jsonString);
-                Console.WriteLine($"成功生成JSON配置文件：{manifestFilePath}");
+                Debug.WriteLine($"成功生成JSON配置文件：{manifestFilePath}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"生成JSON配置文件失败：{ex.Message}");
+                Debug.WriteLine($"生成JSON配置文件失败：{ex.Message}");
             }
         }
 
@@ -383,26 +392,43 @@ namespace unreal_GUI.Model.Features
         {
             try
             {
-                // 内容包设置完整路径
-                string contentSettingsFullDir = Path.GetFullPath(contentSettingsDir);
+                // 计算ContentSettings相对于contentPackDir的相对路径
+                string contentSettingsRelativePath = Path.GetRelativePath(contentPackDir, contentSettingsDir);
 
-                // 准备要打包的内容列表
+                // 准备要打包的内容列表（使用相对路径）
+                // 注意：按照C++原版逻辑，只打包Config、Media和manifest.json，不打包Samples目录
+                // Samples目录的内容会在安装阶段直接复制到引擎Samples目录
+
+                // 获取各个子目录的相对路径
+                string configPath = Path.Combine(contentSettingsDir, "Config");
+                string mediaPath = Path.Combine(contentSettingsDir, "Media");
+                string manifestPath = Path.Combine(contentSettingsDir, "manifest.json");
+
+                // 计算这些路径相对于contentPackDir的路径
+                string configRelativePath = Path.GetRelativePath(contentPackDir, configPath).Replace('\\', '/');
+                string mediaRelativePath = Path.GetRelativePath(contentPackDir, mediaPath).Replace('\\', '/');
+                string manifestRelativePath = Path.GetRelativePath(contentPackDir, manifestPath).Replace('\\', '/');
+
                 List<string> contentToPack = [
-                    $"\"{Path.Combine(contentSettingsFullDir, "Config")}\"",
-                    $"\"{Path.Combine(contentSettingsFullDir, "Media")}\"",
-                    $"\"{Path.Combine(contentSettingsFullDir, "manifest.json")}\""
+                    $"\"{configRelativePath}\"",
+                    $"\"{mediaRelativePath}\"",
+                    $"\"{manifestRelativePath}\""
                 ];
 
                 // 创建ContentToUPack.txt文件
                 string contentToUPackFilePath = Path.Combine(contentPackDir, "ContentToUPack.txt");
                 await File.WriteAllLinesAsync(contentToUPackFilePath, contentToPack);
 
-                Console.WriteLine($"成功创建ContentToUPack.txt文件：{contentToUPackFilePath}");
+                Debug.WriteLine($"成功创建ContentToUPack.txt文件：{contentToUPackFilePath}");
+                foreach (var item in contentToPack)
+                {
+                    Debug.WriteLine($"  添加到打包列表: {item}");
+                }
                 return contentToUPackFilePath;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"创建ContentToUPack.txt文件失败：{ex.Message}");
+                Debug.WriteLine($"创建ContentToUPack.txt文件失败：{ex.Message}");
                 return string.Empty;
             }
         }
@@ -437,21 +463,36 @@ namespace unreal_GUI.Model.Features
                 // 创建目标目录
                 Directory.CreateDirectory(targetDir);
 
+                // 检查源目录是否包含Content文件夹
+                string sourceContentDir = Path.Combine(fullSelectedFolderPath, "Content");
+
+                string sourceDirToCopy;
+                if (Directory.Exists(sourceContentDir))
+                {
+                    // 如果源目录包含Content文件夹，则只复制Content文件夹的内容
+                    sourceDirToCopy = sourceContentDir;
+                }
+                else
+                {
+                    // 否则复制整个选定的文件夹
+                    sourceDirToCopy = fullSelectedFolderPath;
+                }
+
                 // 计算要复制的文件总数
-                var allFiles = Directory.GetFiles(fullSelectedFolderPath, "*", SearchOption.AllDirectories);
+                var allFiles = Directory.GetFiles(sourceDirToCopy, "*", SearchOption.AllDirectories);
                 int totalFiles = allFiles.Length;
 
                 // 创建进度跟踪对象
                 var progressTracker = new AssetCopyProgressTracker(totalFiles, this);
 
                 // 复制文件夹（带进度）
-                await CopyDirectoryWithProgressAsync(fullSelectedFolderPath, targetDir, progressTracker);
+                await CopyDirectoryWithProgressAsync(sourceDirToCopy, targetDir, progressTracker);
 
                 // 检查是否有文件被复制
                 string[] files = Directory.GetFiles(targetDir, "*", SearchOption.AllDirectories);
                 if (files.Length == 0)
                 {
-                    Console.WriteLine("警告：没有文件被复制到目标目录");
+                    Debug.WriteLine("警告：没有文件被复制到目标目录");
                     return false;
                 }
 
@@ -466,12 +507,12 @@ namespace unreal_GUI.Model.Features
                     AssetPathsMap[engineTargetPath] = Path.GetDirectoryName(file)!;
                 }
 
-                Console.WriteLine($"成功复制 {files.Length} 个文件到 {targetDir}");
+                Debug.WriteLine($"成功复制 {files.Length} 个文件到 {targetDir}");
                 return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"复制资产失败：{ex.Message}");
+                Debug.WriteLine($"复制资产失败：{ex.Message}");
                 return false;
             }
         }
@@ -617,7 +658,7 @@ namespace unreal_GUI.Model.Features
                 string contentToUPackFullPath = Path.GetFullPath(contentToUPackPath);
 
                 // 直接执行UnrealPak.exe
-                using System.Diagnostics.Process process = new();
+                using Process process = new();
                 process.StartInfo.FileName = unrealPakPath;
                 process.StartInfo.Arguments = $"-Create=\"{contentToUPackFullPath}\" \"{generatedUpackPath}\"";
                 process.StartInfo.WorkingDirectory = contentPackDir;
@@ -633,17 +674,17 @@ namespace unreal_GUI.Model.Features
                 // 检查执行结果
                 if (process.ExitCode != 0)
                 {
-                    Console.WriteLine($"UnrealPak.exe执行失败：{error}");
+                    Debug.WriteLine($"UnrealPak.exe执行失败：{error}");
                     throw new Exception($"UnrealPak.exe执行失败：{error}");
                 }
 
-                Console.WriteLine($"成功生成.upack文件：{generatedUpackPath}");
-                Console.WriteLine($"UnrealPak输出：{output}");
+                Debug.WriteLine($"成功生成.upack文件：{generatedUpackPath}");
+                Debug.WriteLine($"UnrealPak输出：{output}");
                 return generatedUpackPath;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"生成.upack文件失败：{ex.Message}");
+                Debug.WriteLine($"生成.upack文件失败：{ex.Message}");
                 throw;
             }
         }
@@ -677,27 +718,32 @@ namespace unreal_GUI.Model.Features
                 }
 
                 // 复制资产到样本目录
+                // 根据映射逐个复制文件
                 foreach (var assetPathPair in AssetPathsMap)
                 {
-                    string sourceDir = assetPathPair.Value;
-                    string relativeDestPath = assetPathPair.Key;
+                    string relativeDestPath = assetPathPair.Key;  // 如 "/Content/MyFolder/MyAsset.uasset"
+                    string sourceDir = assetPathPair.Value;       // 源文件所在目录
 
-                    // 构建完整的目标路径
-                    string destDir = Path.Combine(sampleDestDir, "Content", relativeDestPath.TrimStart('/'));
-                    destDir = Path.GetDirectoryName(destDir)!;
+                    // 获取目标文件的完整路径
+                    string destFilePath = Path.Combine(sampleDestDir, "Content", relativeDestPath.TrimStart('/'));
+
+                    // 获取目标目录
+                    string destDir = Path.GetDirectoryName(destFilePath) ?? string.Empty;
 
                     // 创建目标目录
-                    if (!Directory.Exists(destDir))
+                    if (!string.IsNullOrEmpty(destDir) && !Directory.Exists(destDir))
                     {
                         Directory.CreateDirectory(destDir);
                     }
 
-                    // 复制文件
-                    string[] files = Directory.GetFiles(sourceDir, "*", SearchOption.TopDirectoryOnly);
-                    foreach (string file in files)
+                    // 获取要复制的源文件名（从目标路径中提取）
+                    string sourceFileName = Path.GetFileName(relativeDestPath);
+                    string sourceFilePath = Path.Combine(sourceDir, sourceFileName);
+
+                    // 确保源文件存在后再复制
+                    if (File.Exists(sourceFilePath))
                     {
-                        string destFile = Path.Combine(destDir, Path.GetFileName(file));
-                        File.Copy(file, destFile, true);
+                        File.Copy(sourceFilePath, destFilePath, true);
                     }
                 }
 
@@ -705,16 +751,16 @@ namespace unreal_GUI.Model.Features
                 string[] installedFiles = Directory.GetFiles(sampleDestDir, "*", SearchOption.AllDirectories);
                 if (installedFiles.Length == 0)
                 {
-                    Console.WriteLine("警告：没有文件被安装到引擎目录");
+                    Debug.WriteLine("警告：没有文件被安装到引擎目录");
                     return false;
                 }
 
-                Console.WriteLine($"成功安装内容包到引擎目录，共 {installedFiles.Length} 个文件");
+                Debug.WriteLine($"成功安装内容包到引擎目录，共 {installedFiles.Length} 个文件");
                 return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"安装内容包失败：{ex.Message}");
+                Debug.WriteLine($"安装内容包失败：{ex.Message}");
                 return false;
             }
         }
