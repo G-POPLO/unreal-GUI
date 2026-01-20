@@ -397,23 +397,28 @@ namespace unreal_GUI.Model.Features
                 string mediaPath = Path.Combine(contentSettingsDir, "Media");
                 string manifestPath = Path.Combine(contentSettingsDir, "manifest.json");
 
-                // 获取Samples目录（如果存在）
-                string samplesDir = Path.Combine(contentPackDir, "Samples");
-
                 List<string> contentToPack = [];
 
-                // 添加Config目录（如果存在）
+                // 添加Config目录下的所有文件（如果存在）
                 if (Directory.Exists(configPath))
                 {
-                    string configFullPath = Path.GetFullPath(configPath).Replace('\\', '/');
-                    contentToPack.Add($"\"{configFullPath}\"");
+                    string[] configFiles = Directory.GetFiles(configPath, "*.*", SearchOption.AllDirectories);
+                    foreach (string file in configFiles)
+                    {
+                        string fileFullPath = Path.GetFullPath(file).Replace('\\', '/');
+                        contentToPack.Add($"\"{fileFullPath}\"");
+                    }
                 }
 
-                // 添加Media目录（如果存在）
+                // 添加Media目录下的所有文件（如果存在）
                 if (Directory.Exists(mediaPath))
                 {
-                    string mediaFullPath = Path.GetFullPath(mediaPath).Replace('\\', '/');
-                    contentToPack.Add($"\"{mediaFullPath}\"");
+                    string[] mediaFiles = Directory.GetFiles(mediaPath, "*.*", SearchOption.AllDirectories);
+                    foreach (string file in mediaFiles)
+                    {
+                        string fileFullPath = Path.GetFullPath(file).Replace('\\', '/');
+                        contentToPack.Add($"\"{fileFullPath}\"");
+                    }
                 }
 
                 // 添加manifest.json文件（如果存在）
@@ -421,13 +426,6 @@ namespace unreal_GUI.Model.Features
                 {
                     string manifestFullPath = Path.GetFullPath(manifestPath).Replace('\\', '/');
                     contentToPack.Add($"\"{manifestFullPath}\"");
-                }
-
-                // 如果Samples目录存在，也将其添加到打包列表
-                if (Directory.Exists(samplesDir))
-                {
-                    string samplesFullPath = Path.GetFullPath(samplesDir).Replace('\\', '/');
-                    contentToPack.Add($"\"{samplesFullPath}/*.*\"");
                 }
 
                 // 创建ContentToUPack.txt文件
