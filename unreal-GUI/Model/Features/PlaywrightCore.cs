@@ -101,7 +101,7 @@ namespace unreal_GUI.Model.Features
             {
                 selector += "." + string.Join(".", classSelectors);
             }
-            //string testelement = string.Empty;
+
             try
             {
                 // 等待目标元素出现，设置适当的超时时间（15秒）
@@ -112,7 +112,7 @@ namespace unreal_GUI.Model.Features
                 });
 
                 // 返回元素文本内容
-                //testelement = element.ToString();
+
                 return await element.InnerTextAsync();
 
             }
@@ -132,28 +132,18 @@ namespace unreal_GUI.Model.Features
                 string destPath = Path.Combine(desktopPath, "screenshot.png");
                 File.Copy(screenshotPath, destPath, true);
 #endif
-                // 元素超时未出现，尝试使用QuerySelector查找，兼容可能已经存在但不可见的情况
-                var element = await page.QuerySelectorAsync(selector);
+                // 元素超时未出现时返回
+                //var element = await page.QuerySelectorAsync(selector);
                 //testelement = element.ToString();
-                await ModernDialog.ShowErrorAsync($"无法获取Fab网页元素或访问超时:{element}", "错误");
-                return element != null ? await element.InnerTextAsync() : string.Empty;
+                //await ModernDialog.ShowErrorAsync($"无法获取Fab网页元素或访问超时:{element}", "错误");
+                //return element != null ? await element.InnerTextAsync() : string.Empty;
+                await ModernDialog.ShowErrorAsync($"无法获取Fab网页元素或访问超时(尝试将Headless设置为False可解决该问题)", "错误");
+                return string.Empty;
 
             }
             finally
             {
-                //// 截图保存到本地
-                //string screenshotPath = "screenshot.png";
-                //await page.ScreenshotAsync(new PageScreenshotOptions()
-                //{
-                //    Path = screenshotPath,
-                //    FullPage = true // 截取完整网页
-                //});
-
-                //// 复制到桌面
-                //string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-                //string destPath = Path.Combine(desktopPath, "screenshot.png");
-                //File.Copy(screenshotPath, destPath, true);
-
+                // empty finally block
             }
         }
     }

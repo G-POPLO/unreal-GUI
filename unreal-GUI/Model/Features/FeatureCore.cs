@@ -183,18 +183,18 @@ namespace unreal_GUI.Model.Features
             finally
             {
                 // 清理临时生成的内容包目录
-                if (!string.IsNullOrEmpty(contentPackDir) && Directory.Exists(contentPackDir))
-                {
-                    try
-                    {
-                        Directory.Delete(contentPackDir, true);
-                        Debug.WriteLine($"已清理临时目录: {contentPackDir}");
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine($"清理临时目录失败: {ex.Message}");
-                    }
-                }
+                //if (!string.IsNullOrEmpty(contentPackDir) && Directory.Exists(contentPackDir))
+                //{
+                //    try
+                //    {
+                //        Directory.Delete(contentPackDir, true);
+                //        Debug.WriteLine($"已清理临时目录: {contentPackDir}");
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        Debug.WriteLine($"清理临时目录失败: {ex.Message}");
+                //    }
+                //}
             }
 
             return result;
@@ -392,28 +392,43 @@ namespace unreal_GUI.Model.Features
         {
             try
             {
-                // 计算ContentSettings相对于contentPackDir的相对路径
-                string contentSettingsRelativePath = Path.GetRelativePath(contentPackDir, contentSettingsDir);
-
-                // 准备要打包的内容列表（使用相对路径）
-                // 注意：按照C++原版逻辑，只打包Config、Media和manifest.json，不打包Samples目录
-                // Samples目录的内容会在安装阶段直接复制到引擎Samples目录
-
-                // 获取各个子目录的相对路径
+                // 获取各个子目录的完整路径
                 string configPath = Path.Combine(contentSettingsDir, "Config");
                 string mediaPath = Path.Combine(contentSettingsDir, "Media");
                 string manifestPath = Path.Combine(contentSettingsDir, "manifest.json");
 
-                // 计算这些路径相对于contentPackDir的路径
-                string configRelativePath = Path.GetRelativePath(contentPackDir, configPath).Replace('\\', '/');
-                string mediaRelativePath = Path.GetRelativePath(contentPackDir, mediaPath).Replace('\\', '/');
-                string manifestRelativePath = Path.GetRelativePath(contentPackDir, manifestPath).Replace('\\', '/');
+                // 获取Samples目录（如果存在）
+                string samplesDir = Path.Combine(contentPackDir, "Samples");
 
-                List<string> contentToPack = [
-                    $"\"{configRelativePath}\"",
-                    $"\"{mediaRelativePath}\"",
-                    $"\"{manifestRelativePath}\""
-                ];
+                List<string> contentToPack = [];
+
+                // 添加Config目录（如果存在）
+                if (Directory.Exists(configPath))
+                {
+                    string configFullPath = Path.GetFullPath(configPath).Replace('\\', '/');
+                    contentToPack.Add($"\"{configFullPath}\"");
+                }
+
+                // 添加Media目录（如果存在）
+                if (Directory.Exists(mediaPath))
+                {
+                    string mediaFullPath = Path.GetFullPath(mediaPath).Replace('\\', '/');
+                    contentToPack.Add($"\"{mediaFullPath}\"");
+                }
+
+                // 添加manifest.json文件（如果存在）
+                if (File.Exists(manifestPath))
+                {
+                    string manifestFullPath = Path.GetFullPath(manifestPath).Replace('\\', '/');
+                    contentToPack.Add($"\"{manifestFullPath}\"");
+                }
+
+                // 如果Samples目录存在，也将其添加到打包列表
+                if (Directory.Exists(samplesDir))
+                {
+                    string samplesFullPath = Path.GetFullPath(samplesDir).Replace('\\', '/');
+                    contentToPack.Add($"\"{samplesFullPath}/*.*\"");
+                }
 
                 // 创建ContentToUPack.txt文件
                 string contentToUPackFilePath = Path.Combine(contentPackDir, "ContentToUPack.txt");
@@ -633,7 +648,7 @@ namespace unreal_GUI.Model.Features
         }
 
         /// <summary>
-        /// 直接调用UnrealPak.exe生成.upack文件
+        /// 创建BAT文件并调用UnrealPak.exe生成.upack文件
         /// </summary>
         /// <returns>生成的.upack文件路径</returns>
         private static async Task<string> CreateUPackGenerationBatFileAsync(string enginePath, string contentPackDir, string contentToUPackPath,
@@ -657,11 +672,19 @@ namespace unreal_GUI.Model.Features
                 // 构建ContentToUPack.txt完整路径
                 string contentToUPackFullPath = Path.GetFullPath(contentToUPackPath);
 
-                // 直接执行UnrealPak.exe
+                // 创建BAT文件内容，使用正斜杠作为路径分隔符
+                string batContent = $"\"{unrealPakPath.Replace('\\', '/')}\" -Create=\"{contentToUPackFullPath.Replace('\\', '/')}\" \"{generatedUpackPath.Replace('\\', '/')}\" -abslog=\"{Path.Combine(contentPackDir, "UnrealPak.log").Replace('\\', '/')}\"";
+
+                // BAT文件路径
+                string batFilePath = Path.Combine(contentPackDir, "GenerateContentPack.bat");
+
+                // 写入BAT文件
+                await File.WriteAllTextAsync(batFilePath, batContent);
+
+                // 执行BAT文件
                 using Process process = new();
-                process.StartInfo.FileName = unrealPakPath;
-                process.StartInfo.Arguments = $"-Create=\"{contentToUPackFullPath}\" \"{generatedUpackPath}\"";
-                process.StartInfo.WorkingDirectory = contentPackDir;
+                process.StartInfo.FileName = batFilePath;
+                process.StartInfo.WorkingDirectory = contentPackDir;  // 设置工作目录为contentPackDir
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.RedirectStandardOutput = true;
                 process.StartInfo.RedirectStandardError = true;
@@ -674,8 +697,8 @@ namespace unreal_GUI.Model.Features
                 // 检查执行结果
                 if (process.ExitCode != 0)
                 {
-                    Debug.WriteLine($"UnrealPak.exe执行失败：{error}");
-                    throw new Exception($"UnrealPak.exe执行失败：{error}");
+                    Debug.WriteLine($"生成.upack文件失败：{error}");
+                    throw new Exception($"生成.upack文件失败：{error}");
                 }
 
                 Debug.WriteLine($"成功生成.upack文件：{generatedUpackPath}");
