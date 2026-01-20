@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -10,33 +11,43 @@ namespace unreal_GUI.Model.Features
     /// <summary>
     /// 进度报告事件参数
     /// </summary>
-    public class ProgressReportedEventArgs : EventArgs
+    /// <remarks>
+    /// 构造函数
+    /// </remarks>
+    /// <param name="message">进度消息</param>
+    public class ProgressReportedEventArgs(string message) : EventArgs
     {
         /// <summary>
         /// 进度消息
         /// </summary>
-        public string Message { get; set; } = string.Empty;
+        public string Message { get; set; } = message;
     }
 
     /// <summary>
     /// 资产复制进度报告事件参数
     /// </summary>
-    public class AssetCopyProgressEventArgs : EventArgs
+    /// <remarks>
+    /// 构造函数
+    /// </remarks>
+    /// <param name="filesCopied">已复制的文件数</param>
+    /// <param name="totalFiles">总文件数</param>
+    /// <param name="currentFile">当前正在复制的文件名</param>
+    public class AssetCopyProgressEventArgs(int filesCopied, int totalFiles, string currentFile = "") : EventArgs
     {
         /// <summary>
         /// 已复制的文件数
         /// </summary>
-        public int FilesCopied { get; set; }
+        public int FilesCopied { get; set; } = filesCopied;
 
         /// <summary>
         /// 总文件数
         /// </summary>
-        public int TotalFiles { get; set; }
+        public int TotalFiles { get; set; } = totalFiles;
 
         /// <summary>
         /// 当前正在复制的文件名
         /// </summary>
-        public string CurrentFile { get; set; } = string.Empty;
+        public string CurrentFile { get; set; } = currentFile;
 
         /// <summary>
         /// 进度百分比
@@ -75,7 +86,7 @@ namespace unreal_GUI.Model.Features
             Debug.WriteLine(message);
 
             // 触发事件
-            //ProgressReported?.Invoke(this, new ProgressReportedEventArgs { Message = message });
+            //ProgressReported?.Invoke(this, new ProgressReportedEventArgs(message));
         }
 
         /// <summary>
@@ -88,6 +99,13 @@ namespace unreal_GUI.Model.Features
         }
 
         /// <summary>
+        /// 移除内容包名称中的空格
+        /// </summary>
+        /// <param name="contentPackName">内容包名称</param>
+        /// <returns>移除空格后的内容包名称</returns>
+        private static string NormalizeContentPackName(string contentPackName) => contentPackName.Replace(" ", string.Empty);
+
+        /// <summary>
         /// 生成内容包的主要方法
         /// </summary>
         /// <param name="enginePath">引擎路径</param>
@@ -95,16 +113,26 @@ namespace unreal_GUI.Model.Features
         /// <param name="description">内容包描述</param>
         /// <param name="searchTags">搜索标签</param>
         /// <param name="selectedFolderPath">选中的文件夹路径</param>
-        /// <param name="autoPlaceCreatedPack">是否自动安装到引擎目录</param>
+        /// <param name="autoInstall">是否自动安装到引擎目录</param>
         /// <returns>是否生成成功</returns>
         public async Task<bool> GenerateContentPackAsync(string enginePath, string contentPackName, string description, string searchTags,
-                                                      string selectedFolderPath, bool autoPlaceCreatedPack = true)
+                                                      string selectedFolderPath, bool autoInstall = true)
         {
             string contentPackDir = string.Empty;
             bool result = false;
 
             try
             {
+                // 参数验证
+                if (string.IsNullOrWhiteSpace(enginePath))
+                    throw new ArgumentException("引擎路径不能为空", nameof(enginePath));
+
+                if (string.IsNullOrWhiteSpace(contentPackName))
+                    throw new ArgumentException("内容包名称不能为空", nameof(contentPackName));
+
+                if (!Directory.Exists(selectedFolderPath))
+                    throw new DirectoryNotFoundException($"选中的文件夹不存在: {selectedFolderPath}");
+
                 OnProgressReported("初始化文件夹结构...");
 
                 // 使用选中的文件夹路径作为基础目录
@@ -114,7 +142,7 @@ namespace unreal_GUI.Model.Features
                 InitBasicFolderStructure(baseDir, out contentPackDir, out string contentSettingsDir, out string featurePackDir, out string samplesDir);
 
                 // 移除空格的内容包名称
-                string contentPackNameNoSpace = contentPackName.Replace(" ", string.Empty);
+                string contentPackNameNoSpace = NormalizeContentPackName(contentPackName);
 
                 // 检查是否存在同名内容包
                 if (await CheckSameNameContentPackAsync(enginePath, contentPackNameNoSpace))
@@ -132,12 +160,12 @@ namespace unreal_GUI.Model.Features
                 OnProgressReported("创建ContentToUPack.txt文件...");
 
                 // 创建ContentToUPack.txt文件
-                string contentToUPackPath = await CreateContentToUPackTextFileAsync(contentPackDir, contentSettingsDir);
+                string contentToUPackPath = await CreateContentToPackFileAsync(contentPackDir, contentSettingsDir);
 
                 OnProgressReported("复制资产到生成的内容包文件夹...");
 
                 // 复制资产到生成的内容包文件夹
-                bool shouldContinue = await DuplicateAssetsToGeneratedContentPackFolderAsync(samplesDir, contentPackName, selectedFolderPath);
+                bool shouldContinue = await CopyAssetsToGeneratedContentPackAsync(samplesDir, contentPackName, selectedFolderPath);
                 if (!shouldContinue)
                 {
                     OnProgressReported("生成失败：没有资产被复制");
@@ -150,7 +178,7 @@ namespace unreal_GUI.Model.Features
                 string generatedUpackPath = await CreateUPackGenerationBatFileAsync(enginePath, contentPackDir, contentToUPackPath, contentPackNameNoSpace, featurePackDir);
 
                 // 自动安装到引擎目录
-                if (autoPlaceCreatedPack)
+                if (autoInstall)
                 {
                     OnProgressReported("安装内容包到引擎目录...");
                     bool placementResult = await HandleCreatedContentPackPlacementAsync(enginePath, generatedUpackPath, contentPackNameNoSpace);
@@ -176,25 +204,25 @@ namespace unreal_GUI.Model.Features
             {
                 // 处理异常
                 string errorMessage = $"生成内容包失败: {ex.Message}";
-                Debug.WriteLine(errorMessage);
+                Debug.WriteLine($"{errorMessage}\n{ex.StackTrace}");
                 OnProgressReported(errorMessage);
                 result = false;
             }
             finally
             {
                 // 清理临时生成的内容包目录
-                //if (!string.IsNullOrEmpty(contentPackDir) && Directory.Exists(contentPackDir))
-                //{
-                //    try
-                //    {
-                //        Directory.Delete(contentPackDir, true);
-                //        Debug.WriteLine($"已清理临时目录: {contentPackDir}");
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        Debug.WriteLine($"清理临时目录失败: {ex.Message}");
-                //    }
-                //}
+                if (!string.IsNullOrEmpty(contentPackDir) && Directory.Exists(contentPackDir))
+                {
+                    try
+                    {
+                        Directory.Delete(contentPackDir, true);
+                        Debug.WriteLine($"已清理临时目录: {contentPackDir}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"清理临时目录失败: {ex.Message}");
+                    }
+                }
             }
 
             return result;
@@ -226,7 +254,7 @@ namespace unreal_GUI.Model.Features
         /// <summary>
         /// 创建基本文件夹结构
         /// </summary>
-        private void InitBasicFolderStructure(string baseDir, out string contentPackDir, out string contentSettingsDir,
+        private static void InitBasicFolderStructure(string baseDir, out string contentPackDir, out string contentSettingsDir,
                                              out string featurePackDir, out string samplesDir)
         {
             // 使用指定的基础目录
@@ -236,32 +264,15 @@ namespace unreal_GUI.Model.Features
             // 主内容包目录
             contentPackDir = Path.Combine(projectDir, "GeneratedContentPack");
 
-            // 创建主目录（如果不存在）
-            if (!Directory.Exists(contentPackDir))
-            {
-                Directory.CreateDirectory(contentPackDir);
-            }
-
-            // 内容设置目录
+            // 设置子目录路径
             contentSettingsDir = Path.Combine(contentPackDir, "ContentSettings");
-            if (!Directory.Exists(contentSettingsDir))
-            {
-                Directory.CreateDirectory(contentSettingsDir);
-            }
-
-            // 功能包目录
             featurePackDir = Path.Combine(contentPackDir, "FeaturePacks");
-            if (!Directory.Exists(featurePackDir))
-            {
-                Directory.CreateDirectory(featurePackDir);
-            }
-
-            // 样本目录
             samplesDir = Path.Combine(contentPackDir, "Samples");
-            if (!Directory.Exists(samplesDir))
-            {
-                Directory.CreateDirectory(samplesDir);
-            }
+
+            // 创建所有必要的目录，Directory.CreateDirectory 会自动创建不存在的父目录
+            Directory.CreateDirectory(contentSettingsDir);
+            Directory.CreateDirectory(featurePackDir);
+            Directory.CreateDirectory(samplesDir);
         }
 
         /// <summary>
@@ -318,7 +329,7 @@ namespace unreal_GUI.Model.Features
                 string configFilePath = Path.Combine(contentSettingsConfigDir, "config.ini");
 
                 // 移除空格的内容包名称
-                string contentPackNameNoSpace = contentPackName.Replace(" ", string.Empty);
+                string contentPackNameNoSpace = NormalizeContentPackName(contentPackName);
 
                 // 配置文件内容 - 将Samples目录下的内容映射到包的Content目录
                 string configContent = $"[AdditionalFilesToAdd]\n+Files=Samples/{contentPackNameNoSpace}/*.*";
@@ -352,19 +363,10 @@ namespace unreal_GUI.Model.Features
                 var manifestData = new
                 {
                     Version = "1",
-                    Name = new[]
-                    {
-                        new { Language = "en", Text = contentPackName }
-                    },
-                    Description = new[]
-                    {
-                        new { Language = "en", Text = description }
-                    },
+                    Name = new[] { new { Language = "en", Text = contentPackName } },
+                    Description = new[] { new { Language = "en", Text = description } },
                     AssetTypes = Array.Empty<object>(),
-                    SearchTags = new[]
-                    {
-                        new { Language = "en", Text = "Custom" }
-                    },
+                    SearchTags = new[] { new { Language = "en", Text = "Custom" } },
                     ClassTypes = string.Empty,
                     Category = "Content",
                     Thumbnail = "ContentPackThumbnail64x64.png",
@@ -388,7 +390,7 @@ namespace unreal_GUI.Model.Features
         /// <summary>
         /// 创建ContentToUPack.txt文件
         /// </summary>
-        private static async Task<string> CreateContentToUPackTextFileAsync(string contentPackDir, string contentSettingsDir)
+        private static async Task<string> CreateContentToPackFileAsync(string contentPackDir, string contentSettingsDir)
         {
             try
             {
@@ -402,23 +404,19 @@ namespace unreal_GUI.Model.Features
                 // 添加Config目录下的所有文件（如果存在）
                 if (Directory.Exists(configPath))
                 {
-                    string[] configFiles = Directory.GetFiles(configPath, "*.*", SearchOption.AllDirectories);
-                    foreach (string file in configFiles)
-                    {
-                        string fileFullPath = Path.GetFullPath(file).Replace('\\', '/');
-                        contentToPack.Add($"\"{fileFullPath}\"");
-                    }
+                    var configFiles = Directory.GetFiles(configPath, "*.*", SearchOption.AllDirectories).ToList();
+                    contentToPack.AddRange(
+                        configFiles.Select(file => $"\"{Path.GetFullPath(file).Replace('\\', '/')}\"")
+                    );
                 }
 
                 // 添加Media目录下的所有文件（如果存在）
                 if (Directory.Exists(mediaPath))
                 {
-                    string[] mediaFiles = Directory.GetFiles(mediaPath, "*.*", SearchOption.AllDirectories);
-                    foreach (string file in mediaFiles)
-                    {
-                        string fileFullPath = Path.GetFullPath(file).Replace('\\', '/');
-                        contentToPack.Add($"\"{fileFullPath}\"");
-                    }
+                    var mediaFiles = Directory.GetFiles(mediaPath, "*.*", SearchOption.AllDirectories).ToList();
+                    contentToPack.AddRange(
+                        mediaFiles.Select(file => $"\"{Path.GetFullPath(file).Replace('\\', '/')}\"")
+                    );
                 }
 
                 // 添加manifest.json文件（如果存在）
@@ -433,10 +431,7 @@ namespace unreal_GUI.Model.Features
                 await File.WriteAllLinesAsync(contentToUPackFilePath, contentToPack);
 
                 Debug.WriteLine($"成功创建ContentToUPack.txt文件：{contentToUPackFilePath}");
-                foreach (var item in contentToPack)
-                {
-                    Debug.WriteLine($"  添加到打包列表: {item}");
-                }
+                contentToPack.ForEach(item => Debug.WriteLine($"添加到打包列表: {item}"));
                 return contentToUPackFilePath;
             }
             catch (Exception ex)
@@ -449,7 +444,7 @@ namespace unreal_GUI.Model.Features
         /// <summary>
         /// 复制资产到生成的内容包文件夹
         /// </summary>
-        private async Task<bool> DuplicateAssetsToGeneratedContentPackFolderAsync(string samplesDir, string contentPackName,
+        private async Task<bool> CopyAssetsToGeneratedContentPackAsync(string samplesDir, string contentPackName,
                                                                                 string selectedFolderPath)
         {
             try
@@ -462,7 +457,7 @@ namespace unreal_GUI.Model.Features
                 string fullSelectedFolderPath = Path.GetFullPath(selectedFolderPath);
 
                 // 移除空格的内容包名称
-                string contentPackNameNoSpace = contentPackName.Replace(" ", string.Empty);
+                string contentPackNameNoSpace = NormalizeContentPackName(contentPackName);
 
                 // 目标目录
                 string targetDir = Path.Combine(fullSamplesDir, contentPackNameNoSpace, "Content");
@@ -479,27 +474,23 @@ namespace unreal_GUI.Model.Features
                 // 检查源目录是否包含Content文件夹
                 string sourceContentDir = Path.Combine(fullSelectedFolderPath, "Content");
 
-                string sourceDirToCopy;
-                if (Directory.Exists(sourceContentDir))
-                {
-                    // 如果源目录包含Content文件夹，则只复制Content文件夹的内容
-                    sourceDirToCopy = sourceContentDir;
-                }
-                else
-                {
-                    // 否则复制整个选定的文件夹
-                    sourceDirToCopy = fullSelectedFolderPath;
-                }
+                string sourceDirToCopy = Directory.Exists(sourceContentDir) ? sourceContentDir : fullSelectedFolderPath;
 
                 // 计算要复制的文件总数
                 var allFiles = Directory.GetFiles(sourceDirToCopy, "*", SearchOption.AllDirectories);
                 int totalFiles = allFiles.Length;
 
+                if (totalFiles == 0)
+                {
+                    Debug.WriteLine("警告：源目录中没有文件可复制");
+                    return false;
+                }
+
                 // 创建进度跟踪对象
                 var progressTracker = new AssetCopyProgressTracker(totalFiles, this);
 
                 // 复制文件夹（带进度）
-                await CopyDirectoryWithProgressAsync(sourceDirToCopy, targetDir, progressTracker);
+                await CopyDirectoryAsync(sourceDirToCopy, targetDir, progressTracker);
 
                 // 检查是否有文件被复制
                 string[] files = Directory.GetFiles(targetDir, "*", SearchOption.AllDirectories);
@@ -512,11 +503,8 @@ namespace unreal_GUI.Model.Features
                 // 构建资产路径映射，用于后续安装
                 foreach (string file in files)
                 {
-                    // 计算相对路径
                     string relativePath = Path.GetRelativePath(targetDir, file);
-                    // 构建目标路径（用于安装到引擎时使用）
                     string engineTargetPath = Path.Combine("/Content", relativePath);
-                    // 添加到映射
                     AssetPathsMap[engineTargetPath] = Path.GetDirectoryName(file)!;
                 }
 
@@ -527,38 +515,6 @@ namespace unreal_GUI.Model.Features
             {
                 Debug.WriteLine($"复制资产失败：{ex.Message}");
                 return false;
-            }
-        }
-
-        /// <summary>
-        /// 异步复制文件夹
-        /// </summary>
-        /// <param name="sourceDir">源目录</param>
-        /// <param name="destinationDir">目标目录</param>
-        private static async Task CopyDirectoryAsync(string sourceDir, string destinationDir)
-        {
-            // 获取源目录下的所有文件和子目录
-            string[] files = Directory.GetFiles(sourceDir);
-            string[] subDirs = Directory.GetDirectories(sourceDir);
-
-            // 创建目标目录（如果不存在）
-            if (!Directory.Exists(destinationDir))
-            {
-                Directory.CreateDirectory(destinationDir);
-            }
-
-            // 复制所有文件
-            foreach (string file in files)
-            {
-                string destFile = Path.Combine(destinationDir, Path.GetFileName(file));
-                await CopyFileAsync(file, destFile);
-            }
-
-            // 递归复制所有子目录
-            foreach (string subDir in subDirs)
-            {
-                string destSubDir = Path.Combine(destinationDir, Path.GetFileName(subDir));
-                await CopyDirectoryAsync(subDir, destSubDir);
             }
         }
 
@@ -574,13 +530,34 @@ namespace unreal_GUI.Model.Features
             public void IncrementProgress(string currentFile)
             {
                 FilesCopied++;
-                var args = new AssetCopyProgressEventArgs
-                {
-                    FilesCopied = FilesCopied,
-                    TotalFiles = TotalFiles,
-                    CurrentFile = Path.GetFileName(currentFile)
-                };
+                var args = new AssetCopyProgressEventArgs(FilesCopied, TotalFiles, Path.GetFileName(currentFile));
                 _owner.OnAssetCopyProgressReported(args);
+            }
+        }
+
+        /// <summary>
+        /// 异步复制文件夹
+        /// </summary>
+        /// <param name="sourceDir">源目录</param>
+        /// <param name="destinationDir">目标目录</param>
+        /// <param name="progressTracker">进度跟踪器（可选）</param>
+        private static async Task CopyDirectoryAsync(string sourceDir, string destinationDir, AssetCopyProgressTracker? progressTracker = null)
+        {
+            // 创建目标目录（如果不存在）
+            Directory.CreateDirectory(destinationDir);
+
+            // 复制所有文件
+            foreach (string file in Directory.GetFiles(sourceDir))
+            {
+                string destFile = Path.Combine(destinationDir, Path.GetFileName(file));
+                await CopyFileAsync(file, destFile, progressTracker);
+            }
+
+            // 递归复制所有子目录
+            foreach (string subDir in Directory.GetDirectories(sourceDir))
+            {
+                string destSubDir = Path.Combine(destinationDir, Path.GetFileName(subDir));
+                await CopyDirectoryAsync(subDir, destSubDir, progressTracker);
             }
         }
 
@@ -589,60 +566,13 @@ namespace unreal_GUI.Model.Features
         /// </summary>
         /// <param name="sourceFile">源文件</param>
         /// <param name="destinationFile">目标文件</param>
-        private static async Task CopyFileAsync(string sourceFile, string destinationFile)
+        /// <param name="progressTracker">进度跟踪器（可选）</param>
+        private static async Task CopyFileAsync(string sourceFile, string destinationFile, AssetCopyProgressTracker? progressTracker = null)
         {
-            using FileStream sourceStream = File.Open(sourceFile, FileMode.Open, FileAccess.Read, FileShare.Read);
-            using FileStream destinationStream = File.Create(destinationFile);
-            await sourceStream.CopyToAsync(destinationStream);
-        }
+            await Task.Run(() => File.Copy(sourceFile, destinationFile, true));
 
-        /// <summary>
-        /// 带进度的异步复制文件
-        /// </summary>
-        /// <param name="sourceFile">源文件</param>
-        /// <param name="destinationFile">目标文件</param>
-        /// <param name="progressTracker">进度跟踪器</param>
-        private static async Task CopyFileWithProgressAsync(string sourceFile, string destinationFile, AssetCopyProgressTracker progressTracker)
-        {
-            using FileStream sourceStream = File.Open(sourceFile, FileMode.Open, FileAccess.Read, FileShare.Read);
-            using FileStream destinationStream = File.Create(destinationFile);
-            await sourceStream.CopyToAsync(destinationStream);
-
-            // 更新进度
-            progressTracker.IncrementProgress(sourceFile);
-        }
-
-        /// <summary>
-        /// 带进度的异步复制目录
-        /// </summary>
-        /// <param name="sourceDir">源目录</param>
-        /// <param name="destinationDir">目标目录</param>
-        /// <param name="progressTracker">进度跟踪器</param>
-        private static async Task CopyDirectoryWithProgressAsync(string sourceDir, string destinationDir, AssetCopyProgressTracker progressTracker)
-        {
-            // 获取源目录下的所有文件和子目录
-            string[] files = Directory.GetFiles(sourceDir);
-            string[] subDirs = Directory.GetDirectories(sourceDir);
-
-            // 创建目标目录（如果不存在）
-            if (!Directory.Exists(destinationDir))
-            {
-                Directory.CreateDirectory(destinationDir);
-            }
-
-            // 复制所有文件
-            foreach (string file in files)
-            {
-                string destFile = Path.Combine(destinationDir, Path.GetFileName(file));
-                await CopyFileWithProgressAsync(file, destFile, progressTracker);
-            }
-
-            // 递归复制所有子目录
-            foreach (string subDir in subDirs)
-            {
-                string destSubDir = Path.Combine(destinationDir, Path.GetFileName(subDir));
-                await CopyDirectoryWithProgressAsync(subDir, destSubDir, progressTracker);
-            }
+            // 如果提供了进度跟踪器，则更新进度
+            progressTracker?.IncrementProgress(sourceFile);
         }
 
         /// <summary>
@@ -739,20 +669,14 @@ namespace unreal_GUI.Model.Features
                 }
 
                 // 复制资产到样本目录
-                // 根据映射逐个复制文件
-                foreach (var assetPathPair in AssetPathsMap)
+                foreach (var (relativeDestPath, sourceDir) in AssetPathsMap)
                 {
-                    string relativeDestPath = assetPathPair.Key;  // 如 "/Content/MyFolder/MyAsset.uasset"
-                    string sourceDir = assetPathPair.Value;       // 源文件所在目录
-
                     // 获取目标文件的完整路径
                     string destFilePath = Path.Combine(sampleDestDir, "Content", relativeDestPath.TrimStart('/'));
 
-                    // 获取目标目录
-                    string destDir = Path.GetDirectoryName(destFilePath) ?? string.Empty;
-
-                    // 创建目标目录
-                    if (!string.IsNullOrEmpty(destDir) && !Directory.Exists(destDir))
+                    // 创建目标目录（如果不存在）
+                    string? destDir = Path.GetDirectoryName(destFilePath);
+                    if (!string.IsNullOrEmpty(destDir))
                     {
                         Directory.CreateDirectory(destDir);
                     }
