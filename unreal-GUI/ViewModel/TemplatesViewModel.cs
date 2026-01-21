@@ -127,6 +127,8 @@ namespace unreal_GUI.ViewModel
             }
         }
 
+
+
         // 1. 添加Id属性用于绑定
         [ObservableProperty]
         private string id;
@@ -160,7 +162,7 @@ namespace unreal_GUI.ViewModel
                 try
                 {
                     // 验证图片尺寸
-                    System.Drawing.Image img = System.Drawing.Image.FromFile(openFileDialog.FileName);
+                    using var img = System.Drawing.Image.FromFile(openFileDialog.FileName);
                     if (img.Width >= 128 && img.Height >= 128)
                     {
                         // 保存图片路径（用于后续复制到Media文件夹）
@@ -172,8 +174,6 @@ namespace unreal_GUI.ViewModel
                         bitmap.UriSource = new Uri(openFileDialog.FileName, UriKind.Absolute);
                         bitmap.EndInit();
                         TemplateIcon = bitmap;
-
-
                     }
                     else
                     {
@@ -201,7 +201,7 @@ namespace unreal_GUI.ViewModel
                 try
                 {
                     // 验证图片尺寸
-                    System.Drawing.Image img = System.Drawing.Image.FromFile(openFileDialog.FileName);
+                    using var img = System.Drawing.Image.FromFile(openFileDialog.FileName);
                     if (img.Width >= 400 && img.Height >= 200)
                     {
                         // 保存图片路径（用于后续复制到Media文件夹）
@@ -217,8 +217,6 @@ namespace unreal_GUI.ViewModel
                         // 更新提示文本
                         PictureTipText = "已选择模板预览图。";
                         PictureTipLText = Path.GetFileName(openFileDialog.FileName);
-
-
                     }
                     else
                     {
@@ -523,11 +521,11 @@ namespace unreal_GUI.ViewModel
                     // 从jsonContent反序列化设置数据
                     var settings = JsonSerializer.Deserialize<SettingsData>(jsonContent);
 
-                    if (settings?.Engines != null)
+                    if (settings != null && settings.Engines != null)
                     {
-                        foreach (var engine in settings.Engines)
+                        foreach (var engine in settings.Engines.Where(e => e != null))
                         {
-                            AvailableEngines.Add(new EngineDisplayInfo
+                            AvailableEngines.Add(new()
                             {
                                 DisplayName = $"Unreal Engine {engine.Version}",
                                 Path = engine.Path
@@ -646,8 +644,7 @@ namespace unreal_GUI.ViewModel
         private void AddDefaultCategories()
         {
             // 添加默认的五个类别
-            var categories = new List<CategoryViewModel>
-            {
+            List<CategoryViewModel> categories = [
                 new() {
                     Key = "Games",
                     DisplayName = "游戏 (Games)",
@@ -683,9 +680,8 @@ namespace unreal_GUI.ViewModel
                     IsMajorCategory = true,
                     IsSelected = false
                 }
-            };
+            ];
 
-            // 先添加所有类别
             foreach (var category in categories)
             {
                 TemplateCategories.Add(category);
@@ -707,7 +703,7 @@ namespace unreal_GUI.ViewModel
                 var configPath = Path.Combine(projectPath, "Config", "DefaultGame.ini");
                 if (File.Exists(configPath))
                 {
-                    foreach (var line in File.ReadAllLines(configPath))
+                    foreach (var line in await File.ReadAllLinesAsync(configPath))
                     {
                         if (line.Trim().StartsWith("ProjectID=", StringComparison.OrdinalIgnoreCase))
                         {
@@ -724,12 +720,12 @@ namespace unreal_GUI.ViewModel
         }
 
         // 加载默认项目图标
-        private async Task LoadDefaultProjectIconAsync()
+        private Task LoadDefaultProjectIconAsync()
         {
             try
             {
                 if (string.IsNullOrEmpty(ProjectPath))
-                    return;
+                    return Task.CompletedTask;
 
                 // 检查Saved\AutoScreenshot.png是否存在
                 string defaultIconPath = Path.Combine(ProjectPath, "Saved", "AutoScreenshot.png");
@@ -748,8 +744,6 @@ namespace unreal_GUI.ViewModel
                         bitmap.UriSource = new Uri(defaultIconPath, UriKind.Absolute);
                         bitmap.EndInit();
                         TemplateIcon = bitmap;
-
-
                     }
                 }
             }
@@ -758,6 +752,7 @@ namespace unreal_GUI.ViewModel
                 // 静默失败，不影响用户操作
                 Debug.WriteLine($"加载默认图标失败: {ex.Message}");
             }
+            return Task.CompletedTask;
         }
 
         // 备份TemplateCategories.ini文件
@@ -799,6 +794,11 @@ namespace unreal_GUI.ViewModel
         {
             try
             {
+                if (string.IsNullOrEmpty(ProjectPath) || string.IsNullOrEmpty(TemplateName) || string.IsNullOrEmpty(TemplateDescriptionEn))
+                {
+                    return false;
+                }
+
                 // 获取选中的类别
                 string category = SelectedCategory?.Key ?? "Games"; // 默认类别
 
@@ -851,12 +851,10 @@ namespace unreal_GUI.ViewModel
 
                 // 创建Config目录并写入文件
                 string configDir = Path.Combine(ProjectPath, "Config");
-
+                Directory.CreateDirectory(configDir);
 
                 string templateDefsPath = Path.Combine(configDir, "TemplateDefs.ini");
-                File.WriteAllText(templateDefsPath, iniContent);
-
-
+                await File.WriteAllTextAsync(templateDefsPath, iniContent);
 
                 return true;
             }
@@ -892,7 +890,7 @@ namespace unreal_GUI.ViewModel
                 else
                 {
                     // 文件较少时直接复制
-                    CopyDirectory(ProjectPath, targetDir);
+                    await CopyDirectoryAsync(ProjectPath, targetDir);
                 }
 
                 return true;
@@ -906,7 +904,9 @@ namespace unreal_GUI.ViewModel
 
 
         // 带进度的目录复制方法
+#pragma warning disable CA1822 // 将成员标记为 static
         private async Task CopyProjectWithProgressAsync(string sourceDir, string destinationDir, int totalFiles)
+#pragma warning restore CA1822 // 将成员标记为 static
         {
             // Toast 通知初始化（带进度条）
             string toastTag = "copy-progress";
@@ -945,7 +945,6 @@ namespace unreal_GUI.ViewModel
             // 在后台线程执行复制操作，避免阻塞UI线程
             await Task.Run(async () =>
             {
-                var buffer = new byte[81920];
                 var progressState = new ProgressState
                 {
                     FilesCopied = 0,
@@ -956,7 +955,7 @@ namespace unreal_GUI.ViewModel
                 };
 
                 // 递归复制目录
-                await CopyDirectoryWithProgressAsync(sourceDir, destinationDir, progressState, buffer);
+                await CopyDirectoryAsync(sourceDir, destinationDir, progressState);
 
                 // 复制完成后更新通知状态
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
@@ -990,68 +989,19 @@ namespace unreal_GUI.ViewModel
             public string ToastGroup { get; set; } = string.Empty;
         }
 
-        // 带进度的递归目录复制
-#pragma warning disable CA1822 // 将成员标记为 static
-        private async Task CopyDirectoryWithProgressAsync(string sourceDir, string destinationDir, ProgressState state, byte[] buffer)
-#pragma warning restore CA1822 // 将成员标记为 static
+        // 异步目录复制方法（支持进度报告）
+        private static async Task CopyDirectoryAsync(string sourceDir, string destinationDir, ProgressState? progressState = null)
         {
-            // 创建目标目录
-            Directory.CreateDirectory(destinationDir);
-
-            // 复制文件
-            var files = Directory.GetFiles(sourceDir);
-            foreach (var file in files)
+            if (string.IsNullOrEmpty(sourceDir) || string.IsNullOrEmpty(destinationDir))
             {
-                var fileName = Path.GetFileName(file);
-                var destFile = Path.Combine(destinationDir, fileName);
-
-                // 复制文件
-                using var sourceStream = File.OpenRead(file);
-                using var destStream = File.Create(destFile);
-
-                int read;
-                while ((read = await sourceStream.ReadAsync(buffer)) > 0)
-                {
-                    await destStream.WriteAsync(buffer.AsMemory(0, read));
-                }
-
-                state.FilesCopied++;
-
-                // 更新进度（每复制10个文件或文件总数少于100时每个都更新）
-                if (state.FilesCopied % 10 == 0 || state.TotalFiles < 100)
-                {
-                    double progress = state.FilesCopied / (double)state.TotalFiles;
-                    int percent = (int)(progress * 100);
-
-                    var data = new NotificationData
-                    {
-                        SequenceNumber = state.SequenceNumber++
-                    };
-                    data.Values["progressValue"] = progress.ToString("F2");
-                    data.Values["progressText"] = $"{percent}%";
-                    data.Values["currentFile"] = $"正在复制: {fileName}";
-
-                    // 在UI线程上更新Toast通知
-                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        ToastNotificationManagerCompat.CreateToastNotifier().Update(data, state.ToastTag, state.ToastGroup);
-                    });
-                }
+                throw new ArgumentException("源目录和目标目录路径不能为空");
             }
 
-            // 递归复制子目录
-            var directories = Directory.GetDirectories(sourceDir);
-            foreach (var dir in directories)
+            if (!Directory.Exists(sourceDir))
             {
-                var dirName = Path.GetFileName(dir);
-                var destDir = Path.Combine(destinationDir, dirName);
-                await CopyDirectoryWithProgressAsync(dir, destDir, state, buffer);
+                throw new DirectoryNotFoundException($"源目录不存在: {sourceDir}");
             }
-        }
 
-        // 复制路径
-        private static void CopyDirectory(string sourceDir, string destinationDir)
-        {
             // 创建目标目录
             Directory.CreateDirectory(destinationDir);
 
@@ -1060,7 +1010,47 @@ namespace unreal_GUI.ViewModel
             {
                 var fileName = Path.GetFileName(file);
                 var destFile = Path.Combine(destinationDir, fileName);
-                File.Copy(file, destFile, true);
+
+                if (progressState != null)
+                {
+                    // 带进度的异步复制
+                    using var sourceStream = File.OpenRead(file);
+                    using var destStream = File.Create(destFile);
+                    var buffer = new byte[81920];
+                    int read;
+                    while ((read = await sourceStream.ReadAsync(buffer)) > 0)
+                    {
+                        await destStream.WriteAsync(buffer.AsMemory(0, read));
+                    }
+
+                    progressState.FilesCopied++;
+
+                    // 更新进度（每复制10个文件或文件总数少于100时每个都更新）
+                    if (progressState.FilesCopied % 10 == 0 || progressState.TotalFiles < 100)
+                    {
+                        double progress = progressState.FilesCopied / (double)progressState.TotalFiles;
+                        int percent = (int)(progress * 100);
+
+                        var data = new NotificationData
+                        {
+                            SequenceNumber = progressState.SequenceNumber++
+                        };
+                        data.Values["progressValue"] = progress.ToString("F2");
+                        data.Values["progressText"] = $"{percent}%";
+                        data.Values["currentFile"] = $"正在复制: {fileName}";
+
+                        // 在UI线程上更新Toast通知
+                        System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            ToastNotificationManagerCompat.CreateToastNotifier().Update(data, progressState.ToastTag, progressState.ToastGroup);
+                        });
+                    }
+                }
+                else
+                {
+                    // 简单的异步复制
+                    await Task.Run(() => File.Copy(file, destFile, true));
+                }
             }
 
             // 递归复制子目录
@@ -1068,50 +1058,14 @@ namespace unreal_GUI.ViewModel
             {
                 var dirName = Path.GetFileName(dir);
                 var destDir = Path.Combine(destinationDir, dirName);
-                CopyDirectory(dir, destDir);
+                await CopyDirectoryAsync(dir, destDir, progressState);
             }
         }
 
-        // 复制图片到项目的Media文件夹
-        private async Task CreateMediaFolderAndCopyImagesAsync()
+        // 同步目录复制方法（内部调用异步版本）
+        private static void CopyDirectory(string sourceDir, string destinationDir)
         {
-            try
-            {
-                // 创建项目的Media目录
-                var projectMediaDir = Path.Combine(ProjectPath, "Media");
-                Directory.CreateDirectory(projectMediaDir);
-
-                // 复制模板图标
-                if (!string.IsNullOrEmpty(TemplateIconPath) && File.Exists(TemplateIconPath))
-                {
-                    var iconDestPath = Path.Combine(projectMediaDir, $"{TemplateName}.png");
-                    File.Copy(TemplateIconPath, iconDestPath, true);
-                }
-                else
-                {
-                    // 如果没有手动选择图标，尝试使用Saved目录下的AutoScreenshot.png作为默认图标
-                    var savedScreenshotPath = Path.Combine(ProjectPath, "Saved", "AutoScreenshot.png");
-                    if (File.Exists(savedScreenshotPath))
-                    {
-                        var iconDestPath = Path.Combine(projectMediaDir, $"{TemplateName}.png");
-                        File.Copy(savedScreenshotPath, iconDestPath, true);
-                        await ModernDialog.ShowInfoAsync($"已使用项目Saved目录中的AutoScreenshot.png作为默认图标", "信息");
-                    }
-                }
-
-                // 复制模板预览图
-                if (!string.IsNullOrEmpty(TemplatePreviewPath) && File.Exists(TemplatePreviewPath))
-                {
-                    var previewDestPath = Path.Combine(projectMediaDir, $"{TemplateName}_Preview.png");
-                    File.Copy(TemplatePreviewPath, previewDestPath, true);
-                }
-
-                await Task.CompletedTask;
-            }
-            catch (Exception ex)
-            {
-                await ModernDialog.ShowErrorAsync($"创建Media文件夹并复制图片失败: {ex.Message}", "错误");
-            }
+            CopyDirectoryAsync(sourceDir, destinationDir).Wait();
         }
 
         [RelayCommand]
@@ -1120,7 +1074,6 @@ namespace unreal_GUI.ViewModel
             try
             {
                 if (SelectedEngine == null)
-
                 {
                     await ModernDialog.ShowInfoAsync("请先选择引擎版本。", "提示");
                     return;
@@ -1148,10 +1101,15 @@ namespace unreal_GUI.ViewModel
         }
 
         // 复制图片到项目的Media文件夹
-        private async Task CopyImagesToMediaFolder()
+        private async Task CreateMediaFolderAndCopyImagesAsync()
         {
             try
             {
+                if (string.IsNullOrEmpty(ProjectPath) || string.IsNullOrEmpty(TemplateName))
+                {
+                    return;
+                }
+
                 // 创建项目的Media目录
                 var projectMediaDir = Path.Combine(ProjectPath, "Media");
                 Directory.CreateDirectory(projectMediaDir);
@@ -1183,12 +1141,10 @@ namespace unreal_GUI.ViewModel
                     var previewDestPath = Path.Combine(projectMediaDir, $"{TemplateName}_Preview.png");
                     File.Copy(TemplatePreviewPath, previewDestPath, true);
                 }
-
-                await Task.CompletedTask;
             }
             catch (Exception ex)
             {
-                await ModernDialog.ShowErrorAsync($"复制图片失败: {ex.Message}", "错误");
+                await ModernDialog.ShowErrorAsync($"创建Media文件夹并复制图片失败: {ex.Message}", "错误");
             }
         }
 
@@ -1198,7 +1154,7 @@ namespace unreal_GUI.ViewModel
             // Toast 通知初始化（带进度条）
             string toastTag = "asset-copy-progress";
             string toastGroup = "asset-copy-group";
-            
+
             // 仅在主线程上执行UI更新
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
