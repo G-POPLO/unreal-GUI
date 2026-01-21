@@ -50,7 +50,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "D:\PROGRAM\unreal-gui\unreal-GUI\bin\x64\Release\net10.0-windows10.0.18362.0\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\PROGRAM\unreal-gui\unreal-GUI\bin\x64\Release\net10.0-windows10.0.18362.0\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-; NOTE: Replace to your own path
+; NOTE: Replace it to your own path
 
 [Registry]
 Root: HKA; Subkey: "Software\Classes\{#MyAppAssocExt}\OpenWithProgids"; ValueType: string; ValueName: "{#MyAppAssocKey}"; ValueData: ""; Flags: uninsdeletevalue

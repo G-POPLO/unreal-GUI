@@ -97,7 +97,7 @@ namespace reminder
             {
                 selector += "." + string.Join(".", classSelectors);
             }
-            //string testelement = string.Empty;
+
             try
             {
                 // 等待目标元素出现，设置适当的超时时间（15秒）
@@ -108,7 +108,7 @@ namespace reminder
                 });
 
                 // 返回元素文本内容
-                //testelement = element.ToString();
+
                 return await element.InnerTextAsync();
 
             }
@@ -128,11 +128,8 @@ namespace reminder
                 string destPath = Path.Combine(desktopPath, "screenshot.png");
                 File.Copy(screenshotPath, destPath, true);
 #endif
-                // 元素超时未出现，尝试使用QuerySelector查找，兼容可能已经存在但不可见的情况
-                var element = await page.QuerySelectorAsync(selector);
-                //testelement = element.ToString();
-                // 这里我们不显示错误对话框，而是简单地返回空字符串
-                return element != null ? await element.InnerTextAsync() : string.Empty;
+
+                return string.Empty;
 
             }
         }

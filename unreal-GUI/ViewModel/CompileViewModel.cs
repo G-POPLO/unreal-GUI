@@ -123,11 +123,11 @@ namespace unreal_GUI.ViewModel
                 return;
             }
 
-            var TerminalPath = Path.Combine(SelectedEngine.Path, "Engine", "Build", "BatchFiles", "RunTerminal.bat");
+            var TerminalPath = Path.Combine(SelectedEngine.Path, "Engine", "Build", "BatchFiles", "RunUAT.bat");
 
             if (!File.Exists(TerminalPath))
             {
-                TipsText = "找不到RunTerminal.bat文件";
+                TipsText = "找不到RunUAT.bat文件";
                 return;
             }
 

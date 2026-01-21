@@ -14,11 +14,24 @@ namespace reminder
 
             Console.WriteLine("Fab免费资产提醒程序启动...");
 
-            // 检查Fab限时免费资产
-            await CheckFabFreeAssets();
+            // 创建隐藏的Form以启动消息循环
+            var hiddenForm = new Form
+            {
+                WindowState = FormWindowState.Minimized,
+                ShowInTaskbar = false
+            };
+            hiddenForm.Load += async (sender, e) =>
+            {
+                // 检查Fab限时免费资产
+                await CheckFabFreeAssets();
 
-            Console.WriteLine("程序执行完毕，按任意键退出...");
-            Console.ReadKey();
+                Console.WriteLine("程序执行完毕，按任意键退出...");
+                //Console.ReadKey();
+
+                Application.Exit();
+            };
+
+            Application.Run(hiddenForm);
         }
 
         /// <summary>
@@ -52,7 +65,7 @@ namespace reminder
                 }
                 else
                 {
-                    DateTime? endDate = await Fab_Notification.GetLimitedTimeFreeEndDate();
+                    DateTime? endDate = await FabReminder.GetLimitedTimeFreeEndDate();
 
                     if (endDate.HasValue)
                     {
@@ -67,6 +80,7 @@ namespace reminder
             catch (Exception ex)
             {
                 Console.WriteLine($"检查Fab免费资产时发生错误: {ex.Message}");
+                Debug.WriteLine(ex.Message);
             }
         }
 

@@ -11,7 +11,7 @@ namespace unreal_GUI.Model.Basic
     /// <summary>
     /// 提供将 OGG/OPUS 文件转换为 PCM 数据流的功能，以便 NAudio 使用（需要改进）
     /// </summary>
-    public class OpusOggWaveReader : WaveStream
+    public class Opus2PCM : WaveStream
     {
         readonly WaveFormat waveFormat;
         readonly MemoryStream oggStream;
@@ -20,7 +20,7 @@ namespace unreal_GUI.Model.Basic
         byte[] wavData;
 
         [Obsolete]
-        private OpusOggWaveReader(string oggFile)
+        private Opus2PCM(string oggFile)
         {
             try
             {
@@ -140,14 +140,11 @@ namespace unreal_GUI.Model.Basic
                 throw new FileNotFoundException($"找不到指定的声音文件: {opusFilePath}", opusFilePath);
 
             // 创建WasapiOut播放器和OpusOggWaveReader
-            using var reader = new OpusOggWaveReader(opusFilePath);
+            using var reader = new Opus2PCM(opusFilePath);
             using var player = new WasapiOut();
 
             // 初始化播放器
             player.Init(reader);
-
-            // 播放音频
-
 
             // 等待播放完成
             while (player.PlaybackState == PlaybackState.Playing)
@@ -174,7 +171,7 @@ namespace unreal_GUI.Model.Basic
             await Task.Run(() =>
             {
                 // 创建WaveOutEvent播放器和OpusOggWaveReader
-                using var reader = new OpusOggWaveReader(opusFilePath);
+                using var reader = new Opus2PCM(opusFilePath);
                 using var player = new WasapiOut();
 
 

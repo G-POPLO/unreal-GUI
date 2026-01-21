@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -12,6 +13,9 @@ namespace unreal_GUI.Model.Basic
             {
                 0 => "ui-sound-on.opus",
                 1 => "ui-sound-off.opus",
+                2 => "ui-sound-error.opus",
+                3 => "ui-sound-notification.opus",
+                4 => "ui-sound-success.opus",
                 _ => "ui-sound-on.opus"
             };
 
@@ -23,13 +27,12 @@ namespace unreal_GUI.Model.Basic
                 try
                 {
 #pragma warning disable CS0612 // 类型或成员已过时
-                    OpusOggWaveReader.PlayOpusFile(soundPath);
+                    Opus2PCM.PlayOpusFile(soundPath);
 #pragma warning restore CS0612 // 类型或成员已过时
                 }
                 catch (Exception ex)
                 {
-                    // 记录异常但不抛出，避免影响主程序流程
-                    System.Diagnostics.Debug.WriteLine($"播放声音时发生错误: {ex.Message}");
+                    Debug.WriteLine($"播放声音时发生错误: {ex.Message}");
                 }
             });
         }

@@ -29,8 +29,7 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private bool _incrementalUpdate = false;
 
-        //[ObservableProperty]
-        //private bool _allowDeleteFiles = false;
+
 
         [ObservableProperty]
         private bool _filter = true;
@@ -56,8 +55,6 @@ namespace unreal_GUI.ViewModel
         // 增量更新是否可用（-mx <= 5时可用）
         public bool IsIncrementalUpdateEnabled => CompressLevel <= 5;
 
-        // 允许删除文件是否可用（增量更新启用时可用）
-        //public bool IsAllowDeleteEnabled => IncrementalUpdate;
 
         // 压缩级别变化时更新增量更新的可用性
         partial void OnCompressLevelChanged(int value)
@@ -93,13 +90,7 @@ namespace unreal_GUI.ViewModel
                 // 注意：不再自动关闭过滤器，让用户可以控制增量更新时是否使用过滤
             }
 
-            // 如果关闭增量更新，自动关闭允许删除文件
-            //if (!value && AllowDeleteFiles)
-            //{
-            //    AllowDeleteFiles = false;
-            //}
-            // 通知UI IsAllowDeleteEnabled 属性已变化
-            //OnPropertyChanged(nameof(IsAllowDeleteEnabled));
+
         }
 
         [RelayCommand]

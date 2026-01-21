@@ -1,9 +1,9 @@
-﻿using Microsoft.Toolkit.Uwp.Notifications;
+using Microsoft.Toolkit.Uwp.Notifications;
 using Windows.UI.Notifications;
 
 namespace reminder
 {
-    internal class WindowsNotification
+    internal class NotificationPush
     {
         /// <summary>
         /// 显示简单的文本通知
@@ -22,33 +22,7 @@ namespace reminder
         }
 
 
-        /// <summary>
-        /// 显示带操作按钮的通知
-        /// </summary>
-        /// <param name="title">通知标题</param>
-        /// <param name="message">通知内容</param>
-        /// <param name="button1Text">按钮1文本</param>
-        /// <param name="button1Action">按钮1操作</param>
-        /// <param name="button1Url">按钮1要打开的URL</param>
-        /// <param name="button2Text">按钮2文本</param>
-        /// <param name="button2Action">按钮2操作</param>
-        public static void ShowNotificationWithUrls(string title, string message, string button1Text, string button1Action, string button1Url, string button2Text, string button2Action)
-        {
-            var toastContent = new ToastContentBuilder()
-                .AddText(title)
-                .AddText(message)
-                .AddButton(new ToastButton()
-                    .SetContent(button1Text)
-                    .AddArgument("action", button1Action)
-                    .AddArgument("url", button1Url))
-                .AddButton(new ToastButton()
-                    .SetContent(button2Text)
-                    .AddArgument("action", button2Action))
-                .GetToastContent();
 
-            var toast = new ToastNotification(toastContent.GetXml());
-            ToastNotificationManagerCompat.CreateToastNotifier().Show(toast);
-        }
 
         /// <summary>
         /// 关闭指定的通知
@@ -77,5 +51,8 @@ namespace reminder
             var toast = new ToastNotification(toastContent.GetXml());
             ToastNotificationManagerCompat.CreateToastNotifier().Show(toast);
         }
+
+
+
     }
 }

@@ -22,22 +22,22 @@
                            FontSize="14" Foreground="{DynamicResource TextFillColorSecondaryBrush}" 
                            Margin="0,0,0,20"/>
                 <!-- 引擎选择卡片 -->
-                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+        <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                CornerRadius="4" Margin="0,0,0,20">
+            <StackPanel Margin="15">
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE713;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="引擎选择" FontSize="18" FontWeight="SemiBold"/>
+                </StackPanel>
+
+                <ComboBox ItemsSource="{Binding AvailableEngines}" SelectedItem="{Binding SelectedEngine}" 
+                          DisplayMemberPath="DisplayName" Width="400" Margin="0,0,0,10"/>
                         
-                        CornerRadius="4" Margin="0,0,0,20">
-                    <StackPanel Margin="15">
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE713;" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="引擎选择" FontSize="18" FontWeight="SemiBold"/>
-                        </StackPanel>
 
-                        <ComboBox ItemsSource="{Binding AvailableEngines}" SelectedItem="{Binding SelectedEngine}" 
-                                  DisplayMemberPath="DisplayName" Width="400" Margin="0,0,0,10"/>
-
-                        <TextBlock Text="选择要安装模板的Unreal Engine版本" 
-                                   FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-                    </StackPanel>
-                </Border>
+                <TextBlock Text="选择要安装模板的Unreal Engine版本" 
+                           FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            </StackPanel>
+        </Border>
                 <!-- 项目选择卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
                         

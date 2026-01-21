@@ -57,5 +57,16 @@ namespace reminder
         {
             return SharedConfig.GetSetting(IniFile.DefaultSectionName, key, defaultValue);
         }
+
+        /// <summary>
+        /// 写入配置文件中的日期时间值
+        /// </summary>
+        /// <param name="key">配置键</param>
+        /// <param name="value">配置值</param>
+        public void WriteDateTime(string key, DateTime value)
+        {
+            SharedConfig.SetSetting(IniFile.DefaultSectionName, key, value.ToString());
+            SharedConfig.Save(ConfigPath);
+        }
     }
 }

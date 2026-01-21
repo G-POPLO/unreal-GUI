@@ -157,7 +157,7 @@ namespace unreal_GUI.ViewModel
             Properties.Settings.Default.AdvancedMode = AdvancedMode;
             Properties.Settings.Default.BackdropType = BackdropType;
             Properties.Settings.Default.AminateType = AminateType;
-            Properties.Settings.Default.AutoStart = AutoStart;
+
             Properties.Settings.Default.Save();
 
             if (Properties.Settings.Default.AutoStart)

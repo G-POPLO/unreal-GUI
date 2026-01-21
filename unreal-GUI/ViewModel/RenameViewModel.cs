@@ -244,8 +244,7 @@ namespace unreal_GUI.ViewModel
 
                             Process.Start(new ProcessStartInfo
                             {
-                                Arguments = finalPath,
-                                UseShellExecute = true
+                                Arguments = finalPath
                             });
                         }
                     }
