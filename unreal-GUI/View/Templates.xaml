@@ -1,0 +1,263 @@
+<UserControl x:Class="unreal_GUI.View.Templates"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:unreal_GUI.View"
+             xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
+             xmlns:viewmodel="clr-namespace:unreal_GUI.ViewModel"
+             xmlns:converters="clr-namespace:unreal_GUI.Converters"
+             mc:Ignorable="d" 
+             d:DesignWidth="600">
+
+    <UserControl.DataContext>
+        <viewmodel:TemplatesViewModel />
+    </UserControl.DataContext>
+    <Grid Margin="20">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="10">
+                <!-- 页面标题 -->
+                <TextBlock Text="创建自定义模板" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+                <TextBlock Text="将您的Unreal Engine项目转换为可重用的自定义模板" 
+                           FontSize="14" Foreground="{DynamicResource TextFillColorSecondaryBrush}" 
+                           Margin="0,0,0,20"/>
+                <!-- 引擎选择卡片 -->
+        <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                CornerRadius="4" Margin="0,0,0,20">
+            <StackPanel Margin="15">
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE713;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="引擎选择" FontSize="18" FontWeight="SemiBold"/>
+                </StackPanel>
+
+                <ComboBox ItemsSource="{Binding AvailableEngines}" SelectedItem="{Binding SelectedEngine}" 
+                          DisplayMemberPath="DisplayName" Width="400" Margin="0,0,0,10"/>
+                        
+
+                <TextBlock Text="选择要安装模板的Unreal Engine版本" 
+                           FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            </StackPanel>
+        </Border>
+                <!-- 项目选择卡片 -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                        
+                        CornerRadius="4" Margin="0,0,0,20">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="项目选择" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <TextBox Text="{Binding ProjectPath}" Width="500" Margin="0,0,10,0"/>
+                            <Button Command="{Binding BrowseProjectCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8AC;" Margin="0,0,5,0"/>
+                                    <TextBlock Text="浏览"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+
+                        <TextBlock Text="选择您想要转换为模板的Unreal Engine项目文件夹" 
+                                   FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    </StackPanel>
+                </Border>
+
+                <!-- 模板信息卡片 -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                        
+                        CornerRadius="4" Margin="0,0,0,20">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xe9d5;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="模板信息" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+
+                        <!-- 模板名称 -->
+                        <StackPanel Margin="0,0,0,10">
+                            <TextBlock Text="以下信息将填入Config\TemplateDefs.ini" 
+            FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" 
+            Margin="0,0,0,5"/>
+                            <TextBlock Text="模板名称" Margin="0,0,0,5"/>
+                            
+                        <TextBox Text="{Binding TemplateName}"/>
+                        
+                        <!-- 允许项目创建选项 -->
+                        <CheckBox IsChecked="{Binding IsProjectSelected}" Content="创建模板项目" Margin="0,10,0,0"/>
+                            <TextBlock Text="启用此选项允许用户直接从此模板创建新项目,这将显示在新建项目对话框中的模板选择区域" 
+                                   FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" 
+                                   Margin="0,5,0,0"/>
+                            <TextBlock Text="禁用则只作为功能包引用" 
+                                       FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" 
+                                       Margin="0,5,0,0"/>
+                        </StackPanel>
+
+
+                        <!-- 模板ID -->
+                        <!-- Project_ID绑定到Id属性 -->
+                        <TextBlock x:Name="Project_ID" Text="{Binding Id, StringFormat=Project ID（唯一）: {0}}" 
+    FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+    Margin="0,0,0,5"/>
+                        <CheckBox IsChecked="{Binding EnableMultiLanguageConfig}" Content="启用多语言配置" Margin="0,0,0,5"/>
+                        <!-- 英文描述 -->
+                        <StackPanel Margin="0,0,0,15">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="英文描述" Margin="0,0,0,5"/>
+                                <TextBlock Text="(必填)" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="5,0,0,5"/>
+                            </StackPanel>
+                            <TextBox Text="{Binding TemplateDescriptionEn}" Height="60" TextWrapping="Wrap" AcceptsReturn="True"/>
+                        </StackPanel>
+
+                        <!-- 中文描述 -->
+                        <StackPanel Margin="0,0,0,15" Visibility="{Binding EnableMultiLanguageConfig, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <TextBlock Text="中文描述" Margin="0,0,0,5"/>
+                            <TextBox Text="{Binding TemplateDescriptionZhHans}" Height="60" TextWrapping="Wrap" AcceptsReturn="True"/>
+                        </StackPanel>
+
+                        <!-- 日文描述 -->
+                        <StackPanel Margin="0,0,0,15" Visibility="{Binding EnableMultiLanguageConfig, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <TextBlock Text="日文描述" Margin="0,0,0,5"/>
+                            <TextBox Text="{Binding TemplateDescriptionJa}" Height="60" TextWrapping="Wrap" AcceptsReturn="True"/>
+                        </StackPanel>
+
+                        <!-- 韩文描述 -->
+                        <StackPanel Margin="0,0,0,15" Visibility="{Binding EnableMultiLanguageConfig, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <TextBlock Text="韩文描述" Margin="0,0,0,5"/>
+                            <TextBox Text="{Binding TemplateDescriptionKo}" Height="60" TextWrapping="Wrap" AcceptsReturn="True"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- 模板类别卡片 -->
+        <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                
+               x:Name="TemplateType" CornerRadius="4" Margin="0,0,0,20"
+               Visibility="{Binding IsProjectSelected, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Inverse}">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,15,0">
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE72D;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="模板类别" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+
+                        <ItemsControl ItemsSource="{Binding TemplateCategories}" Margin="0,10,0,10">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <RadioButton Content="{Binding DisplayName}" 
+                                                 GroupName="TemplateCategory" 
+                                                 Command="{Binding DataContext.SelectCategoryCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" 
+                                                 CommandParameter="{Binding}" 
+                                                 IsChecked="{Binding IsSelected}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemContainerStyle>
+                                <Style>
+                                    <Setter Property="FrameworkElement.Margin" Value="0,0,0,10"/>
+                                </Style>
+                            </ItemsControl.ItemContainerStyle>
+                        </ItemsControl>
+
+                        <TextBlock Text="选择模板将显示在新建项目对话框中的类别" 
+                                   FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+
+                        <Button Command="{Binding AddCategoryCommand}" Style="{DynamicResource AccentButtonStyle}" Margin="0,10,10,0">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE770;" Margin="0,0,5,0"/>
+                                <TextBlock Text="创建新的分类"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Border>
+
+                <!-- 图标和预览图卡片 -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                        
+                        CornerRadius="4" Margin="0,0,0,20">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEE42;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="图标和预览图（可选）" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <StackPanel Margin="0,0,30,0">
+                                <TextBlock Text="模板图标" Margin="0,0,0,5"/>
+                                <Border 
+                                        BorderThickness="1" Width="128" Height="128" HorizontalAlignment="Left">
+                                    <Image Source="{Binding TemplateIcon}" Stretch="UniformToFill"/>
+                                </Border>
+                                <Button Command="{Binding BrowseIconCommand}" Margin="0,10,0,0" HorizontalAlignment="Left">
+                                    <StackPanel Orientation="Horizontal">
+                                        <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xe8b9;" Margin="0,0,5,0"/>
+                                        <TextBlock Text="选择图标"/>
+                                    </StackPanel>
+                                </Button>
+                                <TextBlock x:Name="PictureTip"  Text="PNG格式，推荐128x128像素" 
+                                           FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" 
+                                           Margin="0,5,0,0"/>
+                            </StackPanel>
+
+                            <StackPanel>
+                                <TextBlock Text="模板预览图" Margin="0,0,0,5"/>
+                                <Border 
+                                        BorderThickness="1" Width="400" Height="200" HorizontalAlignment="Left">
+                                    <Image Source="{Binding TemplatePreview}" Stretch="UniformToFill"/>
+                                </Border>
+                                <Button Command="{Binding BrowsePreviewCommand}" Margin="0,10,0,0" HorizontalAlignment="Left">
+                                    <StackPanel Orientation="Horizontal">
+                                        <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xe8b9;" Margin="0,0,5,0"/>
+                                        <TextBlock Text="选择预览图"/>
+                                    </StackPanel>
+                                </Button>
+                                <TextBlock x:Name="PictureTip_L" Text="PNG格式，推荐400x200像素" 
+                                           FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" 
+                                           Margin="0,5,0,0"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+
+
+                <!-- 操作按钮 -->
+                <StackPanel Orientation="Horizontal" Margin="0,20,0,20" HorizontalAlignment="Right">
+                    <Button Command="{Binding CreateTemplateCommand}" Style="{DynamicResource AccentButtonStyle}" Margin="0,0,10,0">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE770;" Margin="0,0,5,0"/>
+                            <TextBlock>
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Text" Value="创建功能包"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsProjectSelected}" Value="True">
+                                                <Setter Property="Text" Value="创建模板"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding OpenTemplateCommand}" Style="{DynamicResource AccentButtonStyle}" Margin="0,0,10,0">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
+                            <TextBlock Text="打开引擎模板文件夹"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding RecoveryCommand}" Margin="0,0,10,0">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE72C;" Margin="0,0,5,0"/>
+                            <TextBlock Text="恢复备份配置文件"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding OpenBackupCommand}" Margin="0,0,10,0">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
+                            <TextBlock Text="查看配置文件备份"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
+

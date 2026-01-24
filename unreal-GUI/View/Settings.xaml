@@ -1,0 +1,255 @@
+<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:unreal_GUI"
+             xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
+             xmlns:ikw="http://schemas.inkore.net/lib/ui/wpf"
+             xmlns:viewmodel="clr-namespace:unreal_GUI.ViewModel" x:Class="unreal_GUI.Settings"  
+             mc:Ignorable="d" 
+             >
+    <UserControl.DataContext>
+        <viewmodel:SettingsViewModel />
+    </UserControl.DataContext>
+    <Grid Margin="20">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="10">
+                <!-- 页面标题 -->
+                <TextBlock Text="设置" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+
+                <!-- 引擎目录设置卡片 -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                        
+                      CornerRadius="4" Margin="0,0,0,20">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8FD;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="引擎目录设定" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+
+                        <ListBox x:Name="EnginePathsList" ItemsSource="{Binding EnginePathsDisplay}" 
+                                 Height="120" Margin="0,0,0,15"/>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="新增" Margin="0,0,10,0" Command="{Binding AddEnginePathCommand}"/>
+                            <Button Content="删除" Margin="0,0,10,0" Command="{Binding RemoveEnginePathCommand}" 
+                                    CommandParameter="{Binding SelectedItem, ElementName=EnginePathsList}"/>
+                            <Button Content="自动设置引擎路径" Margin="0,0,10,0" Command="{Binding AutoPathCommand}"/>
+
+                        </StackPanel>
+
+                    </StackPanel>
+                </Border>
+
+                <!-- 应用设置卡片 -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                        
+                        CornerRadius="4" Margin="0,0,0,20">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE71D;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="应用设置" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+
+                        <TextBlock Text="默认设置" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,10"/>
+
+                        <WrapPanel x:Name="Setting_Panel" Orientation="Horizontal">
+                            <ui:AppBarSeparator />
+                            <ui:AppBarToggleButton x:Name="Button0" Label="任务完成后打开输出文件夹" 
+                                                   IsChecked="{Binding AutoOpen}" HorizontalAlignment="Left">
+                                <ui:AppBarToggleButton.Icon>
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;"/>
+                                </ui:AppBarToggleButton.Icon>
+                            </ui:AppBarToggleButton>
+                            <ui:AppBarSeparator />
+                            <ui:AppBarToggleButton x:Name="Button3" Label="应用程序启动时自动检查更新" 
+                        IsChecked="{Binding AutoUpdate}"  HorizontalAlignment="Left">
+                                <ui:AppBarToggleButton.Icon>
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xECC5;"/>
+                                </ui:AppBarToggleButton.Icon>
+                            </ui:AppBarToggleButton>
+                            <ui:AppBarSeparator />
+                            <ui:AppBarToggleButton x:Name="Button1" Label="使用Gitcode作为更新下载源" 
+                                                   IsChecked="{Binding Gitcode}"  HorizontalAlignment="Left">
+                                <ui:AppBarToggleButton.Icon>
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEC05;"/>
+                                </ui:AppBarToggleButton.Icon>
+                            </ui:AppBarToggleButton>
+
+                            <ui:AppBarSeparator />
+
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
+
+
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                        
+                       CornerRadius="4">
+
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEC7A;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="实验性选项" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+
+                        <TextBlock Text="开启实验性选项后会启用一些尚未完成开发的实验性功能，这些功能可能会不适应未来版本" 
+                                   TextWrapping="Wrap" Margin="0,0,0,15"/>
+                        <WrapPanel x:Name="beta_Panel"  Orientation="Horizontal">
+                            <ui:AppBarSeparator />
+                            <ui:AppBarToggleButton x:Name="beta_Button0" Label="Fab免费资产领取通知" 
+          IsChecked="{Binding FabNotification}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <ui:AppBarToggleButton.Icon>
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEC24;"/>
+                                </ui:AppBarToggleButton.Icon>
+                            </ui:AppBarToggleButton>
+                            <ui:AppBarSeparator />
+
+
+
+                        </WrapPanel>
+                        <TextBlock x:Name="LimitedTime" Text="{Binding LimitedTime, StringFormat=Fab免费资产获取截至时间：\{0:yyyy-MM-dd HH:mm:ss\}}" 
+                                   TextWrapping="Wrap" Margin="0,5,0,10" FontWeight="SemiBold"/>
+
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="开机启动Fab资产检查" 
+                                       VerticalAlignment="Center" IsEnabled="{Binding FabNotification}"/>
+                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding AutoStart}" IsEnabled="{Binding FabNotification}"/>
+                        </Grid>
+
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="使用EpicGames Launcher来打开Fab网站" 
+                                       VerticalAlignment="Center" IsEnabled="{Binding FabNotification}"/>
+                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding OpenEpic}" IsEnabled="{Binding FabNotification}"/>
+                        </Grid>
+
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="使用Headless方式获取Fab信息（建议关闭，开启后可能会无法爬取）" 
+                                       VerticalAlignment="Center" IsEnabled="{Binding FabNotification}"/>
+                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding HeadlessEnabled}" IsEnabled="{Binding FabNotification}"/>
+                        </Grid>
+
+                        <!--<Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto" MinWidth="120"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="指定Playwright使用的浏览器" Margin="0,8,0,8"/>
+                            <ComboBox x:Name="BrowerOption" Grid.Column="1" d:LayoutOverrides="Height" Margin="-32,0,0,0" VerticalAlignment="Stretch" Width="120"/>
+
+                        </Grid>-->
+                      
+
+
+
+
+                    </StackPanel>
+
+                </Border>
+
+                <!-- 窗口设置卡片 -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                         Margin="0,20,0,0"
+                    CornerRadius="4">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.OtherUser}" Glyph="&#xE7EE;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="高级选项" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+
+
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="启用扩展功能" 
+                 VerticalAlignment="Center"/>
+                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding AdvancedMode}"/>
+                        </Grid>
+
+
+
+
+                    </StackPanel>
+
+                </Border>
+
+
+                <!-- 窗口设置卡片 -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                         Margin="0,20,0,0"
+                    CornerRadius="4">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <ui:FontIcon Icon="{x:Static ui:FluentSystemIcons.WindowSettings_20_Regular}" Glyph="&#xEE7D;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="窗口设置" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+
+
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="窗口样式" 
+                 VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" d:LayoutOverrides="Height" VerticalAlignment="Stretch" Width="120" 
+                                      SelectedValue="{Binding BackdropType}" SelectedValuePath="Tag">
+                                <ComboBoxItem Content="Mica" Tag="0"/>
+                                <ComboBoxItem Content="Arcylic" Tag="1"/>
+                                <ComboBoxItem Content="None" Tag="2"/>
+                            </ComboBox>
+                        </Grid>
+
+
+                        <!--<Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="窗口动画" 
+                 VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1" d:LayoutOverrides="Height" VerticalAlignment="Stretch" Width="120" 
+                                      SelectedValue="{Binding AminateType}" SelectedValuePath="Tag">
+                                <ComboBoxItem Content="Entrance" Tag="0"/>
+                                <ComboBoxItem Content="DrillIn" Tag="1"/>
+                                <ComboBoxItem Content="Suppress" Tag="2"/>
+                            </ComboBox>
+                        </Grid>-->
+
+
+                    </StackPanel>
+
+                </Border>
+
+                <Button Command="{Binding SaveSettingsCommand}" Margin="5,10,0,0" HorizontalAlignment="Left" 
+                     Style="{DynamicResource AccentButtonStyle}">
+                    <StackPanel Orientation="Horizontal">
+                        <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74E;" Margin="0,0,5,0"/>
+                        <TextBlock Text="保存设置"/>
+                    </StackPanel>
+                </Button>
+
+                <TextBlock x:Name="Tips" Text="{Binding TipText}" TextWrapping="Wrap" 
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" 
+                                   Margin="0,10,0,0"/>
+            </StackPanel>
+
+        </ScrollViewer>
+    </Grid>
+</UserControl>

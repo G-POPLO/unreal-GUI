@@ -1,16 +1,17 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.13.35931.197
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11217.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "unreal-GUI", "unreal-GUI.csproj", "{152FF494-525F-417B-849B-9B7FC54DCA17}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "unreal-GUI", "unreal-GUI\unreal-GUI.csproj", "{152FF494-525F-417B-849B-9B7FC54DCA17}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "code_test", "code_test\code_test.csproj", "{AD9C01F3-D8D1-4368-ADA6-DDD3E4F40B8C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "reminder", "reminder\reminder.csproj", "{8F636962-AECA-424D-B941-A7443A234915}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{614E1CCD-8D83-41F8-BF9D-91F482BCD503}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unreal-GUI-Reminder", "Unreal-GUI-Reminder\Unreal-GUI-Reminder.csproj", "{14DC1462-C0AB-4A50-8B12-014BEEBAF7F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,12 +20,16 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{152FF494-525F-417B-849B-9B7FC54DCA17}.Debug|x64.ActiveCfg = Debug|x64
+		{152FF494-525F-417B-849B-9B7FC54DCA17}.Debug|x64.Build.0 = Debug|x64
 		{152FF494-525F-417B-849B-9B7FC54DCA17}.Release|x64.ActiveCfg = Release|x64
 		{152FF494-525F-417B-849B-9B7FC54DCA17}.Release|x64.Build.0 = Release|x64
-		{14DC1462-C0AB-4A50-8B12-014BEEBAF7F0}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{14DC1462-C0AB-4A50-8B12-014BEEBAF7F0}.Debug|x64.Build.0 = Debug|Any CPU
-		{14DC1462-C0AB-4A50-8B12-014BEEBAF7F0}.Release|x64.ActiveCfg = Release|Any CPU
-		{14DC1462-C0AB-4A50-8B12-014BEEBAF7F0}.Release|x64.Build.0 = Release|Any CPU
+		{AD9C01F3-D8D1-4368-ADA6-DDD3E4F40B8C}.Debug|x64.ActiveCfg = Debug|x64
+		{AD9C01F3-D8D1-4368-ADA6-DDD3E4F40B8C}.Debug|x64.Build.0 = Debug|x64
+		{AD9C01F3-D8D1-4368-ADA6-DDD3E4F40B8C}.Release|x64.ActiveCfg = Release|x64
+		{AD9C01F3-D8D1-4368-ADA6-DDD3E4F40B8C}.Release|x64.Build.0 = Release|x64
+		{8F636962-AECA-424D-B941-A7443A234915}.Debug|x64.ActiveCfg = Debug|x64
+		{8F636962-AECA-424D-B941-A7443A234915}.Release|x64.ActiveCfg = Release|x64
+		{8F636962-AECA-424D-B941-A7443A234915}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

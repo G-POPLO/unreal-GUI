@@ -15,6 +15,7 @@ Unreal-GUI 是一款旨在简化虚幻引擎（Unreal Engine）相关操作流�
 - [贡献指南](#贡献指南)
 - [许可证](#许可证)
 - [第三方库引用](#第三方库引用)
+- [相关文档](#相关文档)
 
 ## 功能特性
 
@@ -23,11 +24,12 @@ Unreal-GUI 是一款旨在简化虚幻引擎（Unreal Engine）相关操作流�
 3. **快速访问**: 方便用户打开UE5的插件目录等。
 4. **缓存清理**: 清理项目文件的缓存，包括编译生成的中间文件和临时文件。同时可以查看DDC的缓存情况等。
 5. **Fab资产通知提醒（测试）**:该功能允许用户在Fab资产有更新时收到通知提醒，确保用户及时了解最新的资产动态。 
+6. **自定义模板创建**:  用户可以向引擎添加自定义的模板或内容包以供项目创建时使用。
+7. **项目压缩**: 用户可以将项目文件夹压缩为7z文件，方便分享或备份。
 
 ## 安装说明
-应用程序需安装[.NET 9 Runtime](https://dotnet.microsoft.com/zh-cn/download/dotnet/9.0/runtime)，否则会提示缺少依赖项。
-由于应用程序使用了[Windows App SDK](https://learn.microsoft.com/windows/apps/windows-app-sdk/)，因此仅提供Windows 10(1903或内部版本10.0.18362.0)及以上的运行版本。
-#### 注意：从版本[v0.3.1.0](https://github.com/G-POPLO/unreal-GUI/releases/tag/0.3.1.0)开始，应用体积极度膨胀，主要是因为集成了Playwright的浏览器引擎和微软的Windows.SDK，如果你对应用程序体积敏感且不需要新功能所需的特性，请选择[v0.3.0.0](https://github.com/G-POPLO/unreal-GUI/releases/tag/0.3.0.0)。
+应用程序需安装[.NET 10 Runtime](https://dotnet.microsoft.com/zh-cn/download/dotnet/10.0/runtime)，否则会提示缺少依赖项。
+由于应用程序使用了[Windows App SDK](https://learn.microsoft.com/windows/apps/windows-app-sdk/)，因此仅提供Windows 10(1903或内部版本10.0.18362.0)及以上的运行版本。应用程序使用了`Segoe Fluent Icons`且该字体默认不包括在Windows 10上，请安装[Segoe Fluent Icons](https://learn.microsoft.com/zh-cn/windows/apps/design/style/segoe-fluent-icons-font#how-do-i-get-this-font)以显示正确的图标。
 
 1. 从 [Releases](https://github.com/G-POPLO/unreal-GUI/releases) 页面下载最新版本的 Unreal-GUI。
 2. 解压下载的文件到安装的目录。
@@ -38,7 +40,7 @@ Unreal-GUI 是一款旨在简化虚幻引擎（Unreal Engine）相关操作流�
 我们欢迎任何形式的贡献！如想为项目贡献代码，请遵循以下步骤：
 
 1. Fork 本仓库
-2. 创建您的特性分支 (`git checkout -b feature/NewFeature`)
+2. 若更改较多，请创建您的特性分支 (`git checkout -b feature/NewFeature`)，否则可直接在 `develop` 分支上工作。
 3. 提交您的更改 (`git commit -m 'Add some NewFeature'`)
 4. 推送到分支 (`git push origin feature/develop`)
 5. 开启一个 Pull Request
@@ -46,7 +48,7 @@ Unreal-GUI 是一款旨在简化虚幻引擎（Unreal Engine）相关操作流�
 
 ## 许可证
 
-本项目采用 MIT 许可证。详情请见 [LICENSE](LICENSE.txt) 文件。
+本项目采用 Apache 2.0 许可证。详情请见 [LICENSE](LICENSE) 文件。
 
 ## 第三方库引用
 
@@ -54,9 +56,16 @@ Unreal-GUI 是一款旨在简化虚幻引擎（Unreal Engine）相关操作流�
 
 - [Playwright](https://github.com/microsoft/playwright-dotnet)
 - [renom](https://github.com/UnrealisticDev/Renom)
+- [SoftCircuits.IniFileParser](https://www.nuget.org/packages/SoftCircuits.IniFileParser)
+- [7-Zip.CommandLine](https://www.nuget.org/packages/7-Zip.CommandLine)
+- [SixLabors.ImageSharp](https://www.nuget.org/packages/SixLabors.ImageSharp)
+- [NAudio.Wasapi](https://www.nuget.org/packages/NAudio.Wasapi)&[Concentus.Oggfile](https://www.nuget.org/packages/Concentus.Oggfile)
+- [Markdig.Wpf](https://www.nuget.org/packages/Markdig.Wpf)
 - [iNKORE.UI.WPF.Modern](https://github.com/iNKORE-NET/UI.WPF.Modern)
-- [SevenZipSharp](https://github.com/squid-box/SevenZipSharp)
-- [MVVM Toolkit](https://github.com/CommunityToolkit/dotnet)
-- [Newtonsoft.Json](https://www.newtonsoft.com/json)
-- [Microsoft.Toolkit.Uwp.Notifications](https://learn.microsoft.com/zh-cn/windows/apps/develop/notifications/app-notifications/send-local-toast?tabs=desktop-msix)
+- [MVVM Toolkit](https://github.com/CommunityToolkit/dotnet)& [ValueConverters](https://www.nuget.org/packages/ValueConverters)&[Microsoft.Toolkit.Uwp.Notifications](https://learn.microsoft.com/zh-cn/windows/apps/develop/notifications/app-notifications/send-local-toast?tabs=desktop-msix)
 
+
+## 相关文档
+- [Unreal Engine 自定义模板创建](https://dev.epicgames.com/documentation/zh-cn/unreal-engine/converting-a-project-to-an-unreal-engine-template)
+- [Unreal Engine 项目结构](https://dev.epicgames.com/documentation/unreal-engine/unreal-engine-directory-structure)
+- [Segoe Fluent 图标字体](https://learn.microsoft.com/zh-cn/windows/apps/design/style/segoe-fluent-icons-font)

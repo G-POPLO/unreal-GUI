@@ -1,0 +1,93 @@
+<UserControl x:Class="unreal_GUI.Model.DialogContent.Add_Categories"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:unreal_GUI.Model.DialogContent"
+             xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
+             mc:Ignorable="d">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10">
+        <StackPanel>
+            <!-- 基本信息区域 -->
+            <StackPanel Margin="0,0,0,20">
+                <!-- Key -->
+                <StackPanel Margin="0,0,0,10">
+                    <TextBlock Text="Key (必填)" FontWeight="SemiBold" ToolTip="用于从模板引用类别的名称，应简短易懂"/>
+                    <TextBox Width="200" Margin="0,5,0,0" HorizontalAlignment="Left"
+                             Text="{Binding CategoryKey}"
+                             Padding="5"/>
+                    <TextBlock Text="应简短易懂，用于从模板引用类别，例如'SIM'" FontSize="12"  Margin="0,5,0,0"  Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <CheckBox Content="是否为主类别 (Major Category)" 
+                        IsChecked="{Binding IsMajorCategory}" Margin="0,0,20,0">
+                    </CheckBox>
+                    <CheckBox Content="启用多语言文本配置" 
+                        IsChecked="{Binding EnableMultiLanguageConfig}"/>
+                </StackPanel>
+
+                <!-- IsMajorCategory -->
+                <TextBlock Text="主类别在UI中显示为完整行，非主类别显示为子项" FontSize="12"  Margin="0,0,0,10" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+
+                <!-- 图标 -->
+                <StackPanel Margin="0,10,0,0">
+                    <TextBlock Text="类别图标" FontWeight="SemiBold"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                        <Border Width="300" Height="100" Margin="0,0,10,0" BorderBrush="LightGray" BorderThickness="1">
+                            <Image Source="{Binding CategoryIcon}" Stretch="UniformToFill"/>
+                        </Border>
+                        <StackPanel>
+                            <Button Command="{Binding BrowseIconCommand}" Content="选择图标" Margin="0,0,0,10" Padding="8,4" Style="{DynamicResource AccentButtonStyle}"/>
+                            <TextBlock Text="PNG格式，建议大小为600x200像素" FontSize="12"  TextWrapping="Wrap" Width="200"/>
+                            <TextBlock Text="{Binding IconFileName}" Margin="0,5,0,0" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- 英文描述 -->
+            <StackPanel Margin="0,0,0,15">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="英文描述" Margin="0,0,0,5"/>
+                    <TextBlock Text="(必填)" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="5,0,0,5"/>
+                </StackPanel>
+                <TextBox Text="{Binding DescriptionEn}"  TextWrapping="Wrap" AcceptsReturn="True"/>
+            </StackPanel>
+
+            <!-- 中文描述 -->
+            <StackPanel Margin="0,0,0,15" Visibility="{Binding EnableMultiLanguageConfig, Converter={StaticResource BoolToVisibilityConverter}}">
+                <TextBlock Text="中文描述" Margin="0,0,0,5"/>
+                <TextBox Text="{Binding DescriptionZh}"  TextWrapping="Wrap" AcceptsReturn="True"/>
+            </StackPanel>
+
+            <!-- 日文描述 -->
+            <StackPanel Margin="0,0,0,15" Visibility="{Binding EnableMultiLanguageConfig, Converter={StaticResource BoolToVisibilityConverter}}">
+                <TextBlock Text="日文描述" Margin="0,0,0,5"/>
+                <TextBox Text="{Binding DescriptionJa}"  TextWrapping="Wrap" AcceptsReturn="True"/>
+            </StackPanel>
+
+            <!-- 韩文描述 -->
+            <StackPanel Margin="0,0,0,15" Visibility="{Binding EnableMultiLanguageConfig, Converter={StaticResource BoolToVisibilityConverter}}">
+                <TextBlock Text="韩文描述" Margin="0,0,0,5"/>
+                <TextBox Text="{Binding DescriptionKo}"  TextWrapping="Wrap" AcceptsReturn="True"/>
+            </StackPanel>
+
+            <!-- 生成按钮区域 -->
+            <StackPanel Orientation="Horizontal" Margin="0,20,0,15" HorizontalAlignment="Left">
+                <Button Command="{Binding GenerateCategoriesCommand}" Content="生成Categories文本" Margin="0,0,10,0" Padding="10,5" Style="{DynamicResource AccentButtonStyle}"/>
+                <Button Command="{Binding ResetFormCommand}" Content="重置表单" Padding="10,5"/>
+            </StackPanel>
+
+            <!-- 生成结果显示区域 -->
+            <StackPanel Margin="0,20,0,15">
+                <TextBlock Text="生成结果:" FontWeight="SemiBold" Margin="0,0,0,5"/>
+
+                <TextBox Text="{Binding GeneratedCategoriesText}" TextWrapping="Wrap" IsReadOnly="True" />
+                <TextBlock Text="以下文本将插入TemplateCategories.ini，且生成的配置对已安装的引擎全局生效" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,5,0,0"/>
+            </StackPanel>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
+
+

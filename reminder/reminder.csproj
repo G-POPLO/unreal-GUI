@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0-windows10.0.18362.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <!--<PublishAot>true</PublishAot>-->
+    <RollForward>LatestMajor</RollForward>
+    <InvariantGlobalization>true</InvariantGlobalization>
+      <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+      <GenerateDependencyFile>False</GenerateDependencyFile>
+    <Platforms>x64</Platforms>
+    <SupportedOSPlatformVersion>10.0.18362.0</SupportedOSPlatformVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Optimize>True</Optimize>
+     
+      <!--Playwright不支持AOT，以下选项已被禁用-->
+      <!--<PublishTrimmed>True</PublishTrimmed>-->
+    <!--<PublishReadyToRun>True</PublishReadyToRun>-->
+    <!--<PublishReadyToRunComposite>true</PublishReadyToRunComposite>-->
+  </PropertyGroup>
+    <!--要求不生成.deps.json文件-->
+    <PropertyGroup>
+        <IncludeSatelliteResource>false</IncludeSatelliteResource>
+    </PropertyGroup>
+        
+       <PropertyGroup>
+          <PlaywrightPlatform>win</PlaywrightPlatform>
+       </PropertyGroup>
+    
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Playwright" Version="1.56.0" />
+    <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
+    <PackageReference Include="SoftCircuits.IniFileParser" Version="2.7.0" />
+    <PackageReference Include="System.Drawing.Common" Version="10.0.2" />
+  </ItemGroup>
+
+
+</Project>

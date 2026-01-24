@@ -1,0 +1,28 @@
+<Application x:Class="unreal_GUI.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:unreal_GUI"
+             xmlns:converters="clr-namespace:unreal_GUI.Converters"
+             xmlns:conv="clr-namespace:ValueConverters;assembly=ValueConverters"
+             StartupUri="MainWindow.xaml"
+             xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ui:ThemeResources />
+                <ui:XamlControlsResources />
+            </ResourceDictionary.MergedDictionaries>
+            <!-- ===================== ValueConverters库转换器 ===================== -->
+            <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+                              
+            <!-- ===================== 自定义转换器 ===================== -->
+            <converters:EqualityConverter x:Key="EqualityConverter" />
+            <converters:BoolToInverseBoolConverter x:Key="BoolToInverseBoolConverter" />
+            <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+            <converters:NullToVisibilityInverterConverter x:Key="NullToVisibilityInverterConverter" />
+            <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+            <converters:ImageCoordinateConverter x:Key="ImageCoordinateConverter" />
+            
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
