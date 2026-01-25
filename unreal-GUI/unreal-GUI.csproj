@@ -14,7 +14,7 @@
         <ApplicationIcon>Icon\icon.ico</ApplicationIcon>
         <SignAssembly>False</SignAssembly>
         <Authors>C-Poplo</Authors>
-        <Version>0.5.0.0</Version>
+        <Version>0.5.1.0</Version>
         <Title>Unreal-GUI</Title>
         <AssemblyName>Unreal-GUI</AssemblyName>
         <DelaySign>True</DelaySign>
