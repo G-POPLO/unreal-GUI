@@ -21,6 +21,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Optimize>True</Optimize>
+    <DebugType>none</DebugType>
      
       <!--Playwright不支持AOT，以下选项已被禁用-->
       <!--<PublishTrimmed>True</PublishTrimmed>-->
@@ -34,7 +35,16 @@
         
        <PropertyGroup>
           <PlaywrightPlatform>win</PlaywrightPlatform>
+          <Title>Reminder</Title>
+          <Description>由Unreal-GUI托管的Fab免费资产检查程序</Description>
+          <Authors>C-Poplo</Authors>
+          <PackageProjectUrl>https://github.com/G-POPLO/unreal-GUI</PackageProjectUrl>
+          <ApplicationIcon>icon.ico</ApplicationIcon>
        </PropertyGroup>
+        
+       <ItemGroup>
+         <Content Include="Icon\icon.ico" />
+       </ItemGroup>
     
   <ItemGroup>
     <PackageReference Include="Microsoft.Playwright" Version="1.57.0" />
