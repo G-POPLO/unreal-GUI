@@ -70,6 +70,8 @@ namespace reminder
                     if (endDate.HasValue)
                     {
                         Console.WriteLine($"发现新的Fab免费资产，截止时间: {endDate.Value}");
+                        Console.WriteLine("程序执行完毕，按任意键退出...");
+                        Console.ReadKey();
                     }
                     else
                     {
