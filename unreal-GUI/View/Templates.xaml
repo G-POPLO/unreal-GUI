@@ -7,8 +7,9 @@
              xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
              xmlns:viewmodel="clr-namespace:unreal_GUI.ViewModel"
              xmlns:converters="clr-namespace:unreal_GUI.Converters"
-             mc:Ignorable="d" 
-             d:DesignWidth="600">
+             mc:Ignorable="d"
+             >
+          
 
     <UserControl.DataContext>
         <viewmodel:TemplatesViewModel />
@@ -52,7 +53,7 @@
                             <TextBox Text="{Binding ProjectPath}" Width="500" Margin="0,0,10,0"/>
                             <Button Command="{Binding BrowseProjectCommand}">
                                 <StackPanel Orientation="Horizontal">
-                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8AC;" Margin="0,0,5,0"/>
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
                                     <TextBlock Text="浏览"/>
                                 </StackPanel>
                             </Button>

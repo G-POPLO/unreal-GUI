@@ -1131,7 +1131,7 @@ namespace unreal_GUI.ViewModel
                     {
                         var iconDestPath = Path.Combine(projectMediaDir, $"{TemplateName}.png");
                         File.Copy(savedScreenshotPath, iconDestPath, true);
-                        await ModernDialog.ShowInfoAsync($"已使用项目Saved目录中的AutoScreenshot.png作为默认图标", "信息");
+                        //await ModernDialog.ShowInfoAsync($"已使用项目Saved目录中的AutoScreenshot.png作为默认图标", "信息");
                     }
                 }
 

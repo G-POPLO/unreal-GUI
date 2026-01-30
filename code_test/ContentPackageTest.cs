@@ -57,10 +57,10 @@ namespace code_test
             var featureCore = new FeatureCore();
 
             // 订阅进度报告事件
-            featureCore.ProgressReported += (sender, e) =>
-            {
-                Console.WriteLine($"进度: {e.Message}");
-            };
+            // featureCore.ProgressReported += (sender, e) =>
+            // {
+            //     Console.WriteLine($"进度: {e.Message}");
+            // };
 
             try
             {
