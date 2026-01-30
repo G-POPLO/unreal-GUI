@@ -234,6 +234,19 @@ namespace unreal_GUI.ViewModel
                     SoundFX.PlaySound(0);
                     string successMessage = IncrementalUpdate ? "增量更新完成" : "压缩完成";
                     await ModernDialog.ShowInfoAsync(successMessage, "成功");
+
+                    if (Properties.Settings.Default.AutoOpen)
+                    {
+                        string folderPath = IncrementalUpdate ? Path.GetDirectoryName(InputPath) : OutputPath;
+                        if (!string.IsNullOrEmpty(folderPath) && Directory.Exists(folderPath))
+                        {
+                            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                            {
+                                FileName = "explorer.exe",
+                                Arguments = folderPath
+                            });
+                        }
+                    }
                 }
 
             }

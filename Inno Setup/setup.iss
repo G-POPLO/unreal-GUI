@@ -3,7 +3,7 @@
 ; Non-commercial use only
 
 #define MyAppName "Unreal-GUI"
-#define MyAppVersion "0.5"
+#define MyAppVersion "1.0.0"
 #define MyAppPublisher "C-POPLO"
 #define MyAppURL "https://github.com/G-POPLO/unreal-GUI"
 #define MyAppExeName "Unreal-GUI.exe"
