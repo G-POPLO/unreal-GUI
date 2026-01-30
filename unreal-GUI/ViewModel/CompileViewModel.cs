@@ -179,7 +179,7 @@ namespace unreal_GUI.ViewModel
                         TipsText = "编译成功！";
                         if (Properties.Settings.Default.AutoOpen)
                         {
-                            Process.Start(OutputPath);
+                            Process.Start("explorer.exe", OutputPath);
                         }
                     }
                     else

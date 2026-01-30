@@ -149,7 +149,6 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="指定Playwright使用的浏览器" Margin="0,8,0,8"/>
                             <ComboBox x:Name="BrowerOption" Grid.Column="1" d:LayoutOverrides="Height" Margin="-32,0,0,0" VerticalAlignment="Stretch" Width="120"/>
-
                         </Grid>-->
                       
 
@@ -247,7 +246,7 @@
 
                 <TextBlock x:Name="Tips" Text="{Binding TipText}" TextWrapping="Wrap" 
                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}" 
-                                   Margin="0,10,0,0"/>
+                                   Margin="10,10,0,0"/>
             </StackPanel>
 
         </ScrollViewer>

@@ -22,15 +22,13 @@ namespace unreal_GUI.Model.Features
             {
                 // 添加开机自启项
                 key.SetValue(AppName, exePath);
-                // 设置开机启动项的描述
-                //key.SetValue(AppName + "_Description", "由Unreal-GUI托管的Fab免费资产检查程序");
+
             }
             else
             {
                 // 删除开机自启项
                 key.DeleteValue(AppName, false);
-                // 删除开机启动项的描述
-                //key.DeleteValue(AppName + "_Description", false);
+
             }
         }
     }
