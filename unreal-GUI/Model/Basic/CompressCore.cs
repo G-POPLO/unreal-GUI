@@ -36,7 +36,7 @@ namespace unreal_GUI.Model.Basic
                 {
                     FileName = sevenZipExePath,
                     Arguments = arguments,
-                    WorkingDirectory = appFolderPath,
+                    WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
                     UseShellExecute = false,
                     CreateNoWindow = true,
                     RedirectStandardOutput = true,
@@ -47,7 +47,9 @@ namespace unreal_GUI.Model.Basic
                 using var process = new Process { StartInfo = processStartInfo };
                 process.Start();
 
-
+                // 读取输出以便调试
+                string output = await process.StandardOutput.ReadToEndAsync();
+                string error = await process.StandardError.ReadToEndAsync();
 
                 // 等待进程完成
                 await process.WaitForExitAsync();
@@ -55,7 +57,6 @@ namespace unreal_GUI.Model.Basic
                 // 检查进程退出代码并处理错误
                 if (process.ExitCode != 0)
                 {
-
                     // 根据退出代码返回相应的错误信息
                     string errorMessage = process.ExitCode switch
                     {
@@ -67,7 +68,8 @@ namespace unreal_GUI.Model.Basic
                         _ => $"未知错误，退出代码: {process.ExitCode}"
                     };
 
-                    await ModernDialog.ShowErrorAsync($"压缩失败：{errorMessage}", "错误");
+                    string fullError = $"压缩失败：{errorMessage}\n输出: {output}\n错误: {error}";
+                    await ModernDialog.ShowErrorAsync(fullError, "错误");
                     return false;
                 }
 
