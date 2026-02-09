@@ -16,6 +16,7 @@ namespace unreal_GUI.ViewModel
     public partial class CompileViewModel : ObservableObject
     {
         private List<EngineInfo> engineList = [];
+        private string pluginName;
 
         [ObservableProperty]
         private EngineInfo selectedEngine;
@@ -56,6 +57,7 @@ namespace unreal_GUI.ViewModel
                 string pluginContent = File.ReadAllText(InputPath);
                 JsonNode pluginInfo = JsonNode.Parse(pluginContent);
                 string pluginEngineVersion = pluginInfo["EngineVersion"].ToString();
+                pluginName = pluginInfo["FriendlyName"]?.ToString()?.Replace(" ", "") ?? Path.GetFileNameWithoutExtension(InputPath);
 
                 // 获取选择的引擎版本
                 TipsText = SelectedEngine != null
@@ -143,7 +145,25 @@ namespace unreal_GUI.ViewModel
                 return;
             }
 
-            // 检查输出文件夹是否为空
+            if (string.IsNullOrWhiteSpace(pluginName))
+            {
+                TipsText = "无法获取插件名称";
+                return;
+            }
+
+            // 创建以插件名称命名的子文件夹
+            string actualOutputPath = Path.Combine(OutputPath, pluginName);
+
+            // 如果子文件夹不存在，创建它
+            if (!Directory.Exists(actualOutputPath))
+            {
+                Directory.CreateDirectory(actualOutputPath);
+            }
+
+            // 更新 OutputPath 为新的子文件夹路径
+            OutputPath = actualOutputPath;
+
+            // 检查子文件夹是否为空
             if (Directory.GetFileSystemEntries(OutputPath).Length > 0)
             {
                 // 显示确认对话框
@@ -186,8 +206,8 @@ namespace unreal_GUI.ViewModel
                     {
                         string errorMessage = process.ExitCode switch
                         {
-                            6 => "引擎API更改，请手动创建新的C++工程进行编译",
-                            -1 => "用户取消了操作",
+                            6 => "编译失败：引擎API更改，请手动创建新的C++工程进行编译",
+                            -1 => "编译失败：用户取消了操作",
                             _ => $"编译失败，错误代码：{process.ExitCode}"
                         };
                         TipsText = errorMessage;
