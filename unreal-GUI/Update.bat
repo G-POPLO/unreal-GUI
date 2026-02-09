@@ -1,4 +1,5 @@
 @echo off
+chcp 65001 >nul
 setlocal enabledelayedexpansion
 
 :: 等待Unreal-GUI.exe进程完全关闭
