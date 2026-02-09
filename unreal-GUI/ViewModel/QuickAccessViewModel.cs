@@ -43,7 +43,14 @@ namespace unreal_GUI.ViewModel
                 }
                 else
                 {
-                    _ = ModernDialog.ShowErrorAsync("目录不存在", $"未找到插件目录：\n{pluginPath}");
+                    Directory.CreateDirectory(pluginPath);   
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = pluginPath,
+                        UseShellExecute = true
+                    });
+                    // _ = ModernDialog.ShowErrorAsync("目录不存在", $"未找到插件目录：\n{pluginPath}");
+                 
                 }
             }
         }

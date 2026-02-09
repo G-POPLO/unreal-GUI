@@ -184,7 +184,13 @@ namespace unreal_GUI.ViewModel
                     }
                     else
                     {
-                        TipsText = $"编译失败，错误代码：{process.ExitCode}";
+                        string errorMessage = process.ExitCode switch
+                        {
+                            6 => "引擎API更改，请手动创建新的C++工程进行编译",
+                            -1 => "用户取消了操作",
+                            _ => $"编译失败，错误代码：{process.ExitCode}"
+                        };
+                        TipsText = errorMessage;
                     }
                 }
 
