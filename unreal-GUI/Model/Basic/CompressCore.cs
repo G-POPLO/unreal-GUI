@@ -8,6 +8,8 @@ namespace unreal_GUI.Model.Basic
 {
     public class CompressCore
     {
+        private static readonly string AppFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App");
+        private static readonly string SevenZipExePath = Path.Combine(AppFolderPath, "7za.exe");
         /// <summary>
         /// 使用7za.exe解压文件
         /// </summary>
@@ -350,6 +352,215 @@ namespace unreal_GUI.Model.Basic
                 await ModernDialog.ShowErrorAsync($"增量更新失败：{ex.Message}", "错误");
                 return false;
             }
+        }
+
+        /// <summary>
+        /// 智能压缩：使用PowerShell动态生成文件列表，对Textures文件夹使用存储模式，其他文件使用高压缩率
+        /// </summary>
+        /// <param name="projectPath">要压缩的项目目录路径</param>
+        /// <param name="outputArchivePath">输出压缩文件路径</param>
+        /// <param name="compressionLevel">压缩级别（0-9）</param>
+        /// <param name="solidCompress">是否启用固实压缩</param>
+        /// <param name="filter">是否启用文件过滤器</param>
+        /// <returns>压缩是否成功</returns>
+        public static async Task<bool> SmartCompressAsync(string projectPath, string outputArchivePath, int compressionLevel = 5, bool solidCompress = true, bool filter = true)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(projectPath))
+                {
+                    await ModernDialog.ShowErrorAsync("没有要压缩的项目目录", "错误");
+                    return false;
+                }
+
+                if (!Directory.Exists(projectPath))
+                {
+                    await ModernDialog.ShowErrorAsync($"项目目录不存在: {projectPath}", "错误");
+                    return false;
+                }
+
+                string outputDirectory = Path.GetDirectoryName(outputArchivePath);
+                if (!string.IsNullOrEmpty(outputDirectory))
+                {
+                    Directory.CreateDirectory(outputDirectory);
+                }
+
+                string contentPath = Path.Combine(projectPath, "Content");
+                string filesCompressPath = Path.Combine(projectPath, "files_compress.txt");
+                string filesStorePath = Path.Combine(projectPath, "files_store.txt");
+
+                try
+                {
+                    await GenerateFileListsAsync(projectPath, contentPath, filesCompressPath, filesStorePath, filter);
+
+                    bool hasCompressFiles = File.Exists(filesCompressPath) && new FileInfo(filesCompressPath).Length > 0;
+                    bool hasStoreFiles = File.Exists(filesStorePath) && new FileInfo(filesStorePath).Length > 0;
+
+                    if (!hasCompressFiles && !hasStoreFiles)
+                    {
+                        await ModernDialog.ShowErrorAsync("没有找到要压缩的文件", "错误");
+                        return false;
+                    }
+
+                    bool success = true;
+
+                    if (hasCompressFiles)
+                    {
+                        success = await CompressWithFileListAsync(projectPath, outputArchivePath, filesCompressPath, compressionLevel, solidCompress, filter, true);
+                    }
+
+                    if (success && hasStoreFiles)
+                    {
+                        success = await CompressWithFileListAsync(projectPath, outputArchivePath, filesStorePath, 0, false, false, false);
+                    }
+
+                    return success;
+                }
+                finally
+                {
+                    if (File.Exists(filesCompressPath)) File.Delete(filesCompressPath);
+                    if (File.Exists(filesStorePath)) File.Delete(filesStorePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                await ModernDialog.ShowErrorAsync($"智能压缩失败：{ex.Message}", "错误");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 使用PowerShell生成文件列表
+        /// </summary>
+        private static async Task GenerateFileListsAsync(string projectPath, string contentPath, string filesCompressPath, string filesStorePath, bool filter)
+        {
+            var psScript = new StringBuilder();
+            psScript.AppendLine("$ErrorActionPreference = 'Stop'");
+            psScript.AppendLine($"$projectPath = '{projectPath.Replace("'", "''")}'");
+            psScript.AppendLine($"$contentPath = '{contentPath.Replace("'", "''")}'");
+            psScript.AppendLine($"$filesCompressPath = '{filesCompressPath.Replace("'", "''")}'");
+            psScript.AppendLine($"$filesStorePath = '{filesStorePath.Replace("'", "''")}'");
+            psScript.AppendLine();
+            psScript.AppendLine("$compressFiles = @()");
+            psScript.AppendLine("$storeFiles = @()");
+            psScript.AppendLine();
+
+            if (filter)
+            {
+                psScript.AppendLine("# 收集Config目录文件");
+                psScript.AppendLine("$configPath = Join-Path $projectPath 'Config'");
+                psScript.AppendLine("if (Test-Path $configPath) {");
+                psScript.AppendLine("    $compressFiles += Get-ChildItem -Path $configPath -Recurse -File | ForEach-Object { $_.FullName.Substring($projectPath.Length + 1) }");
+                psScript.AppendLine("}");
+                psScript.AppendLine();
+
+                psScript.AppendLine("# 收集Source目录文件");
+                psScript.AppendLine("$sourcePath = Join-Path $projectPath 'Source'");
+                psScript.AppendLine("if (Test-Path $sourcePath) {");
+                psScript.AppendLine("    $compressFiles += Get-ChildItem -Path $sourcePath -Recurse -File | ForEach-Object { $_.FullName.Substring($projectPath.Length + 1) }");
+                psScript.AppendLine("}");
+                psScript.AppendLine();
+
+                psScript.AppendLine("# 收集Plugins目录文件（排除Intermediate和Binaries）");
+                psScript.AppendLine("$pluginsPath = Join-Path $projectPath 'Plugins'");
+                psScript.AppendLine("if (Test-Path $pluginsPath) {");
+                psScript.AppendLine("    $compressFiles += Get-ChildItem -Path $pluginsPath -Recurse -File | Where-Object { $_.FullName -notlike '*\\Intermediate\\*' -and $_.FullName -notlike '*\\Binaries\\*' } | ForEach-Object { $_.FullName.Substring($projectPath.Length + 1) }");
+                psScript.AppendLine("}");
+                psScript.AppendLine();
+            }
+
+            psScript.AppendLine("# 收集Content目录文件");
+            psScript.AppendLine("if (Test-Path $contentPath) {");
+            psScript.AppendLine("    $allContentFiles = Get-ChildItem -Path $contentPath -Recurse -File");
+            psScript.AppendLine("    $compressFiles += $allContentFiles | Where-Object { $_.FullName -notlike '*\\Textures\\*' } | ForEach-Object { $_.FullName.Substring($projectPath.Length + 1) }");
+            psScript.AppendLine("    $storeFiles += $allContentFiles | Where-Object { $_.FullName -like '*\\Textures\\*' } | ForEach-Object { $_.FullName.Substring($projectPath.Length + 1) }");
+            psScript.AppendLine("}");
+            psScript.AppendLine();
+
+            if (filter)
+            {
+                psScript.AppendLine("# 收集.uproject文件");
+                psScript.AppendLine("$uprojectFiles = Get-ChildItem -Path $projectPath -Filter '*.uproject' -File | ForEach-Object { $_.Name }");
+                psScript.AppendLine("$compressFiles += $uprojectFiles");
+                psScript.AppendLine();
+            }
+
+            psScript.AppendLine("# 输出文件列表");
+            psScript.AppendLine("$compressFiles | Set-Content -Path $filesCompressPath -Encoding UTF8");
+            psScript.AppendLine("$storeFiles | Set-Content -Path $filesStorePath -Encoding UTF8");
+
+            var processStartInfo = new ProcessStartInfo
+            {
+                FileName = "powershell.exe",
+                Arguments = $"-NoProfile -ExecutionPolicy Bypass -Command \"{psScript}\"",
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
+            };
+
+            using var process = new Process { StartInfo = processStartInfo };
+            process.Start();
+            await process.WaitForExitAsync();
+
+            if (process.ExitCode != 0)
+            {
+                string output = await process.StandardOutput.ReadToEndAsync();
+                string error = await process.StandardError.ReadToEndAsync();
+                throw new Exception($"生成文件列表失败: {error}\n输出: {output}");
+            }
+        }
+
+        /// <summary>
+        /// 使用文件列表进行压缩
+        /// </summary>
+        private static async Task<bool> CompressWithFileListAsync(string projectPath, string outputArchivePath, string fileListPath, int compressionLevel, bool solidCompress, bool filter, bool createNew)
+        {
+            var argumentsBuilder = new StringBuilder();
+
+            if (createNew)
+            {
+                argumentsBuilder.Append($"a -t7z -mx{compressionLevel} -y -bsp1 -bb0 -ms={(solidCompress ? "on" : "off")} ");
+            }
+            else
+            {
+                argumentsBuilder.Append($"a -t7z -mx{compressionLevel} -y -bsp1 -bb0 -ms=off ");
+            }
+
+            argumentsBuilder.Append($"\"{outputArchivePath}\" ");
+            argumentsBuilder.Append($"@\"{fileListPath}\"");
+
+            var processStartInfo = new ProcessStartInfo
+            {
+                FileName = SevenZipExePath,
+                Arguments = argumentsBuilder.ToString(),
+                WorkingDirectory = projectPath,
+                UseShellExecute = false,
+                CreateNoWindow = false,
+                RedirectStandardOutput = false,
+                RedirectStandardError = true
+            };
+
+            using var process = new Process { StartInfo = processStartInfo };
+            process.Start();
+            await process.WaitForExitAsync();
+
+            if (process.ExitCode != 0)
+            {
+                string errorMessage = process.ExitCode switch
+                {
+                    1 => "警告：一些文件可能没有被压缩或损坏",
+                    2 => "出现错误，请检查压缩文件是否被程序占用",
+                    7 => "命令行语法错误",
+                    8 => "内存不足",
+                    255 => "用户停止操作",
+                    _ => $"未知错误，退出代码: {process.ExitCode}"
+                };
+                await ModernDialog.ShowErrorAsync($"压缩失败：{errorMessage}", "错误");
+                return false;
+            }
+
+            return true;
         }
     }
 }

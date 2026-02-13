@@ -11,10 +11,9 @@
         <UseWPF>true</UseWPF>
         <Platforms>x64</Platforms>
         <NuGetAuditLevel>moderate</NuGetAuditLevel>
-        <ApplicationIcon>Icon\icon.ico</ApplicationIcon>
-        <SignAssembly>False</SignAssembly>
+        <ApplicationIcon>Icon\icon.ico</ApplicationIcon>       
         <Authors>C-Poplo</Authors>
-        <Version>0.5.1.2</Version>
+        <Version>0.5.2.0</Version>
         <Title>Unreal-GUI</Title>
         <AssemblyName>Unreal-GUI</AssemblyName>
         <DelaySign>True</DelaySign>

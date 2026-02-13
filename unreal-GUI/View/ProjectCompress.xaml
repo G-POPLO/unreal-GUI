@@ -89,28 +89,28 @@
                         </Grid>
                         <!-- 压缩选项 -->
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                            <ui:AppBarToggleButton Label="启用过滤器" IsChecked="{Binding Filter}" Margin="0,0,20,0" IsEnabled="True">
+                            <ui:AppBarToggleButton Label="启用过滤器" IsChecked="{Binding Filter}" Margin="0,0,20,0" IsEnabled="True" ToolTipService.ToolTip="仅对必要文件进行压缩，关闭则对项目全量压缩">
                                 <ui:AppBarToggleButton.Icon>
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xe71c;"/>
                                 </ui:AppBarToggleButton.Icon>
                             </ui:AppBarToggleButton>
-                            <ui:AppBarToggleButton Label="固实压缩" IsChecked="{Binding SolidCompress}" Margin="0,0,20,0" IsEnabled="{Binding IncrementalUpdate, Converter={StaticResource BoolToInverseBoolConverter}}">
+                            <ui:AppBarToggleButton Label="固实压缩" IsChecked="{Binding SolidCompress}" Margin="0,0,20,0" IsEnabled="{Binding IsSolidCompressEnabled}" ToolTipService.ToolTip="将所有文件视为一个数据流进行压缩，提高压缩率">
                                 <ui:AppBarToggleButton.Icon>
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8C9;"/>
                                 </ui:AppBarToggleButton.Icon>
                             </ui:AppBarToggleButton>
 
-                            <ui:AppBarToggleButton Label="增量更新" IsChecked="{Binding IncrementalUpdate}" Margin="0,0,20,0" IsEnabled="{Binding IsIncrementalUpdateEnabled}">
+                            <ui:AppBarToggleButton Label="增量更新" IsChecked="{Binding IncrementalUpdate}" Margin="0,0,20,0" IsEnabled="{Binding IsIncrementalUpdateEnabled}" ToolTipService.ToolTip="在现有压缩包基础上更新文件，需要-mx≤5且禁用固实压缩">
                                 <ui:AppBarToggleButton.Icon>
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE774;"/>
                                 </ui:AppBarToggleButton.Icon>
                             </ui:AppBarToggleButton>
 
-                            <!--<ui:AppBarToggleButton Label="允许增量更新删除文件" IsChecked="{Binding AllowDeleteFiles}" Margin="0,0,0,0" IsEnabled="{Binding IsAllowDeleteEnabled}">
+                            <ui:AppBarToggleButton Label="跳过贴图压缩" IsChecked="{Binding SkipTextureCompression}" Margin="0,0,0,0" IsEnabled="{Binding IsSkipTextureCompressionEnabled}" HorizontalAlignment="Right" ToolTipService.ToolTip="Textures文件夹使用存储模式，其他文件使用高压缩率">
                                 <ui:AppBarToggleButton.Icon>
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74D;"/>
                                 </ui:AppBarToggleButton.Icon>
-                            </ui:AppBarToggleButton>-->
+                            </ui:AppBarToggleButton>
                         </StackPanel>
                         <!-- 输入路径选择 -->
                         <StackPanel x:Name="_7zUpdate" Orientation="Vertical" Margin="0,0,0,5" Visibility="{Binding Is7zUpdateVisible}">

@@ -29,7 +29,8 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private bool _incrementalUpdate = false;
 
-
+        [ObservableProperty]
+        private bool _skipTextureCompression = false;
 
         [ObservableProperty]
         private bool _filter = true;
@@ -53,7 +54,13 @@ namespace unreal_GUI.ViewModel
         private System.Windows.Visibility _isProjectCardVisible = System.Windows.Visibility.Visible;
 
         // 增量更新是否可用（-mx <= 5时可用）
-        public bool IsIncrementalUpdateEnabled => CompressLevel <= 5;
+        public bool IsIncrementalUpdateEnabled => CompressLevel <= 5 && !SkipTextureCompression && !SolidCompress;
+
+        // 跳过贴图压缩是否可用（增量更新时禁用）
+        public bool IsSkipTextureCompressionEnabled => !IncrementalUpdate && !SolidCompress;
+
+        // 固实压缩是否可用（跳过贴图压缩时禁用）
+        public bool IsSolidCompressEnabled => !SkipTextureCompression;
 
 
         // 压缩级别变化时更新增量更新的可用性
@@ -83,14 +90,45 @@ namespace unreal_GUI.ViewModel
             // 更新按钮文本
             CompressButtonText = value ? "开始增量更新" : "开始压缩";
 
+            // 通知 IsSkipTextureCompressionEnabled 属性已变化
+            OnPropertyChanged(nameof(IsSkipTextureCompressionEnabled));
+
             // 如果启用增量更新，自动关闭固实压缩（过滤器保持用户选择）
             if (value)
             {
                 SolidCompress = false;
                 // 注意：不再自动关闭过滤器，让用户可以控制增量更新时是否使用过滤
             }
+        }
 
+        // 跳过贴图压缩变化时更新固实压缩和增量更新的可用性
+        partial void OnSkipTextureCompressionChanged(bool value)
+        {
+            // 通知 IsSolidCompressEnabled 和 IsIncrementalUpdateEnabled 属性已变化
+            OnPropertyChanged(nameof(IsSolidCompressEnabled));
+            OnPropertyChanged(nameof(IsIncrementalUpdateEnabled));
 
+            // 如果启用跳过贴图压缩，自动关闭固实压缩和增量更新
+            if (value)
+            {
+                SolidCompress = false;
+                IncrementalUpdate = false;
+            }
+        }
+
+        // 固实压缩变化时更新增量更新和跳过贴图压缩的可用性
+        partial void OnSolidCompressChanged(bool value)
+        {
+            // 通知 IsIncrementalUpdateEnabled 和 IsSkipTextureCompressionEnabled 属性已变化
+            OnPropertyChanged(nameof(IsIncrementalUpdateEnabled));
+            OnPropertyChanged(nameof(IsSkipTextureCompressionEnabled));
+
+            // 如果启用固实压缩，自动关闭增量更新和跳过贴图压缩
+            if (value)
+            {
+                IncrementalUpdate = false;
+                SkipTextureCompression = false;
+            }
         }
 
         [RelayCommand]
@@ -219,14 +257,29 @@ namespace unreal_GUI.ViewModel
                     // 构建完整的输出压缩文件路径
                     string outputArchivePath = Path.Combine(OutputPath, $"{projectName}.7z");
 
-                    // 调用压缩方法
-                    success = await CompressCore.CompressFilesAsync(
-                         projectDir,
-                         outputArchivePath,
-                         compressionLevel: CompressLevel,
-                         soildcompress: SolidCompress,
-                         filter: Filter
-                     );
+                    // 根据是否启用跳过贴图压缩选择压缩方法
+                    if (SkipTextureCompression)
+                    {
+                        // 智能压缩：Textures使用存储模式，其他文件使用高压缩率
+                        success = await CompressCore.SmartCompressAsync(
+                            projectDir,
+                            outputArchivePath,
+                            compressionLevel: CompressLevel,
+                            solidCompress: SolidCompress,
+                            filter: Filter
+                        );
+                    }
+                    else
+                    {
+                        // 普通压缩
+                        success = await CompressCore.CompressFilesAsync(
+                             projectDir,
+                             outputArchivePath,
+                             compressionLevel: CompressLevel,
+                             soildcompress: SolidCompress,
+                             filter: Filter
+                         );
+                    }
                 }
 
                 if (success)
