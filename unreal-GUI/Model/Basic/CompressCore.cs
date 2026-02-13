@@ -40,7 +40,7 @@ namespace unreal_GUI.Model.Basic
                     Arguments = arguments,
                     WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
                     UseShellExecute = false,
-                    CreateNoWindow = true,
+                    CreateNoWindow = false,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true
                 };

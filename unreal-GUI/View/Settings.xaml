@@ -236,13 +236,22 @@
 
                 </Border>
 
-                <Button Command="{Binding SaveSettingsCommand}" Margin="5,10,0,0" HorizontalAlignment="Left" 
-                     Style="{DynamicResource AccentButtonStyle}">
-                    <StackPanel Orientation="Horizontal">
-                        <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74E;" Margin="0,0,5,0"/>
-                        <TextBlock Text="保存设置"/>
-                    </StackPanel>
-                </Button>
+                <StackPanel Orientation="Horizontal" Margin="5,10,0,0">
+            
+                    <Button Command="{Binding SaveSettingsCommand}" HorizontalAlignment="Left" 
+                         Style="{DynamicResource AccentButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74E;" Margin="0,0,5,0"/>
+                            <TextBlock Text="保存设置"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding OpenConfigFolderCommand}" HorizontalAlignment="Left" Margin="10,0,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
+                            <TextBlock Text="打开配置文件夹"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
 
                 <TextBlock x:Name="Tips" Text="{Binding TipText}" TextWrapping="Wrap" 
                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}" 

@@ -3,6 +3,8 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -194,6 +196,43 @@ namespace unreal_GUI.ViewModel
 
             TipText = "设置已保存";
             return Task.CompletedTask;
+        }
+
+        [RelayCommand]
+        private void OpenConfigFolder()
+        {
+            try
+            {
+                var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
+                var configPath = config.FilePath;
+                
+                if (!string.IsNullOrEmpty(configPath) && File.Exists(configPath))
+                {
+                    var configDir = Path.GetDirectoryName(configPath);
+                    if (!string.IsNullOrEmpty(configDir))
+                    {
+                        var parentDir = Directory.GetParent(configDir);
+                        if (parentDir != null)
+                        {
+                            var companyDir = parentDir.Parent;
+                            if (companyDir != null && Directory.Exists(companyDir.FullName))
+                            {
+                                Process.Start(new ProcessStartInfo
+                                {
+                                    FileName = companyDir.FullName,
+                                    UseShellExecute = true
+                                });
+                                return;
+                            }
+                        }
+                    }
+                }
+                MessageBox.Show("未找到配置文件夹", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"打开配置文件夹失败：{ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void UpdateEnginePathsDisplay()
