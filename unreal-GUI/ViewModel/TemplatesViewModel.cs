@@ -800,7 +800,7 @@ namespace unreal_GUI.ViewModel
                 }
 
                 // 获取选中的类别
-                string category = SelectedCategory?.Key ?? "Games"; // 默认类别
+                string category = SelectedCategory?.Key; // 默认类别
 
                 // 写入TemplateDefs.ini的内容
                 string iniContent = $"[/Script/GameProjectGeneration.TemplateProjectDefs]\n\n" +
@@ -1131,7 +1131,7 @@ namespace unreal_GUI.ViewModel
                     {
                         var iconDestPath = Path.Combine(projectMediaDir, $"{TemplateName}.png");
                         File.Copy(savedScreenshotPath, iconDestPath, true);
-                        await ModernDialog.ShowInfoAsync($"已使用项目Saved目录中的AutoScreenshot.png作为默认图标", "信息");
+                        //await ModernDialog.ShowInfoAsync($"已使用项目Saved目录中的AutoScreenshot.png作为默认图标", "信息");
                     }
                 }
 

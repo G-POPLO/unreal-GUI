@@ -1,11 +1,32 @@
 @echo off
+chcp 65001 >nul
 setlocal enabledelayedexpansion
-:: ����download�ļ��е����ݵ���ǰĿ¼
-:: xcopy /y /i /e "%~dp0download\*" "%~dp0"
-:: ɾ��download�ļ���
+
+:: 等待Unreal-GUI.exe进程完全关闭
+echo 等待程序关闭...
+:waitloop
+tasklist /FI "IMAGENAME eq Unreal-GUI.exe" 2>NUL | find /I /N "Unreal-GUI.exe">NUL
+if "%ERRORLEVEL%"=="0" (
+    timeout /t 1 /nobreak >nul
+    goto waitloop
+)
+
+:: 创建排除文件列表（排除Update.bat自身，避免被覆盖）
+echo Update.bat > "%~dp0exclude.txt"
+
+:: 复制download文件夹的内容到当前目录（排除Update.bat）
+echo 正在复制更新文件...
+xcopy /y /i /e /EXCLUDE:"%~dp0exclude.txt" "%~dp0download\*" "%~dp0"
+
+:: 删除排除文件列表
+del "%~dp0exclude.txt"
+
+:: 删除download文件夹
+echo 清理临时文件...
 rmdir /s /q "%~dp0download"
-:: �ر��������е�Unreal-GUI.exe����
-for /f "tokens=2 delims=," %%a in ('tasklist ^| find /i "Unreal-GUI.exe"') do (taskkill /f /pid %%a)
-:: ������Ϻ�����Unreal-GUI.exe
-:: start "" "%~dp0Unreal-GUI.exe"
+
+:: 更新完成后启动Unreal-GUI.exe
+echo 启动程序...
+start "" "%~dp0Unreal-GUI.exe"
+
 endlocal

@@ -3,6 +3,8 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -60,6 +62,9 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private byte _aminateType;
 
+        [ObservableProperty]
+        private byte _browerType;
+
         public SettingsViewModel()
         {
             // 初始化设置
@@ -76,6 +81,7 @@ namespace unreal_GUI.ViewModel
             AdvancedMode = Properties.Settings.Default.AdvancedMode;
             BackdropType = Properties.Settings.Default.BackdropType;
             AminateType = Properties.Settings.Default.AminateType;
+            BrowerType = Properties.Settings.Default.BrowerType;
 
             if (File.Exists("settings.json"))
             {
@@ -83,7 +89,7 @@ namespace unreal_GUI.ViewModel
                 {
                     var json = File.ReadAllText("settings.json");
                     var settings = JsonSerializer.Deserialize<SettingsData>(json);
-                    EngineInfos = settings.Engines ?? [];
+                    EngineInfos = settings.Engines;
                     UpdateEnginePathsDisplay();
                 }
                 catch
@@ -157,14 +163,12 @@ namespace unreal_GUI.ViewModel
             Properties.Settings.Default.AdvancedMode = AdvancedMode;
             Properties.Settings.Default.BackdropType = BackdropType;
             Properties.Settings.Default.AminateType = AminateType;
+            Properties.Settings.Default.BrowerType = BrowerType;
 
             Properties.Settings.Default.Save();
 
-            if (Properties.Settings.Default.AutoStart)
-            {
-                // 设置开机自启
-                unreal_GUI.Model.Features.AutoStart.SetAutoStart(AutoStart);
-            }
+            // 设置或取消开机自启
+            unreal_GUI.Model.Features.AutoStart.SetAutoStart(AutoStart);
 
             // 保存JSON文件
             SettingsData settings = new()
@@ -194,6 +198,43 @@ namespace unreal_GUI.ViewModel
 
             TipText = "设置已保存";
             return Task.CompletedTask;
+        }
+
+        [RelayCommand]
+        private static void OpenConfigFolder()
+        {
+            try
+            {
+                var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
+                var configPath = config.FilePath;
+
+                if (!string.IsNullOrEmpty(configPath) && File.Exists(configPath))
+                {
+                    var configDir = Path.GetDirectoryName(configPath);
+                    if (!string.IsNullOrEmpty(configDir))
+                    {
+                        var parentDir = Directory.GetParent(configDir);
+                        if (parentDir != null)
+                        {
+                            var companyDir = parentDir.Parent;
+                            if (companyDir != null && Directory.Exists(companyDir.FullName))
+                            {
+                                Process.Start(new ProcessStartInfo
+                                {
+                                    FileName = companyDir.FullName,
+                                    UseShellExecute = true
+                                });
+                                return;
+                            }
+                        }
+                    }
+                }
+                MessageBox.Show("未找到配置文件夹", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"打开配置文件夹失败：{ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void UpdateEnginePathsDisplay()

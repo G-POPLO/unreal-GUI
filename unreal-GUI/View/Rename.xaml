@@ -8,7 +8,7 @@
              xmlns:viewmodel="clr-namespace:unreal_GUI.ViewModel"
              d:DataContext="{d:DesignInstance Type=viewmodel:RenameViewModel}"
              mc:Ignorable="d" 
-             d:DesignWidth="800">
+             >
 
     <Grid Margin="20">
         <ScrollViewer VerticalScrollBarVisibility="Auto">

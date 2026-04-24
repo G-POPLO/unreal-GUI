@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+// ReSharper disable All
 
 namespace unreal_GUI.Model.Features
 {
@@ -278,7 +279,7 @@ namespace unreal_GUI.Model.Features
         /// <summary>
         /// 检查是否存在同名内容包
         /// </summary>
-        private static async Task<bool> CheckSameNameContentPackAsync(string enginePath, string contentPackNameNoSpace)
+        private static Task<bool> CheckSameNameContentPackAsync(string enginePath, string contentPackNameNoSpace)
         {
             try
             {
@@ -291,7 +292,7 @@ namespace unreal_GUI.Model.Features
                 if (File.Exists(upackFilePath))
                 {
                     Debug.WriteLine($"错误：已存在同名内容包文件 {upackFilePath}");
-                    return true;
+                    return Task.FromResult(true);
                 }
 
                 // 检查样本文件夹是否存在
@@ -299,15 +300,15 @@ namespace unreal_GUI.Model.Features
                 if (Directory.Exists(samplesFolderPath))
                 {
                     Debug.WriteLine($"错误：已存在同名样本文件夹 {samplesFolderPath}");
-                    return true;
+                    return Task.FromResult(true);
                 }
 
-                return false;
+                return Task.FromResult(false);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"检查同名内容包失败：{ex.Message}");
-                return false;
+                return Task.FromResult(false);
             }
         }
 
@@ -643,7 +644,7 @@ namespace unreal_GUI.Model.Features
         /// <summary>
         /// 处理生成的内容包的安装
         /// </summary>
-        private async Task<bool> HandleCreatedContentPackPlacementAsync(string enginePath, string generatedUpackPath, string contentPackNameNoSpace)
+        private Task<bool> HandleCreatedContentPackPlacementAsync(string enginePath, string generatedUpackPath, string contentPackNameNoSpace)
         {
             try
             {
@@ -697,16 +698,16 @@ namespace unreal_GUI.Model.Features
                 if (installedFiles.Length == 0)
                 {
                     Debug.WriteLine("警告：没有文件被安装到引擎目录");
-                    return false;
+                    return Task.FromResult(false);
                 }
 
                 Debug.WriteLine($"成功安装内容包到引擎目录，共 {installedFiles.Length} 个文件");
-                return true;
+                return Task.FromResult(true);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"安装内容包失败：{ex.Message}");
-                return false;
+                return Task.FromResult(false);
             }
         }
     }

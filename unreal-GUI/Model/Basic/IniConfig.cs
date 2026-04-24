@@ -27,6 +27,7 @@ namespace unreal_GUI.Model.Basic
                 SharedConfig.SetSetting(IniFile.DefaultSectionName, "FabNotificationEnabled", Properties.Settings.Default.FabNotificationEnabled);
                 SharedConfig.SetSetting(IniFile.DefaultSectionName, "HeadlessEnabled", Properties.Settings.Default.HeadlessEnabled);
                 SharedConfig.SetSetting(IniFile.DefaultSectionName, "BrowerType", Properties.Settings.Default.BrowerType);
+                SharedConfig.SetSetting(IniFile.DefaultSectionName, "OpenEpic", Properties.Settings.Default.OpenEpic);
                 SharedConfig.SetSetting(IniFile.DefaultSectionName, "LimitedTime", Properties.Settings.Default.LimitedTime.ToString("yyyy-MM-dd HH:mm:ss"));
                 Save();
             }
@@ -40,6 +41,7 @@ namespace unreal_GUI.Model.Basic
             bool fabNotificationEnabled = SharedConfig.GetSetting(IniFile.DefaultSectionName, "FabNotificationEnabled", Properties.Settings.Default.FabNotificationEnabled);
             bool headlessEnabled = SharedConfig.GetSetting(IniFile.DefaultSectionName, "HeadlessEnabled", Properties.Settings.Default.HeadlessEnabled);
             byte browerType = (byte)SharedConfig.GetSetting(IniFile.DefaultSectionName, "BrowerType", Properties.Settings.Default.BrowerType);
+            bool openEpic = SharedConfig.GetSetting(IniFile.DefaultSectionName, "OpenEpic", Properties.Settings.Default.OpenEpic);
             //DateTime limitedTime = DateTime.TryParse(SharedConfig.GetSetting(IniFile.DefaultSectionName, "LimitedTime", string.Empty), out DateTime result) ? result : Properties.Settings.Default.LimitedTime;
 
             // 比较并更新不一致的值
@@ -54,6 +56,10 @@ namespace unreal_GUI.Model.Basic
             if (browerType != Properties.Settings.Default.BrowerType)
             {
                 SharedConfig.SetSetting(IniFile.DefaultSectionName, "BrowerType", Properties.Settings.Default.BrowerType);
+            }
+            if (openEpic != Properties.Settings.Default.OpenEpic)
+            {
+                SharedConfig.SetSetting(IniFile.DefaultSectionName, "OpenEpic", Properties.Settings.Default.OpenEpic);
             }
             //if (limitedTime != Properties.Settings.Default.LimitedTime)
             //{
