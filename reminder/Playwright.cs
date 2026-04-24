@@ -1,4 +1,4 @@
-﻿using Microsoft.Playwright;
+using Microsoft.Playwright;
 
 namespace reminder
 {
@@ -12,10 +12,13 @@ namespace reminder
         public static async Task<string> GetPageContentAsync(string url)
         {
             using var playwright = await Microsoft.Playwright.Playwright.CreateAsync();
+            IniConfig iniConfig = new();
+            byte browerType = (byte)iniConfig.ReadInt("BrowerType", 0);
+            string channel = browerType == 1 ? "chrome" : "msedge";
             await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
             {
                 Headless = true,
-                Channel = "msedge",
+                Channel = channel,
                 Args =
                 [
                     "--disable-blink-features=AutomationControlled",
@@ -68,10 +71,13 @@ namespace reminder
         public static async Task<string> GetH2ElementTextAsync(string url, params string[] classSelectors)
         {
             using var playwright = await Microsoft.Playwright.Playwright.CreateAsync();
+            IniConfig iniConfig = new();
+            byte browerType = (byte)iniConfig.ReadInt("BrowerType", 0);
+            string channel = browerType == 1 ? "chrome" : "msedge";
             await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
             {
                 Headless = false, // 默认使用无头模式
-                Channel = "msedge",
+                Channel = channel,
                 Args =
                 [
                     "--disable-blink-features=AutomationControlled",

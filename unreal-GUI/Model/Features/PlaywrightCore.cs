@@ -16,10 +16,12 @@ namespace unreal_GUI.Model.Features
         public static async Task<string> GetPageContentAsync(string url)
         {
             using var playwright = await Microsoft.Playwright.Playwright.CreateAsync();
+            byte browerType = Properties.Settings.Default.BrowerType;
+            string channel = browerType == 1 ? "chrome" : "msedge";
             await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
             {
                 Headless = true,
-                Channel = "msedge",
+                Channel = channel,
                 Args =
                 [
                     "--disable-blink-features=AutomationControlled",
@@ -72,10 +74,12 @@ namespace unreal_GUI.Model.Features
         public static async Task<string> GetH2ElementTextAsync(string url, params string[] classSelectors)
         {
             using var playwright = await Microsoft.Playwright.Playwright.CreateAsync();
+            byte browerType = Properties.Settings.Default.BrowerType;
+            string channel = browerType == 1 ? "chrome" : "msedge";
             await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
             {
                 Headless = Properties.Settings.Default.HeadlessEnabled, // 根据设置决定是否使用无头模式
-                Channel = "msedge",
+                Channel = channel,
                 Args =
                 [
                     "--disable-blink-features=AutomationControlled",

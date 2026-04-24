@@ -62,6 +62,9 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private byte _aminateType;
 
+        [ObservableProperty]
+        private byte _browerType;
+
         public SettingsViewModel()
         {
             // 初始化设置
@@ -78,6 +81,7 @@ namespace unreal_GUI.ViewModel
             AdvancedMode = Properties.Settings.Default.AdvancedMode;
             BackdropType = Properties.Settings.Default.BackdropType;
             AminateType = Properties.Settings.Default.AminateType;
+            BrowerType = Properties.Settings.Default.BrowerType;
 
             if (File.Exists("settings.json"))
             {
@@ -85,7 +89,7 @@ namespace unreal_GUI.ViewModel
                 {
                     var json = File.ReadAllText("settings.json");
                     var settings = JsonSerializer.Deserialize<SettingsData>(json);
-                    EngineInfos = settings.Engines ?? [];
+                    EngineInfos = settings.Engines;
                     UpdateEnginePathsDisplay();
                 }
                 catch
@@ -159,14 +163,12 @@ namespace unreal_GUI.ViewModel
             Properties.Settings.Default.AdvancedMode = AdvancedMode;
             Properties.Settings.Default.BackdropType = BackdropType;
             Properties.Settings.Default.AminateType = AminateType;
+            Properties.Settings.Default.BrowerType = BrowerType;
 
             Properties.Settings.Default.Save();
 
-            if (Properties.Settings.Default.AutoStart)
-            {
-                // 设置开机自启
-                unreal_GUI.Model.Features.AutoStart.SetAutoStart(AutoStart);
-            }
+            // 设置或取消开机自启
+            unreal_GUI.Model.Features.AutoStart.SetAutoStart(AutoStart);
 
             // 保存JSON文件
             SettingsData settings = new()
@@ -199,13 +201,13 @@ namespace unreal_GUI.ViewModel
         }
 
         [RelayCommand]
-        private void OpenConfigFolder()
+        private static void OpenConfigFolder()
         {
             try
             {
                 var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
                 var configPath = config.FilePath;
-                
+
                 if (!string.IsNullOrEmpty(configPath) && File.Exists(configPath))
                 {
                     var configDir = Path.GetDirectoryName(configPath);

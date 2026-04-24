@@ -77,7 +77,7 @@ namespace unreal_GUI.ViewModel
         }
 
         [RelayCommand(CanExecute = nameof(CanRename))]
-        private async Task Rename()
+        private Task Rename()
         {
             string projectPath = InputPath;
             string newName = OutputPath;
@@ -104,7 +104,7 @@ namespace unreal_GUI.ViewModel
                 {
                     Message = $"错误：找不到renom.exe工具文件";
 
-                    return;
+                    return Task.CompletedTask;
                 }
 
                 var processInfo = new ProcessStartInfo
@@ -267,6 +267,8 @@ namespace unreal_GUI.ViewModel
 
                 SoundFX.PlaySound(1);
             }
+
+            return Task.CompletedTask;
         }
 
         private bool CanRename()

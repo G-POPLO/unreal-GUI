@@ -25,7 +25,7 @@ namespace reminder
                 // 检查Fab限时免费资产
                 await CheckFabFreeAssets();
 
-                Console.WriteLine("程序执行完毕，按任意键退出...");
+
                 //Console.ReadKey();
 
                 Application.Exit();
@@ -71,7 +71,7 @@ namespace reminder
                     {
                         Console.WriteLine($"发现新的Fab免费资产，截止时间: {endDate.Value}");
                         Console.WriteLine("程序执行完毕，按任意键退出...");
-                        Console.ReadKey();
+                        //Console.ReadKey();
                     }
                     else
                     {

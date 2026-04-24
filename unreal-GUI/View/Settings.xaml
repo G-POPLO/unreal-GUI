@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:unreal_GUI"
              xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
              xmlns:ikw="http://schemas.inkore.net/lib/ui/wpf"
-             xmlns:viewmodel="clr-namespace:unreal_GUI.ViewModel" x:Class="unreal_GUI.Settings"  
+             xmlns:viewmodel="clr-namespace:unreal_GUI.ViewModel" 
+             x:Class="unreal_GUI.Settings"  
              mc:Ignorable="d" 
              >
     <UserControl.DataContext>
@@ -140,6 +141,19 @@
                             <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="使用Headless方式获取Fab信息（建议关闭，开启后可能会无法爬取）" 
                                        VerticalAlignment="Center" IsEnabled="{Binding FabNotification}"/>
                             <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding HeadlessEnabled}" IsEnabled="{Binding FabNotification}"/>
+                        </Grid>
+
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto" MinWidth="120"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="指定Playwright使用的浏览器" VerticalAlignment="Center" IsEnabled="{Binding FabNotification}"/>
+                            <ComboBox Grid.Column="1" VerticalAlignment="Stretch" Width="120" 
+                                      SelectedValue="{Binding BrowerType}" SelectedValuePath="Tag" IsEnabled="{Binding FabNotification}">
+                                <ComboBoxItem Content="Edge" Tag="0"/>
+                                <ComboBoxItem Content="Chrome" Tag="1"/>
+                            </ComboBox>
                         </Grid>
 
                         <!--<Grid Margin="0,0,0,15">

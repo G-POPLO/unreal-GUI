@@ -78,14 +78,15 @@
 
                         <!-- 压缩效果(-mx) -->
 
-                        <TextBlock Text="-mx值越高，压缩效果越好，但所需的压缩时间也会增长。增量更新要求-mx=&lt;5"  Margin="5"  Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                        <TextBlock Text="输入/输出产物为7z，-mx值越高，压缩效果越好，但所需的压缩时间也会增长。增量更新要求-mx=&lt;5，由于项目贴图难以压缩，故不推荐其设置过高"  Margin="5"  Foreground="{DynamicResource TextFillColorSecondaryBrush}" TextWrapping="Wrap"/>
                         <Grid Height="32" >
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="103*"/>
+                                <ColumnDefinition Width="15*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <Slider Minimum="0" Maximum="9" Value="{Binding CompressLevel}" Grid.Column="0"/>
-                            <TextBlock Text="{Binding CompressLevel, StringFormat=压缩效果(-mx): \{0\}}" Grid.Column="1" FontWeight="SemiBold" Margin="20,0,0,0"  VerticalAlignment="Center"  />
+                            <Slider Minimum="0" Maximum="9" Value="{Binding CompressLevel}" Grid.Column="0" Grid.ColumnSpan="2"/>
+                            <TextBlock Text="{Binding CompressLevel, StringFormat=压缩效果(-mx): \{0\}}" Grid.Column="2" FontWeight="SemiBold" Margin="20,0,0,0"  VerticalAlignment="Center"  />
                         </Grid>
                         <!-- 压缩选项 -->
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
@@ -132,7 +133,7 @@
 
                         </StackPanel>
 
-                          <!-- 输出路径选择 -->
+                        <!-- 输出路径选择 -->
                         <StackPanel x:Name="_7zOutput" Orientation="Vertical" Margin="0,0,0,5" Visibility="{Binding Is7zOutputVisible}">
                             <TextBlock Text="输出路径" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,5"/>
                             <Grid>
@@ -150,7 +151,7 @@
                                 </Button>
                             </Grid>
                         </StackPanel>
-                     
+
 
                         <!-- 压缩按钮 -->
                         <Button Command="{Binding CompressCommand}" Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left"  Margin="0,10,0,0">
