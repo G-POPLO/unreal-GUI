@@ -92,14 +92,14 @@
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
                             <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEC7A;" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="实验性选项" FontSize="18" FontWeight="SemiBold"/>
+                            <TextBlock Text="扩展功能" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
 
-                        <TextBlock Text="开启实验性选项后会启用一些尚未完成开发的实验性功能，这些功能可能会不适应未来版本" 
-                                   TextWrapping="Wrap" Margin="0,0,0,15"/>
+                        <!--<TextBlock Text="Fab资产爬取扩展选项" 
+                                   TextWrapping="Wrap" Margin="0,0,0,15"/>-->
                         <WrapPanel x:Name="beta_Panel"  Orientation="Horizontal">
                             <ui:AppBarSeparator />
-                            <ui:AppBarToggleButton x:Name="beta_Button0" Label="Fab免费资产领取通知" 
+                            <ui:AppBarToggleButton x:Name="beta_Button0" Label="Fab免费资产自动领取" 
           IsChecked="{Binding FabNotification}" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <ui:AppBarToggleButton.Icon>
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEC24;"/>
@@ -122,6 +122,18 @@
                                        VerticalAlignment="Center" IsEnabled="{Binding FabNotification}"/>
                             <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding AutoStart}" IsEnabled="{Binding FabNotification}"/>
                         </Grid>
+
+
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" 
+                                       VerticalAlignment="Center" IsEnabled="{Binding FabNotification}"><Run Language="zh-cn" Text="使用个人许可证（关闭使用专业许可证）"/></TextBlock>
+                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding AutoStart}" IsEnabled="{Binding FabNotification}"/>
+                        </Grid>
+
 
                         <Grid Margin="0,0,0,15">
                             <Grid.ColumnDefinitions>
@@ -263,6 +275,13 @@
                         <StackPanel Orientation="Horizontal">
                             <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
                             <TextBlock Text="打开配置文件夹"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Command="{Binding OpenConfigFolderCommand}" HorizontalAlignment="Left" Margin="10,0,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
+                            <TextBlock Text="查看登录凭证"/>
                         </StackPanel>
                     </Button>
                 </StackPanel>
