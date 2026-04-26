@@ -89,7 +89,7 @@ namespace unreal_GUI.ViewModel
 
         public static async Task CheckFabAsset()
         {
-            if (Properties.Settings.Default.FabNotificationEnabled)
+            if (Properties.Settings.Default.AutoClaimEnabled)
             {
                 // 只有当本机时间大于LimitedTime或LimitedTime为空时才调用
                 DateTime limitedTime = Properties.Settings.Default.LimitedTime;

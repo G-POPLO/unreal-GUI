@@ -61,13 +61,13 @@ namespace unreal_GUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool FabNotificationEnabled {
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AutoClaimEnabled {
             get {
-                return ((bool)(this["FabNotificationEnabled"]));
+                return ((bool)(this["AutoClaimEnabled"]));
             }
             set {
-                this["FabNotificationEnabled"] = value;
+                this["AutoClaimEnabled"] = value;
             }
         }
         

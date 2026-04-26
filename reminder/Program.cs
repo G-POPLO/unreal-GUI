@@ -28,7 +28,7 @@ namespace reminder
 
                 //Console.ReadKey();
 
-                Application.Exit();
+                //Application.Exit();
             };
 
             Application.Run(hiddenForm);
@@ -45,13 +45,9 @@ namespace reminder
 
                 // 读取配置确定是否启用Fab提醒功能
                 var configReader = new IniConfig();
-                bool fabReminderEnabled = configReader.ReadBool("FabNotificationEnabled", true);
+                bool fabReminderEnabled = configReader.ReadBool("AutoClaimEnabled", true);
 
-                if (!fabReminderEnabled)
-                {
-                    Console.WriteLine("Fab提醒功能已禁用，程序将退出");
-                    Environment.Exit(0);
-                }
+
 
                 // 读取LimitedTime配置
                 DateTime limitedTime = configReader.ReadDateTime("LimitedTime", new DateTime(1990, 1, 1));
@@ -70,8 +66,25 @@ namespace reminder
                     if (endDate.HasValue)
                     {
                         Console.WriteLine($"发现新的Fab免费资产，截止时间: {endDate.Value}");
+
+                        // 检查是否启用了自动领取功能
+                        bool autoClaimEnabled = configReader.ReadBool("AutoClaimEnabled", false);
+                        if (autoClaimEnabled)
+                        {
+                            Console.WriteLine("自动领取功能已启用，开始自动化领取...");
+                            bool claimResult = await FabReminder.AutoClaimFabAssetsAsync();
+                            if (claimResult)
+                            {
+                                Console.WriteLine("自动领取成功！");
+                            }
+                            else
+                            {
+                                Console.WriteLine("自动领取失败，请手动领取。");
+                            }
+                        }
+
                         Console.WriteLine("程序执行完毕，按任意键退出...");
-                        //Console.ReadKey();
+                        Console.ReadKey();
                     }
                     else
                     {

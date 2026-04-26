@@ -100,7 +100,7 @@
                         <WrapPanel x:Name="beta_Panel"  Orientation="Horizontal">
                             <ui:AppBarSeparator />
                             <ui:AppBarToggleButton x:Name="beta_Button0" Label="Fab免费资产自动领取" 
-          IsChecked="{Binding FabNotification}" HorizontalAlignment="Center" VerticalAlignment="Center">
+          IsChecked="{Binding AutoClaimEnabled}" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <ui:AppBarToggleButton.Icon>
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEC24;"/>
                                 </ui:AppBarToggleButton.Icon>
@@ -119,7 +119,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="开机启动Fab资产检查" 
-                                       VerticalAlignment="Center" IsEnabled="{Binding FabNotification}"/>
+                                       VerticalAlignment="Center" IsEnabled="{Binding AutoClaimEnabled}"/>
                             <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding AutoStart}" IsEnabled="{Binding FabNotification}"/>
                         </Grid>
 
@@ -130,8 +130,8 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" TextWrapping="Wrap" 
-                                       VerticalAlignment="Center" IsEnabled="{Binding FabNotification}"><Run Language="zh-cn" Text="使用个人许可证（关闭使用专业许可证）"/></TextBlock>
-                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding AutoStart}" IsEnabled="{Binding FabNotification}"/>
+                                       VerticalAlignment="Center" IsEnabled="{Binding AutoClaimEnabled}"><Run Language="zh-cn" Text="使用个人许可证（关闭使用专业许可证）"/></TextBlock>
+                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding HasUsingPro}" IsEnabled="{Binding AutoClaimEnabled}"/>
                         </Grid>
 
 
@@ -141,8 +141,8 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="使用EpicGames Launcher来打开Fab网站" 
-                                       VerticalAlignment="Center" IsEnabled="{Binding FabNotification}"/>
-                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding OpenEpic}" IsEnabled="{Binding FabNotification}"/>
+                                       VerticalAlignment="Center" IsEnabled="{Binding AutoClaimEnabled}"/>
+                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding OpenEpic}" IsEnabled="{Binding AutoClaimEnabled}"/>
                         </Grid>
 
                         <Grid Margin="0,0,0,15">
@@ -151,8 +151,8 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="使用Headless方式获取Fab信息（建议关闭，开启后可能会无法爬取）" 
-                                       VerticalAlignment="Center" IsEnabled="{Binding FabNotification}"/>
-                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding HeadlessEnabled}" IsEnabled="{Binding FabNotification}"/>
+                                       VerticalAlignment="Center" IsEnabled="{Binding AutoClaimEnabled}"/>
+                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding HeadlessEnabled}" IsEnabled="{Binding AutoClaimEnabled}"/>
                         </Grid>
 
                         <Grid Margin="0,0,0,15">
@@ -160,9 +160,9 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto" MinWidth="120"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="指定Playwright使用的浏览器" VerticalAlignment="Center" IsEnabled="{Binding FabNotification}"/>
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="指定Playwright使用的浏览器" VerticalAlignment="Center" IsEnabled="{Binding AutoClaimEnabled}"/>
                             <ComboBox Grid.Column="1" VerticalAlignment="Stretch" Width="120" 
-                                      SelectedValue="{Binding BrowerType}" SelectedValuePath="Tag" IsEnabled="{Binding FabNotification}">
+                                      SelectedValue="{Binding BrowerType}" SelectedValuePath="Tag" IsEnabled="{Binding AutoClaimEnabled}">
                                 <ComboBoxItem Content="Edge" Tag="0"/>
                                 <ComboBoxItem Content="Chrome" Tag="1"/>
                             </ComboBox>

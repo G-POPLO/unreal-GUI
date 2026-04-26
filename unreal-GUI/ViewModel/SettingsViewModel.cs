@@ -39,7 +39,7 @@ namespace unreal_GUI.ViewModel
 
 
         [ObservableProperty]
-        private bool _fabNotification;
+        private bool _autoClaimEnabled;
 
         [ObservableProperty]
         private DateTime _limitedTime;
@@ -65,13 +65,16 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         private byte _browerType;
 
+        [ObservableProperty]
+        private bool _hasUsingPro;
+
         public SettingsViewModel()
         {
             // 初始化设置
             AutoOpen = Properties.Settings.Default.AutoOpen;
             Gitcode = Properties.Settings.Default.Gitcode;
             AutoUpdate = Properties.Settings.Default.AutoUpdate;
-            FabNotification = Properties.Settings.Default.FabNotificationEnabled;
+            AutoClaimEnabled = Properties.Settings.Default.AutoClaimEnabled;
             // 从INI文件读取LimitedTime
             IniConfig iniConfig = new();
             LimitedTime = iniConfig.ReadDateTime("LimitedTime", Properties.Settings.Default.LimitedTime);
@@ -82,6 +85,7 @@ namespace unreal_GUI.ViewModel
             BackdropType = Properties.Settings.Default.BackdropType;
             AminateType = Properties.Settings.Default.AminateType;
             BrowerType = Properties.Settings.Default.BrowerType;
+            HasUsingPro = Properties.Settings.Default.HasUsingPro;
 
             if (File.Exists("settings.json"))
             {
@@ -155,7 +159,7 @@ namespace unreal_GUI.ViewModel
             Properties.Settings.Default.AutoOpen = AutoOpen;
             Properties.Settings.Default.Gitcode = Gitcode;
             Properties.Settings.Default.AutoUpdate = AutoUpdate;
-            Properties.Settings.Default.FabNotificationEnabled = FabNotification;
+            Properties.Settings.Default.AutoClaimEnabled = AutoClaimEnabled;
             Properties.Settings.Default.LimitedTime = LimitedTime;
             Properties.Settings.Default.AutoStart = AutoStart;
             Properties.Settings.Default.OpenEpic = OpenEpic;
@@ -164,6 +168,7 @@ namespace unreal_GUI.ViewModel
             Properties.Settings.Default.BackdropType = BackdropType;
             Properties.Settings.Default.AminateType = AminateType;
             Properties.Settings.Default.BrowerType = BrowerType;
+            Properties.Settings.Default.HasUsingPro = HasUsingPro;
 
             Properties.Settings.Default.Save();
 
