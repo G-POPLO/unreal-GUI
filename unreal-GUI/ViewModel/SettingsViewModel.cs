@@ -242,6 +242,34 @@ namespace unreal_GUI.ViewModel
             }
         }
 
+        [RelayCommand]
+        private static void OpenLoginDataFolder()
+        {
+            try
+            {
+                string loginDataDir = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "UnrealGUI", "FabBrowserData");
+
+                if (Directory.Exists(loginDataDir))
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = loginDataDir,
+                        UseShellExecute = true
+                    });
+                }
+                else
+                {
+                    MessageBox.Show("登录凭证文件夹尚未创建，请先运行 Fab 自动领取功能", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"打开登录凭证文件夹失败：{ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         private void UpdateEnginePathsDisplay()
         {
             EnginePathsDisplay = [.. EngineInfos.Select(p => $"{p.Path} ({p.Version})")];

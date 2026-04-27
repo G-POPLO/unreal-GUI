@@ -282,15 +282,21 @@ namespace reminder
         {
             try
             {
-                // 使用 Playwright 原生方法检查页面上是否存在"添加到购物车"按钮
-                var cards = await page.QuerySelectorAllAsync(".oeSuy4_9.vL3jJySf");
-                if (cards.Count == 0)
+                // 使用 Playwright 原生方法检查页面上是否存在用户头像
+                // 如果存在 img.fabkit-Avatar-image，则表示已登录
+                var avatarImage = await page.QuerySelectorAsync("img.fabkit-Avatar-image");
+                bool isLoggedIn = avatarImage != null;
+
+                if (isLoggedIn)
                 {
-                    return false;
+                    Console.WriteLine("  [登录检查] 检测到用户头像，已登录");
+                }
+                else
+                {
+                    Console.WriteLine("  [登录检查] 未检测到用户头像，未登录");
                 }
 
-                var addButton = await cards[0].QuerySelectorAsync(".fabkit-Button-root.fabkit-Button--icon.fabkit-Button--rounded.fabkit-Button--sm.fabkit-Button--blurry");
-                return addButton != null;
+                return isLoggedIn;
             }
             catch (Exception ex)
             {
@@ -316,11 +322,21 @@ namespace reminder
                 await Task.Delay(checkIntervalMs);
                 elapsedMs += checkIntervalMs;
 
-                bool isLoggedIn = await CheckIsLoggedInAsync(page);
-                if (isLoggedIn)
+                try
                 {
-                    Console.WriteLine("检测到登录状态，继续执行...");
-                    return;
+                    bool isLoggedIn = await CheckIsLoggedInAsync(page);
+                    if (isLoggedIn)
+                    {
+                        Console.WriteLine("检测到登录状态，继续执行...");
+                        return;
+                    }
+                }
+                catch (PlaywrightException ex) when (ex.Message.Contains("Execution context was destroyed"))
+                {
+                    // 页面正在导航（登录跳转中），等待一下再检查
+                    Console.WriteLine("检测到页面导航，等待页面加载完成...");
+                    await Task.Delay(3000);
+                    continue;
                 }
 
                 // 每30秒提示一次
@@ -432,6 +448,76 @@ namespace reminder
             catch (Exception ex)
             {
                 Console.WriteLine($"选择许可证时出错: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// 测试访问 Cloudflare Turnstile 页面
+        /// </summary>
+        public static async Task TestCloudflareTurnstileAsync()
+        {
+            using var playwright = await Microsoft.Playwright.Playwright.CreateAsync();
+            IniConfig iniConfig = new();
+            byte browerType = (byte)iniConfig.ReadInt("BrowerType", 0);
+            string channel = browerType == 1 ? "chrome" : "msedge";
+
+            await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+            {
+                Headless = false,
+                Channel = channel,
+                Args =
+                [
+                    "--disable-blink-features=AutomationControlled",
+                    "--start-maximized"
+                ]
+            });
+
+            var context = await browser.NewContextAsync(new BrowserNewContextOptions
+            {
+                UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0",
+            });
+
+            var page = await context.NewPageAsync();
+
+            try
+            {
+                Console.WriteLine("[测试] 正在访问 Cloudflare Turnstile 测试页面...");
+                await page.GotoAsync("https://2captcha.com/demo/cloudflare-turnstile", new PageGotoOptions
+                {
+                    WaitUntil = WaitUntilState.DOMContentLoaded,
+                });
+                Console.WriteLine("[测试] 页面已加载 (DOMContentLoaded)");
+
+                // 等待页面稳定
+                await Task.Delay(3000);
+                Console.WriteLine("[测试] 等待3秒让页面稳定");
+
+                // 点击文本为 "Cloudflare Turnstile" 的按钮
+                Console.WriteLine("[测试] 正在查找并点击文本为 'Cloudflare Turnstile' 的按钮...");
+                // 使用更精确的选择器：form 区域内的 Cloudflare Turnstile 链接
+                var locator = page.Locator("form").GetByRole(AriaRole.Link, new() { Name = "Cloudflare Turnstile" });
+                try
+                {
+                    await locator.WaitForAsync(new LocatorWaitForOptions { Timeout = 10000 });
+                    await locator.ClickAsync();
+                    Console.WriteLine("[测试] 已点击 'Cloudflare Turnstile' 按钮");
+                }
+                catch (TimeoutException)
+                {
+                    Console.WriteLine("[测试] 未找到文本为 'Cloudflare Turnstile' 的按钮");
+                }
+
+                Console.WriteLine("[测试] 等待观察...");
+                Console.WriteLine("[测试] 按任意键关闭浏览器...");
+                Console.ReadKey();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[测试] 发生错误: {ex.Message}");
+            }
+            finally
+            {
+                await page.CloseAsync();
             }
         }
 

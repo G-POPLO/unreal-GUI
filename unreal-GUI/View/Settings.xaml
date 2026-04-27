@@ -278,7 +278,7 @@
                         </StackPanel>
                     </Button>
 
-                    <Button Command="{Binding OpenConfigFolderCommand}" HorizontalAlignment="Left" Margin="10,0,0,0">
+                    <Button Command="{Binding OpenLoginDataFolderCommand}" HorizontalAlignment="Left" Margin="10,0,0,0">
                         <StackPanel Orientation="Horizontal">
                             <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
                             <TextBlock Text="查看登录凭证"/>

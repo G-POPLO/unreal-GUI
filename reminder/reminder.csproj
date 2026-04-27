@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
-    <!--<PublishAot>true</PublishAot>-->
+   
     <RollForward>LatestMajor</RollForward>
     <InvariantGlobalization>true</InvariantGlobalization>
       <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
@@ -23,10 +23,7 @@
     <Optimize>True</Optimize>
     <DebugType>none</DebugType>
      
-      <!--Playwright不支持AOT，以下选项已被禁用-->
-      <!--<PublishTrimmed>True</PublishTrimmed>-->
-    <!--<PublishReadyToRun>True</PublishReadyToRun>-->
-    <!--<PublishReadyToRunComposite>true</PublishReadyToRunComposite>-->
+     
   </PropertyGroup>
     <!--要求不生成.deps.json文件-->
     <PropertyGroup>
