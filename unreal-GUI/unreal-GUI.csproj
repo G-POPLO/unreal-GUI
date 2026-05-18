@@ -47,9 +47,9 @@
         </None>-->
 
         <!-- Batch file -->
-        <None Include="Update.bat">
+        <!--<None Include="Update.bat">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
+        </None>-->
 
         <!-- Sound files (with subfolder support) -->
         <None Include="$(ProjectDir)Sound\**\*">

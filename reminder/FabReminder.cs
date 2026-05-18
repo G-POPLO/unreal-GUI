@@ -13,7 +13,7 @@ namespace reminder
                 // 使用Playwright直接查找具有指定class的h2元素
                 // fabkit-Typography-root fabkit-Typography--align-start fabkit-Typography--intent-primary fabkit-Heading--xl ArhVH7Um
                 string dateString = await Playwright.GetH2ElementTextAsync(
-                    "https://www.fab.com/limited-time-free",
+                    "https://www.fab.com/limited-time-free?lang=en",
                     "fabkit-Typography-root",
                     "fabkit-Typography--align-start",
                     "fabkit-Typography--intent-primary",
@@ -64,8 +64,6 @@ namespace reminder
                         var configWriter = new IniConfig();
                         configWriter.WriteDateTime("LimitedTime", chinaTime);
 
-                        // 发送通知
-                        SendFabNotification(chinaTime);
                         return chinaTime;
                     }
                 }

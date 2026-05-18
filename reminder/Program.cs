@@ -20,9 +20,9 @@ namespace reminder
                 WindowState = FormWindowState.Minimized,
                 ShowInTaskbar = false
             };
-            hiddenForm.Load += (sender, e) =>
+            hiddenForm.Load += async (sender, e) =>
             {
-                CheckFabFreeAssets();
+                await CheckFabFreeAssets();
                 Application.Exit();
             };
 
@@ -32,7 +32,7 @@ namespace reminder
         /// <summary>
         /// 检查Fab限时免费资产
         /// </summary>
-        static void CheckFabFreeAssets()
+        static async Task CheckFabFreeAssets()
         {
             try
             {
@@ -58,6 +58,16 @@ namespace reminder
                 
                 Console.WriteLine($"上次记录的截止时间 {limitedTime} 已过期，发送提醒通知");
                 FabReminder.SendFabNotification(limitedTime);
+                Console.WriteLine("正在打开浏览器获取最新截止时间...");
+                var newLimitedTime = await FabReminder.GetLimitedTimeFreeEndDate();
+                if (newLimitedTime.HasValue)
+                {
+                    Console.WriteLine($"获取到最新截止时间: {newLimitedTime.Value}");
+                }
+                else
+                {
+                    Console.WriteLine("获取最新截止时间失败");
+                }
                 Console.WriteLine("程序执行完毕...");
                 Environment.Exit(0);
             }
