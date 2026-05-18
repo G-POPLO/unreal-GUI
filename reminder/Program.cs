@@ -52,15 +52,12 @@ namespace reminder
 
                 if (system_time <= limitedTime)
                 {
-                    Console.WriteLine($"Fab免费资产仍在有效期内，截止时间: {limitedTime}，发送提醒通知");
-                    FabReminder.SendFabNotification(limitedTime);
-                }
-                else
-                {
-                    Console.WriteLine($"上次记录的截止时间 {limitedTime} 已过期，发送提醒通知");
-                    FabReminder.SendFabNotification(limitedTime);
+                    Console.WriteLine($"Fab免费资产仍在有效期内，程序退出");
+                    Environment.Exit(0);
                 }
                 
+                Console.WriteLine($"上次记录的截止时间 {limitedTime} 已过期，发送提醒通知");
+                FabReminder.SendFabNotification(limitedTime);
                 Console.WriteLine("程序执行完毕...");
                 Environment.Exit(0);
             }
