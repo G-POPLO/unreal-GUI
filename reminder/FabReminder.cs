@@ -111,7 +111,7 @@ namespace reminder
         /// <summary>
         /// 发送Windows通知
         /// </summary>
-        private static void SendFabNotification(DateTime limitedTime)
+        public static void SendFabNotification(DateTime limitedTime)
         {
             // 读取配置确定是否使用Epic启动器
             var configReader = new reminder.IniConfig();
