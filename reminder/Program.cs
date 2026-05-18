@@ -43,7 +43,6 @@ namespace reminder
             {
                 Console.WriteLine("正在检查Fab限时免费资产...");
 
-                // 读取配置确定是否启用Fab提醒功能
                 var configReader = new IniConfig();
                 bool fabReminderEnabled = configReader.ReadBool("FabNotificationEnabled", true);
 
@@ -53,14 +52,13 @@ namespace reminder
                     Environment.Exit(0);
                 }
 
-                // 读取LimitedTime配置
                 DateTime limitedTime = configReader.ReadDateTime("LimitedTime", new DateTime(1990, 1, 1));
                 DateTime system_time = DateTime.Now;
 
-                // 只有当本机时间大于LimitedTime时才运行检查
                 if (system_time <= limitedTime)
                 {
-                    Console.WriteLine($"本机时间 {system_time} 未大于截至时间 {limitedTime}，程序将退出");
+                    Console.WriteLine($"本机时间 {system_time} 未大于截至时间 {limitedTime}，发送提醒通知");
+                    FabReminder.SendFabNotification(limitedTime);
                     Environment.Exit(0);
                 }
                 else
@@ -71,7 +69,6 @@ namespace reminder
                     {
                         Console.WriteLine($"发现新的Fab免费资产，截止时间: {endDate.Value}");
                         Console.WriteLine("程序执行完毕，按任意键退出...");
-                        //Console.ReadKey();
                     }
                     else
                     {
