@@ -20,14 +20,9 @@ namespace reminder
                 WindowState = FormWindowState.Minimized,
                 ShowInTaskbar = false
             };
-            hiddenForm.Load += async (sender, e) =>
+            hiddenForm.Load += (sender, e) =>
             {
-                // 检查Fab限时免费资产
-                await CheckFabFreeAssets();
-
-
-                //Console.ReadKey();
-
+                CheckFabFreeAssets();
                 Application.Exit();
             };
 
@@ -37,7 +32,7 @@ namespace reminder
         /// <summary>
         /// 检查Fab限时免费资产
         /// </summary>
-        static async Task CheckFabFreeAssets()
+        static void CheckFabFreeAssets()
         {
             try
             {
@@ -57,24 +52,17 @@ namespace reminder
 
                 if (system_time <= limitedTime)
                 {
-                    Console.WriteLine($"本机时间 {system_time} 未大于截至时间 {limitedTime}，发送提醒通知");
+                    Console.WriteLine($"Fab免费资产仍在有效期内，截止时间: {limitedTime}，发送提醒通知");
                     FabReminder.SendFabNotification(limitedTime);
-                    Environment.Exit(0);
                 }
                 else
                 {
-                    DateTime? endDate = await FabReminder.GetLimitedTimeFreeEndDate();
-
-                    if (endDate.HasValue)
-                    {
-                        Console.WriteLine($"发现新的Fab免费资产，截止时间: {endDate.Value}");
-                        Console.WriteLine("程序执行完毕，按任意键退出...");
-                    }
-                    else
-                    {
-                        Console.WriteLine("未找到Fab免费资产信息或获取失败");
-                    }
+                    Console.WriteLine($"上次记录的截止时间 {limitedTime} 已过期，发送提醒通知");
+                    FabReminder.SendFabNotification(limitedTime);
                 }
+                
+                Console.WriteLine("程序执行完毕...");
+                Environment.Exit(0);
             }
             catch (Exception ex)
             {
