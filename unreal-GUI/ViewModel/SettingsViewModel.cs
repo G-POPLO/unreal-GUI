@@ -19,51 +19,49 @@ namespace unreal_GUI.ViewModel
     public partial class SettingsViewModel : ObservableObject
     {
         [ObservableProperty]
-        private List<EngineInfo> _engineInfos = [];
+        public partial List<EngineInfo> EngineInfos { get; set; } = [];
 
         [ObservableProperty]
-        private List<string> _enginePathsDisplay = [];
+        public partial List<string> EnginePathsDisplay { get; set; } = [];
 
         [ObservableProperty]
-        private string _tipText = "";
+        public partial string TipText { get; set; } = "";
 
         [ObservableProperty]
-        private bool _autoOpen;
+        public partial bool AutoOpen { get; set; }
 
         [ObservableProperty]
-        private bool _gitcode;
-
-
-        [ObservableProperty]
-        private bool _autoUpdate;
-
+        public partial bool Gitcode { get; set; }
 
         [ObservableProperty]
-        private bool _fabNotification;
+        public partial bool AutoUpdate { get; set; }
 
         [ObservableProperty]
-        private DateTime _limitedTime;
+        public partial bool FabNotification { get; set; }
 
         [ObservableProperty]
-        private bool _autoStart;
+        public partial DateTime LimitedTime { get; set; }
 
         [ObservableProperty]
-        private bool _openEpic;
+        public partial bool AutoStart { get; set; }
 
         [ObservableProperty]
-        private bool _headlessEnabled;
+        public partial bool OpenEpic { get; set; }
 
         [ObservableProperty]
-        private bool _advancedMode;
+        public partial bool HeadlessEnabled { get; set; }
 
         [ObservableProperty]
-        private byte _backdropType;
+        public partial bool AdvancedMode { get; set; }
 
         [ObservableProperty]
-        private byte _aminateType;
+        public partial byte BackdropType { get; set; }
 
         [ObservableProperty]
-        private byte _browerType;
+        public partial byte AminateType { get; set; }
+
+        [ObservableProperty]
+        public partial byte BrowerType { get; set; }
 
         public SettingsViewModel()
         {

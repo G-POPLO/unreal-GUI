@@ -14,32 +14,31 @@ namespace unreal_GUI.ViewModel
     public partial class ClearViewModel : ObservableObject
     {
         [ObservableProperty]
-        private List<EngineInfo> _engineList = [];
+        public partial List<EngineInfo> EngineList { get; set; } = [];
 
         [ObservableProperty]
-        private string _inputPath = "";
+        public partial string InputPath { get; set; } = "";
 
         [ObservableProperty]
-        private string _tipClearCache = "";
+        public partial string TipClearCache { get; set; } = "";
 
         [ObservableProperty]
-        private string _tipClearLog = "";
+        public partial string TipClearLog { get; set; } = "";
 
         [ObservableProperty]
-        private string _tipZen = "";
+        public partial string TipZen { get; set; } = "";
 
         [ObservableProperty]
-        private bool _isCleanButtonEnabled = false;
+        public partial bool IsCleanButtonEnabled { get; set; }
 
         [ObservableProperty]
-        private bool _isSaveChecked = false;
+        public partial bool IsSaveChecked { get; set; }
 
         [ObservableProperty]
-        private bool _isDerivedDataCacheChecked = false;
-
+        public partial bool IsDerivedDataCacheChecked { get; set; }
 
         [ObservableProperty]
-        private EngineInfo _selectedEngine;
+        public partial EngineInfo SelectedEngine { get; set; } = null!;
 
         public ClearViewModel()
         {

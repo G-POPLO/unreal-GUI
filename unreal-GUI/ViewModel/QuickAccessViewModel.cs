@@ -14,10 +14,10 @@ namespace unreal_GUI.ViewModel
     public partial class QuickAccessViewModel : ObservableObject
     {
         [ObservableProperty]
-        private ObservableCollection<object> engines = [];
+        public partial ObservableCollection<object> Engines { get; set; } = [];
 
         [ObservableProperty]
-        private ObservableCollection<object> customButtons = [];
+        public partial ObservableCollection<object> CustomButtons { get; set; } = [];
 
         public QuickAccessViewModel()
         {

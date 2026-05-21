@@ -19,16 +19,16 @@ namespace unreal_GUI.ViewModel
         private string pluginName;
 
         [ObservableProperty]
-        private EngineInfo selectedEngine;
+        public partial EngineInfo SelectedEngine { get; set; } = null!;
 
         [ObservableProperty]
-        private string inputPath;
+        public partial string InputPath { get; set; } = string.Empty;
 
         [ObservableProperty]
-        private string outputPath;
+        public partial string OutputPath { get; set; } = string.Empty;
 
         [ObservableProperty]
-        private string tipsText;
+        public partial string TipsText { get; set; } = string.Empty;
 
         public CompileViewModel()
         {

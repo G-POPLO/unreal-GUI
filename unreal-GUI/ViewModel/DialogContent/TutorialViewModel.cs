@@ -6,10 +6,10 @@ namespace unreal_GUI.ViewModel
     public partial class TutorialViewModel : ObservableObject
     {
         [ObservableProperty]
-        private BitmapImage? tutorialImage;
+        public partial BitmapImage? TutorialImage { get; set; }
 
         [ObservableProperty]
-        private string markdownText = string.Empty;
+        public partial string MarkdownText { get; set; } = string.Empty;
 
         public TutorialViewModel()
         {

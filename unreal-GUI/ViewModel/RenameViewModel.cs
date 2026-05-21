@@ -13,31 +13,31 @@ namespace unreal_GUI.ViewModel
     public partial class RenameViewModel : ObservableObject
     {
         [ObservableProperty]
-        private string _inputPath;
+        public partial string InputPath { get; set; } = string.Empty;
 
         [ObservableProperty]
-        private string _outputPath;
+        public partial string OutputPath { get; set; } = string.Empty;
 
         [ObservableProperty]
-        private bool _isProjectSelected = true;
+        public partial bool IsProjectSelected { get; set; } = true;
 
         [ObservableProperty]
-        private bool _isBPSelected = true;
+        public partial bool IsBPSelected { get; set; } = true;
 
         [ObservableProperty]
-        private string _message;
+        public partial string Message { get; set; } = string.Empty;
 
         [ObservableProperty]
-        private Visibility _messageVisibility = Visibility.Hidden;
+        public partial Visibility MessageVisibility { get; set; } = Visibility.Hidden;
 
         [ObservableProperty]
-        private Visibility _projectTypePanelVisibility = Visibility.Visible;
+        public partial Visibility ProjectTypePanelVisibility { get; set; } = Visibility.Visible;
 
         [ObservableProperty]
-        private Visibility _infoBarVisibility = Visibility.Collapsed;
+        public partial Visibility InfoBarVisibility { get; set; } = Visibility.Collapsed;
 
         [ObservableProperty]
-        private bool _isRenameButtonEnabled = true;
+        public partial bool IsRenameButtonEnabled { get; set; } = true;
 
         partial void OnIsProjectSelectedChanged(bool value)
         {

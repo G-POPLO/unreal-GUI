@@ -10,11 +10,11 @@ namespace unreal_GUI.ViewModel
     public partial class AboutViewModel : ObservableObject
     {
         [ObservableProperty]
-        private string _versionText;
+        public partial string VersionText { get; set; } = string.Empty;
 
         public AboutViewModel()
         {
-            _versionText = "当前版本：" + Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            VersionText = "当前版本：" + Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
         [RelayCommand]
