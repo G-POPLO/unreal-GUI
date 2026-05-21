@@ -1,9 +1,7 @@
-﻿using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Png;
-using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
-using System;
+﻿using System;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Media.Imaging;
 
@@ -59,11 +57,11 @@ namespace unreal_GUI.Model.Features
                     Directory.CreateDirectory(outputDirectory);
                 }
 
-                // 使用ImageSharp加载图片
-                using var image = Image.Load<Rgba32>(inputPath);
+                // 使用System.Drawing加载图片
+                using var originalImage = Image.FromFile(inputPath);
 
-                int originalWidth = image.Width;
-                int originalHeight = image.Height;
+                int originalWidth = originalImage.Width;
+                int originalHeight = originalImage.Height;
                 double originalRatio = (double)originalWidth / originalHeight;
                 double targetRatio = 3.0;
 
@@ -92,18 +90,20 @@ namespace unreal_GUI.Model.Features
                 if (cropX + cropWidth > originalWidth) cropWidth = originalWidth - cropX;
                 if (cropY + cropHeight > originalHeight) cropHeight = originalHeight - cropY;
 
-                // 从中心裁剪图片
-                var croppedImage = image.Clone(ctx => ctx.Crop(new Rectangle(cropX, cropY, cropWidth, cropHeight)));
-
-                // 配置PNG编码器
-                var pngEncoder = new PngEncoder
+                // 创建裁剪后的图片
+                using var croppedBitmap = new Bitmap(cropWidth, cropHeight);
+                using (var graphics = Graphics.FromImage(croppedBitmap))
                 {
-                    CompressionLevel = PngCompressionLevel.BestCompression,
-                    ColorType = PngColorType.RgbWithAlpha
-                };
+                    graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                    graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+                    graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
 
-                // 保存裁剪后的图片
-                croppedImage.Save(outputPath, pngEncoder);
+                    // 从原图裁剪指定区域
+                    graphics.DrawImage(originalImage, new Rectangle(0, 0, cropWidth, cropHeight), cropX, cropY, cropWidth, cropHeight, GraphicsUnit.Pixel);
+                }
+
+                // 保存为PNG
+                croppedBitmap.Save(outputPath, ImageFormat.Png);
 
                 return true;
             }
@@ -116,7 +116,7 @@ namespace unreal_GUI.Model.Features
         }
 
         /// <summary>
-        /// 使用ImageSharp压缩PNG图片
+        /// 使用System.Drawing压缩PNG图片
         /// </summary>
         /// <param name="inputPath">输入图片路径</param>
         /// <param name="outputPath">输出图片路径</param>
@@ -139,18 +139,11 @@ namespace unreal_GUI.Model.Features
                     Directory.CreateDirectory(outputDirectory);
                 }
 
-                // 使用ImageSharp加载、处理并保存图片
-                using var image = Image.Load(inputPath);
+                // 使用System.Drawing加载图片
+                using var image = Image.FromFile(inputPath);
 
-                // 配置PNG编码器
-                var pngEncoder = new PngEncoder
-                {
-                    CompressionLevel = PngCompressionLevel.BestCompression,
-                    ColorType = PngColorType.RgbWithAlpha
-                };
-
-                // 保存压缩后的图片
-                image.Save(outputPath, pngEncoder);
+                // 保存为PNG（System.Drawing的PNG压缩是自动的，不支持自定义压缩级别）
+                image.Save(outputPath, ImageFormat.Png);
 
                 return true;
             }
@@ -163,7 +156,7 @@ namespace unreal_GUI.Model.Features
         }
 
         /// <summary>
-        /// 使用ImageSharp压缩PNG图片并调整尺寸
+        /// 使用System.Drawing压缩PNG图片并调整尺寸
         /// </summary>
         /// <param name="inputPath">输入图片路径</param>
         /// <param name="outputPath">输出图片路径</param>
@@ -188,41 +181,45 @@ namespace unreal_GUI.Model.Features
                     Directory.CreateDirectory(outputDirectory);
                 }
 
-                // 使用ImageSharp加载图片
-                using var image = Image.Load(inputPath);
+                // 使用System.Drawing加载图片
+                using var originalImage = Image.FromFile(inputPath);
+                int newWidth = originalImage.Width;
+                int newHeight = originalImage.Height;
 
                 // 如果需要调整尺寸
                 if (maxWidth > 0 || maxHeight > 0)
                 {
-                    int newWidth = image.Width;
-                    int newHeight = image.Height;
-
                     // 计算新尺寸，保持宽高比
-                    if (maxWidth > 0 && image.Width > maxWidth)
+                    if (maxWidth > 0 && originalImage.Width > maxWidth)
                     {
                         newWidth = maxWidth;
-                        newHeight = (int)Math.Round((double)image.Height * newWidth / image.Width);
+                        newHeight = (int)Math.Round((double)originalImage.Height * newWidth / originalImage.Width);
                     }
 
                     if (maxHeight > 0 && newHeight > maxHeight)
                     {
                         newHeight = maxHeight;
-                        newWidth = (int)Math.Round((double)image.Width * newHeight / image.Height);
+                        newWidth = (int)Math.Round((double)originalImage.Width * newHeight / originalImage.Height);
                     }
 
-                    // 调整图片尺寸
-                    image.Mutate(x => x.Resize(newWidth, newHeight));
+                    // 创建调整尺寸后的图片
+                    using var resizedBitmap = new Bitmap(newWidth, newHeight);
+                    using (var graphics = Graphics.FromImage(resizedBitmap))
+                    {
+                        graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                        graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+                        graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                        graphics.DrawImage(originalImage, 0, 0, newWidth, newHeight);
+                    }
+
+                    // 保存为PNG
+                    resizedBitmap.Save(outputPath, ImageFormat.Png);
                 }
-
-                // 配置PNG编码器
-                var pngEncoder = new PngEncoder
+                else
                 {
-                    CompressionLevel = PngCompressionLevel.BestCompression,
-                    ColorType = PngColorType.RgbWithAlpha
-                };
-
-                // 保存压缩后的图片
-                image.Save(outputPath, pngEncoder);
+                    // 不需要调整尺寸，直接保存
+                    originalImage.Save(outputPath, ImageFormat.Png);
+                }
 
                 return true;
             }

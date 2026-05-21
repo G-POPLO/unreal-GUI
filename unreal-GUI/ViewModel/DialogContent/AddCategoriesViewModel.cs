@@ -17,43 +17,43 @@ namespace unreal_GUI.ViewModel
     {
         // 基本信息属性
         [ObservableProperty]
-        private string categoryKey = "User";
+        public partial string CategoryKey { get; set; } = "User";
 
         [ObservableProperty]
-        private bool isMajorCategory = true;
+        public partial bool IsMajorCategory { get; set; } = true;
 
         [ObservableProperty]
-        private bool enableMultiLanguageConfig = false;
+        public partial bool EnableMultiLanguageConfig { get; set; }
 
         [ObservableProperty]
-        private BitmapImage? categoryIcon;
+        public partial BitmapImage? CategoryIcon { get; set; }
 
         [ObservableProperty]
-        private string iconFileName = string.Empty;
+        public partial string IconFileName { get; set; } = string.Empty;
 
         [ObservableProperty]
-        private string iconPath = string.Empty;
+        public partial string IconPath { get; set; } = string.Empty;
 
         // 多语言描述属性
         [ObservableProperty]
-        private string descriptionEn = string.Empty;
+        public partial string DescriptionEn { get; set; } = string.Empty;
 
         [ObservableProperty]
-        private string? descriptionZh;
+        public partial string? DescriptionZh { get; set; }
 
         [ObservableProperty]
-        private string? descriptionJa;
+        public partial string? DescriptionJa { get; set; }
 
         [ObservableProperty]
-        private string? descriptionKo;
+        public partial string? DescriptionKo { get; set; }
 
         // 用于显示名称（在XAML中未直接绑定，但用于生成Categories文本）
         [ObservableProperty]
-        private string displayName = string.Empty;
+        public partial string DisplayName { get; set; } = string.Empty;
 
         // 用于获取生成的Categories文本
         [ObservableProperty]
-        private string generatedCategoriesText = string.Empty;
+        public partial string GeneratedCategoriesText { get; set; } = string.Empty;
 
         private readonly CategoriesParser _categoriesParser;
 
@@ -103,64 +103,89 @@ namespace unreal_GUI.ViewModel
         [RelayCommand]
         private void BrowseIcon()
         {
+            string? selectedPath = ShowImageFileDialog();
+            if (string.IsNullOrEmpty(selectedPath))
+                return;
+
+            string processedPath = ProcessSelectedImage(selectedPath);
+            UpdateIconProperties(processedPath);
+        }
+
+        /// <summary>
+        /// 显示图片文件选择对话框
+        /// </summary>
+        /// <returns>选择的文件路径，如果取消则返回null</returns>
+        private static string? ShowImageFileDialog()
+        {
             var openFileDialog = new OpenFileDialog
             {
                 Filter = "PNG Images (*.png)|*.png|All files (*.*)|*.*",
                 Title = "选择类别图标"
             };
 
-            if (openFileDialog.ShowDialog() == true)
+            return openFileDialog.ShowDialog() == true ? openFileDialog.FileName : null;
+        }
+
+        /// <summary>
+        /// 处理选择的图片，必要时进行裁剪
+        /// </summary>
+        /// <param name="imagePath">原始图片路径</param>
+        /// <returns>处理后的图片路径</returns>
+        private string ProcessSelectedImage(string imagePath)
+        {
+            return PhotoEditCore.IsCorrectRatio(imagePath) ? imagePath : TryCropImageTo3to1Ratio(imagePath) ?? imagePath;
+        }
+
+        /// <summary>
+        /// 尝试将图片裁剪为3:1比例
+        /// </summary>
+        /// <param name="imagePath">原始图片路径</param>
+        /// <returns>裁剪后的图片路径，失败返回null</returns>
+        private string? TryCropImageTo3to1Ratio(string imagePath)
+        {
+            try
             {
-                string selectedImagePath = openFileDialog.FileName;
+                string tempDirectory = Path.Combine(Path.GetTempPath(), "UnrealGUI");
+                Directory.CreateDirectory(tempDirectory);
 
-                // 检查图片比例是否符合3:1
-                if (!PhotoEditCore.IsCorrectRatio(selectedImagePath))
-                {
-                    // 图片不符合3:1比例，自动从中心裁剪
-                    try
-                    {
-                        // 创建临时裁剪后的图片文件
-                        string tempDirectory = Path.Combine(Path.GetTempPath(), "UnrealGUI");
-                        if (!Directory.Exists(tempDirectory))
-                        {
-                            Directory.CreateDirectory(tempDirectory);
-                        }
+                string croppedImagePath = Path.Combine(tempDirectory, $"{CategoryKey}_2X.png");
 
-                        string croppedImageName = $"{CategoryKey}_2X.png";
-                        string croppedImagePath = Path.Combine(tempDirectory, croppedImageName);
+                if (PhotoEditCore.AutoCropTo3to1Ratio(imagePath, croppedImagePath))
+                    return croppedImagePath;
 
-                        // 自动裁剪图片为3:1比例
-                        bool cropSuccess = PhotoEditCore.AutoCropTo3to1Ratio(selectedImagePath, croppedImagePath);
-
-                        if (cropSuccess)
-                        {
-                            selectedImagePath = croppedImagePath;
-                        }
-                        else
-                        {
-                            MessageBox.Show("图片裁剪失败，将使用原图", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"图片裁剪时发生错误：{ex.Message}，将使用原图", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    }
-                }
-
-                // 设置图标路径和文件名
-                IconPath = selectedImagePath;
-                IconFileName = Path.GetFileName(selectedImagePath);
-
-                // 加载图标到UI
-                var bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                bitmap.UriSource = new Uri(IconPath);
-                bitmap.EndInit();
-                CategoryIcon = bitmap;
-
-                // 复制图片到引擎Templates目录
-                //CopyImageToEngineTemplates(openFileDialog.FileName);
+                MessageBox.Show("图片裁剪失败，将使用原图", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return null;
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"图片裁剪时发生错误：{ex.Message}，将使用原图", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 更新图标相关属性
+        /// </summary>
+        /// <param name="imagePath">图片路径</param>
+        private void UpdateIconProperties(string imagePath)
+        {
+            IconPath = imagePath;
+            IconFileName = Path.GetFileName(imagePath);
+            CategoryIcon = LoadBitmapImage(imagePath);
+        }
+
+        /// <summary>
+        /// 从路径加载BitmapImage
+        /// </summary>
+        /// <param name="imagePath">图片路径</param>
+        /// <returns>BitmapImage对象</returns>
+        private static BitmapImage LoadBitmapImage(string imagePath)
+        {
+            var bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(imagePath);
+            bitmap.EndInit();
+            return bitmap;
         }
 
         /// <summary>

@@ -1,7 +1,7 @@
 using Microsoft.Win32;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
 using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -60,7 +60,8 @@ namespace unreal_GUI.View.DialogContent
             {
                 originalImagePath = imagePath;
 
-                using var image = SixLabors.ImageSharp.Image.Load(imagePath);
+                // 使用 System.Drawing 加载图片
+                using var image = System.Drawing.Image.FromFile(imagePath);
 
                 // 转换为 BitmapSource
                 var bitmapSource = ConvertImageToBitmapSource(image);
@@ -82,14 +83,14 @@ namespace unreal_GUI.View.DialogContent
         }
 
         /// <summary>
-        /// 将 ImageSharp Image 转换为 WPF BitmapSource
+        /// 将 System.Drawing.Image 转换为 WPF BitmapImage
         /// </summary>
-        /// <param name="image">ImageSharp 图片对象</param>
-        /// <returns>WPF BitmapSource</returns>
-        private static BitmapSource ConvertImageToBitmapSource(SixLabors.ImageSharp.Image image)
+        /// <param name="image">System.Drawing 图片对象</param>
+        /// <returns>WPF BitmapImage</returns>
+        private static BitmapImage ConvertImageToBitmapSource(System.Drawing.Image image)
         {
             using var memoryStream = new MemoryStream();
-            image.SaveAsPng(memoryStream);
+            image.Save(memoryStream, ImageFormat.Png);
             memoryStream.Position = 0;
 
             var bitmapImage = new BitmapImage();
@@ -193,28 +194,37 @@ namespace unreal_GUI.View.DialogContent
 
             try
             {
-                // 重新加载原始图片进行剪裁
-                using var originalImage = SixLabors.ImageSharp.Image.Load(originalImagePath);
+                // 使用 System.Drawing 加载原始图片进行剪裁
+                using var originalBitmap = new Bitmap(originalImagePath);
 
                 // 创建剪裁矩形
-                var cropRectangle = new SixLabors.ImageSharp.Rectangle(
+                var cropRectangle = new Rectangle(
                     (int)ViewModel.RectLeft,
                     (int)ViewModel.RectTop,
                     (int)ViewModel.RectWidth,
                     (int)ViewModel.RectHeight);
 
-                // 执行剪裁
-                originalImage.Mutate(ctx => ctx.Crop(cropRectangle));
+                // 创建剪裁后的图片
+                using var croppedBitmap = new Bitmap(cropRectangle.Width, cropRectangle.Height);
+                using (var graphics = Graphics.FromImage(croppedBitmap))
+                {
+                    graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                    graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+                    graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+
+                    // 从原图裁剪指定区域
+                    graphics.DrawImage(originalBitmap, new Rectangle(0, 0, cropRectangle.Width, cropRectangle.Height), cropRectangle, GraphicsUnit.Pixel);
+                }
 
                 // 保存剪裁后的图片
                 var extension = System.IO.Path.GetExtension(outputPath).ToLower();
                 if (extension == ".jpg" || extension == ".jpeg")
                 {
-                    originalImage.SaveAsJpeg(outputPath);
+                    croppedBitmap.Save(outputPath, ImageFormat.Jpeg);
                 }
                 else
                 {
-                    originalImage.SaveAsPng(outputPath);
+                    croppedBitmap.Save(outputPath, ImageFormat.Png);
                 }
 
                 CroppedImagePath = outputPath;
