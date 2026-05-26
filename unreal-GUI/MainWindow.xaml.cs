@@ -4,6 +4,7 @@ using iNKORE.UI.WPF.Modern.Helpers.Styles;
 using System;
 using System.Windows;
 using System.Windows.Navigation;
+using unreal_GUI.Model.Basic;
 using unreal_GUI.View;
 using unreal_GUI.ViewModel;
 
@@ -25,6 +26,7 @@ namespace unreal_GUI
         {
 
             SetSystemBackdropType();
+            SoundFX.PlaySound(0); // 播放启动音效
             if (!Properties.Settings.Default.IsUpgraded)
             {
                 Properties.Settings.Default.Upgrade(); // 从旧版本迁移设置
