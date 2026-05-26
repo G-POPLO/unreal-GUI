@@ -117,7 +117,7 @@ namespace unreal_GUI.ViewModel
                     File.Delete(file);
                 File.Delete(Path.Combine(InputPath, ".vsconfig"));
                 TipClearCache = "清理完毕";
-                SoundFX.PlaySound(0);
+                SoundFX.PlaySound(4);
 
                 if (Properties.Settings.Default.AutoOpen)
                 {
@@ -127,7 +127,7 @@ namespace unreal_GUI.ViewModel
             catch (Exception ex)
             {
                 TipClearCache = "清理失败: " + ex.Message;
-                SoundFX.PlaySound(1);
+                SoundFX.PlaySound(2);
             }
         }
 
@@ -201,13 +201,13 @@ namespace unreal_GUI.ViewModel
                 }
 
                 TipClearLog = "Log清理完毕";
-                SoundFX.PlaySound(0);
+                SoundFX.PlaySound(4);
 
             }
             catch (Exception ex)
             {
                 TipClearLog = "Log清理失败: " + ex.Message;
-                SoundFX.PlaySound(1);
+                SoundFX.PlaySound(2);
 
             }
         }

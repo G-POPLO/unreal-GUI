@@ -35,7 +35,7 @@ static class SoundFX
         try
         {
             using var reader = new Opus2PCM(soundPath);
-            using var player = new WaveOutEvent();
+            using var player = new WasapiOut();
             var tcs = new TaskCompletionSource<bool>();
 
             player.PlaybackStopped += (_, _) => tcs.TrySetResult(true);

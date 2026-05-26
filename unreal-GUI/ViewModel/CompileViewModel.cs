@@ -197,6 +197,7 @@ namespace unreal_GUI.ViewModel
                     if (process.ExitCode == 0)
                     {
                         TipsText = "编译成功！";
+                        SoundFX.PlaySound(4);
                         if (Properties.Settings.Default.AutoOpen)
                         {
                             Process.Start("explorer.exe", OutputPath);
@@ -204,6 +205,7 @@ namespace unreal_GUI.ViewModel
                     }
                     else
                     {
+                        SoundFX.PlaySound(2);
                         string errorMessage = process.ExitCode switch
                         {
                             6 => "编译失败：引擎API更改，请手动创建新的C++工程进行编译",
@@ -214,13 +216,11 @@ namespace unreal_GUI.ViewModel
                     }
                 }
 
-                SoundFX.PlaySound(0);
-
             }
             catch (Exception ex)
             {
+                SoundFX.PlaySound(2);
                 TipsText = $"编译错误：{ex.Message}";
-                SoundFX.PlaySound(1);
 
             }
         }

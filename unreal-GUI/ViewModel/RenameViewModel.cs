@@ -125,10 +125,11 @@ namespace unreal_GUI.ViewModel
                     process.WaitForExit(); // 等待重命名进程完成
 
                     if (process.ExitCode == 0)
+                {
+                    SoundFX.PlaySound(4);
+                    // 如果是C++项目，需要额外重命名模块
+                    if (IsProjectSelected && !IsBPSelected)
                     {
-                        // 如果是C++项目，需要额外重命名模块
-                        if (IsProjectSelected && !IsBPSelected)
-                        {
                             //// 更新项目路径为重命名后的新路径
                             projectPath = Path.Combine(Path.GetDirectoryName(projectPath), newName);
                             string originalProjectName = Path.GetFileName(projectPath);
@@ -240,8 +241,6 @@ namespace unreal_GUI.ViewModel
                                 InputPath = finalPath;
                             }
 
-                            SoundFX.PlaySound(1);
-
                             Process.Start(new ProcessStartInfo
                             {
                                 FileName = "explorer.exe",
@@ -251,11 +250,13 @@ namespace unreal_GUI.ViewModel
                     }
                     else
                     {
+                        SoundFX.PlaySound(2);
                         Message = $"重命名失败：程序返回错误代码 {process.ExitCode}";
                     }
                 }
                 else
                 {
+                    SoundFX.PlaySound(2);
                     Message = "重命名失败：无法启动重命名进程";
                 }
 
@@ -263,9 +264,8 @@ namespace unreal_GUI.ViewModel
             }
             catch (Exception ex)
             {
+                SoundFX.PlaySound(2);
                 Message = $"重命名失败：{ex.Message}";
-
-                SoundFX.PlaySound(1);
             }
 
             return Task.CompletedTask;

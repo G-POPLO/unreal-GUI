@@ -284,7 +284,7 @@ namespace unreal_GUI.ViewModel
 
                 if (success)
                 {
-                    SoundFX.PlaySound(0);
+                    SoundFX.PlaySound(4);
                     string successMessage = IncrementalUpdate ? "增量更新完成" : "压缩完成";
                     await ModernDialog.ShowInfoAsync(successMessage, "成功");
 
@@ -305,6 +305,7 @@ namespace unreal_GUI.ViewModel
             }
             catch (Exception ex)
             {
+                SoundFX.PlaySound(2);
                 string errorMessage = IncrementalUpdate ? $"增量更新过程中发生错误: {ex.Message}" : $"压缩过程中发生错误: {ex.Message}";
                 await ModernDialog.ShowErrorAsync(errorMessage, "错误");
             }

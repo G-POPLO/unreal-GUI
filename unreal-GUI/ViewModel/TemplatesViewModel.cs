@@ -312,13 +312,15 @@ namespace unreal_GUI.ViewModel
                             true); // 自动安装到引擎目录
 
                         if (success)
-                        {
-                            await ModernDialog.ShowInfoAsync($"功能包 '{TemplateName}' 创建成功！", "成功");
-                        }
-                        else
-                        {
-                            await ModernDialog.ShowErrorAsync($"创建功能包失败。", "错误");
-                        }
+                {
+                    SoundFX.PlaySound(4);
+                    await ModernDialog.ShowInfoAsync($"功能包 '{TemplateName}' 创建成功！", "成功");
+                }
+                else
+                {
+                    SoundFX.PlaySound(2);
+                    await ModernDialog.ShowErrorAsync($"创建功能包失败。", "错误");
+                }
                     }
                     finally
                     {
@@ -329,6 +331,7 @@ namespace unreal_GUI.ViewModel
             }
             catch (Exception ex)
             {
+                SoundFX.PlaySound(2);
                 string operationName = IsProjectSelected ? "模板" : "功能包";
                 await ModernDialog.ShowErrorAsync($"创建{operationName}失败: {ex.Message}", "错误");
             }
@@ -416,15 +419,18 @@ namespace unreal_GUI.ViewModel
                 if (!string.IsNullOrEmpty(selectedBackupPath) && File.Exists(selectedBackupPath))
                 {
                     File.Copy(selectedBackupPath, targetPath, true);
+                    SoundFX.PlaySound(4);
                     await ModernDialog.ShowInfoAsync($"已从{backupDescription}恢复模板配置文件。", "成功");
                 }
                 else
                 {
+                    SoundFX.PlaySound(3);
                     await ModernDialog.ShowInfoAsync("未找到任何备份文件，无法恢复配置文件。", "提示");
                 }
             }
             catch (Exception ex)
             {
+                SoundFX.PlaySound(2);
                 await ModernDialog.ShowInfoAsync($"恢复配置文件失败: {ex.Message}", "提示");
             }
 
@@ -467,10 +473,12 @@ namespace unreal_GUI.ViewModel
                     await LoadCategoriesAsync();
                 }
 
+                SoundFX.PlaySound(4);
                 await ModernDialog.ShowInfoAsync("表单已重置。", "成功");
             }
             catch (Exception ex)
             {
+                SoundFX.PlaySound(2);
                 await ModernDialog.ShowErrorAsync($"重置表单失败: {ex.Message}", "错误");
             }
         }
