@@ -3,10 +3,11 @@
 ; Non-commercial use only
 
 #define MyAppName "Unreal-GUI"
-#define MyAppVersion "1.0.0"
 #define MyAppPublisher "C-POPLO"
 #define MyAppURL "https://github.com/G-POPLO/unreal-GUI"
 #define MyAppExeName "Unreal-GUI.exe"
+#define MyAppExePath "D:\PROGRAM\unreal-gui\unreal-GUI\bin\x64\Release\net10.0-windows10.0.18362.0\" + MyAppExeName
+#define MyAppVersion GetVersionNumbersString(MyAppExePath)
 #define MyAppAssocName MyAppName + " File"
 #define MyAppAssocExt ".myp"
 #define MyAppAssocKey StringChange(MyAppAssocName, " ", "") + MyAppAssocExt
@@ -49,7 +50,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "D:\PROGRAM\unreal-gui\unreal-GUI\bin\x64\Release\net10.0-windows10.0.18362.0\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\PROGRAM\unreal-gui\unreal-GUI\bin\x64\Release\net10.0-windows10.0.18362.0\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "D:\PROGRAM\unreal-gui\unreal-GUI\bin\x64\Release\net10.0-windows10.0.18362.0\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "settings.json,ShareSettings.ini"
 ; NOTE: Replace it to your own path
 
 [Registry]
