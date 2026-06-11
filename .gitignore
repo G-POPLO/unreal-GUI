@@ -183,3 +183,6 @@ doc/
 # code_test相关
 code_test/output
 code_test/input
+
+.understand-anything
+.claude
