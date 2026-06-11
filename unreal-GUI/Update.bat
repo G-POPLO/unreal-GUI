@@ -1,3 +1,4 @@
+:: Unreal-GUI程序的更新脚本，已废弃，现使用Inno安装程序代替
 @echo off
 chcp 65001 >nul
 setlocal enabledelayedexpansion
