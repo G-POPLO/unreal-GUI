@@ -96,7 +96,7 @@
 
                         <!-- 模板ID -->
                         <!-- Project_ID绑定到Id属性 -->
-                        <TextBlock x:Name="Project_ID" Text="{Binding Id, StringFormat=Project ID（唯一）: {0}}" 
+                        <TextBlock x:Name="Project_ID" Text="{Binding ProjectId, StringFormat=Project ID（唯一）: {0}}" 
     FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"
     Margin="0,0,0,5"/>
                         <CheckBox IsChecked="{Binding EnableMultiLanguageConfig}" Content="启用多语言配置" Margin="0,0,0,5"/>

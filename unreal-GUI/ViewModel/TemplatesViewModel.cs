@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -122,8 +123,21 @@ namespace unreal_GUI.ViewModel
             // 当引擎选择变化时，加载对应的类别
             if (newValue != null)
             {
-                // 直接调用异步方法并捕获异常
-                LoadCategoriesAsync().ConfigureAwait(false);
+                // 使用安全 fire-and-forget 包装，避免异常被静默吞没
+                _ = LoadCategoriesSafelyAsync();
+            }
+        }
+
+        // 安全加载类别，捕获所有异常（含 ShowErrorAsync 自身异常）
+        private async Task LoadCategoriesSafelyAsync()
+        {
+            try
+            {
+                await LoadCategoriesAsync();
+            }
+            catch (Exception ex)
+            {
+                await ModernDialog.ShowErrorAsync($"加载类别失败: {ex.Message}", "错误");
             }
         }
 
@@ -131,7 +145,7 @@ namespace unreal_GUI.ViewModel
 
         // 1. 添加Id属性用于绑定
         [ObservableProperty]
-        public partial string Id { get; set; } = string.Empty;
+        public partial string ProjectId { get; set; } = string.Empty;
 
         // 控制是否允许项目创建
         [ObservableProperty]
@@ -141,10 +155,13 @@ namespace unreal_GUI.ViewModel
         public partial bool EnableMultiLanguageConfig { get; set; }
 
         // 注意：EngineInfo类已在JsonConfig.cs中定义，这里使用自定义的显示包装类
-        public class EngineDisplayInfo
+        public partial class EngineDisplayInfo : ObservableObject
         {
-            public string DisplayName { get; set; }
-            public string Path { get; set; }
+            [ObservableProperty]
+            public partial string DisplayName { get; set; } = string.Empty;
+
+            [ObservableProperty]
+            public partial string Path { get; set; } = string.Empty;
         }
 
 
@@ -381,46 +398,18 @@ namespace unreal_GUI.ViewModel
         {
             try
             {
-                var backupDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backup");
                 var targetPath = GetTemplateCategoriesPath();
-
                 if (string.IsNullOrEmpty(targetPath))
                 {
                     await ModernDialog.ShowInfoAsync("无法获取目标配置文件路径。", "提示");
                     return;
                 }
 
-                // 首先尝试恢复原始备份
-                var originalBackupPath = Path.Combine(backupDir, "TemplateCategories_Backup.ini");
+                var backupDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Backup");
 
-                string selectedBackupPath = null;
-                string backupDescription = "";
-
-                if (File.Exists(originalBackupPath))
+                if (TryFindBackupToRestore(backupDir, out string backupPath, out string backupDescription))
                 {
-                    selectedBackupPath = originalBackupPath;
-                    backupDescription = "原始备份文件";
-                }
-                else
-                {
-                    // 查找最近一次的备份文件
-                    var backupFiles = Directory.GetFiles(backupDir, "TemplateCategories_*.ini")
-                        .OrderByDescending(f => new FileInfo(f).LastWriteTime)
-                        .ToArray();
-
-                    if (backupFiles.Length > 0)
-                    {
-                        selectedBackupPath = backupFiles[0];
-                        var backupFileInfo = new FileInfo(selectedBackupPath);
-                        backupDescription = $"最近备份 ({backupFileInfo.LastWriteTime:yyyy-MM-dd HH:mm:ss})";
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(selectedBackupPath) && File.Exists(selectedBackupPath))
-                {
-                    File.Copy(selectedBackupPath, targetPath, true);
-                    SoundFX.PlaySound(4);
-                    await ModernDialog.ShowInfoAsync($"已从{backupDescription}恢复模板配置文件。", "成功");
+                    await RestoreFromBackupAsync(backupPath, backupDescription, targetPath);
                 }
                 else
                 {
@@ -431,7 +420,7 @@ namespace unreal_GUI.ViewModel
             catch (Exception ex)
             {
                 SoundFX.PlaySound(2);
-                await ModernDialog.ShowInfoAsync($"恢复配置文件失败: {ex.Message}", "提示");
+                await ModernDialog.ShowErrorAsync($"恢复配置文件失败: {ex.Message}", "错误");
             }
 
             if (AvailableEngines.Count > 0)
@@ -440,9 +429,46 @@ namespace unreal_GUI.ViewModel
             }
         }
 
+        // 查找要使用的备份文件：优先固定名称的原始备份，否则按时间倒序取最近的时间戳备份
+        private static bool TryFindBackupToRestore(string backupDir, out string backupPath, out string description)
+        {
+            // 优先选择固定名称的原始备份
+            var originalBackupPath = Path.Combine(backupDir, "TemplateCategories_Backup.ini");
+            if (File.Exists(originalBackupPath))
+            {
+                backupPath = originalBackupPath;
+                description = "原始备份文件";
+                return true;
+            }
+
+            // 否则按时间倒序查找最近的时间戳备份
+            var latestBackup = Directory.GetFiles(backupDir, "TemplateCategories_*.ini")
+                .OrderByDescending(f => new FileInfo(f).LastWriteTime)
+                .FirstOrDefault();
+
+            if (latestBackup != null)
+            {
+                backupPath = latestBackup;
+                description = $"最近备份 ({new FileInfo(latestBackup).LastWriteTime:yyyy-MM-dd HH:mm:ss})";
+                return true;
+            }
+
+            backupPath = string.Empty;
+            description = string.Empty;
+            return false;
+        }
+
+        // 将指定备份恢复到目标路径
+        private static async Task RestoreFromBackupAsync(string backupPath, string description, string targetPath)
+        {
+            File.Copy(backupPath, targetPath, true);
+            SoundFX.PlaySound(4);
+            await ModernDialog.ShowInfoAsync($"已从{description}恢复模板配置文件。", "成功");
+        }
+
         // 重置表单字段
         [RelayCommand]
-        private async Task Reset()
+        private async Task ResetAsync()
         {
             try
             {
@@ -453,7 +479,7 @@ namespace unreal_GUI.ViewModel
                 TemplateDescriptionZhHans = string.Empty;
                 TemplateDescriptionJa = string.Empty;
                 TemplateDescriptionKo = string.Empty;
-                Id = string.Empty;
+                ProjectId = string.Empty;
                 TemplateIconPath = string.Empty;
                 TemplatePreviewPath = string.Empty;
                 PictureTipText = string.Empty;
@@ -515,36 +541,46 @@ namespace unreal_GUI.ViewModel
         {
             AvailableEngines = [];
             TemplateCategories = [];
-            _ = InitializeEngineListAsync();
+            // 启动时延迟加载引擎列表；异常仅记录到 Debug，不在启动阶段弹窗打扰用户
+            _ = LoadEnginesSafelyAsync();
+        }
+
+        // 安全初始化引擎列表（fire-and-forget）
+        private async Task LoadEnginesSafelyAsync()
+        {
+            try
+            {
+                await InitializeEngineListAsync();
+            }
+            catch (Exception ex)
+            {
+                // 仅记录异常，避免在启动阶段弹出错误对话框
+                Debug.WriteLine($"初始化引擎列表失败: {ex.Message}");
+            }
         }
 
         // 初始化引擎列表 - 使用SettingsViewModel中的数据结构获取引擎信息
         private async Task InitializeEngineListAsync()
         {
-            try
+            if (!File.Exists("settings.json"))
             {
-                if (File.Exists("settings.json"))
-                {
-                    string jsonContent = File.ReadAllText("settings.json");
-                    // 从jsonContent反序列化设置数据
-                    var settings = JsonSerializer.Deserialize<SettingsData>(jsonContent);
-
-                    if (settings != null && settings.Engines != null)
-                    {
-                        foreach (var engine in settings.Engines.Where(e => e != null))
-                        {
-                            AvailableEngines.Add(new()
-                            {
-                                DisplayName = $"Unreal Engine {engine.Version}",
-                                Path = engine.Path
-                            });
-                        }
-                    }
-                }
+                return;
             }
-            catch (Exception ex)
+
+            string jsonContent = await File.ReadAllTextAsync("settings.json");
+            // 从jsonContent反序列化设置数据
+            var settings = JsonSerializer.Deserialize<SettingsData>(jsonContent);
+
+            if (settings != null && settings.Engines != null)
             {
-                await ModernDialog.ShowErrorAsync($"初始化引擎列表失败: {ex.Message}", "提示");
+                foreach (var engine in settings.Engines.Where(e => e != null))
+                {
+                    AvailableEngines.Add(new()
+                    {
+                        DisplayName = $"Unreal Engine {engine.Version}",
+                        Path = engine.Path
+                    });
+                }
             }
         }
 
@@ -565,12 +601,12 @@ namespace unreal_GUI.ViewModel
                 ProjectPath = Path.GetDirectoryName(projectFilePath);
                 string projectName = Path.GetFileNameWithoutExtension(projectFilePath);
 
-                Id = await ReadProjectIdAsync(ProjectPath); // 绑定ID
+                ProjectId = await ReadProjectIdAsync(ProjectPath); // 绑定ID
 
                 // 如果没有手动选择图标，尝试使用默认图标
                 if (TemplateIcon == null)
                 {
-                    await LoadDefaultProjectIconAsync();
+                    LoadDefaultProjectIcon();
                 }
             }
             else
@@ -604,9 +640,6 @@ namespace unreal_GUI.ViewModel
                     await Task.Run(() => AddDefaultCategories());
                     return;
                 }
-
-                // 异步读取文件内容
-                string fileContent = await File.ReadAllTextAsync(categoriesPath);
 
                 // 解析类别
                 var categories = await Task.Run(() => CategoriesParser.ParseCategories(categoriesPath));
@@ -727,32 +760,33 @@ namespace unreal_GUI.ViewModel
             return string.Empty;
         }
 
-        // 加载默认项目图标
-        private Task LoadDefaultProjectIconAsync()
+        // 加载默认项目图标（同步方法，内部无 IO 等待）
+        private void LoadDefaultProjectIcon()
         {
             try
             {
                 if (string.IsNullOrEmpty(ProjectPath))
-                    return Task.CompletedTask;
+                    return;
 
                 // 检查Saved\AutoScreenshot.png是否存在
                 string defaultIconPath = Path.Combine(ProjectPath, "Saved", "AutoScreenshot.png");
 
-                if (File.Exists(defaultIconPath))
-                {
-                    // 验证图片尺寸
-                    using var img = System.Drawing.Image.FromFile(defaultIconPath);
-                    if (img.Width >= 64 && img.Height >= 64) // 最小尺寸要求
-                    {
-                        TemplateIconPath = defaultIconPath;
+                if (!File.Exists(defaultIconPath))
+                    return;
 
-                        // 更新UI显示
-                        var bitmap = new BitmapImage();
-                        bitmap.BeginInit();
-                        bitmap.UriSource = new Uri(defaultIconPath, UriKind.Absolute);
-                        bitmap.EndInit();
-                        TemplateIcon = bitmap;
-                    }
+                // 验证图片尺寸
+                using var img = System.Drawing.Image.FromFile(defaultIconPath);
+                if (img.Width >= 64 && img.Height >= 64) // 最小尺寸要求
+                {
+                    TemplateIconPath = defaultIconPath;
+
+                    // 更新UI显示
+                    var bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad; // 立即加载并释放文件句柄
+                    bitmap.UriSource = new Uri(defaultIconPath, UriKind.Absolute);
+                    bitmap.EndInit();
+                    TemplateIcon = bitmap;
                 }
             }
             catch (Exception ex)
@@ -760,7 +794,6 @@ namespace unreal_GUI.ViewModel
                 // 静默失败，不影响用户操作
                 Debug.WriteLine($"加载默认图标失败: {ex.Message}");
             }
-            return Task.CompletedTask;
         }
 
         // 备份TemplateCategories.ini文件
@@ -792,7 +825,7 @@ namespace unreal_GUI.ViewModel
             }
             catch (Exception ex)
             {
-                await ModernDialog.ShowInfoAsync($"备份文件失败: {ex.Message}", "提示");
+                await ModernDialog.ShowErrorAsync($"备份文件失败: {ex.Message}", "错误");
                 return false;
             }
         }
@@ -810,52 +843,55 @@ namespace unreal_GUI.ViewModel
                 // 获取选中的类别
                 string category = SelectedCategory?.Key; // 默认类别
 
-                // 写入TemplateDefs.ini的内容
-                string iniContent = $"[/Script/GameProjectGeneration.TemplateProjectDefs]\n\n" +
-                               $"Categories={category}\n" +
-                               $"ProjectID={Id}\n" +
-                               $"bAllowProjectCreation={(IsProjectSelected ? "true" : "false")}\n" +
-                               $"LocalizedDisplayNames=(Language=\"en\", Text=\"{TemplateName}\")\n" +
-                               $"LocalizedDescriptions=(Language=\"en\", Text=\"{TemplateDescriptionEn}\")\n";
+                // 写入TemplateDefs.ini的内容（使用 StringBuilder 避免 O(n²) 字符串复制）
+                var sb = new StringBuilder();
+                sb.Append("[/Script/GameProjectGeneration.TemplateProjectDefs]\n\n");
+                sb.Append($"Categories={category}\n");
+                sb.Append($"ProjectID={ProjectId}\n");
+                sb.Append($"bAllowProjectCreation={(IsProjectSelected ? "true" : "false")}\n");
+                sb.Append($"LocalizedDisplayNames=(Language=\"en\", Text=\"{TemplateName}\")\n");
+                sb.Append($"LocalizedDescriptions=(Language=\"en\", Text=\"{TemplateDescriptionEn}\")\n");
 
                 // 添加其他语言描述（如果提供）
                 if (!string.IsNullOrEmpty(TemplateDescriptionZhHans))
                 {
-                    iniContent += $"LocalizedDisplayNames=(Language=\"zh-Hans\", Text=\"{TemplateName}\")\n" +
-                                $"LocalizedDescriptions=(Language=\"zh-Hans\", Text=\"{TemplateDescriptionZhHans}\")\n";
+                    sb.Append($"LocalizedDisplayNames=(Language=\"zh-Hans\", Text=\"{TemplateName}\")\n");
+                    sb.Append($"LocalizedDescriptions=(Language=\"zh-Hans\", Text=\"{TemplateDescriptionZhHans}\")\n");
                 }
 
                 if (!string.IsNullOrEmpty(TemplateDescriptionJa))
                 {
-                    iniContent += $"LocalizedDisplayNames=(Language=\"ja\", Text=\"{TemplateName}\")\n" +
-                                $"LocalizedDescriptions=(Language=\"ja\", Text=\"{TemplateDescriptionJa}\")\n";
+                    sb.Append($"LocalizedDisplayNames=(Language=\"ja\", Text=\"{TemplateName}\")\n");
+                    sb.Append($"LocalizedDescriptions=(Language=\"ja\", Text=\"{TemplateDescriptionJa}\")\n");
                 }
 
                 if (!string.IsNullOrEmpty(TemplateDescriptionKo))
                 {
-                    iniContent += $"LocalizedDisplayNames=(Language=\"ko\", Text=\"{TemplateName}\")\n" +
-                                $"LocalizedDescriptions=(Language=\"ko\", Text=\"{TemplateDescriptionKo}\")\n";
+                    sb.Append($"LocalizedDisplayNames=(Language=\"ko\", Text=\"{TemplateName}\")\n");
+                    sb.Append($"LocalizedDescriptions=(Language=\"ko\", Text=\"{TemplateDescriptionKo}\")\n");
                 }
 
                 // 添加忽略的文件夹和文件
-                iniContent += $"\nFoldersToIgnore=Media\n" +
-                            $"FilesToIgnore=\"Config/TemplateDefs.ini\"\n" +
-                            $"\n; Ignore template-specific files\n" +
-                            $"FilesToIgnore=\"%TEMPLATENAME%.uproject\"\n" +
-                            $"FilesToIgnore=\"%TEMPLATENAME%.png\"\n" +
-                            $"FilesToIgnore=\"Config/TemplateDefs.ini\"\n" +
-                            $"FilesToIgnore=\"Manifest.json\"\n" +
-                            $"\n; Rename the source code directory\n" +
-                            $"FolderRenames=(From=\"Source/%TEMPLATENAME%\", To=\"Source/%PROJECTNAME%\")\n" +
-                            $"FolderRenames=(From=\"Source/%TEMPLATENAME%Editor\", To=\"Source/%PROJECTNAME%Editor\")\n" +
-                            $"\n; Filename replacement rules (Case sensitivity of string matching when bCaseSensitive=true)\n" +
-                            $"FilenameReplacements=(Extensions=(\"cpp\",\"h\",\"ini\",\"cs\"), From=\"%TEMPLATENAME_UPPERCASE%\", To=\"%PROJECTNAME_UPPERCASE%\", bCaseSensitive=true)\n" +
-                            $"FilenameReplacements=(Extensions=(\"cpp\",\"h\",\"ini\",\"cs\"), From=\"%TEMPLATENAME_LOWERCASE%\", To=\"%PROJECTNAME_LOWERCASE%\", bCaseSensitive=true)\n" +
-                            $"FilenameReplacements=(Extensions=(\"cpp\",\"h\",\"ini\",\"cs\"), From=\"%TEMPLATENAME%\", To=\"%PROJECTNAME%\", bCaseSensitive=false)\n" +
-                            $"\n; File content replacement \n" +
-                            $"ReplacementsInFiles=(Extensions=(\"cpp\",\"h\",\"ini\",\"cs\",\"uplugin\"), From=\"%TEMPLATENAME%\", To=\"%PROJECTNAME%\", bCaseSensitive=false)\n" +
-                            $"ReplacementsInFiles=(Extensions=(\"cpp\",\"h\",\"ini\",\"cs\",\"uplugin\"), From=\"%TEMPLATENAME_UPPERCASE%\", To=\"%PROJECTNAME_UPPERCASE%\", bCaseSensitive=true)\n" +
-                            $"ReplacementsInFiles=(Extensions=(\"cpp\",\"h\",\"ini\",\"cs\",\"uplugin\"), From=\"%TEMPLATENAME_LOWERCASE%\", To=\"%PROJECTNAME_LOWERCASE%\", bCaseSensitive=true)\n";
+                sb.Append("\nFoldersToIgnore=Media\n");
+                sb.Append("FilesToIgnore=\"Config/TemplateDefs.ini\"\n");
+                sb.Append("\n; Ignore template-specific files\n");
+                sb.Append("FilesToIgnore=\"%TEMPLATENAME%.uproject\"\n");
+                sb.Append("FilesToIgnore=\"%TEMPLATENAME%.png\"\n");
+                sb.Append("FilesToIgnore=\"Config/TemplateDefs.ini\"\n");
+                sb.Append("FilesToIgnore=\"Manifest.json\"\n");
+                sb.Append("\n; Rename the source code directory\n");
+                sb.Append("FolderRenames=(From=\"Source/%TEMPLATENAME%\", To=\"Source/%PROJECTNAME%\")\n");
+                sb.Append("FolderRenames=(From=\"Source/%TEMPLATENAME%Editor\", To=\"Source/%PROJECTNAME%Editor\")\n");
+                sb.Append("\n; Filename replacement rules (Case sensitivity of string matching when bCaseSensitive=true)\n");
+                sb.Append("FilenameReplacements=(Extensions=(\"cpp\",\"h\",\"ini\",\"cs\"), From=\"%TEMPLATENAME_UPPERCASE%\", To=\"%PROJECTNAME_UPPERCASE%\", bCaseSensitive=true)\n");
+                sb.Append("FilenameReplacements=(Extensions=(\"cpp\",\"h\",\"ini\",\"cs\"), From=\"%TEMPLATENAME_LOWERCASE%\", To=\"%PROJECTNAME_LOWERCASE%\", bCaseSensitive=true)\n");
+                sb.Append("FilenameReplacements=(Extensions=(\"cpp\",\"h\",\"ini\",\"cs\"), From=\"%TEMPLATENAME%\", To=\"%PROJECTNAME%\", bCaseSensitive=false)\n");
+                sb.Append("\n; File content replacement\n");
+                sb.Append("ReplacementsInFiles=(Extensions=(\"cpp\",\"h\",\"ini\",\"cs\",\"uplugin\"), From=\"%TEMPLATENAME%\", To=\"%PROJECTNAME%\", bCaseSensitive=false)\n");
+                sb.Append("ReplacementsInFiles=(Extensions=(\"cpp\",\"h\",\"ini\",\"cs\",\"uplugin\"), From=\"%TEMPLATENAME_UPPERCASE%\", To=\"%PROJECTNAME_UPPERCASE%\", bCaseSensitive=true)\n");
+                sb.Append("ReplacementsInFiles=(Extensions=(\"cpp\",\"h\",\"ini\",\"cs\",\"uplugin\"), From=\"%TEMPLATENAME_LOWERCASE%\", To=\"%PROJECTNAME_LOWERCASE%\", bCaseSensitive=true)\n");
+
+                string iniContent = sb.ToString();
 
                 // 创建Config目录并写入文件
                 string configDir = Path.Combine(ProjectPath, "Config");
@@ -868,7 +904,7 @@ namespace unreal_GUI.ViewModel
             }
             catch (Exception ex)
             {
-                await ModernDialog.ShowInfoAsync($"写入TemplateDefs.ini失败: {ex.Message}", "提示");
+                await ModernDialog.ShowErrorAsync($"写入TemplateDefs.ini失败: {ex.Message}", "错误");
                 return false;
             }
         }
@@ -1129,8 +1165,8 @@ namespace unreal_GUI.ViewModel
                 }
                 else
                 {
-                    // 简单的异步复制
-                    await Task.Run(() => File.Copy(file, destFile, true));
+                    // 简单的异步复制（File.Copy 本身为同步 IO，避免无意义地占用 ThreadPool 线程）
+                    File.Copy(file, destFile, true);
                 }
             }
 
@@ -1148,12 +1184,6 @@ namespace unreal_GUI.ViewModel
                 var destDir = Path.Combine(destinationDir, dirName);
                 await CopyDirectoryAsync(dir, destDir, progressState);
             }
-        }
-
-        // 同步目录复制方法（内部调用异步版本）
-        private static void CopyDirectory(string sourceDir, string destinationDir)
-        {
-            CopyDirectoryAsync(sourceDir, destinationDir).Wait();
         }
 
         [RelayCommand]
@@ -1243,8 +1273,8 @@ namespace unreal_GUI.ViewModel
             string toastTag = "asset-copy-progress";
             string toastGroup = "asset-copy-group";
 
-            // 仅在主线程上执行UI更新
-            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            // 仅在主线程上执行UI更新；使用 Func<Task> 重载以支持 async lambda
+            System.Windows.Application.Current.Dispatcher.Invoke(async () =>
             {
                 // 如果是第一次显示进度，则显示初始通知
                 if (e.FilesCopied == 1)
@@ -1295,17 +1325,11 @@ namespace unreal_GUI.ViewModel
 
                 ToastNotificationManagerCompat.CreateToastNotifier().Update(data, toastTag, toastGroup);
 
-                // 如果复制完成，延迟移除通知
+                // 如果复制完成，延迟移除通知（await 而非 fire-and-forget）
                 if (e.FilesCopied == e.TotalFiles)
                 {
-                    // 延迟2秒后移除通知
-                    Task.Delay(2000).ContinueWith(_ =>
-                    {
-                        System.Windows.Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            ToastNotificationManagerCompat.History.Remove(toastTag, toastGroup);
-                        });
-                    });
+                    await Task.Delay(2000);
+                    ToastNotificationManagerCompat.History.Remove(toastTag, toastGroup);
                 }
             });
         }
