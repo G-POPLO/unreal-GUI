@@ -124,24 +124,37 @@ namespace unreal_GUI.ViewModel
         {
             try
             {
-                using var key = Registry.LocalMachine.OpenSubKey("SOFTWARE\\EpicGames\\Unreal Engine");
-                if (key != null)
+                var launcherDataPath = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                    "Epic", "UnrealEngineLauncher", "LauncherInstalled.dat");
+
+                if (!File.Exists(launcherDataPath))
                 {
-                    foreach (var subKeyName in key.GetSubKeyNames())
+                    MessageBox.Show("未找到LauncherInstalled.dat文件，请手动设置引擎目录", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+                var json = File.ReadAllText(launcherDataPath);
+                var data = JsonSerializer.Deserialize<LauncherInstalledData>(json);
+
+                if (data?.InstallationList == null) return;
+
+                foreach (var entry in data.InstallationList)
+                {
+                    if (entry.ArtifactId?.StartsWith("UE_") == true)
                     {
-                        using var subKey = key.OpenSubKey(subKeyName);
-                        var path = subKey?.GetValue("InstalledDirectory") as string;
-                        if (!string.IsNullOrEmpty(path) && !EngineInfos.Any(x => x.Path == path))
+                        var version = entry.ArtifactId["UE_".Length..];
+                        if (!string.IsNullOrEmpty(entry.InstallLocation) && !EngineInfos.Any(x => x.Path == entry.InstallLocation))
                         {
-                            EngineInfos.Add(new EngineInfo { Path = path, Version = GetEngineVersion(path) });
+                            EngineInfos.Add(new EngineInfo { Path = entry.InstallLocation, Version = version });
                         }
                     }
-                    UpdateEnginePathsDisplay();
                 }
+                UpdateEnginePathsDisplay();
             }
             catch (Exception)
             {
-                MessageBox.Show("未检测到引擎，请手动设置引擎目录", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("读取引擎列表失败，请手动设置引擎目录", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 

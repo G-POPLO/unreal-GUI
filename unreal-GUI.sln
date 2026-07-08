@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamlLocalizationScanner", "XamlLocalizationScanner\XamlLocalizationScanner.csproj", "{5A26D22A-6D1C-719D-33B7-2524FEC1325C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -24,12 +26,15 @@ Global
 		{152FF494-525F-417B-849B-9B7FC54DCA17}.Release|x64.ActiveCfg = Release|x64
 		{152FF494-525F-417B-849B-9B7FC54DCA17}.Release|x64.Build.0 = Release|x64
 		{AD9C01F3-D8D1-4368-ADA6-DDD3E4F40B8C}.Debug|x64.ActiveCfg = Debug|x64
-		{AD9C01F3-D8D1-4368-ADA6-DDD3E4F40B8C}.Debug|x64.Build.0 = Debug|x64
 		{AD9C01F3-D8D1-4368-ADA6-DDD3E4F40B8C}.Release|x64.ActiveCfg = Release|x64
 		{AD9C01F3-D8D1-4368-ADA6-DDD3E4F40B8C}.Release|x64.Build.0 = Release|x64
 		{8F636962-AECA-424D-B941-A7443A234915}.Debug|x64.ActiveCfg = Debug|x64
 		{8F636962-AECA-424D-B941-A7443A234915}.Release|x64.ActiveCfg = Release|x64
 		{8F636962-AECA-424D-B941-A7443A234915}.Release|x64.Build.0 = Release|x64
+		{5A26D22A-6D1C-719D-33B7-2524FEC1325C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5A26D22A-6D1C-719D-33B7-2524FEC1325C}.Debug|x64.Build.0 = Debug|Any CPU
+		{5A26D22A-6D1C-719D-33B7-2524FEC1325C}.Release|x64.ActiveCfg = Release|Any CPU
+		{5A26D22A-6D1C-719D-33B7-2524FEC1325C}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

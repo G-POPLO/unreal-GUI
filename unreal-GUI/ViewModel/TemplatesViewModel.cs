@@ -312,15 +312,15 @@ namespace unreal_GUI.ViewModel
                             true); // 自动安装到引擎目录
 
                         if (success)
-                {
-                    SoundFX.PlaySound(4);
-                    await ModernDialog.ShowInfoAsync($"功能包 '{TemplateName}' 创建成功！", "成功");
-                }
-                else
-                {
-                    SoundFX.PlaySound(2);
-                    await ModernDialog.ShowErrorAsync($"创建功能包失败。", "错误");
-                }
+                        {
+                            SoundFX.PlaySound(4);
+                            await ModernDialog.ShowInfoAsync($"功能包 '{TemplateName}' 创建成功！", "成功");
+                        }
+                        else
+                        {
+                            SoundFX.PlaySound(2);
+                            await ModernDialog.ShowErrorAsync($"创建功能包失败。", "错误");
+                        }
                     }
                     finally
                     {
@@ -886,9 +886,8 @@ namespace unreal_GUI.ViewModel
                     Directory.Delete(targetDir, true);
                 }
 
-                // 获取要复制的文件总数用于显示进度
-                var allFiles = Directory.GetFiles(ProjectPath, "*", SearchOption.AllDirectories);
-                var totalFiles = allFiles.Length;
+                // 计算需要复制的文件总数（已排除无关目录/文件）
+                var totalFiles = CountFilesToCopy(ProjectPath);
 
                 // 如果文件较多（超过50个），显示进度通知
                 if (totalFiles > 50)
@@ -908,6 +907,34 @@ namespace unreal_GUI.ViewModel
                 await ModernDialog.ShowInfoAsync($"复制项目到Templates目录失败: {ex.Message}", "提示");
                 return false;
             }
+        }
+
+        // 统计需要复制的文件总数（排除无关目录/文件）
+        private static int CountFilesToCopy(string sourceDir)
+        {
+            if (string.IsNullOrEmpty(sourceDir) || !Directory.Exists(sourceDir))
+            {
+                return 0;
+            }
+
+            int count = 0;
+            foreach (var file in Directory.GetFiles(sourceDir))
+            {
+                if (!IsFileExcluded(Path.GetFileName(file)))
+                {
+                    count++;
+                }
+            }
+
+            foreach (var dir in Directory.GetDirectories(sourceDir))
+            {
+                if (!IsDirectoryExcluded(Path.GetFileName(dir)))
+                {
+                    count += CountFilesToCopy(dir);
+                }
+            }
+
+            return count;
         }
 
 
@@ -997,6 +1024,45 @@ namespace unreal_GUI.ViewModel
             public string ToastGroup { get; set; } = string.Empty;
         }
 
+        // 模板复制时需要排除的目录（IDE缓存、UE中间产物、构建输出等）
+        private static readonly HashSet<string> ExcludedDirectories = new(StringComparer.OrdinalIgnoreCase)
+        {
+            ".vs", ".idea", ".vscode", ".vsconfig", ".git", ".svn",
+            "Intermediate", "Binaries", "Saved", "DerivedDataCache",
+            "Build", "obj", "bin"
+
+        };
+
+        // 模板复制时需要排除的文件
+        private static readonly HashSet<string> ExcludedFiles = new(StringComparer.OrdinalIgnoreCase)
+        {
+            ".DS_Store", "Thumbs.db"
+        };
+
+        // 模板复制时需要排除的扩展名（仅保留现代VS/MSVC在项目根目录会生成的文件）
+        private static readonly HashSet<string> ExcludedExtensions = new(StringComparer.OrdinalIgnoreCase)
+        {
+            ".VC.db", ".VC.opendb"
+        };
+
+        // 判断目录是否应被排除
+        private static bool IsDirectoryExcluded(string dirName)
+        {
+            return ExcludedDirectories.Contains(dirName);
+        }
+
+        // 判断文件是否应被排除
+        private static bool IsFileExcluded(string fileName)
+        {
+            if (ExcludedFiles.Contains(fileName))
+            {
+                return true;
+            }
+
+            string ext = Path.GetExtension(fileName);
+            return !string.IsNullOrEmpty(ext) && ExcludedExtensions.Contains(ext);
+        }
+
         // 异步目录复制方法（支持进度报告）
         private static async Task CopyDirectoryAsync(string sourceDir, string destinationDir, ProgressState? progressState = null)
         {
@@ -1017,6 +1083,13 @@ namespace unreal_GUI.ViewModel
             foreach (var file in Directory.GetFiles(sourceDir))
             {
                 var fileName = Path.GetFileName(file);
+
+                // 跳过被排除的文件
+                if (IsFileExcluded(fileName))
+                {
+                    continue;
+                }
+
                 var destFile = Path.Combine(destinationDir, fileName);
 
                 if (progressState != null)
@@ -1061,10 +1134,17 @@ namespace unreal_GUI.ViewModel
                 }
             }
 
-            // 递归复制子目录
+            // 递归复制子目录（跳过被排除的目录）
             foreach (var dir in Directory.GetDirectories(sourceDir))
             {
                 var dirName = Path.GetFileName(dir);
+
+                // 跳过被排除的目录
+                if (IsDirectoryExcluded(dirName))
+                {
+                    continue;
+                }
+
                 var destDir = Path.Combine(destinationDir, dirName);
                 await CopyDirectoryAsync(dir, destDir, progressState);
             }

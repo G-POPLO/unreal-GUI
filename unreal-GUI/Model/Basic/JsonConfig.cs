@@ -39,16 +39,37 @@ namespace unreal_GUI.Model
 
 
     /// <summary>
-    /// 自定义按钮类
-    /// </summary>
-    public partial class CustomButton : ObservableObject
-    {
-        [ObservableProperty]
-        [JsonPropertyName("name")]
-        private string _name;
+/// 自定义按钮类
+/// </summary>
+public partial class CustomButton : ObservableObject
+{
+    [ObservableProperty]
+    [JsonPropertyName("name")]
+    private string _name;
 
-        [ObservableProperty]
-        [JsonPropertyName("path")]
-        private string _path;
-    }
+    [ObservableProperty]
+    [JsonPropertyName("path")]
+    private string _path;
+}
+
+/// <summary>
+/// LauncherInstalled.dat 数据结构（Epic Games Launcher 安装列表）
+/// </summary>
+public class LauncherInstalledData
+{
+    [JsonPropertyName("InstallationList")]
+    public List<LauncherInstalledEntry> InstallationList { get; set; } = [];
+}
+
+/// <summary>
+/// LauncherInstalled.dat 中的单个条目
+/// </summary>
+public class LauncherInstalledEntry
+{
+    [JsonPropertyName("InstallLocation")]
+    public string InstallLocation { get; set; } = string.Empty;
+
+    [JsonPropertyName("ArtifactId")]
+    public string ArtifactId { get; set; } = string.Empty;
+}
 }

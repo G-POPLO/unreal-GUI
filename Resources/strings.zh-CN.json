@@ -1,0 +1,618 @@
+﻿{
+  "ui_Content_1": {
+    "value": "插件编译",
+    "comment": "Source: MainWindow.xaml:30, Element: ui\nSource: View/Compile.xaml:14, Element: TextBlock"
+  },
+  "ui_Content_2": {
+    "value": "项目重命名",
+    "comment": "Source: MainWindow.xaml:35, Element: ui"
+  },
+  "ui_Content_3": {
+    "value": "快速访问",
+    "comment": "Source: MainWindow.xaml:40, Element: ui\nSource: View/QuickAccess.xaml:18, Element: TextBlock"
+  },
+  "ui_Content_4": {
+    "value": "清除缓存",
+    "comment": "Source: MainWindow.xaml:46, Element: ui"
+  },
+  "ui_Content_5": {
+    "value": "自定义模板",
+    "comment": "Source: MainWindow.xaml:52, Element: ui"
+  },
+  "ui_Content_6": {
+    "value": "项目压缩",
+    "comment": "Source: MainWindow.xaml:58, Element: ui\nSource: View/ProjectCompress.xaml:17, Element: TextBlock"
+  },
+  "ui_Content_7": {
+    "value": "终端",
+    "comment": "Source: MainWindow.xaml:64, Element: ui"
+  },
+  "ui_Content_8": {
+    "value": "设置",
+    "comment": "Source: MainWindow.xaml:71, Element: ui\nSource: View/Settings.xaml:20, Element: TextBlock"
+  },
+  "ui_Content_9": {
+    "value": "关于",
+    "comment": "Source: MainWindow.xaml:76, Element: ui\nSource: View/About.xaml:17, Element: TextBlock"
+  },
+  "Author_Text": {
+    "value": "作者：C-Poplo",
+    "comment": "Source: View/About.xaml:30, Element: TextBlock"
+  },
+  "TextBlock_Text_11": {
+    "value": "一款简单的小工具，原开发目的是辅助用户将繁杂的命令操作转成简单的GUI操作，现正考虑将其打造成为集合各种开发小工具的统一平台。",
+    "comment": "Source: View/About.xaml:31, Element: TextBlock"
+  },
+  "TextBlock_Text_12": {
+    "value": "获取更新",
+    "comment": "Source: View/About.xaml:39, Element: TextBlock"
+  },
+  "TextBlock_Text_13": {
+    "value": "提出反馈",
+    "comment": "Source: View/About.xaml:47, Element: TextBlock"
+  },
+  "TextBlock_Text_14": {
+    "value": "项目进展",
+    "comment": "Source: View/About.xaml:62, Element: TextBlock"
+  },
+  "TextBlock_Text_15": {
+    "value": "使用说明",
+    "comment": "Source: View/About.xaml:78, Element: TextBlock"
+  },
+  "Run_Run_Content_16": {
+    "value": "快速访问：",
+    "comment": "Source: View/About.xaml:82, Element: Run"
+  },
+  "Run_Run_Content_17": {
+    "value": "编译工具：",
+    "comment": "Source: View/About.xaml:88, Element: Run"
+  },
+  "Run_Run_Content_18": {
+    "value": "缓存清理：",
+    "comment": "Source: View/About.xaml:94, Element: Run"
+  },
+  "Run_Run_Content_19": {
+    "value": "重命名工具：",
+    "comment": "Source: View/About.xaml:100, Element: Run"
+  },
+  "Run_Run_Content_20": {
+    "value": "自定义模板：",
+    "comment": "Source: View/About.xaml:106, Element: Run"
+  },
+  "Run_Run_Content_21": {
+    "value": "项目压缩：",
+    "comment": "Source: View/About.xaml:112, Element: Run"
+  },
+  "TextBlock_Text_22": {
+    "value": "缓存清理",
+    "comment": "Source: View/Clear.xaml:15, Element: TextBlock"
+  },
+  "TextBlock_Text_23": {
+    "value": "目录选择",
+    "comment": "Source: View/Clear.xaml:24, Element: TextBlock"
+  },
+  "TextBlock_Text_24": {
+    "value": "选择需要清理的项目目录：",
+    "comment": "Source: View/Clear.xaml:27, Element: TextBlock"
+  },
+  "TextBlock_Text_25": {
+    "value": "浏览",
+    "comment": "Source: View/Clear.xaml:33, Element: TextBlock\nSource: View/Compile.xaml:47, Element: TextBlock\nSource: View/Compile.xaml:69, Element: TextBlock\nSource: View/ProjectCompress.xaml:41, Element: TextBlock\nSource: View/ProjectCompress.xaml:129, Element: TextBlock\nSource: View/ProjectCompress.xaml:149, Element: TextBlock\nSource: View/Rename.xaml:75, Element: TextBlock\nSource: View/Templates.xaml:57, Element: TextBlock"
+  },
+  "TextBlock_Text_26": {
+    "value": "选择清理过程中需要额外清理的目录：",
+    "comment": "Source: View/Clear.xaml:36, Element: TextBlock"
+  },
+  "TextBlock_Text_27": {
+    "value": "开始清理",
+    "comment": "Source: View/Clear.xaml:55, Element: TextBlock"
+  },
+  "TextBlock_Text_28": {
+    "value": "Zen存储服务器仪表盘",
+    "comment": "Source: View/Clear.xaml:71, Element: TextBlock"
+  },
+  "TextBlock_Text_29": {
+    "value": "选择引擎版本：",
+    "comment": "Source: View/Clear.xaml:74, Element: TextBlock"
+  },
+  "TextBlock_Text_30": {
+    "value": "打开Zen存储服务器仪表盘",
+    "comment": "Source: View/Clear.xaml:81, Element: TextBlock"
+  },
+  "TextBlock_Text_31": {
+    "value": "ZenDashboard文档",
+    "comment": "Source: View/Clear.xaml:89, Element: TextBlock"
+  },
+  "TextBlock_Text_32": {
+    "value": "清理日志",
+    "comment": "Source: View/Clear.xaml:104, Element: TextBlock\nSource: View/Clear.xaml:111, Element: TextBlock"
+  },
+  "TextBlock_Text_33": {
+    "value": "清理 AutomationTool\\Logs 目录下的所有内容和 Local\\UnrealEngine 目录下的所有 XmlConfigCache.bin 文件",
+    "comment": "Source: View/Clear.xaml:106, Element: TextBlock"
+  },
+  "TextBlock_Text_34": {
+    "value": "引擎版本选择",
+    "comment": "Source: View/Compile.xaml:23, Element: TextBlock"
+  },
+  "TextBlock_Text_35": {
+    "value": "选择目标引擎版本进行编译",
+    "comment": "Source: View/Compile.xaml:26, Element: TextBlock"
+  },
+  "TextBlock_Text_36": {
+    "value": "插件路径设置",
+    "comment": "Source: View/Compile.xaml:38, Element: TextBlock"
+  },
+  "TextBlock_Text_37": {
+    "value": "选择要编译的插件路径",
+    "comment": "Source: View/Compile.xaml:41, Element: TextBlock"
+  },
+  "TextBlock_Text_38": {
+    "value": "输出路径设置",
+    "comment": "Source: View/Compile.xaml:60, Element: TextBlock"
+  },
+  "TextBlock_Text_39": {
+    "value": "请选择或创建空白文件夹作为输出路径",
+    "comment": "Source: View/Compile.xaml:63, Element: TextBlock"
+  },
+  "TextBlock_Text_40": {
+    "value": "执行编译",
+    "comment": "Source: View/Compile.xaml:82, Element: TextBlock"
+  },
+  "TextBlock_Text_41": {
+    "value": "开始编译",
+    "comment": "Source: View/Compile.xaml:90, Element: TextBlock"
+  },
+  "TextBlock_Text_42": {
+    "value": "项目信息",
+    "comment": "Source: View/ProjectCompress.xaml:26, Element: TextBlock\nSource: View/ProjectCompress.xaml:55, Element: TextBlock"
+  },
+  "TextBlock_Text_43": {
+    "value": "项目路径",
+    "comment": "Source: View/ProjectCompress.xaml:30, Element: TextBlock"
+  },
+  "TextBlock_Text_44": {
+    "value": "项目缩略图",
+    "comment": "Source: View/ProjectCompress.xaml:61, Element: TextBlock"
+  },
+  "TextBlock_Text_45": {
+    "value": "压缩选项",
+    "comment": "Source: View/ProjectCompress.xaml:76, Element: TextBlock"
+  },
+  "TextBlock_Text_46": {
+    "value": "输入/输出产物为7z，-mx值越高，压缩效果越好，但所需的压缩时间也会增长。增量更新要求-mx=&lt;5，由于项目贴图难以压缩，故不推荐其设置过高",
+    "comment": "Source: View/ProjectCompress.xaml:81, Element: TextBlock"
+  },
+  "TextBlock_Text_47": {
+    "value": "要更新的压缩包",
+    "comment": "Source: View/ProjectCompress.xaml:118, Element: TextBlock"
+  },
+  "TextBlock_Text_48": {
+    "value": "输出路径",
+    "comment": "Source: View/ProjectCompress.xaml:138, Element: TextBlock"
+  },
+  "ui_ToolTip_49": {
+    "value": "仅对必要文件进行压缩，关闭则对项目全量压缩",
+    "comment": "Source: View/ProjectCompress.xaml:93, Element: ui"
+  },
+  "ui_ToolTip_50": {
+    "value": "将所有文件视为一个数据流进行压缩，提高压缩率",
+    "comment": "Source: View/ProjectCompress.xaml:98, Element: ui"
+  },
+  "ui_ToolTip_51": {
+    "value": "在现有压缩包基础上更新文件，需要-mx≤5且禁用固实压缩",
+    "comment": "Source: View/ProjectCompress.xaml:104, Element: ui"
+  },
+  "ui_ToolTip_52": {
+    "value": "Textures文件夹使用存储模式，其他文件使用高压缩率",
+    "comment": "Source: View/ProjectCompress.xaml:110, Element: ui"
+  },
+  "ui_Label_53": {
+    "value": "启用过滤器",
+    "comment": "Source: View/ProjectCompress.xaml:93, Element: ui"
+  },
+  "ui_Label_54": {
+    "value": "固实压缩",
+    "comment": "Source: View/ProjectCompress.xaml:98, Element: ui"
+  },
+  "ui_Label_55": {
+    "value": "增量更新",
+    "comment": "Source: View/ProjectCompress.xaml:104, Element: ui"
+  },
+  "Label_56": {
+    "value": "跳过贴图压缩",
+    "comment": "Source: View/ProjectCompress.xaml:110, Element: Unknown"
+  },
+  "TextBlock_Text_57": {
+    "value": "插件目录",
+    "comment": "Source: View/QuickAccess.xaml:27, Element: TextBlock"
+  },
+  "TextBlock_Text_58": {
+    "value": "常用网站",
+    "comment": "Source: View/QuickAccess.xaml:55, Element: TextBlock"
+  },
+  "TextBlock_Text_59": {
+    "value": "社区学习库",
+    "comment": "Source: View/QuickAccess.xaml:67, Element: TextBlock"
+  },
+  "TextBlock_Text_60": {
+    "value": "文档",
+    "comment": "Source: View/QuickAccess.xaml:73, Element: TextBlock"
+  },
+  "TextBlock_Text_61": {
+    "value": "自定义文件夹",
+    "comment": "Source: View/QuickAccess.xaml:93, Element: TextBlock"
+  },
+  "TextBlock_Text_62": {
+    "value": "添加",
+    "comment": "Source: View/QuickAccess.xaml:114, Element: TextBlock"
+  },
+  "TextBlock_Text_63": {
+    "value": "删除",
+    "comment": "Source: View/QuickAccess.xaml:121, Element: TextBlock\nSource: View/Settings.xaml:37, Element: Button\nSource: View/DialogContent/Delete_DialogContent.xaml:10, Element: Button"
+  },
+  "TextBlock_Text_64": {
+    "value": "重命名工具",
+    "comment": "Source: View/Rename.xaml:17, Element: TextBlock"
+  },
+  "TextBlock_Text_65": {
+    "value": "类型选择",
+    "comment": "Source: View/Rename.xaml:26, Element: TextBlock"
+  },
+  "TextBlock_Text_66": {
+    "value": "项目",
+    "comment": "Source: View/Rename.xaml:33, Element: TextBlock"
+  },
+  "TextBlock_Text_67": {
+    "value": "插件",
+    "comment": "Source: View/Rename.xaml:39, Element: TextBlock"
+  },
+  "TextBlock_Text_68": {
+    "value": "蓝图",
+    "comment": "Source: View/Rename.xaml:47, Element: TextBlock"
+  },
+  "TextBlock_Text_69": {
+    "value": "路径设置",
+    "comment": "Source: View/Rename.xaml:67, Element: TextBlock"
+  },
+  "tip0_Text": {
+    "value": "设置输入路径",
+    "comment": "Source: View/Rename.xaml:70, Element: TextBlock"
+  },
+  "TextBlock_Text_71": {
+    "value": "输入重命名名称",
+    "comment": "Source: View/Rename.xaml:82, Element: TextBlock"
+  },
+  "TextBlock_Text_72": {
+    "value": "执行重命名",
+    "comment": "Source: View/Rename.xaml:106, Element: TextBlock"
+  },
+  "TextBlock_Text_73": {
+    "value": "开始重命名",
+    "comment": "Source: View/Rename.xaml:113, Element: TextBlock"
+  },
+  "InfoBar_Title": {
+    "value": "注意",
+    "comment": "Source: View/Rename.xaml:84, Element: ui"
+  },
+  "TextBlock_Text_75": {
+    "value": "引擎目录设定",
+    "comment": "Source: View/Settings.xaml:29, Element: TextBlock"
+  },
+  "TextBlock_Text_76": {
+    "value": "应用设置",
+    "comment": "Source: View/Settings.xaml:53, Element: TextBlock"
+  },
+  "TextBlock_Text_77": {
+    "value": "默认设置",
+    "comment": "Source: View/Settings.xaml:56, Element: TextBlock"
+  },
+  "TextBlock_Text_78": {
+    "value": "实验性选项",
+    "comment": "Source: View/Settings.xaml:95, Element: TextBlock"
+  },
+  "TextBlock_Text_79": {
+    "value": "开启实验性选项后会启用一些尚未完成开发的实验性功能，这些功能可能会不适应未来版本",
+    "comment": "Source: View/Settings.xaml:98, Element: TextBlock"
+  },
+  "TextBlock_Text_80": {
+    "value": "开机启动Fab资产检查",
+    "comment": "Source: View/Settings.xaml:121, Element: TextBlock"
+  },
+  "TextBlock_Text_81": {
+    "value": "使用EpicGames Launcher来打开Fab网站",
+    "comment": "Source: View/Settings.xaml:131, Element: TextBlock"
+  },
+  "TextBlock_Text_82": {
+    "value": "使用Headless方式获取Fab信息（建议关闭，开启后可能会无法爬取）",
+    "comment": "Source: View/Settings.xaml:141, Element: TextBlock"
+  },
+  "TextBlock_Text_83": {
+    "value": "指定Playwright使用的浏览器",
+    "comment": "Source: View/Settings.xaml:151, Element: TextBlock\nSource: View/Settings.xaml:164, Element: TextBlock"
+  },
+  "TextBlock_Text_84": {
+    "value": "高级选项",
+    "comment": "Source: View/Settings.xaml:183, Element: TextBlock"
+  },
+  "TextBlock_Text_85": {
+    "value": "启用扩展功能",
+    "comment": "Source: View/Settings.xaml:193, Element: TextBlock"
+  },
+  "TextBlock_Text_86": {
+    "value": "窗口设置",
+    "comment": "Source: View/Settings.xaml:213, Element: TextBlock"
+  },
+  "TextBlock_Text_87": {
+    "value": "窗口样式",
+    "comment": "Source: View/Settings.xaml:222, Element: TextBlock"
+  },
+  "TextBlock_Text_88": {
+    "value": "窗口动画",
+    "comment": "Source: View/Settings.xaml:238, Element: TextBlock"
+  },
+  "TextBlock_Text_89": {
+    "value": "保存设置",
+    "comment": "Source: View/Settings.xaml:259, Element: TextBlock"
+  },
+  "TextBlock_Text_90": {
+    "value": "打开配置文件夹",
+    "comment": "Source: View/Settings.xaml:265, Element: TextBlock"
+  },
+  "Button_Content_91": {
+    "value": "新增",
+    "comment": "Source: View/Settings.xaml:36, Element: Button"
+  },
+  "Button_Content_92": {
+    "value": "自动设置引擎路径",
+    "comment": "Source: View/Settings.xaml:39, Element: Button"
+  },
+  "Button0_Label": {
+    "value": "任务完成后打开输出文件夹",
+    "comment": "Source: View/Settings.xaml:60, Element: ui"
+  },
+  "Button3_Label": {
+    "value": "应用程序启动时自动检查更新",
+    "comment": "Source: View/Settings.xaml:67, Element: ui"
+  },
+  "Button1_Label": {
+    "value": "使用Gitcode作为更新下载源",
+    "comment": "Source: View/Settings.xaml:74, Element: ui"
+  },
+  "beta_Button0_Label": {
+    "value": "Fab免费资产领取通知",
+    "comment": "Source: View/Settings.xaml:102, Element: ui"
+  },
+  "TextBlock_Text_97": {
+    "value": "创建自定义模板",
+    "comment": "Source: View/Templates.xaml:21, Element: TextBlock"
+  },
+  "TextBlock_Text_98": {
+    "value": "将您的Unreal Engine项目转换为可重用的自定义模板",
+    "comment": "Source: View/Templates.xaml:22, Element: TextBlock"
+  },
+  "TextBlock_Text_99": {
+    "value": "引擎选择",
+    "comment": "Source: View/Templates.xaml:31, Element: TextBlock"
+  },
+  "TextBlock_Text_100": {
+    "value": "选择要安装模板的Unreal Engine版本",
+    "comment": "Source: View/Templates.xaml:38, Element: TextBlock"
+  },
+  "TextBlock_Text_101": {
+    "value": "项目选择",
+    "comment": "Source: View/Templates.xaml:49, Element: TextBlock"
+  },
+  "TextBlock_Text_102": {
+    "value": "选择您想要转换为模板的Unreal Engine项目文件夹",
+    "comment": "Source: View/Templates.xaml:62, Element: TextBlock"
+  },
+  "TextBlock_Text_103": {
+    "value": "模板信息",
+    "comment": "Source: View/Templates.xaml:74, Element: TextBlock"
+  },
+  "TextBlock_Text_104": {
+    "value": "以下信息将填入Config\\TemplateDefs.ini",
+    "comment": "Source: View/Templates.xaml:79, Element: TextBlock"
+  },
+  "TextBlock_Text_105": {
+    "value": "模板名称",
+    "comment": "Source: View/Templates.xaml:82, Element: TextBlock"
+  },
+  "Text_106": {
+    "value": "启用此选项允许用户直接从此模板创建新项目,这将显示在新建项目对话框中的模板选择区域",
+    "comment": "Source: View/Templates.xaml:88, Element: Unknown"
+  },
+  "TextBlock_Text_107": {
+    "value": "禁用则只作为功能包引用",
+    "comment": "Source: View/Templates.xaml:91, Element: TextBlock"
+  },
+  "TextBlock_Text_108": {
+    "value": "英文描述",
+    "comment": "Source: View/Templates.xaml:106, Element: TextBlock\nSource: View/DialogContent/Add_Categories.xaml:51, Element: TextBlock"
+  },
+  "TextBlock_Text_109": {
+    "value": "(必填)",
+    "comment": "Source: View/Templates.xaml:107, Element: TextBlock\nSource: View/DialogContent/Add_Categories.xaml:52, Element: TextBlock"
+  },
+  "TextBlock_Text_110": {
+    "value": "中文描述",
+    "comment": "Source: View/Templates.xaml:114, Element: TextBlock\nSource: View/DialogContent/Add_Categories.xaml:59, Element: TextBlock"
+  },
+  "TextBlock_Text_111": {
+    "value": "日文描述",
+    "comment": "Source: View/Templates.xaml:120, Element: TextBlock\nSource: View/DialogContent/Add_Categories.xaml:65, Element: TextBlock"
+  },
+  "TextBlock_Text_112": {
+    "value": "韩文描述",
+    "comment": "Source: View/Templates.xaml:126, Element: TextBlock\nSource: View/DialogContent/Add_Categories.xaml:71, Element: TextBlock"
+  },
+  "TextBlock_Text_113": {
+    "value": "模板类别",
+    "comment": "Source: View/Templates.xaml:140, Element: TextBlock"
+  },
+  "TextBlock_Text_114": {
+    "value": "选择模板将显示在新建项目对话框中的类别",
+    "comment": "Source: View/Templates.xaml:160, Element: TextBlock"
+  },
+  "TextBlock_Text_115": {
+    "value": "创建新的分类",
+    "comment": "Source: View/Templates.xaml:166, Element: TextBlock"
+  },
+  "TextBlock_Text_116": {
+    "value": "图标和预览图（可选）",
+    "comment": "Source: View/Templates.xaml:179, Element: TextBlock"
+  },
+  "TextBlock_Text_117": {
+    "value": "模板图标",
+    "comment": "Source: View/Templates.xaml:184, Element: TextBlock"
+  },
+  "TextBlock_Text_118": {
+    "value": "选择图标",
+    "comment": "Source: View/Templates.xaml:192, Element: TextBlock\nSource: View/DialogContent/Add_Categories.xaml:40, Element: Button"
+  },
+  "Text_119": {
+    "value": "PNG格式，推荐128x128像素",
+    "comment": "Source: View/Templates.xaml:195, Element: Unknown"
+  },
+  "TextBlock_Text_120": {
+    "value": "模板预览图",
+    "comment": "Source: View/Templates.xaml:201, Element: TextBlock"
+  },
+  "TextBlock_Text_121": {
+    "value": "选择预览图",
+    "comment": "Source: View/Templates.xaml:209, Element: TextBlock"
+  },
+  "Text_122": {
+    "value": "PNG格式，推荐400x200像素",
+    "comment": "Source: View/Templates.xaml:212, Element: Unknown"
+  },
+  "TextBlock_Text_123": {
+    "value": "打开引擎模板文件夹",
+    "comment": "Source: View/Templates.xaml:244, Element: TextBlock"
+  },
+  "TextBlock_Text_124": {
+    "value": "恢复备份配置文件",
+    "comment": "Source: View/Templates.xaml:250, Element: TextBlock"
+  },
+  "TextBlock_Text_125": {
+    "value": "查看配置文件备份",
+    "comment": "Source: View/Templates.xaml:256, Element: TextBlock"
+  },
+  "CheckBox_Content_126": {
+    "value": "创建模板项目",
+    "comment": "Source: View/Templates.xaml:87, Element: CheckBox"
+  },
+  "CheckBox_Content_127": {
+    "value": "启用多语言配置",
+    "comment": "Source: View/Templates.xaml:102, Element: CheckBox"
+  },
+  "TextBlock_Text_128": {
+    "value": "Command Line Terminal 功能正在开发中，敬请期待！ ",
+    "comment": "Source: View/Terminal.xaml:17, Element: TextBlock"
+  },
+  "ui_Title_129": {
+    "value": "提示",
+    "comment": "Source: View/Terminal.xaml:13, Element: ui"
+  },
+  "TextBlock_Text_130": {
+    "value": "Key (必填)",
+    "comment": "Source: View/DialogContent/Add_Categories.xaml:15, Element: TextBlock"
+  },
+  "TextBlock_Text_131": {
+    "value": "应简短易懂，用于从模板引用类别，例如",
+    "comment": "Source: View/DialogContent/Add_Categories.xaml:19, Element: TextBlock"
+  },
+  "TextBlock_Text_132": {
+    "value": "主类别在UI中显示为完整行，非主类别显示为子项",
+    "comment": "Source: View/DialogContent/Add_Categories.xaml:30, Element: TextBlock"
+  },
+  "TextBlock_Text_133": {
+    "value": "类别图标",
+    "comment": "Source: View/DialogContent/Add_Categories.xaml:34, Element: TextBlock"
+  },
+  "TextBlock_Text_134": {
+    "value": "PNG格式，建议大小为600x200像素",
+    "comment": "Source: View/DialogContent/Add_Categories.xaml:41, Element: TextBlock"
+  },
+  "TextBlock_Text_135": {
+    "value": "生成结果:",
+    "comment": "Source: View/DialogContent/Add_Categories.xaml:83, Element: TextBlock"
+  },
+  "TextBlock_Text_136": {
+    "value": "以下文本将插入TemplateCategories.ini，且生成的配置对已安装的引擎全局生效",
+    "comment": "Source: View/DialogContent/Add_Categories.xaml:86, Element: TextBlock"
+  },
+  "CheckBox_Content_137": {
+    "value": "是否为主类别 (Major Category)",
+    "comment": "Source: View/DialogContent/Add_Categories.xaml:22, Element: CheckBox"
+  },
+  "CheckBox_Content_138": {
+    "value": "启用多语言文本配置",
+    "comment": "Source: View/DialogContent/Add_Categories.xaml:25, Element: CheckBox"
+  },
+  "Button_Content_139": {
+    "value": "生成Categories文本",
+    "comment": "Source: View/DialogContent/Add_Categories.xaml:77, Element: Button"
+  },
+  "Button_Content_140": {
+    "value": "重置表单",
+    "comment": "Source: View/DialogContent/Add_Categories.xaml:78, Element: Button"
+  },
+  "TextBlock_ToolTip_141": {
+    "value": "用于从模板引用类别的名称，应简短易懂",
+    "comment": "Source: View/DialogContent/Add_Categories.xaml:15, Element: TextBlock"
+  },
+  "TextBlock_Text_142": {
+    "value": "自定义按钮名称",
+    "comment": "Source: View/DialogContent/Add_DialogContent.xaml:9, Element: TextBlock"
+  },
+  "TextBlock_Text_143": {
+    "value": "按钮路径",
+    "comment": "Source: View/DialogContent/Add_DialogContent.xaml:11, Element: TextBlock"
+  },
+  "Button_Content_144": {
+    "value": "设置路径",
+    "comment": "Source: View/DialogContent/Add_DialogContent.xaml:13, Element: Button"
+  },
+  "TextBlock_Text_145": {
+    "value": "请选择预删除的按钮",
+    "comment": "Source: View/DialogContent/Delete_DialogContent.xaml:8, Element: TextBlock"
+  },
+  "TextBlock_Text_146": {
+    "value": "图片剪裁工具",
+    "comment": "Source: View/DialogContent/ImageEdit.xaml:21, Element: TextBlock"
+  },
+  "Text_147": {
+    "value": "本工具用于将图片剪裁为3:1比例，适用于类别(Categories)图标。",
+    "comment": "Source: View/DialogContent/ImageEdit.xaml:22, Element: Unknown"
+  },
+  "TextBlock_Text_148": {
+    "value": "尺寸: ",
+    "comment": "Source: View/DialogContent/ImageEdit.xaml:122, Element: TextBlock"
+  },
+  "TextBlock_Text_149": {
+    "value": "剪裁比例: 3:1",
+    "comment": "Source: View/DialogContent/ImageEdit.xaml:139, Element: TextBlock"
+  },
+  "PNGCompressCheckBox_Content": {
+    "value": "启用压缩",
+    "comment": "Source: View/DialogContent/ImageEdit.xaml:162, Element: CheckBox"
+  },
+  "FinishCropButton_Content": {
+    "value": "完成剪裁",
+    "comment": "Source: View/DialogContent/ImageEdit.xaml:169, Element: Button"
+  },
+  "TextBlock_Text_152": {
+    "value": "进度",
+    "comment": "Source: View/DialogContent/ProgressInfo.xaml:11, Element: TextBlock"
+  },
+  "TextBlock_Text_153": {
+    "value": "信息",
+    "comment": "Source: View/DialogContent/ProgressInfo.xaml:26, Element: TextBlock"
+  },
+  "TextBlock_Text_154": {
+    "value": "教程图片",
+    "comment": "Source: View/DialogContent/Tutorial.xaml:21, Element: TextBlock"
+  }
+}
