@@ -31,7 +31,7 @@ namespace unreal_GUI.ViewModel
         public partial bool AutoOpen { get; set; }
 
         [ObservableProperty]
-        public partial bool Gitcode { get; set; }
+        public partial bool NonGithub { get; set; }
 
         [ObservableProperty]
         public partial bool AutoUpdate { get; set; }
@@ -74,7 +74,7 @@ namespace unreal_GUI.ViewModel
         {
             // 初始化设置
             AutoOpen = Properties.Settings.Default.AutoOpen;
-            Gitcode = Properties.Settings.Default.Gitcode;
+            NonGithub = Properties.Settings.Default.NonGithub;
             AutoUpdate = Properties.Settings.Default.AutoUpdate;
             //AutoClaimEnabled = Properties.Settings.Default.AutoClaimEnabled;
             // 从INI文件读取LimitedTime
@@ -159,7 +159,7 @@ namespace unreal_GUI.ViewModel
         {
             // 保存应用程序设置
             Properties.Settings.Default.AutoOpen = AutoOpen;
-            Properties.Settings.Default.Gitcode = Gitcode;
+            Properties.Settings.Default.NonGithub = NonGithub;
             Properties.Settings.Default.AutoUpdate = AutoUpdate;
             //Properties.Settings.Default.AutoClaimEnabled = AutoClaimEnabled;
             Properties.Settings.Default.LimitedTime = LimitedTime;

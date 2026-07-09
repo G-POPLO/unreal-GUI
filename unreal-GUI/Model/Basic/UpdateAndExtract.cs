@@ -38,10 +38,8 @@ namespace unreal_GUI.Model.Basic
             {
                 using HttpClient client = new();
                 client.DefaultRequestHeaders.UserAgent.ParseAdd("unreal-GUI");
-                // 从API获取最新版本信息
-                var response = Properties.Settings.Default.Gitcode
-                    ? await client.GetAsync("https://api.gitcode.com/api/v5/repos/C-Poplo/unreal-GUI/releases/latest/?access_token=4RszX_1zdryXuvgwHbV-Edr7")
-                    : await client.GetAsync("https://api.github.com/repos/G-POPLO/unreal-GUI/releases/latest");
+                // 从GitHub API获取最新版本信息
+                var response = await client.GetAsync("https://api.github.com/repos/G-POPLO/unreal-GUI/releases/latest");
 
                 release_info = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
                 latestVersion = release_info.RootElement.GetProperty("tag_name").GetString();
@@ -91,6 +89,12 @@ namespace unreal_GUI.Model.Basic
 
                 if (!string.IsNullOrEmpty(downloadUrl))
                 {
+                    // 当启用第三方更新源时，使用gh-proxy加速下载
+                    if (Properties.Settings.Default.NonGithub)
+                    {
+                        downloadUrl = $"https://gh-proxy.org/{downloadUrl}";
+                    }
+
                     var downloadDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "download");
                     Directory.CreateDirectory(downloadDir);
                     var downloadPath = Path.Combine(downloadDir, "unreal_setup.exe");

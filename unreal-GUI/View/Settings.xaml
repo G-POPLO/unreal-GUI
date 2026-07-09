@@ -71,8 +71,8 @@
                                 </ui:AppBarToggleButton.Icon>
                             </ui:AppBarToggleButton>
                             <ui:AppBarSeparator />
-                            <ui:AppBarToggleButton x:Name="Button1" Label="使用Gitcode作为更新下载源" 
-                                                   IsChecked="{Binding Gitcode}"  HorizontalAlignment="Left">
+                            <ui:AppBarToggleButton x:Name="Button1" Label="使用第三方更新源" 
+                                                   IsChecked="{Binding NonGithub}"  HorizontalAlignment="Left">
                                 <ui:AppBarToggleButton.Icon>
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEC05;"/>
                                 </ui:AppBarToggleButton.Icon>
@@ -124,8 +124,8 @@
                         </Grid>
 
 
-                        <!-- 自动领取相关设置暂时注释
-                        <Grid Margin="0,0,0,15">
+                  
+                        <!--<Grid Margin="0,0,0,15">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
@@ -133,7 +133,7 @@
                             <TextBlock Grid.Column="0" TextWrapping="Wrap" 
                                        VerticalAlignment="Center" IsEnabled="{Binding AutoClaimEnabled}"><Run Language="zh-cn" Text="使用个人许可证（关闭使用专业许可证）"/></TextBlock>
                             <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding HasUsingPro}" IsEnabled="{Binding AutoClaimEnabled}"/>
-                        </Grid>
+                        </Grid>-->
 
 
                         <Grid Margin="0,0,0,15">
@@ -141,7 +141,7 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="使用EpicGames Launcher来打开Fab网站" 
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="使用EpicGames Launcher打开Fab网站" 
                                        VerticalAlignment="Center" IsEnabled="{Binding AutoClaimEnabled}"/>
                             <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding OpenEpic}" IsEnabled="{Binding AutoClaimEnabled}"/>
                         </Grid>
@@ -151,7 +151,7 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="使用Headless方式获取Fab信息（建议关闭，开启后可能会无法爬取）" 
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="使用Headless Mode（建议关闭，开启后可能会无法爬取）" 
                                        VerticalAlignment="Center" IsEnabled="{Binding AutoClaimEnabled}"/>
                             <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding HeadlessEnabled}" IsEnabled="{Binding AutoClaimEnabled}"/>
                         </Grid>
@@ -168,21 +168,6 @@
                                 <ComboBoxItem Content="Chrome" Tag="1"/>
                             </ComboBox>
                         </Grid>
-                        -->
-
-                        <!--<Grid Margin="0,0,0,15">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="Auto" MinWidth="120"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="指定Playwright使用的浏览器" Margin="0,8,0,8"/>
-                            <ComboBox x:Name="BrowerOption" Grid.Column="1" d:LayoutOverrides="Height" Margin="-32,0,0,0" VerticalAlignment="Stretch" Width="120"/>
-                        </Grid>-->
-                      
-
-
-
-
                     </StackPanel>
 
                 </Border>
