@@ -2,6 +2,7 @@ using iNKORE.UI.WPF.Modern.Controls;
 using iNKORE.UI.WPF.Modern.Controls.Helpers;
 using iNKORE.UI.WPF.Modern.Helpers.Styles;
 using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Navigation;
 using unreal_GUI.View;
@@ -19,6 +20,7 @@ namespace unreal_GUI
             DataContext = new MainWindowViewModel();
 
             Loaded += MainWindow_Loaded;
+            Closing += MainWindow_Closing;
         }
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -43,6 +45,8 @@ namespace unreal_GUI
             await MainWindowViewModel.AutoUpdate();
             //await MainWindowViewModel.CheckFabAsset();
 
+            // 恢复窗口大小和位置
+            RestoreWindowState();
         }
 
         private void SetSystemBackdropType()
@@ -151,6 +155,59 @@ namespace unreal_GUI
             if (e.PropertyName == nameof(MainWindowViewModel.BackdropType))
             {
                 SetSystemBackdropType();
+            }
+        }
+
+        private void MainWindow_Closing(object sender, CancelEventArgs e)
+        {
+            if (Properties.Settings.Default.RememberWindowSize)
+            {
+                if (WindowState == WindowState.Normal)
+                {
+                    Properties.Settings.Default.WindowWidth = Width;
+                    Properties.Settings.Default.WindowHeight = Height;
+                    Properties.Settings.Default.WindowLeft = Left;
+                    Properties.Settings.Default.WindowTop = Top;
+                    Properties.Settings.Default.WindowMaximized = false;
+                }
+                else
+                {
+                    Properties.Settings.Default.WindowMaximized = true;
+                }
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        private void RestoreWindowState()
+        {
+            if (Properties.Settings.Default.RememberWindowSize)
+            {
+                if (Properties.Settings.Default.WindowMaximized)
+                {
+                    WindowState = WindowState.Maximized;
+                }
+                else
+                {
+                    var savedWidth = Properties.Settings.Default.WindowWidth;
+                    var savedHeight = Properties.Settings.Default.WindowHeight;
+                    var savedLeft = Properties.Settings.Default.WindowLeft;
+                    var savedTop = Properties.Settings.Default.WindowTop;
+
+                    // 确保保存的尺寸在合理范围内
+                    if (savedWidth >= MinWidth && savedHeight >= MinHeight)
+                    {
+                        Width = savedWidth;
+                        Height = savedHeight;
+                    }
+
+                    // 确保窗口位置在可见的屏幕范围内
+                    if (savedLeft >= -1000 && savedTop >= -1000)
+                    {
+                        WindowStartupLocation = WindowStartupLocation.Manual;
+                        Left = savedLeft;
+                        Top = savedTop;
+                    }
+                }
             }
         }
 

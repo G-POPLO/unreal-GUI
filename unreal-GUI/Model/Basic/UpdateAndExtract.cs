@@ -40,9 +40,22 @@ namespace unreal_GUI.Model.Basic
                 client.DefaultRequestHeaders.UserAgent.ParseAdd("unreal-GUI");
                 // 从GitHub API获取最新版本信息
                 var response = await client.GetAsync("https://api.github.com/repos/G-POPLO/unreal-GUI/releases/latest");
+                response.EnsureSuccessStatusCode();
 
                 release_info = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
-                latestVersion = release_info.RootElement.GetProperty("tag_name").GetString();
+                
+                // 检查是否是限流响应
+                if (release_info.RootElement.TryGetProperty("message", out var msgElement) &&
+                    !release_info.RootElement.TryGetProperty("tag_name", out _))
+                {
+                    throw new Exception($"GitHub API 返回错误: {msgElement.GetString()}");
+                }
+
+                if (!release_info.RootElement.TryGetProperty("tag_name", out var tagNameElement))
+                {
+                    throw new Exception("GitHub API 响应中未找到 tag_name 字段");
+                }
+                latestVersion = tagNameElement.GetString();
 
                 if (Version.Parse(latestVersion) > Version.Parse(currentVersion))
                 {

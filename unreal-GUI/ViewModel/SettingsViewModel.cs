@@ -36,10 +36,9 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         public partial bool AutoUpdate { get; set; }
 
-        // 自动领取功能暂时注释
-        //[ObservableProperty]
-        //private bool _autoClaimEnabled;
 
+        [ObservableProperty]
+        public partial bool AutoClaimEnabled { get; set; }
         [ObservableProperty]
         public partial bool FabNotification { get; set; }
 
@@ -68,7 +67,10 @@ namespace unreal_GUI.ViewModel
         public partial byte BrowerType { get; set; }
 
         [ObservableProperty]
-        private bool _hasUsingPro;
+        public partial bool HasUsingPro { get; set; }
+
+        [ObservableProperty]
+        public partial bool RememberWindowSize { get; set; }
 
         public SettingsViewModel()
         {
@@ -76,7 +78,7 @@ namespace unreal_GUI.ViewModel
             AutoOpen = Properties.Settings.Default.AutoOpen;
             NonGithub = Properties.Settings.Default.NonGithub;
             AutoUpdate = Properties.Settings.Default.AutoUpdate;
-            //AutoClaimEnabled = Properties.Settings.Default.AutoClaimEnabled;
+            AutoClaimEnabled = Properties.Settings.Default.AutoClaimEnabled;
             // 从INI文件读取LimitedTime
             IniConfig iniConfig = new();
             LimitedTime = iniConfig.ReadDateTime("LimitedTime", Properties.Settings.Default.LimitedTime);
@@ -88,6 +90,7 @@ namespace unreal_GUI.ViewModel
             AminateType = Properties.Settings.Default.AminateType;
             BrowerType = Properties.Settings.Default.BrowerType;
             HasUsingPro = Properties.Settings.Default.HasUsingPro;
+            RememberWindowSize = Properties.Settings.Default.RememberWindowSize;
 
             if (File.Exists("settings.json"))
             {
@@ -174,7 +177,7 @@ namespace unreal_GUI.ViewModel
             Properties.Settings.Default.AutoOpen = AutoOpen;
             Properties.Settings.Default.NonGithub = NonGithub;
             Properties.Settings.Default.AutoUpdate = AutoUpdate;
-            //Properties.Settings.Default.AutoClaimEnabled = AutoClaimEnabled;
+            Properties.Settings.Default.AutoClaimEnabled = AutoClaimEnabled;
             Properties.Settings.Default.LimitedTime = LimitedTime;
             Properties.Settings.Default.AutoStart = AutoStart;
             Properties.Settings.Default.OpenEpic = OpenEpic;
@@ -184,6 +187,7 @@ namespace unreal_GUI.ViewModel
             Properties.Settings.Default.AminateType = AminateType;
             Properties.Settings.Default.BrowerType = BrowerType;
             Properties.Settings.Default.HasUsingPro = HasUsingPro;
+            Properties.Settings.Default.RememberWindowSize = RememberWindowSize;
 
             Properties.Settings.Default.Save();
 

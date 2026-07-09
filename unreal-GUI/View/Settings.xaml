@@ -81,7 +81,7 @@
                             <ui:AppBarSeparator />
 
                             <ui:AppBarToggleButton x:Name="Button2" Label="记忆当前窗口大小" 
-                        IsChecked="{Binding NonGithub}"  HorizontalAlignment="Left">
+                        IsChecked="{Binding RememberWindowSize}"  HorizontalAlignment="Left">
                                 <ui:AppBarToggleButton.Icon>
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xe744;"/>
                                 </ui:AppBarToggleButton.Icon>
@@ -105,9 +105,9 @@
                             <TextBlock Text="扩展功能" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
 
-                        <!--<TextBlock Text="Fab资产爬取扩展选项" 
-                                   TextWrapping="Wrap" Margin="0,0,0,15"/>-->
-                        <!--<WrapPanel x:Name="beta_Panel"  Orientation="Horizontal">
+                        <TextBlock Text="Fab资产爬取选项" 
+                                   TextWrapping="Wrap" Margin="0,0,0,5"/>
+                        <WrapPanel x:Name="beta_Panel"  Orientation="Horizontal">
                             <ui:AppBarSeparator />
                             <ui:AppBarToggleButton x:Name="beta_Button0" Label="Fab免费资产自动领取" 
           IsChecked="{Binding AutoClaimEnabled}" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -119,9 +119,9 @@
 
 
 
-                        </WrapPanel>-->
+                        </WrapPanel>
                         <TextBlock x:Name="LimitedTime" Text="{Binding LimitedTime, StringFormat=Fab免费资产获取截至时间：\{0:yyyy-MM-dd HH:mm:ss\}}" 
-                                   TextWrapping="Wrap" Margin="0,5,0,10" FontWeight="SemiBold"/>
+                                   TextWrapping="Wrap" Margin="0,5,0,5" FontWeight="SemiBold"/>
 
                         <Grid Margin="0,0,0,15">
                             <Grid.ColumnDefinitions>
