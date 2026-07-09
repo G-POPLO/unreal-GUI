@@ -88,7 +88,7 @@ namespace reminder
             string channel = browerType == 1 ? "chrome" : "msedge";
             await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
             {
-                Headless = false, // 默认使用无头模式
+                Headless = false,
                 Channel = channel,
                 Args =
                 [

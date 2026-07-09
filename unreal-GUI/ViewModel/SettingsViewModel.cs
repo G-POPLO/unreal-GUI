@@ -204,6 +204,7 @@ namespace unreal_GUI.ViewModel
             File.WriteAllText("settings.json", JsonSerializer.Serialize(settings, options));
 
             TipText = "设置已保存";
+            SoundFX.PlaySound(0);
             return Task.CompletedTask;
         }
 

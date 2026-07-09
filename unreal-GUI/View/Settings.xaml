@@ -80,6 +80,16 @@
 
                             <ui:AppBarSeparator />
 
+                            <ui:AppBarToggleButton x:Name="Button2" Label="记忆当前窗口大小" 
+                        IsChecked="{Binding NonGithub}"  HorizontalAlignment="Left">
+                                <ui:AppBarToggleButton.Icon>
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xe744;"/>
+                                </ui:AppBarToggleButton.Icon>
+                            </ui:AppBarToggleButton>
+
+                            <ui:AppBarSeparator />
+
+
                         </WrapPanel>
                     </StackPanel>
                 </Border>
