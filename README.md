@@ -58,7 +58,6 @@ Unreal-GUI 是一款旨在简化虚幻引擎（Unreal Engine）相关操作流�
 - [renom](https://github.com/UnrealisticDev/Renom)
 - [SoftCircuits.IniFileParser](https://www.nuget.org/packages/SoftCircuits.IniFileParser)
 - [7-Zip.CommandLine](https://www.nuget.org/packages/7-Zip.CommandLine)
-- [SixLabors.ImageSharp](https://www.nuget.org/packages/SixLabors.ImageSharp)
 - [NAudio.Wasapi](https://www.nuget.org/packages/NAudio.Wasapi)&[Concentus.Oggfile](https://www.nuget.org/packages/Concentus.Oggfile)
 - [Markdig.Wpf](https://www.nuget.org/packages/Markdig.Wpf)
 - [iNKORE.UI.WPF.Modern](https://github.com/iNKORE-NET/UI.WPF.Modern)

@@ -1,7 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
@@ -25,37 +24,11 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         public partial byte BackdropType { get; set; }
 
-        [ObservableProperty]
-        public partial ObservableCollection<string> NavigationHistory { get; set; } = [];
-
         [RelayCommand]
         private void NavigateToPage(string pageTag)
         {
-
             CurrentPageTag = pageTag;
             NavigationRequested?.Invoke(this, pageTag);
-
-            // 添加到导航历史
-            if (!NavigationHistory.Contains(pageTag))
-            {
-                NavigationHistory.Add(pageTag);
-            }
-
-
-        }
-
-        // 返回上一页的命令
-        [RelayCommand]
-        private void GoBack()
-        {
-            if (NavigationHistory.Count > 1)
-            {
-                // 移除当前页面
-                NavigationHistory.RemoveAt(NavigationHistory.Count - 1);
-                // 获取上一个页面
-                string previousPage = NavigationHistory[^1];
-                NavigateToPage(previousPage);
-            }
         }
 
         public MainWindowViewModel()

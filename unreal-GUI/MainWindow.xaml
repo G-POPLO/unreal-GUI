@@ -13,14 +13,9 @@
         >
     
 
-    <Window.DataContext>
-        <viewModel:MainWindowViewModel />
-    </Window.DataContext>
     <Grid>
       
         <ui:NavigationView x:Name="NavigationView" 
-                           Tag="{Binding CurrentPageTag, Mode=TwoWay}"
-                           
                            SelectionChanged="NavigationView_SelectionChanged"
                            BackRequested="NavigationView_BackRequested"                        
                            IsPaneOpen="False"

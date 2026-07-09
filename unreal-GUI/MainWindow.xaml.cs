@@ -13,6 +13,8 @@ namespace unreal_GUI
 {
     public partial class MainWindow : Window
     {
+        private bool _isFirstContentRendered = true;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -20,12 +22,12 @@ namespace unreal_GUI
             DataContext = new MainWindowViewModel();
 
             Loaded += MainWindow_Loaded;
+            ContentRendered += MainWindow_ContentRendered;
             Closing += MainWindow_Closing;
         }
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-
             SetSystemBackdropType();
 
             if (!Properties.Settings.Default.IsUpgraded)
@@ -39,7 +41,6 @@ namespace unreal_GUI
             {
                 viewModel.NavigationRequested += OnNavigationRequested;
                 viewModel.PropertyChanged += ViewModel_PropertyChanged;
-                await viewModel.InitializeJson_Async();
             }
 
             await MainWindowViewModel.AutoUpdate();
@@ -47,6 +48,18 @@ namespace unreal_GUI
 
             // 恢复窗口大小和位置
             RestoreWindowState();
+        }
+
+        private async void MainWindow_ContentRendered(object sender, EventArgs e)
+        {
+            if (!_isFirstContentRendered)
+                return;
+            _isFirstContentRendered = false;
+
+            if (DataContext is MainWindowViewModel viewModel)
+            {
+                await viewModel.InitializeJson_Async();
+            }
         }
 
         private void SetSystemBackdropType()
