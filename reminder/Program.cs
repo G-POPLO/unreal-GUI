@@ -46,21 +46,21 @@ namespace reminder
                 {
                     Console.WriteLine($"获取到最新截止时间: {newLimitedTime.Value}");
 
-                    // 检查是否启用了自动领取功能
-                    bool autoClaimEnabled = configReader.ReadBool("AutoClaimEnabled", false);
-                    if (autoClaimEnabled)
-                    {
-                        Console.WriteLine("自动领取功能已启用，开始自动化领取...");
-                        bool claimResult = await FabReminder.AutoClaimFabAssetsAsync();
-                        if (claimResult)
-                        {
-                            Console.WriteLine("自动领取成功！");
-                        }
-                        else
-                        {
-                            Console.WriteLine("自动领取失败，请手动领取。");
-                        }
-                    }
+                    // 自动领取功能暂时注释
+                    //bool autoClaimEnabled = configReader.ReadBool("AutoClaimEnabled", false);
+                    //if (autoClaimEnabled)
+                    //{
+                    //    Console.WriteLine("自动领取功能已启用，开始自动化领取...");
+                    //    bool claimResult = await FabReminder.AutoClaimFabAssetsAsync();
+                    //    if (claimResult)
+                    //    {
+                    //        Console.WriteLine("自动领取成功！");
+                    //    }
+                    //    else
+                    //    {
+                    //        Console.WriteLine("自动领取失败，请手动领取。");
+                    //    }
+                    //}
 
                     Console.WriteLine("程序执行完毕，按任意键退出...");
                     Console.ReadKey();
