@@ -1,0 +1,22 @@
+            - name: WinGet Releaser
+  # You may pin to the exact commit or the version.
+  # uses: vedantmgoyal9/winget-releaser@4ffc7888bffd451b357355dc214d43bb9f23917e
+  uses: vedantmgoyal9/winget-releaser@v2
+  with:
+    # The PackageIdentifier of the package (case-sensitive).
+    identifier: C-POPLO.Unreal-GUI
+    # The PackageVersion of the package you want to release.
+    version: # optional
+    # The regex to match the installers.
+    installers-regex: .(exe|msi|msix|appx)(bundle){0,1}$ # default is .(exe|msi|msix|appx)(bundle){0,1}$
+    # The maximum number of versions to keep in WinGet Community Repository (Default: 0 - no limit)
+    max-versions-to-keep: 3 # default is 0
+    # The repository where the release is present (should be present under same user/organization).
+    release-repository:  ${{ github.event.repository.name }} # default is ${{ github.event.repository.name }}
+    # The release tag to be used for creating manifests.
+    release-tag: ${{ github.event.release.tag_name || github.ref_name }} # default is ${{ github.event.release.tag_name || github.ref_name }}
+    # GitHub token to create pull request on Windows Package Manager Community Repository.
+    token: ${{ secrets.WINGET_TOKEN }} 
+    # GitHub username where the fork of winget-pkgs is present.
+    fork-user: ${{ github.repository_owner }} # default is ${{ github.repository_owner }}
+          

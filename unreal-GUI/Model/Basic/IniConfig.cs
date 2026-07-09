@@ -24,10 +24,11 @@ namespace unreal_GUI.Model.Basic
             // 如果文件不存在，创建文件并写入默认值
             else
             {
-                SharedConfig.SetSetting(IniFile.DefaultSectionName, "FabNotificationEnabled", Properties.Settings.Default.FabNotificationEnabled);
+                SharedConfig.SetSetting(IniFile.DefaultSectionName, "AutoClaimEnabled", Properties.Settings.Default.AutoClaimEnabled);
                 SharedConfig.SetSetting(IniFile.DefaultSectionName, "HeadlessEnabled", Properties.Settings.Default.HeadlessEnabled);
                 SharedConfig.SetSetting(IniFile.DefaultSectionName, "BrowerType", Properties.Settings.Default.BrowerType);
                 SharedConfig.SetSetting(IniFile.DefaultSectionName, "OpenEpic", Properties.Settings.Default.OpenEpic);
+                SharedConfig.SetSetting(IniFile.DefaultSectionName, "HasUsingPro", Properties.Settings.Default.HasUsingPro);
                 SharedConfig.SetSetting(IniFile.DefaultSectionName, "LimitedTime", Properties.Settings.Default.LimitedTime.ToString("yyyy-MM-dd HH:mm:ss"));
                 Save();
             }
@@ -38,16 +39,17 @@ namespace unreal_GUI.Model.Basic
         private void OverWriteConfig()
         {
             // 读取配置文件中的值
-            bool fabNotificationEnabled = SharedConfig.GetSetting(IniFile.DefaultSectionName, "FabNotificationEnabled", Properties.Settings.Default.FabNotificationEnabled);
+            bool autoClaimEnabled = SharedConfig.GetSetting(IniFile.DefaultSectionName, "AutoClaimEnabled", Properties.Settings.Default.AutoClaimEnabled);
             bool headlessEnabled = SharedConfig.GetSetting(IniFile.DefaultSectionName, "HeadlessEnabled", Properties.Settings.Default.HeadlessEnabled);
             byte browerType = (byte)SharedConfig.GetSetting(IniFile.DefaultSectionName, "BrowerType", Properties.Settings.Default.BrowerType);
             bool openEpic = SharedConfig.GetSetting(IniFile.DefaultSectionName, "OpenEpic", Properties.Settings.Default.OpenEpic);
+            bool hasUsingPro = SharedConfig.GetSetting(IniFile.DefaultSectionName, "HasUsingPro", Properties.Settings.Default.HasUsingPro);
             //DateTime limitedTime = DateTime.TryParse(SharedConfig.GetSetting(IniFile.DefaultSectionName, "LimitedTime", string.Empty), out DateTime result) ? result : Properties.Settings.Default.LimitedTime;
 
             // 比较并更新不一致的值
-            if (fabNotificationEnabled != Properties.Settings.Default.FabNotificationEnabled)
+            if (autoClaimEnabled != Properties.Settings.Default.AutoClaimEnabled)
             {
-                SharedConfig.SetSetting(IniFile.DefaultSectionName, "FabNotificationEnabled", Properties.Settings.Default.FabNotificationEnabled);
+                SharedConfig.SetSetting(IniFile.DefaultSectionName, "AutoClaimEnabled", Properties.Settings.Default.AutoClaimEnabled);
             }
             if (headlessEnabled != Properties.Settings.Default.HeadlessEnabled)
             {
@@ -60,6 +62,10 @@ namespace unreal_GUI.Model.Basic
             if (openEpic != Properties.Settings.Default.OpenEpic)
             {
                 SharedConfig.SetSetting(IniFile.DefaultSectionName, "OpenEpic", Properties.Settings.Default.OpenEpic);
+            }
+            if (hasUsingPro != Properties.Settings.Default.HasUsingPro)
+            {
+                SharedConfig.SetSetting(IniFile.DefaultSectionName, "HasUsingPro", Properties.Settings.Default.HasUsingPro);
             }
             //if (limitedTime != Properties.Settings.Default.LimitedTime)
             //{

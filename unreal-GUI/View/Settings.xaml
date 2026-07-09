@@ -71,14 +71,24 @@
                                 </ui:AppBarToggleButton.Icon>
                             </ui:AppBarToggleButton>
                             <ui:AppBarSeparator />
-                            <ui:AppBarToggleButton x:Name="Button1" Label="使用Gitcode作为更新下载源" 
-                                                   IsChecked="{Binding Gitcode}"  HorizontalAlignment="Left">
+                            <ui:AppBarToggleButton x:Name="Button1" Label="使用第三方更新源" 
+                                                   IsChecked="{Binding NonGithub}"  HorizontalAlignment="Left">
                                 <ui:AppBarToggleButton.Icon>
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEC05;"/>
                                 </ui:AppBarToggleButton.Icon>
                             </ui:AppBarToggleButton>
 
                             <ui:AppBarSeparator />
+
+                            <ui:AppBarToggleButton x:Name="Button2" Label="记忆当前窗口大小" 
+                        IsChecked="{Binding NonGithub}"  HorizontalAlignment="Left">
+                                <ui:AppBarToggleButton.Icon>
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xe744;"/>
+                                </ui:AppBarToggleButton.Icon>
+                            </ui:AppBarToggleButton>
+
+                            <ui:AppBarSeparator />
+
 
                         </WrapPanel>
                     </StackPanel>
@@ -92,15 +102,15 @@
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
                             <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEC7A;" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="实验性选项" FontSize="18" FontWeight="SemiBold"/>
+                            <TextBlock Text="扩展功能" FontSize="18" FontWeight="SemiBold"/>
                         </StackPanel>
 
-                        <TextBlock Text="开启实验性选项后会启用一些尚未完成开发的实验性功能，这些功能可能会不适应未来版本" 
-                                   TextWrapping="Wrap" Margin="0,0,0,15"/>
-                        <WrapPanel x:Name="beta_Panel"  Orientation="Horizontal">
+                        <!--<TextBlock Text="Fab资产爬取扩展选项" 
+                                   TextWrapping="Wrap" Margin="0,0,0,15"/>-->
+                        <!--<WrapPanel x:Name="beta_Panel"  Orientation="Horizontal">
                             <ui:AppBarSeparator />
-                            <ui:AppBarToggleButton x:Name="beta_Button0" Label="Fab免费资产领取通知" 
-          IsChecked="{Binding FabNotification}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <ui:AppBarToggleButton x:Name="beta_Button0" Label="Fab免费资产自动领取" 
+          IsChecked="{Binding AutoClaimEnabled}" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <ui:AppBarToggleButton.Icon>
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEC24;"/>
                                 </ui:AppBarToggleButton.Icon>
@@ -109,7 +119,7 @@
 
 
 
-                        </WrapPanel>
+                        </WrapPanel>-->
                         <TextBlock x:Name="LimitedTime" Text="{Binding LimitedTime, StringFormat=Fab免费资产获取截至时间：\{0:yyyy-MM-dd HH:mm:ss\}}" 
                                    TextWrapping="Wrap" Margin="0,5,0,10" FontWeight="SemiBold"/>
 
@@ -119,18 +129,31 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="开机启动Fab资产检查" 
-                                       VerticalAlignment="Center" IsEnabled="{Binding FabNotification}"/>
+                                       VerticalAlignment="Center"/>
                             <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding AutoStart}" IsEnabled="{Binding FabNotification}"/>
                         </Grid>
 
+
+                  
+                        <!--<Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" 
+                                       VerticalAlignment="Center" IsEnabled="{Binding AutoClaimEnabled}"><Run Language="zh-cn" Text="使用个人许可证（关闭使用专业许可证）"/></TextBlock>
+                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding HasUsingPro}" IsEnabled="{Binding AutoClaimEnabled}"/>
+                        </Grid>-->
+
+
                         <Grid Margin="0,0,0,15">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="使用EpicGames Launcher来打开Fab网站" 
-                                       VerticalAlignment="Center" IsEnabled="{Binding FabNotification}"/>
-                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding OpenEpic}" IsEnabled="{Binding FabNotification}"/>
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="使用EpicGames Launcher打开Fab网站" 
+                                       VerticalAlignment="Center" IsEnabled="{Binding AutoClaimEnabled}"/>
+                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding OpenEpic}" IsEnabled="{Binding AutoClaimEnabled}"/>
                         </Grid>
 
                         <Grid Margin="0,0,0,15">
@@ -138,9 +161,9 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="使用Headless方式获取Fab信息（建议关闭，开启后可能会无法爬取）" 
-                                       VerticalAlignment="Center" IsEnabled="{Binding FabNotification}"/>
-                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding HeadlessEnabled}" IsEnabled="{Binding FabNotification}"/>
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="使用Headless Mode（建议关闭，开启后可能会无法爬取）" 
+                                       VerticalAlignment="Center" IsEnabled="{Binding AutoClaimEnabled}"/>
+                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding HeadlessEnabled}" IsEnabled="{Binding AutoClaimEnabled}"/>
                         </Grid>
 
                         <Grid Margin="0,0,0,15">
@@ -148,27 +171,13 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto" MinWidth="120"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="指定Playwright使用的浏览器" VerticalAlignment="Center" IsEnabled="{Binding FabNotification}"/>
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="指定Playwright使用的浏览器" VerticalAlignment="Center" IsEnabled="{Binding AutoClaimEnabled}"/>
                             <ComboBox Grid.Column="1" VerticalAlignment="Stretch" Width="120" 
-                                      SelectedValue="{Binding BrowerType}" SelectedValuePath="Tag" IsEnabled="{Binding FabNotification}">
+                                      SelectedValue="{Binding BrowerType}" SelectedValuePath="Tag" IsEnabled="{Binding AutoClaimEnabled}">
                                 <ComboBoxItem Content="Edge" Tag="0"/>
                                 <ComboBoxItem Content="Chrome" Tag="1"/>
                             </ComboBox>
                         </Grid>
-
-                        <!--<Grid Margin="0,0,0,15">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="Auto" MinWidth="120"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="指定Playwright使用的浏览器" Margin="0,8,0,8"/>
-                            <ComboBox x:Name="BrowerOption" Grid.Column="1" d:LayoutOverrides="Height" Margin="-32,0,0,0" VerticalAlignment="Stretch" Width="120"/>
-                        </Grid>-->
-                      
-
-
-
-
                     </StackPanel>
 
                 </Border>
@@ -265,6 +274,13 @@
                             <TextBlock Text="打开配置文件夹"/>
                         </StackPanel>
                     </Button>
+
+                    <!--<Button Command="{Binding OpenLoginDataFolderCommand}" HorizontalAlignment="Left" Margin="10,0,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
+                            <TextBlock Text="查看登录凭证"/>
+                        </StackPanel>
+                    </Button>-->
                 </StackPanel>
 
                 <TextBlock x:Name="Tips" Text="{Binding TipText}" TextWrapping="Wrap" 

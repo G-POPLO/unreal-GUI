@@ -31,10 +31,14 @@ namespace unreal_GUI.ViewModel
         public partial bool AutoOpen { get; set; }
 
         [ObservableProperty]
-        public partial bool Gitcode { get; set; }
+        public partial bool NonGithub { get; set; }
 
         [ObservableProperty]
         public partial bool AutoUpdate { get; set; }
+
+        // 自动领取功能暂时注释
+        //[ObservableProperty]
+        //private bool _autoClaimEnabled;
 
         [ObservableProperty]
         public partial bool FabNotification { get; set; }
@@ -63,13 +67,16 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         public partial byte BrowerType { get; set; }
 
+        [ObservableProperty]
+        private bool _hasUsingPro;
+
         public SettingsViewModel()
         {
             // 初始化设置
             AutoOpen = Properties.Settings.Default.AutoOpen;
-            Gitcode = Properties.Settings.Default.Gitcode;
+            NonGithub = Properties.Settings.Default.NonGithub;
             AutoUpdate = Properties.Settings.Default.AutoUpdate;
-            FabNotification = Properties.Settings.Default.FabNotificationEnabled;
+            //AutoClaimEnabled = Properties.Settings.Default.AutoClaimEnabled;
             // 从INI文件读取LimitedTime
             IniConfig iniConfig = new();
             LimitedTime = iniConfig.ReadDateTime("LimitedTime", Properties.Settings.Default.LimitedTime);
@@ -80,6 +87,7 @@ namespace unreal_GUI.ViewModel
             BackdropType = Properties.Settings.Default.BackdropType;
             AminateType = Properties.Settings.Default.AminateType;
             BrowerType = Properties.Settings.Default.BrowerType;
+            HasUsingPro = Properties.Settings.Default.HasUsingPro;
 
             if (File.Exists("settings.json"))
             {
@@ -164,9 +172,9 @@ namespace unreal_GUI.ViewModel
         {
             // 保存应用程序设置
             Properties.Settings.Default.AutoOpen = AutoOpen;
-            Properties.Settings.Default.Gitcode = Gitcode;
+            Properties.Settings.Default.NonGithub = NonGithub;
             Properties.Settings.Default.AutoUpdate = AutoUpdate;
-            Properties.Settings.Default.FabNotificationEnabled = FabNotification;
+            //Properties.Settings.Default.AutoClaimEnabled = AutoClaimEnabled;
             Properties.Settings.Default.LimitedTime = LimitedTime;
             Properties.Settings.Default.AutoStart = AutoStart;
             Properties.Settings.Default.OpenEpic = OpenEpic;
@@ -175,6 +183,7 @@ namespace unreal_GUI.ViewModel
             Properties.Settings.Default.BackdropType = BackdropType;
             Properties.Settings.Default.AminateType = AminateType;
             Properties.Settings.Default.BrowerType = BrowerType;
+            Properties.Settings.Default.HasUsingPro = HasUsingPro;
 
             Properties.Settings.Default.Save();
 
@@ -208,6 +217,7 @@ namespace unreal_GUI.ViewModel
             File.WriteAllText("settings.json", JsonSerializer.Serialize(settings, options));
 
             TipText = "设置已保存";
+            SoundFX.PlaySound(0);
             return Task.CompletedTask;
         }
 
@@ -245,6 +255,34 @@ namespace unreal_GUI.ViewModel
             catch (Exception ex)
             {
                 MessageBox.Show($"打开配置文件夹失败：{ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        [RelayCommand]
+        private static void OpenLoginDataFolder()
+        {
+            try
+            {
+                string loginDataDir = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "UnrealGUI", "FabBrowserData");
+
+                if (Directory.Exists(loginDataDir))
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = loginDataDir,
+                        UseShellExecute = true
+                    });
+                }
+                else
+                {
+                    MessageBox.Show("登录凭证文件夹尚未创建，请先运行 Fab 自动领取功能", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"打开登录凭证文件夹失败：{ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

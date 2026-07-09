@@ -6,6 +6,9 @@ namespace reminder
 {
     internal class FabReminder
     {
+        /// <summary>
+        /// 读取领取时间并提醒，现在已废弃并由"Fab自动化领取资产"的功能替代
+        /// </summary>
         public static async Task<DateTime?> GetLimitedTimeFreeEndDate()
         {
             try
@@ -73,7 +76,7 @@ namespace reminder
             catch (Exception ex)
             {
                 // 记录错误信息到控制台
-                Console.WriteLine($"无法获取Fab免费资产信息: {ex.Message}");
+                Console.WriteLine($"无法获取Fab免费资产截止日期: {ex.Message}");
                 return null;
             }
 
@@ -81,7 +84,34 @@ namespace reminder
         }
 
         /// <summary>
-        /// 显示带操作按钮的通知
+        /// 自动化领取Fab免费资产
+        /// </summary>
+        /// <returns>领取结果，true表示成功</returns>
+        public static async Task<bool> AutoClaimFabAssetsAsync()
+        {
+            try
+            {
+                Console.WriteLine("开始自动化领取Fab免费资产...");
+                bool result = await Playwright.AutoClaimFabAssetsAsync();
+                if (result)
+                {
+                    Console.WriteLine("Fab免费资产自动化领取完成");
+                }
+                else
+                {
+                    Console.WriteLine("Fab免费资产自动化领取失败");
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"自动化领取Fab免费资产时发生错误: {ex.Message}");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 显示带操作按钮的通知，现在通知事件暂不使用
         /// </summary>
         /// <param name="title">通知标题</param>
         /// <param name="message">通知内容</param>

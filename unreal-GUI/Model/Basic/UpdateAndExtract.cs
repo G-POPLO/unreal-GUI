@@ -38,10 +38,8 @@ namespace unreal_GUI.Model.Basic
             {
                 using HttpClient client = new();
                 client.DefaultRequestHeaders.UserAgent.ParseAdd("unreal-GUI");
-                // 从API获取最新版本信息
-                var response = Properties.Settings.Default.Gitcode
-                    ? await client.GetAsync("https://api.gitcode.com/api/v5/repos/C-Poplo/unreal-GUI/releases/latest/?access_token=4RszX_1zdryXuvgwHbV-Edr7")
-                    : await client.GetAsync("https://api.github.com/repos/G-POPLO/unreal-GUI/releases/latest");
+                // 从GitHub API获取最新版本信息
+                var response = await client.GetAsync("https://api.github.com/repos/G-POPLO/unreal-GUI/releases/latest");
 
                 release_info = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
                 latestVersion = release_info.RootElement.GetProperty("tag_name").GetString();
@@ -80,7 +78,7 @@ namespace unreal_GUI.Model.Basic
                         if (asset.TryGetProperty("name", out JsonElement nameElement))
                         {
                             var name = nameElement.GetString();
-                            if (name?.EndsWith(".7z") == true)
+                            if (name?.Equals("unreal_setup.exe", StringComparison.OrdinalIgnoreCase) == true)
                             {
                                 downloadUrl = asset.GetProperty("browser_download_url").GetString();
                                 break;
@@ -91,9 +89,15 @@ namespace unreal_GUI.Model.Basic
 
                 if (!string.IsNullOrEmpty(downloadUrl))
                 {
+                    // 当启用第三方更新源时，使用gh-proxy加速下载
+                    if (Properties.Settings.Default.NonGithub)
+                    {
+                        downloadUrl = $"https://gh-proxy.org/{downloadUrl}";
+                    }
+
                     var downloadDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "download");
                     Directory.CreateDirectory(downloadDir);
-                    var downloadPath = Path.Combine(downloadDir, $"{latestVersion}.7z");
+                    var downloadPath = Path.Combine(downloadDir, "unreal_setup.exe");
 
                     // 获取文件大小
                     using var client = new HttpClient();
@@ -207,36 +211,20 @@ namespace unreal_GUI.Model.Basic
 
                     try
                     {
-                        // 解压到download文件夹
-                        string extractPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "download");
-
-                        // 使用CompressCore进行解压
-                        await Task.Run(async () =>
+                        // 下载完成后关闭通知
+                        Application.Current.Dispatcher.Invoke(() =>
                         {
-                            bool success = await CompressCore.ExtractArchiveAsync(downloadPath, extractPath);
-                            if (!success)
-                            {
-                                throw new Exception("使用7za.exe解压失败");
-                            }
-
-                            // 解压完成后关闭通知
-                            Application.Current.Dispatcher.Invoke(() =>
-                            {
-                                ToastNotificationManagerCompat.History.Remove(toastTag, toastGroup);
-                            });
+                            ToastNotificationManagerCompat.History.Remove(toastTag, toastGroup);
                         });
 
-                        File.Delete(downloadPath); // 删除压缩包
-
-                        // 启动Update.bat并退出程序
-                        var updateBatPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Update.bat");
-                        System.Diagnostics.Process.Start(updateBatPath);
+                        // 启动unreal_setup.exe并退出程序
+                        System.Diagnostics.Process.Start(downloadPath);
                         Environment.Exit(0);
 
                     }
                     catch (Exception ex)
                     {
-                        await ModernDialog.ShowErrorAsync($"解压失败：{ex.Message}", "提示");
+                        await ModernDialog.ShowErrorAsync($"启动安装程序失败：{ex.Message}", "提示");
                     }
                 }
                 else
