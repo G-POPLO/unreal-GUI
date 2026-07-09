@@ -25,6 +25,7 @@ namespace unreal_GUI
         {
 
             SetSystemBackdropType();
+
             if (!Properties.Settings.Default.IsUpgraded)
             {
                 Properties.Settings.Default.Upgrade(); // 从旧版本迁移设置

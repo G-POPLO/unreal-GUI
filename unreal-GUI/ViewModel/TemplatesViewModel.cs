@@ -25,29 +25,29 @@ namespace unreal_GUI.ViewModel
         private readonly FeatureCore _featureCore = new();
 
         [ObservableProperty]
-        private string projectPath;
+        public partial string ProjectPath { get; set; } = string.Empty;
 
         [ObservableProperty]
-        private string templateName;
+        public partial string TemplateName { get; set; } = string.Empty;
 
         [ObservableProperty]
-        private string templateDescriptionEn;
+        public partial string TemplateDescriptionEn { get; set; } = string.Empty;
 
         [ObservableProperty]
-        private string templateDescriptionZhHans;
+        public partial string TemplateDescriptionZhHans { get; set; } = string.Empty;
 
         [ObservableProperty]
-        private string templateDescriptionJa;
+        public partial string TemplateDescriptionJa { get; set; } = string.Empty;
 
         [ObservableProperty]
-        private string templateDescriptionKo;
+        public partial string TemplateDescriptionKo { get; set; } = string.Empty;
 
         // 动态类别集合
         [ObservableProperty]
-        private ObservableCollection<CategoryViewModel> templateCategories = [];
+        public partial ObservableCollection<CategoryViewModel> TemplateCategories { get; set; } = [];
 
         [ObservableProperty]
-        private CategoryViewModel selectedCategory;
+        public partial CategoryViewModel SelectedCategory { get; set; } = null!;
 
         partial void OnSelectedCategoryChanged(CategoryViewModel? oldValue, CategoryViewModel? newValue)
         {
@@ -75,47 +75,47 @@ namespace unreal_GUI.ViewModel
         public partial class CategoryViewModel : ObservableObject
         {
             [ObservableProperty]
-            public string _key;
+            public partial string Key { get; set; } = string.Empty;
 
             [ObservableProperty]
-            public string _displayName;
+            public partial string DisplayName { get; set; } = string.Empty;
 
             [ObservableProperty]
-            public string _description;
+            public partial string Description { get; set; } = string.Empty;
 
             [ObservableProperty]
-            public bool _isMajorCategory;
+            public partial bool IsMajorCategory { get; set; }
 
             [ObservableProperty]
-            private bool _isSelected;
+            public partial bool IsSelected { get; set; }
         }
 
         // 模板图标和预览图
         [ObservableProperty]
-        private BitmapImage templateIcon;
+        public partial BitmapImage TemplateIcon { get; set; } = null!;
 
         [ObservableProperty]
-        private BitmapImage templatePreview;
+        public partial BitmapImage TemplatePreview { get; set; } = null!;
 
         // 图片文件路径（用于后续复制操作）
         [ObservableProperty]
-        private string templateIconPath;
+        public partial string TemplateIconPath { get; set; } = string.Empty;
 
         [ObservableProperty]
-        private string templatePreviewPath;
+        public partial string TemplatePreviewPath { get; set; } = string.Empty;
 
         [ObservableProperty]
-        private string pictureTipText = string.Empty;
+        public partial string PictureTipText { get; set; } = string.Empty;
 
         [ObservableProperty]
-        private string pictureTipLText = string.Empty;
+        public partial string PictureTipLText { get; set; } = string.Empty;
 
         // 可用引擎列表
         [ObservableProperty]
-        private ObservableCollection<EngineDisplayInfo> availableEngines;
+        public partial ObservableCollection<EngineDisplayInfo> AvailableEngines { get; set; } = null!;
 
         [ObservableProperty]
-        private EngineDisplayInfo selectedEngine;
+        public partial EngineDisplayInfo SelectedEngine { get; set; } = null!;
 
         partial void OnSelectedEngineChanged(EngineDisplayInfo? oldValue, EngineDisplayInfo? newValue)
         {
@@ -131,14 +131,14 @@ namespace unreal_GUI.ViewModel
 
         // 1. 添加Id属性用于绑定
         [ObservableProperty]
-        private string id;
+        public partial string Id { get; set; } = string.Empty;
 
         // 控制是否允许项目创建
         [ObservableProperty]
-        private bool isProjectSelected = true;
+        public partial bool IsProjectSelected { get; set; } = true;
 
         [ObservableProperty]
-        private bool enableMultiLanguageConfig = false;
+        public partial bool EnableMultiLanguageConfig { get; set; }
 
         // 注意：EngineInfo类已在JsonConfig.cs中定义，这里使用自定义的显示包装类
         public class EngineDisplayInfo
@@ -312,13 +312,15 @@ namespace unreal_GUI.ViewModel
                             true); // 自动安装到引擎目录
 
                         if (success)
-                        {
-                            await ModernDialog.ShowInfoAsync($"功能包 '{TemplateName}' 创建成功！", "成功");
-                        }
-                        else
-                        {
-                            await ModernDialog.ShowErrorAsync($"创建功能包失败。", "错误");
-                        }
+                {
+                    SoundFX.PlaySound(4);
+                    await ModernDialog.ShowInfoAsync($"功能包 '{TemplateName}' 创建成功！", "成功");
+                }
+                else
+                {
+                    SoundFX.PlaySound(2);
+                    await ModernDialog.ShowErrorAsync($"创建功能包失败。", "错误");
+                }
                     }
                     finally
                     {
@@ -329,6 +331,7 @@ namespace unreal_GUI.ViewModel
             }
             catch (Exception ex)
             {
+                SoundFX.PlaySound(2);
                 string operationName = IsProjectSelected ? "模板" : "功能包";
                 await ModernDialog.ShowErrorAsync($"创建{operationName}失败: {ex.Message}", "错误");
             }
@@ -416,15 +419,18 @@ namespace unreal_GUI.ViewModel
                 if (!string.IsNullOrEmpty(selectedBackupPath) && File.Exists(selectedBackupPath))
                 {
                     File.Copy(selectedBackupPath, targetPath, true);
+                    SoundFX.PlaySound(4);
                     await ModernDialog.ShowInfoAsync($"已从{backupDescription}恢复模板配置文件。", "成功");
                 }
                 else
                 {
+                    SoundFX.PlaySound(3);
                     await ModernDialog.ShowInfoAsync("未找到任何备份文件，无法恢复配置文件。", "提示");
                 }
             }
             catch (Exception ex)
             {
+                SoundFX.PlaySound(2);
                 await ModernDialog.ShowInfoAsync($"恢复配置文件失败: {ex.Message}", "提示");
             }
 
@@ -467,10 +473,12 @@ namespace unreal_GUI.ViewModel
                     await LoadCategoriesAsync();
                 }
 
+                SoundFX.PlaySound(4);
                 await ModernDialog.ShowInfoAsync("表单已重置。", "成功");
             }
             catch (Exception ex)
             {
+                SoundFX.PlaySound(2);
                 await ModernDialog.ShowErrorAsync($"重置表单失败: {ex.Message}", "错误");
             }
         }

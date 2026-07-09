@@ -1,9 +1,9 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
 using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -14,7 +14,9 @@ namespace unreal_GUI.ViewModel
     {
         // 图片相关属性
         [ObservableProperty]
+#pragma warning disable MVVMTK0042 // Prefer using [ObservableProperty] on partial properties
         private BitmapSource? imageSource;
+
 
         [ObservableProperty]
         private int imageWidth;
@@ -266,8 +268,8 @@ namespace unreal_GUI.ViewModel
         {
             currentImagePath = imagePath;
 
-            // 使用 ImageSharp 加载图片
-            using var image = Image.Load(imagePath);
+            // 使用 System.Drawing 加载图片
+            using var image = System.Drawing.Image.FromFile(imagePath);
 
             // 转换为 BitmapSource
             var bitmapSource = ConvertImageToBitmapSource(image);
@@ -283,14 +285,14 @@ namespace unreal_GUI.ViewModel
         }
 
         /// <summary>
-        /// 将 ImageSharp Image 转换为 WPF BitmapSource
+        /// 将 System.Drawing.Image 转换为 WPF BitmapImage
         /// </summary>
-        /// <param name="image">ImageSharp 图片对象</param>
-        /// <returns>WPF BitmapSource</returns>
-        private BitmapSource ConvertImageToBitmapSource(Image image)
+        /// <param name="image">System.Drawing 图片对象</param>
+        /// <returns>WPF BitmapImage</returns>
+        private static BitmapImage ConvertImageToBitmapSource(System.Drawing.Image image)
         {
             using var memoryStream = new MemoryStream();
-            image.SaveAsPng(memoryStream);
+            image.Save(memoryStream, ImageFormat.Png);
             memoryStream.Position = 0;
 
             var bitmapImage = new BitmapImage();
@@ -342,16 +344,27 @@ namespace unreal_GUI.ViewModel
             if (originalImage == null || string.IsNullOrEmpty(currentImagePath))
                 return;
 
-            using var originalImageSharp = Image.Load(currentImagePath);
+            // 使用 System.Drawing 加载原图
+            using var originalBitmap = new Bitmap(currentImagePath);
 
-            // 创建剪裁后的图片
+            // 创建剪裁区域
             var cropRectangle = new Rectangle(
                 (int)RectLeft,
                 (int)RectTop,
                 (int)RectWidth,
                 (int)RectHeight);
 
-            using var croppedImage = originalImageSharp.Clone(ctx => ctx.Crop(cropRectangle));
+            // 创建剪裁后的图片
+            using var croppedBitmap = new Bitmap(cropRectangle.Width, cropRectangle.Height);
+            using (var graphics = Graphics.FromImage(croppedBitmap))
+            {
+                graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+                graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+
+                // 从原图裁剪指定区域
+                graphics.DrawImage(originalBitmap, new Rectangle(0, 0, cropRectangle.Width, cropRectangle.Height), cropRectangle, GraphicsUnit.Pixel);
+            }
 
             // 保存图片
             var extension = Path.GetExtension(outputPath).ToLower();
@@ -359,11 +372,11 @@ namespace unreal_GUI.ViewModel
             {
                 case ".jpg":
                 case ".jpeg":
-                    croppedImage.SaveAsJpeg(outputPath);
+                    croppedBitmap.Save(outputPath, ImageFormat.Jpeg);
                     break;
                 case ".png":
                 default:
-                    croppedImage.SaveAsPng(outputPath);
+                    croppedBitmap.Save(outputPath, ImageFormat.Png);
                     break;
             }
         }
@@ -423,7 +436,7 @@ namespace unreal_GUI.ViewModel
 
         [ObservableProperty]
         private double clickPositionY;
-
+#pragma warning restore MVVMTK0042 // Prefer using [ObservableProperty] on partial properties
         // 开始拖拽边缘
         public void StartEdgeDrag(double posX, double posY, string edgeName)
         {

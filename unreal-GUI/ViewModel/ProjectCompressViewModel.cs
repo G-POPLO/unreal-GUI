@@ -12,46 +12,46 @@ namespace unreal_GUI.ViewModel
     public partial class ProjectCompressViewModel : ObservableObject
     {
         [ObservableProperty]
-        private string _projectPath;
+        public partial string ProjectPath { get; set; } = string.Empty;
 
         [ObservableProperty]
-        private string _engineInfo;
+        public partial string EngineInfo { get; set; } = string.Empty;
 
         [ObservableProperty]
-        private BitmapImage _projectThumbnail;
+        public partial BitmapImage ProjectThumbnail { get; set; } = null!;
 
         [ObservableProperty]
-        private int _compressLevel = 5;
+        public partial int CompressLevel { get; set; } = 5;
 
         [ObservableProperty]
-        private bool _solidCompress = true;
+        public partial bool SolidCompress { get; set; } = true;
 
         [ObservableProperty]
-        private bool _incrementalUpdate = false;
+        public partial bool IncrementalUpdate { get; set; }
 
         [ObservableProperty]
-        private bool _skipTextureCompression = false;
+        public partial bool SkipTextureCompression { get; set; }
 
         [ObservableProperty]
-        private bool _filter = true;
+        public partial bool Filter { get; set; } = true;
 
         [ObservableProperty]
-        private string _outputPath;
+        public partial string OutputPath { get; set; } = string.Empty;
 
         [ObservableProperty]
-        private string _inputPath;
+        public partial string InputPath { get; set; } = string.Empty;
 
         [ObservableProperty]
-        private System.Windows.Visibility _is7zUpdateVisible = System.Windows.Visibility.Collapsed;
+        public partial System.Windows.Visibility Is7zUpdateVisible { get; set; } = System.Windows.Visibility.Collapsed;
 
         [ObservableProperty]
-        private System.Windows.Visibility _is7zOutputVisible = System.Windows.Visibility.Visible;
+        public partial System.Windows.Visibility Is7zOutputVisible { get; set; } = System.Windows.Visibility.Visible;
 
         [ObservableProperty]
-        private string _compressButtonText = "开始压缩";
+        public partial string CompressButtonText { get; set; } = "开始压缩";
 
         [ObservableProperty]
-        private System.Windows.Visibility _isProjectCardVisible = System.Windows.Visibility.Visible;
+        public partial System.Windows.Visibility IsProjectCardVisible { get; set; } = System.Windows.Visibility.Visible;
 
         // 增量更新是否可用（-mx <= 5时可用）
         public bool IsIncrementalUpdateEnabled => CompressLevel <= 5 && !SkipTextureCompression && !SolidCompress;
@@ -284,7 +284,7 @@ namespace unreal_GUI.ViewModel
 
                 if (success)
                 {
-                    SoundFX.PlaySound(0);
+                    SoundFX.PlaySound(4);
                     string successMessage = IncrementalUpdate ? "增量更新完成" : "压缩完成";
                     await ModernDialog.ShowInfoAsync(successMessage, "成功");
 
@@ -305,6 +305,7 @@ namespace unreal_GUI.ViewModel
             }
             catch (Exception ex)
             {
+                SoundFX.PlaySound(2);
                 string errorMessage = IncrementalUpdate ? $"增量更新过程中发生错误: {ex.Message}" : $"压缩过程中发生错误: {ex.Message}";
                 await ModernDialog.ShowErrorAsync(errorMessage, "错误");
             }

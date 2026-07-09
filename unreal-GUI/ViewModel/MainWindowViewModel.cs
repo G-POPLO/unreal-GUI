@@ -17,16 +17,16 @@ namespace unreal_GUI.ViewModel
         public event EventHandler<string> NavigationRequested;
 
         [ObservableProperty]
-        private string currentPageTag = "Compile";
+        public partial string CurrentPageTag { get; set; } = "Compile";
 
         [ObservableProperty]
-        private bool _advancedMode;
+        public partial bool AdvancedMode { get; set; }
 
         [ObservableProperty]
-        private byte _backdropType;
+        public partial byte BackdropType { get; set; }
 
         [ObservableProperty]
-        private ObservableCollection<string> navigationHistory = [];
+        public partial ObservableCollection<string> NavigationHistory { get; set; } = [];
 
         [RelayCommand]
         private void NavigateToPage(string pageTag)

@@ -9,7 +9,9 @@ namespace reminder
 
         public IniConfig(string configPath = "ShareSettings.ini")
         {
-            ConfigPath = configPath;
+            // 使用程序所在目录作为基准路径，确保开机自启动时能正确找到配置文件
+            string baseDirectory = AppContext.BaseDirectory;
+            ConfigPath = Path.Combine(baseDirectory, configPath);
             SharedConfig = new IniFile();
 
             // 检查文件是否存在

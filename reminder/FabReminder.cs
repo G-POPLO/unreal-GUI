@@ -33,17 +33,19 @@ namespace reminder
                     {
                         string dateTimeString = dateMatch.Groups[1].Value;
                         // 解析日期时间字符串
-                        // 格式示例: "Aug 26 at 9:59 AM ET"
+                        // 格式示例: "Aug 26 at 9:59 AM ET" 或 "June 2 at 9:59 AM ET"
                         string[] parts = dateTimeString.Split(' ');
-                        // 替换原有月份数组和解析逻辑
-                        string[] monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                        // 完整月份名称和缩写
+                        string[] monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                        string[] monthAbbrs = ["Jan", "Feb", "Mar", "Apr", "May", "June", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
                         string month = parts[0];
-                        // 兼容 "Sept" 为 "Sep"
-                        if (month.Equals("Sept", StringComparison.OrdinalIgnoreCase))
+                        int monthIndex = Array.FindIndex(monthNames, m => m.Equals(month, StringComparison.OrdinalIgnoreCase)) + 1;
+                        if (monthIndex < 1)
                         {
-                            month = "Sep";
+                            // 尝试匹配缩写
+                            monthIndex = Array.FindIndex(monthAbbrs, m => m.Equals(month, StringComparison.OrdinalIgnoreCase)) + 1;
                         }
-                        int monthIndex = Array.IndexOf(monthNames, month) + 1;
+
                         if (monthIndex < 1 || monthIndex > 12)
                             throw new ArgumentException($"无法识别的月份: {month}");
 
@@ -67,9 +69,7 @@ namespace reminder
                         var configWriter = new IniConfig();
                         configWriter.WriteDateTime("LimitedTime", chinaTime);
 
-                        // 发送通知
-                        //SendFabNotification(chinaTime);
-                        //return chinaTime;
+                        return chinaTime;
                     }
                 }
             }
@@ -141,7 +141,7 @@ namespace reminder
         /// <summary>
         /// 发送Windows通知
         /// </summary>
-        private static void SendFabNotification(DateTime limitedTime)
+        public static void SendFabNotification(DateTime limitedTime)
         {
             // 读取配置确定是否使用Epic启动器
             var configReader = new reminder.IniConfig();
@@ -151,10 +151,10 @@ namespace reminder
             {
                 ShowNotificationWithUrls(
                     "Fab资产领取提醒",
-                    $"新的Fab免费资产可领取，截至时间:{limitedTime}",
+                    $"新的Fab免费资产可领取，点击\"是\"打开Epic启动器",
                     "是",
                     "openUrl",
-                    "com.epicgames.launcher://fab", // com.epicgames.launcher://fab/limited-time-free无法使用，会显示错误页面
+                    "com.epicgames.launcher://fab", // com.epicgames.launcher://fab/limited-time-free 无法使用，会显示错误页面
                     "否",
                     "dismiss");
             }
@@ -162,7 +162,7 @@ namespace reminder
             {
                 ShowNotificationWithUrls(
                     "Fab资产领取提醒",
-                    $"新的Fab免费资产可领取，截至时间:{limitedTime}",
+                    $"新的Fab免费资产可领取，点击\"是\"打开Fab网站",
                     "是",
                     "openUrl",
                     "https://www.fab.com/limited-time-free", // 使用浏览器链接

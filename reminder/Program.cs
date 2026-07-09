@@ -14,24 +14,7 @@ namespace reminder
 
             Console.WriteLine("Fab免费资产提醒程序启动...");
 
-            // 创建隐藏的Form以启动消息循环
-            //var hiddenForm = new Form
-            //{
-            //    WindowState = FormWindowState.Minimized,
-            //    ShowInTaskbar = false
-            //};
-            //hiddenForm.Load += async (sender, e) =>
-            //{
-            // 检查Fab限时免费资产
             await CheckFabFreeAssets();
-
-            //await Playwright.TestCloudflareTurnstileAsync();
-            //Console.ReadKey();
-
-            //Application.Exit();
-            //};
-
-            //Application.Run(hiddenForm);
         }
 
         /// <summary>
@@ -43,72 +26,51 @@ namespace reminder
             {
                 Console.WriteLine("正在检查Fab限时免费资产...");
 
-                // 读取配置确定是否启用Fab提醒功能
                 var configReader = new IniConfig();
                 bool fabReminderEnabled = configReader.ReadBool("AutoClaimEnabled", true);
 
-
-
-                // 读取LimitedTime配置
                 DateTime limitedTime = configReader.ReadDateTime("LimitedTime", new DateTime(1990, 1, 1));
                 DateTime system_time = DateTime.Now;
 
-                // 检查是否启用了自动领取功能
-                //bool autoClaimEnabled = configReader.ReadBool("AutoClaimEnabled", false);
-                //if (autoClaimEnabled)
-                //{
-                //    Console.WriteLine("自动领取功能已启用，开始自动化领取...");
-                //    bool claimResult = await FabReminder.AutoClaimFabAssetsAsync();
-                //    if (claimResult)
-                //    {
-                //        Console.WriteLine("自动领取成功！");
-                //    }
-                //    else
-                //    {
-                //        Console.WriteLine("自动领取失败，请手动领取。");
-                //    }
-                //}
-
-                Console.WriteLine("程序执行完毕，按任意键退出...");
-                Console.ReadKey();
-                // 只有当本机时间大于LimitedTime时才运行检查
                 if (system_time <= limitedTime)
                 {
-                    Console.WriteLine($"本机时间 {system_time} 未大于截至时间 {limitedTime}，程序将退出");
+                    Console.WriteLine($"Fab免费资产仍在有效期内，程序退出");
                     Environment.Exit(0);
+                }
+
+                Console.WriteLine($"上次记录的截止时间 {limitedTime} 已过期，发送提醒通知");
+                FabReminder.SendFabNotification(limitedTime);
+                Console.WriteLine("正在打开浏览器获取最新截止时间...");
+                var newLimitedTime = await FabReminder.GetLimitedTimeFreeEndDate();
+                if (newLimitedTime.HasValue)
+                {
+                    Console.WriteLine($"获取到最新截止时间: {newLimitedTime.Value}");
+
+                    // 检查是否启用了自动领取功能
+                    bool autoClaimEnabled = configReader.ReadBool("AutoClaimEnabled", false);
+                    if (autoClaimEnabled)
+                    {
+                        Console.WriteLine("自动领取功能已启用，开始自动化领取...");
+                        bool claimResult = await FabReminder.AutoClaimFabAssetsAsync();
+                        if (claimResult)
+                        {
+                            Console.WriteLine("自动领取成功！");
+                        }
+                        else
+                        {
+                            Console.WriteLine("自动领取失败，请手动领取。");
+                        }
+                    }
+
+                    Console.WriteLine("程序执行完毕，按任意键退出...");
+                    Console.ReadKey();
                 }
                 else
                 {
-                    DateTime? endDate = await FabReminder.GetLimitedTimeFreeEndDate();
-
-                    if (endDate.HasValue)
-                    {
-                        Console.WriteLine($"发现新的Fab免费资产，截止时间: {endDate.Value}");
-
-                        // 检查是否启用了自动领取功能
-                        bool autoClaimEnabled = configReader.ReadBool("AutoClaimEnabled", false);
-                        if (autoClaimEnabled)
-                        {
-                            Console.WriteLine("自动领取功能已启用，开始自动化领取...");
-                            bool claimResult = await FabReminder.AutoClaimFabAssetsAsync();
-                            if (claimResult)
-                            {
-                                Console.WriteLine("自动领取成功！");
-                            }
-                            else
-                            {
-                                Console.WriteLine("自动领取失败，请手动领取。");
-                            }
-                        }
-
-                        Console.WriteLine("程序执行完毕，按任意键退出...");
-                        Console.ReadKey();
-                    }
-                    else
-                    {
-                        Console.WriteLine("未找到Fab免费资产信息或获取失败");
-                    }
+                    Console.WriteLine("获取最新截止时间失败");
                 }
+                Console.WriteLine("程序执行完毕...");
+                Environment.Exit(0);
             }
             catch (Exception ex)
             {
