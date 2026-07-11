@@ -6,7 +6,8 @@
 #define MyAppPublisher "C-POPLO"
 #define MyAppURL "https://github.com/G-POPLO/unreal-GUI"
 #define MyAppExeName "Unreal-GUI.exe"
-#define MyAppExePath "D:\PROGRAM\unreal-gui\unreal-GUI\bin\x64\Release\net10.0-windows10.0.18362.0\" + MyAppExeName
+#define MyAppBuildRoot "..\unreal-GUI\bin\x64\Release\net10.0-windows10.0.18362.0"
+#define MyAppExePath MyAppBuildRoot + "\" + MyAppExeName
 #define MyAppVersion GetVersionNumbersString(MyAppExePath)
 #define MyAppAssocName MyAppName + " File"
 #define MyAppAssocExt ".myp"
@@ -49,9 +50,9 @@ Name: "chinesesimplified"; MessagesFile: "compiler:Languages\ChineseSimplified.i
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "D:\PROGRAM\unreal-gui\unreal-GUI\bin\x64\Release\net10.0-windows10.0.18362.0\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\PROGRAM\unreal-gui\unreal-GUI\bin\x64\Release\net10.0-windows10.0.18362.0\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "settings.json,ShareSettings.ini"
-; NOTE: Replace it to your own path
+Source: "{#MyAppBuildRoot}\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyAppBuildRoot}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "settings.json,ShareSettings.ini"
+; NOTE: Inno Setup 编译前请先构建 .NET 项目
 
 [Registry]
 Root: HKA; Subkey: "Software\Classes\{#MyAppAssocExt}\OpenWithProgids"; ValueType: string; ValueName: "{#MyAppAssocKey}"; ValueData: ""; Flags: uninsdeletevalue

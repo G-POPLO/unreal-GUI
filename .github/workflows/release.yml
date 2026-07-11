@@ -1,0 +1,79 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'           # 推送 v1.0.0 / v0.6.2 等 tag 时触发
+
+permissions:
+  contents: write      # 允许创建 Release
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json   # 如果有 global.json 则自动读取版本
+          # 或指定版本：
+          # dotnet-version: '10.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore unreal-GUI/unreal-GUI.csproj
+
+      - name: Build .NET project (Release x64)
+        run: |
+          dotnet publish unreal-GUI/unreal-GUI.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained false `
+            -p:Platform=x64
+
+      - name: Setup Inno Setup
+        run: choco install innosetup --no-progress -y
+
+      - name: Compile Inno Setup installer
+        run: |
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "Inno Setup\setup.iss"
+
+      - name: Extract version from tag
+        id: get_version
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}" -replace '^v', ''
+          echo "version=$tag" >> $env:GITHUB_OUTPUT
+
+      - name: Extract changelog for this version
+        id: changelog
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}" -replace '^v', ''
+          $content = Get-Content CHANGELOG.md -Raw
+
+          # 尝试匹配 "## [$tag]" 或 "## [$tag] -" 之间的内容
+          $pattern = "(?ms)## \[$tag\].*?\n(.*?)(?=\n## |\Z)"
+          $match = [regex]::Match($content, $pattern)
+
+          if ($match.Success) {
+            $body = $match.Groups[1].Value.Trim()
+          } else {
+            # 回退: 用 RELEASE_TEMPLATE.md
+            $body = Get-Content .github\RELEASE_TEMPLATE.md -Raw
+          }
+
+          # 写入临时文件供 action-gh-release 使用
+          $body | Out-File -FilePath "release_body.md" -Encoding utf8
+          echo "Extracted changelog for version $tag"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: Inno Setup\Output\*.exe
+          body_path: release_body.md
+          generate_release_notes: true
+          name: Unreal-GUI v${{ steps.get_version.outputs.version }}

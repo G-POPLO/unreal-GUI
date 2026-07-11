@@ -89,6 +89,15 @@
 
                             <ui:AppBarSeparator />
 
+                            <ui:AppBarToggleButton x:Name="Button4" Label="启用增量更新(beta)" 
+IsChecked="{Binding RememberWindowSize}"  HorizontalAlignment="Left">
+                                <ui:AppBarToggleButton.Icon>
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xe744;"/>
+                                </ui:AppBarToggleButton.Icon>
+                            </ui:AppBarToggleButton>
+
+                            <ui:AppBarSeparator />
+
 
                         </WrapPanel>
                     </StackPanel>
