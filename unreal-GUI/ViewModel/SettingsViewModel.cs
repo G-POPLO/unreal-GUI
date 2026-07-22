@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using unreal_GUI.Model;
 using unreal_GUI.Model.Basic;
 using MessageBox = iNKORE.UI.WPF.Modern.Controls.MessageBox;
@@ -72,6 +73,12 @@ namespace unreal_GUI.ViewModel
         [ObservableProperty]
         public partial bool RememberWindowSize { get; set; }
 
+        [ObservableProperty]
+        public partial bool PatchUpdate { get; set; }
+
+        [ObservableProperty]
+        public partial string DefaultOutputPath { get; set; } = string.Empty;
+
         public SettingsViewModel()
         {
             // 初始化设置
@@ -91,6 +98,7 @@ namespace unreal_GUI.ViewModel
             BrowerType = Properties.Settings.Default.BrowerType;
             HasUsingPro = Properties.Settings.Default.HasUsingPro;
             RememberWindowSize = Properties.Settings.Default.RememberWindowSize;
+            PatchUpdate = Properties.Settings.Default.PatchUpdate;
 
             if (File.Exists("settings.json"))
             {
@@ -99,6 +107,7 @@ namespace unreal_GUI.ViewModel
                     var json = File.ReadAllText("settings.json");
                     var settings = JsonSerializer.Deserialize<SettingsData>(json);
                     EngineInfos = settings.Engines;
+                    DefaultOutputPath = settings?.DefaultOutputPath ?? string.Empty;
                     UpdateEnginePathsDisplay();
                 }
                 catch
@@ -169,6 +178,33 @@ namespace unreal_GUI.ViewModel
             }
         }
 
+        [RelayCommand]
+        private void BrowseDefaultOutput()
+        {
+            using var dialog = new FolderBrowserDialog
+            {
+                Description = "选择默认输出文件夹",
+                UseDescriptionForTitle = true
+            };
+
+            // 如果已有默认路径，设置为初始目录
+            if (!string.IsNullOrWhiteSpace(DefaultOutputPath) && Directory.Exists(DefaultOutputPath))
+            {
+                dialog.SelectedPath = DefaultOutputPath;
+            }
+
+            if (dialog.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.SelectedPath))
+            {
+                DefaultOutputPath = dialog.SelectedPath;
+            }
+        }
+
+        [RelayCommand]
+        private void ClearDefaultOutput()
+        {
+            DefaultOutputPath = string.Empty;
+        }
+
 
         [RelayCommand]
         private Task SaveSettings(JsonSerializerOptions options)
@@ -188,6 +224,7 @@ namespace unreal_GUI.ViewModel
             Properties.Settings.Default.BrowerType = BrowerType;
             Properties.Settings.Default.HasUsingPro = HasUsingPro;
             Properties.Settings.Default.RememberWindowSize = RememberWindowSize;
+            Properties.Settings.Default.PatchUpdate = PatchUpdate;
 
             Properties.Settings.Default.Save();
 
@@ -198,7 +235,8 @@ namespace unreal_GUI.ViewModel
             SettingsData settings = new()
             {
                 Engines = EngineInfos,
-                CustomButtons = []
+                CustomButtons = [],
+                DefaultOutputPath = DefaultOutputPath
             };
             // 保存ini文件
             new IniConfig().CreateConfig();

@@ -43,6 +43,42 @@
                     </StackPanel>
                 </Border>
 
+                <!-- 编译默认路径设置卡片 -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+          
+                      CornerRadius="4" Margin="0,0,0,20">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8FD;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="编译默认输出路径" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+
+                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,10" 
+                                   Text="设置编译插件时的默认输出目录。打开编译页面时，若尚未手动选择输出路径，将自动使用此路径。留空则不自动填充。"/>
+
+                        <TextBox Text="{Binding DefaultOutputPath, UpdateSourceTrigger=PropertyChanged}" 
+                                 Margin="0,0,0,10"/>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Button Margin="0,0,10,0" Command="{Binding BrowseDefaultOutputCommand}" 
+                                    Style="{DynamicResource AccentButtonStyle}" HorizontalAlignment="Left">
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8B7;" Margin="0,0,5,0"/>
+                                    <TextBlock Text="浏览"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Margin="0,0,10,0" Command="{Binding ClearDefaultOutputCommand}" 
+                                    HorizontalAlignment="Left">
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE74D;" Margin="0,0,5,0"/>
+                                    <TextBlock Text="清除"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+
+                    </StackPanel>
+                </Border>
+
                 <!-- 应用设置卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
                         
@@ -90,9 +126,9 @@
                             <ui:AppBarSeparator />
 
                             <ui:AppBarToggleButton x:Name="Button4" Label="启用增量更新(beta)" 
-IsChecked="{Binding RememberWindowSize}"  HorizontalAlignment="Left">
+IsChecked="{Binding PatchUpdate}"  HorizontalAlignment="Left">
                                 <ui:AppBarToggleButton.Icon>
-                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xe744;"/>
+                                    <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xe8f3;"/>
                                 </ui:AppBarToggleButton.Icon>
                             </ui:AppBarToggleButton>
 
@@ -103,7 +139,7 @@ IsChecked="{Binding RememberWindowSize}"  HorizontalAlignment="Left">
                     </StackPanel>
                 </Border>
 
-
+                <!-- 扩展设置卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
                         
                        CornerRadius="4">
@@ -191,8 +227,8 @@ IsChecked="{Binding RememberWindowSize}"  HorizontalAlignment="Left">
 
                 </Border>
 
-                <!-- 窗口设置卡片 -->
-                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                <!-- 高级选项设置卡片 -->
+                <!--<Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
                          Margin="0,20,0,0"
                     CornerRadius="4">
                     <StackPanel Margin="15">
@@ -218,7 +254,7 @@ IsChecked="{Binding RememberWindowSize}"  HorizontalAlignment="Left">
 
                     </StackPanel>
 
-                </Border>
+                </Border>-->
 
 
                 <!-- 窗口设置卡片 -->

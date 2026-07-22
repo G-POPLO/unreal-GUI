@@ -98,7 +98,7 @@
 
     <ItemGroup>
         <PackageReference Include="7-Zip.CommandLine" Version="25.1.0" />
-        <PackageReference Include="ACSync.Core" Version="1.0.0" />
+        <PackageReference Include="ACSync.Core" Version="1.0.1" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
         <PackageReference Include="Concentus.Oggfile" Version="1.0.7" />
         <PackageReference Include="iNKORE.UI.WPF.Modern" Version="0.10.2.1" />
@@ -121,6 +121,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\reminder\reminder.csproj" />
+      
     </ItemGroup>
 
     <ItemGroup>

@@ -19,6 +19,10 @@ namespace unreal_GUI.Model
         [ObservableProperty]
         [JsonPropertyName("customButtons")]
         private List<CustomButton> _customButtons = [];
+
+        [ObservableProperty]
+        [JsonPropertyName("defaultOutputPath")]
+        private string _defaultOutputPath = string.Empty;
     }
 
 
