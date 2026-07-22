@@ -11,7 +11,7 @@ namespace unreal_GUI
         public Settings()
         {
             InitializeComponent();
-            this.DataContext = new SettingsViewModel(); // 在这里设置
+            this.DataContext = new SettingsViewModel(); 
         }
 
 

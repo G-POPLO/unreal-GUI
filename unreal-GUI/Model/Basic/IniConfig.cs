@@ -9,19 +9,26 @@ namespace unreal_GUI.Model.Basic
         private string ConfigPath;
         private IniFile SharedConfig;
 
-        public void CreateConfig()
+        // 仅加载配置文件，不触发任何写入，避免读取时副作用
+        private void EnsureLoaded()
         {
+            if (SharedConfig != null) return;
             ConfigPath = Path.Combine(AppContext.BaseDirectory, "ShareSettings.ini");
-
             SharedConfig = new IniFile();
-
-            // 如果文件存在，先加载现有配置
             if (File.Exists(ConfigPath))
             {
                 SharedConfig.Load(ConfigPath);
+            }
+        }
+
+        public void CreateConfig()
+        {
+            EnsureLoaded();
+            // 文件存在时同步差异，文件不存在时写入默认值
+            if (File.Exists(ConfigPath))
+            {
                 OverWriteConfig();
             }
-            // 如果文件不存在，创建文件并写入默认值
             else
             {
                 SharedConfig.SetSetting(IniFile.DefaultSectionName, "AutoClaimEnabled", Properties.Settings.Default.AutoClaimEnabled);
@@ -44,7 +51,7 @@ namespace unreal_GUI.Model.Basic
             byte browerType = (byte)SharedConfig.GetSetting(IniFile.DefaultSectionName, "BrowerType", Properties.Settings.Default.BrowerType);
             bool openEpic = SharedConfig.GetSetting(IniFile.DefaultSectionName, "OpenEpic", Properties.Settings.Default.OpenEpic);
             bool hasUsingPro = SharedConfig.GetSetting(IniFile.DefaultSectionName, "HasUsingPro", Properties.Settings.Default.HasUsingPro);
-            //DateTime limitedTime = DateTime.TryParse(SharedConfig.GetSetting(IniFile.DefaultSectionName, "LimitedTime", string.Empty), out DateTime result) ? result : Properties.Settings.Default.LimitedTime;
+            DateTime limitedTime = DateTime.TryParse(SharedConfig.GetSetting(IniFile.DefaultSectionName, "LimitedTime", string.Empty), out var parsed) ? parsed : Properties.Settings.Default.LimitedTime;
 
             // 比较并更新不一致的值
             if (autoClaimEnabled != Properties.Settings.Default.AutoClaimEnabled)
@@ -67,10 +74,10 @@ namespace unreal_GUI.Model.Basic
             {
                 SharedConfig.SetSetting(IniFile.DefaultSectionName, "HasUsingPro", Properties.Settings.Default.HasUsingPro);
             }
-            //if (limitedTime != Properties.Settings.Default.LimitedTime)
-            //{
-            //    SharedConfig.SetSetting(IniFile.DefaultSectionName, "LimitedTime", Properties.Settings.Default.LimitedTime.ToString("yyyy-MM-dd HH:mm:ss"));
-            //}
+            if (limitedTime != Properties.Settings.Default.LimitedTime)
+            {
+                SharedConfig.SetSetting(IniFile.DefaultSectionName, "LimitedTime", Properties.Settings.Default.LimitedTime.ToString("yyyy-MM-dd HH:mm:ss"));
+            }
             Save();
         }
 
@@ -83,14 +90,21 @@ namespace unreal_GUI.Model.Basic
         }
 
         /// <summary>
+        /// 写入日期时间配置到 INI 文件
+        /// </summary>
+        public void WriteDateTime(string key, DateTime value)
+        {
+            EnsureLoaded();
+            SharedConfig.SetSetting(IniFile.DefaultSectionName, key, value.ToString("yyyy-MM-dd HH:mm:ss"));
+            Save();
+        }
+
+        /// <summary>
         /// 读取布尔值配置
         /// </summary>
         public bool ReadBool(string key, bool defaultValue = false)
         {
-            if (SharedConfig == null)
-            {
-                CreateConfig();
-            }
+            EnsureLoaded();
             return SharedConfig.GetSetting(IniFile.DefaultSectionName, key, defaultValue);
         }
 
@@ -99,10 +113,7 @@ namespace unreal_GUI.Model.Basic
         /// </summary>
         public DateTime ReadDateTime(string key, DateTime defaultValue)
         {
-            if (SharedConfig == null)
-            {
-                CreateConfig();
-            }
+            EnsureLoaded();
             string value = SharedConfig.GetSetting(IniFile.DefaultSectionName, key, string.Empty);
             return DateTime.TryParse(value, out DateTime result) ? result : defaultValue;
         }
@@ -112,10 +123,7 @@ namespace unreal_GUI.Model.Basic
         /// </summary>
         public byte ReadByte(string key, byte defaultValue)
         {
-            if (SharedConfig == null)
-            {
-                CreateConfig();
-            }
+            EnsureLoaded();
             return (byte)SharedConfig.GetSetting(IniFile.DefaultSectionName, key, defaultValue);
         }
 
@@ -124,10 +132,7 @@ namespace unreal_GUI.Model.Basic
         /// </summary>
         public string ReadString(string key, string defaultValue = null)
         {
-            if (SharedConfig == null)
-            {
-                CreateConfig();
-            }
+            EnsureLoaded();
             return SharedConfig.GetSetting(IniFile.DefaultSectionName, key, defaultValue);
         }
     }

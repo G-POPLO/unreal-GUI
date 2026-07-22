@@ -8,11 +8,8 @@
              xmlns:ikw="http://schemas.inkore.net/lib/ui/wpf"
              xmlns:viewmodel="clr-namespace:unreal_GUI.ViewModel" 
              x:Class="unreal_GUI.Settings"  
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              >
-    <UserControl.DataContext>
-        <viewmodel:SettingsViewModel />
-    </UserControl.DataContext>
     <Grid Margin="20">
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel Margin="10">
@@ -174,8 +171,8 @@ IsChecked="{Binding PatchUpdate}"  HorizontalAlignment="Left">
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" TextWrapping="Wrap" Text="开机启动Fab资产检查" 
-                                       VerticalAlignment="Center"/>
-                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding AutoStart}" IsEnabled="{Binding FabNotification}"/>
+                                       VerticalAlignment="Center" IsEnabled="{Binding AutoClaimEnabled}"/>
+                            <ui:ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsOn="{Binding AutoStart}" IsEnabled="{Binding AutoClaimEnabled}"/>
                         </Grid>
 
 

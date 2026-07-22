@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text.Json.Serialization;
 
 namespace unreal_GUI.Model
@@ -14,15 +15,15 @@ namespace unreal_GUI.Model
     {
         [ObservableProperty]
         [JsonPropertyName("engines")]
-        private List<EngineInfo> _engines = [];
+        public partial List<EngineInfo> Engines { get; set; } = [];
 
         [ObservableProperty]
         [JsonPropertyName("customButtons")]
-        private List<CustomButton> _customButtons = [];
+        public partial List<CustomButton> CustomButtons { get; set; } = [];
 
         [ObservableProperty]
         [JsonPropertyName("defaultOutputPath")]
-        private string _defaultOutputPath = string.Empty;
+        public partial string DefaultOutputPath { get; set; } = string.Empty;
     }
 
 
@@ -33,27 +34,27 @@ namespace unreal_GUI.Model
     {
         [ObservableProperty]
         [JsonPropertyName("path")]
-        private string _path;
+        public partial string Path { get; set; } = string.Empty;
 
         [ObservableProperty]
         [JsonPropertyName("version")]
-        private string _version;
+        public partial string Version { get; set; } = string.Empty;
     }
 
 
 
     /// <summary>
-/// 自定义按钮类
-/// </summary>
-public partial class CustomButton : ObservableObject
-{
-    [ObservableProperty]
-    [JsonPropertyName("name")]
-    private string _name;
+    /// 自定义按钮类
+    /// </summary>
+    public partial class CustomButton : ObservableObject
+    {
+        [ObservableProperty]
+        [JsonPropertyName("name")]
+        public partial string Name { get; set; } = string.Empty;
 
-    [ObservableProperty]
-    [JsonPropertyName("path")]
-    private string _path;
+        [ObservableProperty]
+        [JsonPropertyName("path")]
+        public partial string Path { get; set; } = string.Empty;
 }
 
 /// <summary>
