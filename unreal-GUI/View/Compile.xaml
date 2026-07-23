@@ -75,7 +75,7 @@
                 <!-- 编译操作卡片 -->
                 <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
                         
-                          CornerRadius="4">
+                          CornerRadius="4" Margin="0,0,0,20">
                     <StackPanel Margin="15">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
                             <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE945;" Margin="0,0,10,0" VerticalAlignment="Center"/>
@@ -92,6 +92,33 @@
                             </StackPanel>
                         </Button>
                         <TextBlock Text="{Binding TipsText}" TextWrapping="Wrap" Margin="0,10,0,0"  />
+                    </StackPanel>
+                </Border>
+
+                <!-- 编译日志卡片（终端样式） -->
+                <Border Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
+                          CornerRadius="4">
+                    <StackPanel Margin="15">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE756;" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="编译日志" FontSize="18" FontWeight="SemiBold"/>
+                        </StackPanel>
+
+                        <TextBox x:Name="LogTextBox"
+                                 Text="{Binding LogText, Mode=OneWay}"
+                                 IsReadOnly="True"
+                                 TextWrapping="NoWrap"
+                                 FontFamily="Consolas, Courier New, monospace"
+                                 FontSize="12"
+                                 Background="#1E1E1E"
+                                 Foreground="#DCDCDC"
+                                 BorderBrush="#333"
+                                 BorderThickness="1"
+                                 Padding="8"
+                                 Height="280"
+                                 AcceptsReturn="True"
+                                 VerticalScrollBarVisibility="Auto"
+                                 HorizontalScrollBarVisibility="Auto"/>
                     </StackPanel>
                 </Border>
             </StackPanel>

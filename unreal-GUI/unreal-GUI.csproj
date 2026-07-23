@@ -88,9 +88,9 @@
         <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
         <Optimize>True</Optimize>
         <!--WPF无法启用AOT,故禁用-->
-        <!--<PublishTrimmed>True</PublishTrimmed>
+        <!--<PublishTrimmed>True</PublishTrimmed>-->
     <PublishReadyToRun>True</PublishReadyToRun>
-    <PublishReadyToRunComposite>true</PublishReadyToRunComposite>-->
+    <PublishReadyToRunComposite>true</PublishReadyToRunComposite>
         <!--<TieredPGO>true</TieredPGO>-->
     </PropertyGroup>
 

@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using unreal_GUI.Model;
 using unreal_GUI.Model.Basic;
+// 显式使用 WPF 的 Application，避免与 System.Windows.Forms.Application 冲突
+using Application = System.Windows.Application;
 
 namespace unreal_GUI.ViewModel
 {
@@ -29,6 +31,10 @@ namespace unreal_GUI.ViewModel
 
         [ObservableProperty]
         public partial string TipsText { get; set; } = string.Empty;
+
+        // 编译日志（终端样式）显示用，OutputDataReceived / ErrorDataReceived 异步追加
+        [ObservableProperty]
+        public partial string LogText { get; set; } = string.Empty;
 
         public CompileViewModel()
         {
@@ -210,11 +216,14 @@ namespace unreal_GUI.ViewModel
             return false;
         }
 
-        // 启动 RunUAT.bat 并等待编译完成
+        // 启动 RunUAT.bat：捕获输出到 UI 日志窗口，失败时落盘到软件根目录
         private async Task RunBuildProcess(string terminalPath, string actualOutputPath)
         {
             var outputBuilder = new StringBuilder();
             var errorBuilder = new StringBuilder();
+
+            // 清空上一次的日志
+            LogText = string.Empty;
 
             try
             {
@@ -225,7 +234,7 @@ namespace unreal_GUI.ViewModel
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
-                    CreateNoWindow = false,
+                    CreateNoWindow = true,
                     StandardOutputEncoding = Encoding.UTF8,
                     StandardErrorEncoding = Encoding.UTF8
                 };
@@ -233,11 +242,19 @@ namespace unreal_GUI.ViewModel
                 using var process = new Process { StartInfo = startInfo };
                 process.OutputDataReceived += (_, e) =>
                 {
-                    if (e.Data != null) outputBuilder.AppendLine(e.Data);
+                    if (e.Data != null)
+                    {
+                        outputBuilder.AppendLine(e.Data);
+                        AppendLog(e.Data);
+                    }
                 };
                 process.ErrorDataReceived += (_, e) =>
                 {
-                    if (e.Data != null) errorBuilder.AppendLine(e.Data);
+                    if (e.Data != null)
+                    {
+                        errorBuilder.AppendLine(e.Data);
+                        AppendLog(e.Data);
+                    }
                 };
 
                 if (!process.Start())
@@ -279,6 +296,15 @@ namespace unreal_GUI.ViewModel
             {
                 SoundFX.PlaySound(2);
                 TipsText = $"编译错误：{ex.Message}";
+            }
+        }
+
+        // 跨线程安全地往 LogText 追加一行
+        private void AppendLog(string line)
+        {
+            if (Application.Current?.Dispatcher is { } dispatcher)
+            {
+                dispatcher.BeginInvoke(() => LogText += line + Environment.NewLine);
             }
         }
 
