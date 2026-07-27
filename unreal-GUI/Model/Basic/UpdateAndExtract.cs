@@ -14,6 +14,14 @@ namespace unreal_GUI.Model.Basic
         public static JsonDocument release_info;
         public static string latestVersion;
 
+        // Shared HttpClient to avoid socket exhaustion from repeated instantiation (P2).
+        private static readonly HttpClient SharedHttpClient = new HttpClient();
+
+        static UpdateAndExtract()
+        {
+            SharedHttpClient.DefaultRequestHeaders.UserAgent.ParseAdd("unreal-GUI");
+        }
+
         /// <summary>
         /// 将字节数格式化为更易读的格式（如KB, MB等）
         /// </summary>
@@ -36,10 +44,8 @@ namespace unreal_GUI.Model.Basic
             var currentVersion = Application.ResourceAssembly.GetName().Version.ToString();
             try
             {
-                using HttpClient client = new();
-                client.DefaultRequestHeaders.UserAgent.ParseAdd("unreal-GUI");
                 // 从GitHub API获取最新版本信息
-                var response = await client.GetAsync("https://api.github.com/repos/G-POPLO/unreal-GUI/releases/latest");
+                var response = await SharedHttpClient.GetAsync("https://api.github.com/repos/G-POPLO/unreal-GUI/releases/latest");
                 response.EnsureSuccessStatusCode();
 
                 release_info = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
@@ -115,9 +121,7 @@ namespace unreal_GUI.Model.Basic
                     var downloadPath = Path.Combine(downloadDir, assetName);
 
                     // 获取文件大小
-                    using var client = new HttpClient();
-                    client.DefaultRequestHeaders.UserAgent.ParseAdd("unreal-GUI");
-                    var response = await client.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead);
+                    var response = await SharedHttpClient.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead);
                     response.EnsureSuccessStatusCode();
                     var totalBytes = response.Content.Headers.ContentLength ?? -1L;
                     var canReportProgress = totalBytes != -1;
@@ -169,6 +173,9 @@ namespace unreal_GUI.Model.Basic
                         DateTime lastUpdateTime = DateTime.Now;
                         long lastTotalRead = 0;
                         string downloadSpeed = "计算中...";
+                        // P1: throttle Toast updates — at most every 200ms OR on each full percent advance.
+                        DateTime lastNotifyTime = DateTime.MinValue;
+                        int lastPercent = -1;
 
                         while ((read = await stream.ReadAsync(buffer)) > 0)
                         {
@@ -191,7 +198,16 @@ namespace unreal_GUI.Model.Basic
                             {
                                 double progress = totalRead / (double)totalBytes;
                                 int percent = (int)(progress * 100);
-                                // 每次读取都实时更新进度条
+
+                                bool shouldNotify = (now - lastNotifyTime).TotalMilliseconds >= 200
+                                    || percent > lastPercent;
+                                if (!shouldNotify)
+                                {
+                                    continue;
+                                }
+
+                                lastNotifyTime = now;
+                                lastPercent = percent;
                                 var data = new NotificationData
                                 {
                                     SequenceNumber = sequenceNumber++ // 递增序列号
@@ -200,11 +216,12 @@ namespace unreal_GUI.Model.Basic
                                 data.Values["progressText"] = $"{percent}%";
                                 data.Values["downloadSpeed"] = downloadSpeed; // 更新下载速度
 
-                                // 在UI线程上更新Toast通知
-                                Application.Current.Dispatcher.Invoke(() =>
+                                // P1: BeginInvoke avoids blocking the download thread on the UI pump.
+                                // Discard (_) suppresses CS4014 — fire-and-forget is intentional.
+                                _ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                                 {
                                     ToastNotificationManagerCompat.CreateToastNotifier().Update(data, toastTag, toastGroup);
-                                });
+                                }));
                             }
                         }
                     });

@@ -1,14 +1,17 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Threading;
 using unreal_GUI.Model;
 using unreal_GUI.Model.Basic;
 // 显式使用 WPF 的 Application，避免与 System.Windows.Forms.Application 冲突
@@ -19,6 +22,12 @@ namespace unreal_GUI.ViewModel
     public partial class CompileViewModel : ObservableObject
     {
         private string? pluginName;
+
+        // P5: buffer compile output lines and flush them on the UI thread in batches,
+        // instead of marshalling an unbounded BeginInvoke per line and O(n^2) LogText += growth.
+        private readonly ConcurrentQueue<string> _logQueue = new();
+        private int _isFlushScheduled; // 0 = idle, 1 = flush pending
+        private const int MaxLogLength = 200_000;
 
         [ObservableProperty]
         public partial EngineInfo SelectedEngine { get; set; } = null!;
@@ -223,6 +232,7 @@ namespace unreal_GUI.ViewModel
             var errorBuilder = new StringBuilder();
 
             // 清空上一次的日志
+            while (_logQueue.TryDequeue(out _)) { }
             LogText = string.Empty;
 
             try
@@ -300,11 +310,53 @@ namespace unreal_GUI.ViewModel
         }
 
         // 跨线程安全地往 LogText 追加一行
+        // P5: enqueue on the producer (output/error) thread; flush in batches on the UI thread.
         private void AppendLog(string line)
         {
-            if (Application.Current?.Dispatcher is { } dispatcher)
+            _logQueue.Enqueue(line);
+            ScheduleLogFlush();
+        }
+
+        // Coalesce pending lines into a single UI-thread update to avoid per-line marshalling.
+        private void ScheduleLogFlush()
+        {
+            if (Interlocked.CompareExchange(ref _isFlushScheduled, 1, 0) != 0) return;
+            var dispatcher = Application.Current?.Dispatcher;
+            if (dispatcher == null)
             {
-                dispatcher.BeginInvoke(() => LogText += line + Environment.NewLine);
+                Interlocked.Exchange(ref _isFlushScheduled, 0);
+                return;
+            }
+
+            dispatcher.BeginInvoke(new Action(() =>
+            {
+                Interlocked.Exchange(ref _isFlushScheduled, 0);
+                FlushLogQueue();
+                // More lines arrived during this flush — schedule another.
+                if (!_logQueue.IsEmpty)
+                {
+                    ScheduleLogFlush();
+                }
+            }), DispatcherPriority.Background);
+        }
+
+        // Drain the queue and append to LogText in one batch; cap total length to avoid unbounded growth.
+        private void FlushLogQueue()
+        {
+            if (_logQueue.IsEmpty) return;
+
+            var sb = new StringBuilder();
+            while (_logQueue.TryDequeue(out var line))
+            {
+                sb.AppendLine(line);
+            }
+
+            LogText += sb.ToString();
+
+            // Trim head when over the cap to keep the TextBox responsive.
+            if (LogText.Length > MaxLogLength)
+            {
+                LogText = LogText.Substring(LogText.Length - (MaxLogLength / 2));
             }
         }
 

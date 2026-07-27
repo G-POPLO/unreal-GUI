@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using unreal_GUI.Model;
 using unreal_GUI.Model.Basic;
@@ -84,38 +85,46 @@ namespace unreal_GUI.ViewModel
         }
 
         [RelayCommand]
-        private void CleanCache()
+        private async Task CleanCache()
         {
+            if (string.IsNullOrEmpty(InputPath))
+            {
+                TipClearCache = "请先设置工程路径";
+                return;
+            }
+
+            TipClearCache = "正在清理...";
+
             try
             {
-                if (string.IsNullOrEmpty(InputPath))
+                // P6: deletion of DerivedDataCache/Intermediate/Binaries can take tens of
+                // seconds on large projects; run it off the UI thread.
+                await Task.Run(() =>
                 {
-                    TipClearCache = "请先设置工程路径";
-                    return;
-                }
+                    try
+                    {
+                        if (IsDerivedDataCacheChecked)
+                            DeleteDirectoryIfExists(Path.Combine(InputPath, "DerivedDataCache"));
+                    }
+                    catch { }
 
-                try
-                {
-                    if (IsDerivedDataCacheChecked)
-                        DeleteDirectoryIfExists(Path.Combine(InputPath, "DerivedDataCache"));
-                }
-                catch { }
+                    try
+                    {
+                        if (IsSaveChecked)
+                            DeleteDirectoryIfExists(Path.Combine(InputPath, "Saved", "SaveGames"));
+                    }
+                    catch { }
 
-                try
-                {
-                    if (IsSaveChecked)
-                        DeleteDirectoryIfExists(Path.Combine(InputPath, "Saved", "SaveGames"));
-                }
-                catch { }
+                    DeleteDirectoryIfExists(Path.Combine(InputPath, "Binaries"));
+                    DeleteDirectoryIfExists(Path.Combine(InputPath, "Build"));
+                    DeleteDirectoryIfExists(Path.Combine(InputPath, "Intermediate"));
+                    DeleteDirectoryIfExists(Path.Combine(InputPath, ".vs"));
 
-                DeleteDirectoryIfExists(Path.Combine(InputPath, "Binaries"));
-                DeleteDirectoryIfExists(Path.Combine(InputPath, "Build"));
-                DeleteDirectoryIfExists(Path.Combine(InputPath, "Intermediate"));
-                DeleteDirectoryIfExists(Path.Combine(InputPath, ".vs"));
+                    foreach (var file in Directory.GetFiles(InputPath, "*.sln", SearchOption.TopDirectoryOnly))
+                        File.Delete(file);
+                    File.Delete(Path.Combine(InputPath, ".vsconfig"));
+                });
 
-                foreach (var file in Directory.GetFiles(InputPath, "*.sln", SearchOption.TopDirectoryOnly))
-                    File.Delete(file);
-                File.Delete(Path.Combine(InputPath, ".vsconfig"));
                 TipClearCache = "清理完毕";
                 SoundFX.PlaySound(4);
 
@@ -176,39 +185,44 @@ namespace unreal_GUI.ViewModel
         }
 
         [RelayCommand]
-        private void CleanLog()
+        private async Task CleanLog()
         {
+            TipClearLog = "正在清理...";
+
             try
             {
-                // 清理 AutomationTool\Logs 目录下的所有内容
-                string automationToolLogsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Unreal Engine", "AutomationTool", "Logs");
-                if (Directory.Exists(automationToolLogsPath))
+                // P6: directory + bin enumeration can take noticeable time on first run;
+                // keep it off the UI thread.
+                await Task.Run(() =>
                 {
-                    Directory.Delete(automationToolLogsPath, true);
-                    // 重新创建空目录
-                    Directory.CreateDirectory(automationToolLogsPath);
-                }
-
-                // 清理 Local\UnrealEngine 目录下的 XmlConfigCache.bin文件
-                string localUnrealEnginePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "UnrealEngine");
-                if (Directory.Exists(localUnrealEnginePath))
-                {
-                    // 删除 .bin 文件
-                    foreach (var file in Directory.GetFiles(localUnrealEnginePath, "*.bin", SearchOption.TopDirectoryOnly))
+                    // 清理 AutomationTool\Logs 目录下的所有内容
+                    string automationToolLogsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Unreal Engine", "AutomationTool", "Logs");
+                    if (Directory.Exists(automationToolLogsPath))
                     {
-                        File.Delete(file);
+                        Directory.Delete(automationToolLogsPath, true);
+                        // 重新创建空目录
+                        Directory.CreateDirectory(automationToolLogsPath);
                     }
-                }
+
+                    // 清理 Local\UnrealEngine 目录下的 XmlConfigCache.bin文件
+                    string localUnrealEnginePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "UnrealEngine");
+                    if (Directory.Exists(localUnrealEnginePath))
+                    {
+                        // 删除 .bin 文件
+                        foreach (var file in Directory.GetFiles(localUnrealEnginePath, "*.bin", SearchOption.TopDirectoryOnly))
+                        {
+                            File.Delete(file);
+                        }
+                    }
+                });
 
                 TipClearLog = "Log清理完毕";
                 SoundFX.PlaySound(4);
-
             }
             catch (Exception ex)
             {
                 TipClearLog = "Log清理失败: " + ex.Message;
                 SoundFX.PlaySound(2);
-
             }
         }
 
