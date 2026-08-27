@@ -1,4 +1,5 @@
-﻿using SoftCircuits.IniFileParser;
+using SoftCircuits.IniFileParser;
+using System.IO;
 
 namespace reminder
 {
@@ -14,16 +15,11 @@ namespace reminder
             ConfigPath = Path.Combine(baseDirectory, configPath);
             SharedConfig = new IniFile();
 
-            // 检查文件是否存在
-            if (!System.IO.File.Exists(ConfigPath))
+            // 文件存在时加载，不存在时保持空配置，允许后续写入时创建
+            if (File.Exists(ConfigPath))
             {
-                // 配置文件不存在，直接退出程序
-                Console.WriteLine("配置文件不存在，程序将退出");
-                Environment.Exit(0);
+                SharedConfig.Load(ConfigPath);
             }
-
-            // 文件存在，加载配置
-            SharedConfig.Load(ConfigPath);
         }
 
         /// <summary>
@@ -65,10 +61,27 @@ namespace reminder
         /// </summary>
         /// <param name="key">配置键</param>
         /// <param name="value">配置值</param>
-        public void WriteDateTime(string key, DateTime value)
+        /// <returns>是否写入成功</returns>
+        public bool WriteDateTime(string key, DateTime value)
         {
-            SharedConfig.SetSetting(IniFile.DefaultSectionName, key, value.ToString());
-            SharedConfig.Save(ConfigPath);
+            try
+            {
+                // 使用与主程序一致的固定格式，避免不同区域/语言环境造成读写不一致
+                SharedConfig.SetSetting(IniFile.DefaultSectionName, key, value.ToString("yyyy-MM-dd HH:mm:ss"));
+                // 确保目录存在后再保存
+                string? dir = Path.GetDirectoryName(ConfigPath);
+                if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+                SharedConfig.Save(ConfigPath);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"写入INI失败: {ex.Message}");
+                return false;
+            }
         }
     }
 }

@@ -10,7 +10,7 @@ namespace reminder
         static async Task Main(string[] args)
         {
             // 注册通知激活事件处理程序
-            //ToastNotificationManagerCompat.OnActivated += ToastNotificationManagerCompat_OnActivated;
+            ToastNotificationManagerCompat.OnActivated += ToastNotificationManagerCompat_OnActivated;
 
             Console.WriteLine("Fab免费资产提醒程序启动...");
 
@@ -63,7 +63,7 @@ namespace reminder
                     //}
 
                     Console.WriteLine("程序执行完毕，按任意键退出...");
-                    Console.ReadKey();
+                    //Console.ReadKey();
                 }
                 else
                 {
