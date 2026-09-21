@@ -77,3 +77,19 @@ jobs:
           body_path: release_body.md
           generate_release_notes: true
           name: Unreal-GUI v${{ steps.get_version.outputs.version }}
+
+  winget:
+    needs: build        # 等待 Release 创建成功后再提交 WinGet manifest
+    runs-on: windows-latest
+
+    steps:
+      - name: WinGet Releaser
+        uses: vedantmgoyal9/winget-releaser@v2
+        with:
+          identifier: C-POPLO.Unreal-GUI
+          installers-regex: .(exe|msi|msix|appx)(bundle){0,1}$
+          max-versions-to-keep: 3
+          release-repository: ${{ github.event.repository.name }}
+          release-tag: ${{ github.event.release.tag_name || github.ref_name }}
+          token: ${{ secrets.WINGET_TOKEN }}
+          fork-user: ${{ github.repository_owner }}
