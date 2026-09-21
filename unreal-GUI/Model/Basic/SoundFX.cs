@@ -32,10 +32,13 @@ static class SoundFX
             return;
         }
 
+
         try
         {
             using var reader = new Opus2PCM(soundPath);
-            using var player = new WasapiOut();
+            var builder = new WasapiPlayerBuilder();
+            using var player = builder.Build();
+
             var tcs = new TaskCompletionSource<bool>();
 
             player.PlaybackStopped += (_, _) => tcs.TrySetResult(true);
@@ -44,6 +47,7 @@ static class SoundFX
 
             await tcs.Task;
         }
+
         catch (Exception ex)
         {
             Debug.WriteLine($"播放声音时发生错误: {ex.Message}");

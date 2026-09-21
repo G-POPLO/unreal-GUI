@@ -53,7 +53,7 @@ namespace unreal_GUI.Model.Basic
 
                 if (!release_info.RootElement.TryGetProperty("tag_name", out var tagNameElement))
                 {
-                    throw new Exception("GitHub API 响应中未找到 tag_name 字段");
+                    throw new Exception($"GitHub API 响应中未找到 tag_name 字段");
                 }
                 latestVersion = tagNameElement.GetString();
 
@@ -211,7 +211,7 @@ namespace unreal_GUI.Model.Basic
 
                     if (usePatch)
                     {
-                        await ApplyPatchAndRestartAsync(downloadPath, toastTag, toastGroup);
+                        //await ApplyPatchAndRestartAsync(downloadPath, toastTag, toastGroup);
                     }
                     else
                     {
@@ -248,77 +248,77 @@ namespace unreal_GUI.Model.Basic
             }
         }
 
-        private static async Task ApplyPatchAndRestartAsync(string patchPath, string toastTag, string toastGroup)
-        {
-            var installDir = AppDomain.CurrentDomain.BaseDirectory;
-            var sevenZipPath = Path.Combine(installDir, "App", "7za.exe");
+        //private static async Task ApplyPatchAndRestartAsync(string patchPath, string toastTag, string toastGroup)
+        //{
+        //    var installDir = AppDomain.CurrentDomain.BaseDirectory;
+        //    var sevenZipPath = Path.Combine(installDir, "App", "7za.exe");
 
-            // 更新 Toast 状态为"正在应用补丁"
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                var data = new NotificationData
-                {
-                    SequenceNumber = 1
-                };
-                data.Values["progressValue"] = "0.50";
-                data.Values["progressText"] = "50%";
-                data.Values["downloadSpeed"] = "正在应用补丁...";
-                ToastNotificationManagerCompat.CreateToastNotifier().Update(data, toastTag, toastGroup);
-            });
+        //    // 更新 Toast 状态为"正在应用补丁"
+        //    Application.Current.Dispatcher.Invoke(() =>
+        //    {
+        //        var data = new NotificationData
+        //        {
+        //            SequenceNumber = 1
+        //        };
+        //        data.Values["progressValue"] = "0.50";
+        //        data.Values["progressText"] = "50%";
+        //        data.Values["downloadSpeed"] = "正在应用补丁...";
+        //        ToastNotificationManagerCompat.CreateToastNotifier().Update(data, toastTag, toastGroup);
+        //    });
 
-            //try
-            //{
-            //    await Task.Run(() =>
-            //    {
-            //        SyncPatch.ApplyPatch(
-            //            targetPath: installDir,
-            //            patchFile: patchPath,
-            //            excludeExtensions: [".json", ".ini"],
-            //            sevenZipPath: sevenZipPath);
-            //    });
+        //    //try
+        //    //{
+        //    //    await Task.Run(() =>
+        //    //    {
+        //    //        SyncPatch.ApplyPatch(
+        //    //            targetPath: installDir,
+        //    //            patchFile: patchPath,
+        //    //            excludeExtensions: [".json", ".ini"],
+        //    //            sevenZipPath: sevenZipPath);
+        //    //    });
 
-            //    // 更新 Toast 状态为"更新完成"
-            //    Application.Current.Dispatcher.Invoke(() =>
-            //    {
-            //        var data = new NotificationData
-            //        {
-            //            SequenceNumber = 2
-            //        };
-            //        data.Values["progressValue"] = "1.00";
-            //        data.Values["progressText"] = "100%";
-            //        data.Values["downloadSpeed"] = "更新完成，正在重启...";
-            //        ToastNotificationManagerCompat.CreateToastNotifier().Update(data, toastTag, toastGroup);
-            //    });
+        //    //    // 更新 Toast 状态为"更新完成"
+        //    //    Application.Current.Dispatcher.Invoke(() =>
+        //    //    {
+        //    //        var data = new NotificationData
+        //    //        {
+        //    //            SequenceNumber = 2
+        //    //        };
+        //    //        data.Values["progressValue"] = "1.00";
+        //    //        data.Values["progressText"] = "100%";
+        //    //        data.Values["downloadSpeed"] = "更新完成，正在重启...";
+        //    //        ToastNotificationManagerCompat.CreateToastNotifier().Update(data, toastTag, toastGroup);
+        //    //    });
 
-            //    // 短暂停留以便用户看到"更新完成"状态
-            //    await Task.Delay(2000);
+        //    //    // 短暂停留以便用户看到"更新完成"状态
+        //    //    await Task.Delay(2000);
 
-            //    // 关闭通知
-            //    Application.Current.Dispatcher.Invoke(() =>
-            //    {
-            //        ToastNotificationManagerCompat.History.Remove(toastTag, toastGroup);
-            //    });
+        //    //    // 关闭通知
+        //    //    Application.Current.Dispatcher.Invoke(() =>
+        //    //    {
+        //    //        ToastNotificationManagerCompat.History.Remove(toastTag, toastGroup);
+        //    //    });
 
-            //    // 重启应用
-            //    var exePath = Path.Combine(installDir, "Unreal-GUI.exe");
-            //    if (File.Exists(exePath))
-            //    {
-            //        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-            //        {
-            //            FileName = exePath,
-            //            UseShellExecute = true
-            //        });
-            //    }
-            //    Environment.Exit(0);
-            //}
-            //catch (Exception ex)
-            //{
-            //    Application.Current.Dispatcher.Invoke(() =>
-            //    {
-            //        ToastNotificationManagerCompat.History.Remove(toastTag, toastGroup);
-            //    });
-            //    await ModernDialog.ShowErrorAsync($"应用补丁失败：{ex.Message}", "提示");
-            //}
-        }
+        //    //    // 重启应用
+        //    //    var exePath = Path.Combine(installDir, "Unreal-GUI.exe");
+        //    //    if (File.Exists(exePath))
+        //    //    {
+        //    //        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+        //    //        {
+        //    //            FileName = exePath,
+        //    //            UseShellExecute = true
+        //    //        });
+        //    //    }
+        //    //    Environment.Exit(0);
+        //    //}
+        //    //catch (Exception ex)
+        //    //{
+        //    //    Application.Current.Dispatcher.Invoke(() =>
+        //    //    {
+        //    //        ToastNotificationManagerCompat.History.Remove(toastTag, toastGroup);
+        //    //    });
+        //    //    await ModernDialog.ShowErrorAsync($"应用补丁失败：{ex.Message}", "提示");
+        //    //}
+        //}
     }
 }

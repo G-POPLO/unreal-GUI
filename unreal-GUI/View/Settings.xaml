@@ -122,12 +122,12 @@
 
                             <ui:AppBarSeparator />
 
-                            <ui:AppBarToggleButton x:Name="Button4" Label="启用增量更新(beta)" 
+                            <!--<ui:AppBarToggleButton x:Name="Button4" Label="启用增量更新(beta)" 
 IsChecked="{Binding PatchUpdate}"  HorizontalAlignment="Left">
                                 <ui:AppBarToggleButton.Icon>
                                     <ui:FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xe8f3;"/>
                                 </ui:AppBarToggleButton.Icon>
-                            </ui:AppBarToggleButton>
+                            </ui:AppBarToggleButton>-->
 
                             <ui:AppBarSeparator />
 
