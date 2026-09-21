@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [0.6.3.1] - 2026-09-21
+
+### 问题修复
+- 修复应用内更新无法匹配安装包（资产名不一致导致下载失败）的问题
+
+
 ## [0.6.3.0] - 2026-09-21
 
 ### 新功能

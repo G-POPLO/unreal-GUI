@@ -84,8 +84,7 @@ namespace unreal_GUI.Model.Basic
         {
             try
             {
-                bool usePatch = Properties.Settings.Default.PatchUpdate;
-                string assetName = usePatch ? "acsync_patch.7z" : "unreal_setup.exe";
+                string assetName = "unreal-gui_setup.exe";
                 string downloadUrl = null;
                 if (release_info.RootElement.TryGetProperty("assets", out JsonElement assetsArray))
                 {
@@ -210,37 +209,27 @@ namespace unreal_GUI.Model.Basic
                         }
                     });
 
-                    if (usePatch)
+                    try
                     {
-                        //await ApplyPatchAndRestartAsync(downloadPath, toastTag, toastGroup);
+                        // 下载完成后关闭通知
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            ToastNotificationManagerCompat.History.Remove(toastTag, toastGroup);
+                        });
+
+                        // 启动安装程序并退出程序
+                        System.Diagnostics.Process.Start(downloadPath);
+                        Environment.Exit(0);
+
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        try
-                        {
-                            // 下载完成后关闭通知
-                            Application.Current.Dispatcher.Invoke(() =>
-                            {
-                                ToastNotificationManagerCompat.History.Remove(toastTag, toastGroup);
-                            });
-
-                            // 启动unreal_setup.exe并退出程序
-                            System.Diagnostics.Process.Start(downloadPath);
-                            Environment.Exit(0);
-
-                        }
-                        catch (Exception ex)
-                        {
-                            await ModernDialog.ShowErrorAsync($"启动安装程序失败：{ex.Message}", "提示");
-                        }
+                        await ModernDialog.ShowErrorAsync($"启动安装程序失败：{ex.Message}", "提示");
                     }
                 }
                 else
                 {
-                    string errorMsg = usePatch
-                        ? "下载失败，无法从服务器获取增量更新包"
-                        : "下载失败，无法从服务器获取下载链接";
-                    await ModernDialog.ShowErrorAsync(errorMsg, "提示");
+                    await ModernDialog.ShowErrorAsync("下载失败，无法从服务器获取下载链接", "提示");
                 }
             }
             catch (Exception ex)
@@ -248,78 +237,5 @@ namespace unreal_GUI.Model.Basic
                 await ModernDialog.ShowErrorAsync($"下载失败：{ex}", "提示");
             }
         }
-
-        //private static async Task ApplyPatchAndRestartAsync(string patchPath, string toastTag, string toastGroup)
-        //{
-        //    var installDir = AppDomain.CurrentDomain.BaseDirectory;
-        //    var sevenZipPath = Path.Combine(installDir, "App", "7za.exe");
-
-        //    // 更新 Toast 状态为"正在应用补丁"
-        //    Application.Current.Dispatcher.Invoke(() =>
-        //    {
-        //        var data = new NotificationData
-        //        {
-        //            SequenceNumber = 1
-        //        };
-        //        data.Values["progressValue"] = "0.50";
-        //        data.Values["progressText"] = "50%";
-        //        data.Values["downloadSpeed"] = "正在应用补丁...";
-        //        ToastNotificationManagerCompat.CreateToastNotifier().Update(data, toastTag, toastGroup);
-        //    });
-
-        //    //try
-        //    //{
-        //    //    await Task.Run(() =>
-        //    //    {
-        //    //        SyncPatch.ApplyPatch(
-        //    //            targetPath: installDir,
-        //    //            patchFile: patchPath,
-        //    //            excludeExtensions: [".json", ".ini"],
-        //    //            sevenZipPath: sevenZipPath);
-        //    //    });
-
-        //    //    // 更新 Toast 状态为"更新完成"
-        //    //    Application.Current.Dispatcher.Invoke(() =>
-        //    //    {
-        //    //        var data = new NotificationData
-        //    //        {
-        //    //            SequenceNumber = 2
-        //    //        };
-        //    //        data.Values["progressValue"] = "1.00";
-        //    //        data.Values["progressText"] = "100%";
-        //    //        data.Values["downloadSpeed"] = "更新完成，正在重启...";
-        //    //        ToastNotificationManagerCompat.CreateToastNotifier().Update(data, toastTag, toastGroup);
-        //    //    });
-
-        //    //    // 短暂停留以便用户看到"更新完成"状态
-        //    //    await Task.Delay(2000);
-
-        //    //    // 关闭通知
-        //    //    Application.Current.Dispatcher.Invoke(() =>
-        //    //    {
-        //    //        ToastNotificationManagerCompat.History.Remove(toastTag, toastGroup);
-        //    //    });
-
-        //    //    // 重启应用
-        //    //    var exePath = Path.Combine(installDir, "Unreal-GUI.exe");
-        //    //    if (File.Exists(exePath))
-        //    //    {
-        //    //        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-        //    //        {
-        //    //            FileName = exePath,
-        //    //            UseShellExecute = true
-        //    //        });
-        //    //    }
-        //    //    Environment.Exit(0);
-        //    //}
-        //    //catch (Exception ex)
-        //    //{
-        //    //    Application.Current.Dispatcher.Invoke(() =>
-        //    //    {
-        //    //        ToastNotificationManagerCompat.History.Remove(toastTag, toastGroup);
-        //    //    });
-        //    //    await ModernDialog.ShowErrorAsync($"应用补丁失败：{ex.Message}", "提示");
-        //    //}
-        //}
     }
 }
