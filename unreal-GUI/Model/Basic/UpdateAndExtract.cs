@@ -55,7 +55,8 @@ namespace unreal_GUI.Model.Basic
                 {
                     throw new Exception($"GitHub API 响应中未找到 tag_name 字段");
                 }
-                latestVersion = tagNameElement.GetString();
+                // 去除 tag 的 'v' 前缀，避免 Version.Parse 失败
+                latestVersion = tagNameElement.GetString()?.TrimStart('v', 'V');
 
                 if (Version.Parse(latestVersion) > Version.Parse(currentVersion))
                 {

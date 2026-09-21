@@ -3,7 +3,8 @@ name: Build and Release
 on:
   push:
     tags:
-      - 'v*'           # 推送 v1.0.0 / v0.6.2 等 tag 时触发
+      - '[0-9]*'       # 0.6.3.0 等数字 tag（旧版客户端要求 tag_name 无 v 前缀）
+      - 'v*'           # 兼容 v1.0.0 形式
 
 permissions:
   contents: write      # 允许创建 Release
@@ -74,7 +75,7 @@ jobs:
           files: Inno Setup\Output\*.exe
           body_path: release_body.md
           generate_release_notes: true
-          name: Unreal-GUI v${{ steps.get_version.outputs.version }}
+          name: ${{ steps.get_version.outputs.version }}
 
   winget:
     needs: build        # 等待 Release 创建成功后再提交 WinGet manifest
