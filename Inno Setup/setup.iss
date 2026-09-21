@@ -6,7 +6,7 @@
 #define MyAppPublisher "C-POPLO"
 #define MyAppURL "https://github.com/G-POPLO/unreal-GUI"
 #define MyAppExeName "Unreal-GUI.exe"
-#define MyAppBuildRoot "..\unreal-GUI\bin\x64\Release\net10.0-windows10.0.18362.0"
+#define MyAppBuildRoot "..\unreal-GUI\bin\x64\Release\net10.0-windows10.0.18362.0\win-x64\publish"
 #define MyAppExePath MyAppBuildRoot + "\" + MyAppExeName
 #define MyAppVersion GetVersionNumbersString(MyAppExePath)
 #define MyAppAssocName MyAppName + " File"
