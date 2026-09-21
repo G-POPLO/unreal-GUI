@@ -26,7 +26,8 @@ namespace reminder
                 if (!string.IsNullOrEmpty(dateString))
                 {
                     // 提取日期时间部分
-                    var dateRegex = new Regex(@"Limited-Time Free \(Until ([A-Za-z0-9 :,AMPamp]+)\)");
+                    // 注意：右括号在页面 HTML 中可能被截断或缺失，设为可选
+                    var dateRegex = new Regex(@"Limited-Time Free \(Until ([A-Za-z0-9 :,AMPamp]+)\)?");
                     var dateMatch = dateRegex.Match(dateString);
 
                     if (dateMatch.Success)
